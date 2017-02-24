@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class NNAIHandler {
     public static void main(String[] args) {
@@ -14,14 +15,15 @@ public class NNAIHandler {
         int eHealth = 100; // Enemy health
         int eMana = 100; // Enemy mana
         int w[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        int cycN = 0; // NNAI cycle number
+        List<String> reader = new ArrayList<>(1); // Stores lines temp
+        String[] cycN = null; // NNAI cycle number
 
         String inF = "CycleCount.txt"; // Input file name
         String outF = "output.txt"; // Output file name
 
         // Objects
-
         Path in = Paths.get(inF);
+
 
         // Attempt to create input file
         try {
@@ -36,19 +38,28 @@ public class NNAIHandler {
         }catch (IOException e){
             e.printStackTrace(); // Print error
         }
-        // Cycles read from file
-        //cycN = [Read file to it here]
+        try {
+            Scanner sc = new Scanner(new File(inF));
+            // Cycles read from file
+            while (sc.hasNext()) {
+                reader.add(sc.nextLine());
+            }
+            cycN = reader.toArray(new String[0]);
+            sc.close();
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
 
         // Write to cycles file
-        Path file = Paths.get(inF); // Stores path to file
-        // Uncomment below once cycN fixed
-        //Files.write(file, cycN, Charset.forName("UTF-8"), StandardOpenOption.TRUNCATE_EXISTING); // Writes to file ([path], [lines], [Charset], [Write Type])
+        try {
+            Writer writer = new PrintWriter("CycleCount.txt","UTF-8");
+            //cycN[0] = Integer.parseInt(cycN[0])+ 1; -- FIX
+            writer.write(cycN[0]);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
-    }
-    static String readFile(Path path, Charset encoding)
-            throws IOException
-    {
-        byte[] encoded = Files.readAllBytes(path);
-        return new String(encoded, encoding);
     }
 }
