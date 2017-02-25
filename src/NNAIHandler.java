@@ -1,12 +1,8 @@
 // Name: Theo Joyce
 // Describe: NNAI
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 public class NNAIHandler {
     public static void main(String[] args) {
         // Variables
@@ -14,15 +10,12 @@ public class NNAIHandler {
         int pMana = 100; // Player mana
         int eHealth = 100; // Enemy health
         int eMana = 100; // Enemy mana
-        int w[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        List<String> reader = new ArrayList<>(1); // Stores lines temp
-        String[] cycN = null; // NNAI cycle number
-
+        int w[] = {0,0,0,0,0,0}; // Enemy AI Weights array. {myHealth,pHealth,myMana,pMana,pArmor,myArmor}
+        int cycN = 0; // NNAI cycle number
+        Boolean goneOnce = false;
         String inF = "CycleCount.txt"; // Input file name
-        String outF = "output.txt"; // Output file name
 
         // Objects
-        Path in = Paths.get(inF);
 
 
         // Attempt to create input file
@@ -42,21 +35,20 @@ public class NNAIHandler {
             Scanner sc = new Scanner(new File(inF));
             // Cycles read from file
             while (sc.hasNext()) {
-                reader.add(sc.nextLine());
+                if (!goneOnce) {
+                    cycN = Integer.parseInt(sc.next()); // Reads cycle count to variable
+                    goneOnce = true; // Stops variable from being overwritten by anything
+                }
             }
-            cycN = reader.toArray(new String[0]);
-            sc.close();
-
+            sc.close(); // Closes scanner stream
         }catch (IOException e){
             e.printStackTrace();
         }
 
-
         // Write to cycles file
         try {
-            Writer writer = new PrintWriter("CycleCount.txt","UTF-8");
-            //cycN[0] = Integer.parseInt(cycN[0])+ 1; -- FIX
-            writer.write(cycN[0]);
+            cycN++; // Up cycle count
+            Files.write(Paths.get(inF), String.valueOf(cycN).getBytes()); // Write to file
         }catch (IOException e){
             e.printStackTrace();
         }
