@@ -14,8 +14,9 @@ public class SpriteTest extends Application {
     public static void main(String[] args){
         launch(args);
     }
-
+    // Reference: https://gamedevelopment.tutsplus.com/tutorials/introduction-to-javafx-for-game-development--cms-23835
     public void start (Stage stage){
+        // Test code from reference
         stage.setTitle("Hello");
         stage.setTitle( "Canvas Example" );
 
