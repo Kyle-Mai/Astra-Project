@@ -2,7 +2,7 @@ import java.awt.*;
 import java.io.IOException;
 import javax.microedition.lcdui.game.*;
 // Name: Theo Joyce
-// Describe: Battle logic class / Sprite test class
+// Describe: Battle logic class
 public class battle {
     public static void main(String[] args){
         System.out.println("「めんどくさい！」"); // Changes to how I feel about the class at the time of editing
