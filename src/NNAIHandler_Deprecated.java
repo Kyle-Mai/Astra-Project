@@ -3,7 +3,7 @@
 import java.io.*;
 import java.nio.file.*;
 import java.util.Scanner;
-public class NNAIHandler {
+public class NNAIHandler_Deprecated {
     public static void main(String[] args) {
         // Variables
         int pHealth = 100; // Player health
