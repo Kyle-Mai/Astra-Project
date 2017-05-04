@@ -65,7 +65,6 @@ public class planetClass extends planetCore {
                 return 5; //other climate
             }
 
-
         } else {
             //planet is not within the star's habitable zone
 
@@ -75,59 +74,5 @@ public class planetClass extends planetCore {
 
         return 0; //redundancy, declares a failure in the generation process
     }
-
-    //Determines the habitability of the planet.
-    private boolean isInHabitableZone(){
-        //I don't like data type values, so I'm converting in and out of them.
-        Integer starMag = starMagnitude;
-        Double absLum; //absolute luminosity of the star
-        Double absMagnitude = starMag.doubleValue(); //absolute magnitude of the star, as a double
-        Double bolMagnitude; //bolometric magnitude
-        Double BC = new Double(0); //bolometric correction constant
-
-        Double upperBound, lowerBound; //closest and furthest range of the habitable zone (approximation)
-
-        //this calculates the bolometric correction for the star based on the spectral class
-        if (starSpectral == "B" || starSpectral == "M") {
-            BC = -2.0;
-        } else if (starSpectral == "A") {
-            BC = -0.3;
-        } else if (starSpectral == "F") {
-            BC = -0.15;
-        } else if (starSpectral == "G") {
-            BC = -0.4;
-        } else if (starSpectral == "K") {
-            BC = -0.8;
-        } else if (starSpectral == "O") {
-            BC = -4.0;
-        }
-
-        //determines the bolometric magnitude of the star
-        bolMagnitude = absMagnitude + BC;
-
-        //determines the absolute luminosity of the star based on the bolometric magnitude and the constant for the Earth (4.72)
-        absLum = (Math.pow((10),(bolMagnitude - bolometricEarthConst) / -2.5));
-
-        //this gives us the upper and lower bounds of the habitable zone, measured in AU.
-        lowerBound = Math.sqrt(absLum / 1.1);
-        upperBound = Math.sqrt(absLum / 0.53);
-
-        //if the distance from the star is within the upper and lower bounds of the habitable zone, return true
-        //other things may influence habitability, however, this is just the zone
-        if ((lowerBound * AUtoKM) < distanceFromStar && (upperBound * AUtoKM) > distanceFromStar) {
-            return true; //within habitable zone, return true
-        } else {
-            return false; //outside of habitable zone, return false
-        }
-    }
-
-    //determines the habitability of the planet based on the conditions and returns a number between 1-1000 (percent habitability)
-    //higher percent > more habitable, by default anything less than 30% is a no-go
-    private int determineHabitability() {
-        return 100;
-
-    }
-
-
 
 }

@@ -26,8 +26,8 @@ public class planetCore {
     //Variables used in place of constant numbers either for simplicity or reusability. Also stores it in one easy-to-access place at the top of the class.
 
     //Conversion constants.
-    private final double AUtoKM = 14959.7870700; //converts au to million KM
-    private final double bolometricEarthConst = 4.72; //bolometric constant for Earth
+    protected final double AUtoKM = 14959.7870700; //converts au to million KM
+    protected final double bolometricEarthConst = 4.72; //bolometric constant for Earth
 
     private final int tidalLockChance = 13; //chance that the planet will be tidally locked
 
@@ -52,16 +52,16 @@ public class planetCore {
     }
 
     private static class planetSizes {
-        int atmosphereChance; //Chance of a planet within this scale having an atmosphere.
-        int planetScale; //Radius of the planet, listed in KM.
-        String sizeName; //Name of the scale, redundant, just used for identification.
+        int atmosphereChance;
+        int planetScale;
+        String sizeName;
 
         //Constructor for building the ArrayList.
         private planetSizes(String sizeName, int planetScaleKM, int atmosphereChance) {
 
-            this.sizeName = sizeName;
-            this.planetScale = planetScaleKM;
-            this.atmosphereChance = atmosphereChance;
+            this.sizeName = sizeName; //Name of the scale, redundant, just used for identification.
+            this.planetScale = planetScaleKM; //Radius of the planet, listed in KM.
+            this.atmosphereChance = atmosphereChance; //Chance of a planet within this scale having an atmosphere.
         }
 
         //Accessor methods for calling variables related to planet size.
@@ -155,10 +155,12 @@ public class planetCore {
     /** General Methods **/
     //General methods used by the global planetCore objects.
 
+    //TODO: Redo everything beyond this point, probably.
+
     //Checks whether or not the planet is tidally locked to the star.
-    protected boolean checkTidalLock(){
+    protected boolean checkTidalLock(int planetRadius, int starRadius){
         //in order to be tidally locked, the planet must be within 6* the star's radius
-        if (this.planetRadius < (6*starRadius)) {
+        if (planetRadius < (6*starRadius)) {
             //check whether or not it's tidally locked based on the % chance via a random #
             if (randomNumber() <= tidalLockChance) {
                 return true;
@@ -235,6 +237,58 @@ public class planetCore {
         return 0;
 
     } //checks the size of the planet
+
+    //Determines the habitability of the planet.
+    private boolean isInHabitableZone(String starSpectral){
+        //I don't like data type values, so I'm converting in and out of them.
+        Integer starMag = starMagnitude;
+        Double absLum; //absolute luminosity of the star
+        Double absMagnitude = starMag.doubleValue(); //absolute magnitude of the star, as a double
+        Double bolMagnitude; //bolometric magnitude
+        Double BC = new Double(0); //bolometric correction constant
+
+        Double upperBound, lowerBound; //closest and furthest range of the habitable zone (approximation)
+
+        //this calculates the bolometric correction for the star based on the spectral class
+        if (starSpectral == "B" || starSpectral == "M") {
+            BC = -2.0;
+        } else if (starSpectral.equals("A")) {
+            BC = -0.3;
+        } else if (starSpectral.equals("F")) {
+            BC = -0.15;
+        } else if (starSpectral.equals("G")) {
+            BC = -0.4;
+        } else if (starSpectral.equals("K")) {
+            BC = -0.8;
+        } else if (starSpectral.equals("O")) {
+            BC = -4.0;
+        }
+
+        //determines the bolometric magnitude of the star
+        bolMagnitude = absMagnitude + BC;
+
+        //determines the absolute luminosity of the star based on the bolometric magnitude and the constant for the Earth (4.72)
+        absLum = (Math.pow((10),(bolMagnitude - bolometricEarthConst) / -2.5));
+
+        //this gives us the upper and lower bounds of the habitable zone, measured in AU.
+        lowerBound = Math.sqrt(absLum / 1.1);
+        upperBound = Math.sqrt(absLum / 0.53);
+
+        //if the distance from the star is within the upper and lower bounds of the habitable zone, return true
+        //other things may influence habitability, however, this is just the zone
+        if ((lowerBound * AUtoKM) < distanceFromStar && (upperBound * AUtoKM) > distanceFromStar) {
+            return true; //within habitable zone, return true
+        } else {
+            return false; //outside of habitable zone, return false
+        }
+    }
+
+    //determines the habitability of the planet based on the conditions and returns a number between 1-1000 (percent habitability)
+    //higher percent > more habitable, by default anything less than 30% is a no-go
+    private int determineHabitability() {
+        return 100;
+
+    }
 
 
 }
