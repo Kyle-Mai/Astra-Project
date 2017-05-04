@@ -30,7 +30,7 @@ public class planetClass extends planetCore {
 
     public planetClass(int parentStar) {
         this.parentStar = parentStar;
-        this.planetRadius = planetSize();
+        this.planetRadius = calculateSize();
         this.isTidallyLocked = checkTidalLock(); //runs a check to determine tidal lock
 
         this.hasAtmosphere = checkAtmosphere();
@@ -41,52 +41,6 @@ public class planetClass extends planetCore {
         this.parentStar = parentStar;
 
     }
-
-    private int randomNumber(){
-        return (1 + (int)(Math.random() * 1000));
-    } //returns a random number
-
-    private boolean checkAtmosphere(){
-        //first run a check to determine proximity to star
-        //planets too close to star will have a very thin or no atmosphere
-        if (distanceFromStar <= starRadius * 2) {
-            return false;
-        }
-
-        switch (planetType) { //uses the planet type to run the next check
-
-
-        }
-
-        //next, check the size of the planet
-        if (planetRadius <= planetTiny) { //tiny planet
-            if (randomNumber() <= atmosphereChanceTiny) {
-                return true;
-            }
-        } else if (planetRadius > planetTiny && planetRadius <= planetSmall) { //small planet
-            if (randomNumber() <= atmosphereChanceSmall) {
-                return true;
-            }
-        } else if (planetRadius > planetSmall && planetRadius <= planetAverage) { //average planet
-            if (randomNumber() <= atmosphereChanceAverage) {
-                return true;
-            }
-        } else if (planetRadius > planetAverage && planetRadius <= planetLarge) { //large planet
-            if (randomNumber() <= atmosphereChanceLarge) {
-                return true;
-            }
-        } else if (planetRadius > planetLarge && planetRadius <= planetHuge) { //huge planet
-            if (randomNumber() <= atmosphereChanceHuge) {
-                return true;
-            }
-        } else if (planetRadius > planetHuge) {
-            if (randomNumber() <= atmosphereChanceGiant) { //giant planet
-                return true;
-            }
-        }
-        //failed the checks, no atmosphere
-        return false;
-    } //checks whether or not the planet has an atmosphere
 
     private int determinePlanetClass(){ //sets the planetType of the planet
         int randomPlanet = randomNumber();
