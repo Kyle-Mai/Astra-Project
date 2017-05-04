@@ -16,50 +16,104 @@ import java.util.ArrayList;
 
 public class starCore {
 
+    /** ArrayLists **/
+    //Used to store bulk information of like types.
+
+    protected ArrayList<starType> listOfStars = new ArrayList<>(); //Stores a list of the different starType blueprints.
+    protected ArrayList<Integer> spawnWeights = new ArrayList<>(); //Stores a list of the sums of the spawn weights of the star blueprints.
+
+
+    /** Constants **/
+    //The stuff listed here, while variable, is not meant to change after the program starts. It is to simplify editing values going forwards, so only one value (which is easy to find) needs changing.
+
     private final double sunLuminosity = 3.828;
+    private final int binaryChance = 56; //Chance for a star to be a part of a binary system (2 stars) Measured as 1 = 0.1%.
 
-    protected ArrayList<starType> listOfStars = new ArrayList<>();
-    protected ArrayList<Integer> spawnWeights = new ArrayList<>();
 
-    /**
-     Star type objects. Used to set the base description, class, etc of the star.
-     **/
+    /** Star creation **/
+    //Used to set the base description, class, etc of the star.
 
+    //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
     private void createStarTypes() {
-        listOfStars.add(new starType("Red Giant", "", 88,2800, 4600, true));
-        listOfStars.add(new starType("Blue Giant", "", 56, 20000, 50000, true));
-        listOfStars.add(new starType("Yellow Dwarf", "", 286, 5300, 6000, true));
-        listOfStars.add(new starType("Red Dwarf", "", 210, 2500, 4000, true));
-        listOfStars.add(new starType("White Dwarf", "", 52, 100000, 180000, true));
-        listOfStars.add(new starType("Brown Dwarf", "", 53, 700, 1300, false));
-        listOfStars.add(new starType("Wolf Rayet Star", "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 20, 30000, 200000, false));
-        listOfStars.add(new starType("Neutron Star", "", 29, 500000, 720000, false));
-        listOfStars.add(new starType("Pulsar", "A highly magnetized, rotating neutron star with a powerful focused beam of electromagnetic radiation ejected from both poles of the star. The fast, regular rotation of the star allows for incredible accuracy in keeping time - like a stellar clock.", 36, 520000, 750000, false));
-        listOfStars.add(new starType("Black Hole", "", 25, 0, 0, false));
-        listOfStars.add(new starType("Protostar", "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.", 65, 2000, 3000, true));
-        listOfStars.add(new starType("Supergiant", "", 15, 3500, 4500, true));
-        listOfStars.add(new starType("Relativistic Star", "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 6, 500000, 720000, false));
-        listOfStars.add(new starType("Magnetar", "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 19, 500000, 720000, false));
-        listOfStars.add(new starType("Hypergiant", "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 11, 4000, 35000, false));
-        listOfStars.add(new starType("Gravastar", "A Gravastar forms when a collapsing star's mass causes the gravitational acceleration to exceed Planck's length. This creates a region around the star that is a void in the fabric of space-time - a gravitational vacuum. It is theorized that a Gravastar may be responsible for the creation of the known universe.", 4, 0, 0, false));
-        listOfStars.add(new starType("Thorne-Zytkow Object", "While appearing to look like a Supergiant, the core of this star is actually an active Neutron star. The Neutron star's incredibly high heat emission allows for uncommon isotopes to be formed during this star's fusion processes.", 11, 540000, 780000, false));
-        listOfStars.add(new starType("Exotic Star", "A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.", 2, 700000, 900000, false));
+        listOfStars.add(new starType("Red Giant", "", 210,2800, 4600, true));
+        listOfStars.add(new starType("Blue Giant", "", 109, 20000, 50000, true));
+        listOfStars.add(new starType("Yellow Dwarf", "", 355, 5300, 6000, true));
+        listOfStars.add(new starType("Red Dwarf", "", 290, 2500, 4000, true));
+        listOfStars.add(new starType("White Dwarf", "", 135, 100000, 180000, true));
+        listOfStars.add(new starType("Brown Dwarf", "", 87, 700, 1300, false));
+        listOfStars.add(new starType("Wolf Rayet Star", "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 32, 30000, 200000, false));
+        listOfStars.add(new starType("Neutron Star", "", 62, 500000, 720000, false));
+        listOfStars.add(new starType("Pulsar", "A highly magnetized, rotating neutron star with a powerful focused beam of electromagnetic radiation ejected from both poles of the star. The fast, regular rotation of the star allows for incredible accuracy in keeping time - like a stellar clock.", 45, 520000, 750000, false));
+        listOfStars.add(new starType("Black Hole", "", 31, 0, 0, false));
+        listOfStars.add(new starType("Protostar", "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.", 98, 2000, 3000, true));
+        listOfStars.add(new starType("Supergiant", "", 22, 3500, 4500, true));
+        listOfStars.add(new starType("Relativistic Star", "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 8, 500000, 720000, false));
+        listOfStars.add(new starType("Magnetar", "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 26, 500000, 720000, false));
+        listOfStars.add(new starType("Hypergiant", "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 17, 4000, 35000, false));
+        listOfStars.add(new starType("Gravastar", "A Gravastar forms when a collapsing star's mass causes the gravitational acceleration to exceed Planck's length. This creates a region around the star that is a void in the fabric of space-time - a gravitational vacuum. It is theorized that a Gravastar may be responsible for the creation of the known universe.", 6, 0, 0, false));
+        listOfStars.add(new starType("Thorne-Zytkow Object", "While appearing to look like a Supergiant, the core of this star is actually an active Neutron star. The Neutron star's incredibly high heat emission allows for uncommon isotopes to be formed during this star's fusion processes.", 15, 540000, 780000, false));
+        listOfStars.add(new starType("Exotic Star", "A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.", 3, 700000, 900000, false));
 
-        starSpawnChanceWeighter();
     }
-    //TODO: Tune the spawn weights to a more balanced level
 
-    protected int totalSpawnWeight; //spawn weight of all of the star types combined
-
+    //Gets the different spawnChance values of the star blueprints (listOfStars) and organizes them by sum in an ArrayList (spawnWeights).
     private void starSpawnChanceWeighter() {
         spawnWeights.add(0); //adds the default 0 to the first slot in the spawn weights
         for (int i = 0; i < listOfStars.size(); i++) {
             //The total spawn weight amount of the stars combined, to simulate weights rather than percents
             totalSpawnWeight = totalSpawnWeight + listOfStars.get(i).getSpawn();
-            //Creates an arraylist of the different spawn weights for each star (as a sum), this allows the program to figure out which star it is trying to generate.
+            //Stores the sum of (i) plus all of the previously glossed over stars in the spawnWeights array to simulate different markers in a number between 0 and X, with X being the sum of all of the spawnChance values combined.
             spawnWeights.add(totalSpawnWeight);
         }
     }
+
+    //"Class" dedicated to storing star blueprints. Used sort-of like an array that can store multiple value types.
+    private static class starType {
+        //Variables dedicated to the starType blueprint. See constructor for detailed information.
+        String name;
+        int spawn;
+        String desc;
+        int[] Temp = new int[2];
+        boolean habitable;
+        String spectral;
+
+        //Constructor for building different star blueprints in the createStarTypes method listed above.
+        private starType(String starName, String starDesc, int spawnChance, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable){
+            this.name = starName; //the type of star
+            this.desc = starDesc; //the description for the star type
+            this.spawn = spawnChance; //chance of this star being generated, as a weighted system
+            this.Temp[0] = surfaceTempLow; //low end of the surface temperature of the star
+            this.Temp[1] = surfaceTempHigh; //high end of the surface temperature of the star
+            this.habitable = isHabitable; //whether or not the planet generator will attempt to spawn habitable planets around this star
+        }
+
+        // Accessor methods for calling the variables of the starType blueprints.
+        private int getSpawn() { return this.spawn; }
+        private String getSpectral() { return this.spectral; }
+
+    }
+
+
+    /** General variables **/
+    //General variables used by the starCore class.
+
+    protected int totalSpawnWeight; //spawn weight of all of the star types combined
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    /** Pre-loader method **/
+    //Method that MUST be initialized when the class first runs -- ALWAYS! Or else the program will break.
+
+    //Calls and runs all of the vital methods that must run before anything else.
+    public void starPreloader(){
+        createStarTypes();
+        starSpawnChanceWeighter();
+
+    }
+
+
+    /** Simple methods **/
+    //Methods used frequently within the class, such as random number generation and whatnot.
 
     //generates a random number between 1-1000, generally used for percentages out of 100.0%
     protected int randomNumber(){
@@ -70,6 +124,9 @@ public class starCore {
     protected int randomNumber(int low, int high){
         return (low + (int)(Math.random() * high));
     }
+
+    /** General methods **/
+    //General starCore methods, generally used for constructing the specific star (starClass) from the blueprint (starType).
 
     //determines the star's type / class
     protected int chooseStarType(){
@@ -110,33 +167,6 @@ public class starCore {
             return "?"; //unknown, black hole generally
         }
         return "?";
-    }
-
-    private static class starType {
-
-        private String name;
-        private int spawn;
-        private String desc;
-        private int[] Temp = new int[2];
-        boolean habitable;
-        String spectral;
-
-        /** Star IDs **/
-        //
-
-        private starType(String starName, String starDesc, int spawnChance, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable){
-            this.name = starName; //the type of star
-            this.desc = starDesc; //the description for the star type
-            this.spawn = spawnChance; //chance of this star being generated, as a weighted system
-            this.Temp[0] = surfaceTempLow; //low end of the surface temperature of the star
-            this.Temp[1] = surfaceTempHigh; //high end of the surface temperature of the star
-            this.habitable = isHabitable; //whether or not the planet generator will attempt to spawn habitable planets around this star
-        }
-
-        private int getSpawn(){
-            return this.spawn;
-        }
-
     }
 
 
