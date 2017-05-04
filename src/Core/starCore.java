@@ -82,7 +82,7 @@ public class starCore {
         private starType(String starName, int objectID, int spawnWeight, String starDesc, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable){
             this.name = starName; //the type of star
             this.desc = starDesc; //the description for the star type
-            this.starID = objectID;
+            this.starID = objectID; //the ID used to identify the star.
             this.spawn = spawnWeight; //chance of this star being generated, as a weighted system
             this.Temp[0] = surfaceTempLow; //low end of the surface temperature of the star
             this.Temp[1] = surfaceTempHigh; //high end of the surface temperature of the star

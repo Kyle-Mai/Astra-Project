@@ -76,26 +76,26 @@ public class planetCore {
 
     //Sets all of the predefined blueprints into a variable ArrayList (listOfPlanets) to allow for dynamic addition/removal of planet types.
     private void createPlanetTypes(){
-        listOfPlanets.add(new planetType("Continental World", 2000, 86, "The landscape is dotted with numerous large continents and a temperate climate.", 1, true, 3500, 2300));
-        listOfPlanets.add(new planetType("Oceanic World", 2001, 107, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", 1 , true, 3600, 2100));
-        listOfPlanets.add(new planetType("Wetlands World", 2002, 150, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", 1, true, 2700, 1300));
-        listOfPlanets.add(new planetType("Alpine World", 2003, 133, "Large mountain ranges, young and old, spread across the landscape of this planet.", 2, false, 2500, 1300));
-        listOfPlanets.add(new planetType("Tundra World", 2004, 155, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", 2, true, 2300, 800));
-        listOfPlanets.add(new planetType("Ice World", 2005, 207,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", 2, true, 2800, 1400));
-        listOfPlanets.add(new planetType("Desert World", 2006, 222, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", 3, true, 3100, 2000));
-        listOfPlanets.add(new planetType("Swamp World", 2007, 201, "", 3, true, 2400, 600));
-        listOfPlanets.add(new planetType("Tropical World", 2008, 56, "", 3, true, 2500, 900));
-        listOfPlanets.add(new planetType("Greenhouse World", 2009, 106, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", 3, false, 4100, 2900));
-        listOfPlanets.add(new planetType("Frozen World", 2010, 76,  "", 2, false, 2300, 1700));
-        listOfPlanets.add(new planetType("Molten World", 2011, 101, "", 3, false, 3200, 2000));
-        listOfPlanets.add(new planetType("Storm World", 2012, 56, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", 3, false, 3800, 2400));
-        listOfPlanets.add(new planetType("Gas Giant", 2013, 92, "", 4, false, 80000, 32000));
-        listOfPlanets.add(new planetType("Barren World", 2014, 304, "", 4, false, 3000, 2400));
-        listOfPlanets.add(new planetType("Damaged World", 2015, 22, "", 4, false, 2600, 1200));
-        listOfPlanets.add(new planetType("Tidal World", 2016, 40, "", 4, false, 1800, 900));
-        listOfPlanets.add(new planetType("Radioactive World", 2017, 100, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", 4, false, 3200, 2000));
-        listOfPlanets.add(new planetType("Carbon World", 2018, 115, "", 4, false, 2700, 1300));
-        listOfPlanets.add(new planetType("Iron World", 2019, 105, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", 4, false, 4700, 3100));
+        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 86, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
+        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 107, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
+        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 150, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
+        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 133, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300));
+        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 155, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800));
+        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 207,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400));
+        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 222, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000));
+        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 201, "", true, 2400, 600));
+        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 56, "", true, 2500, 900));
+        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2103, 106, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
+        listOfPlanets.add(new planetType("Frozen World", 2010, 2105, 76,  "", false, 2300, 1700));
+        listOfPlanets.add(new planetType("Molten World", 2011, 2102, 101, "", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 56, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
+        listOfPlanets.add(new planetType("Gas Giant", 2013, 2103, 92, "", false, 80000, 32000));
+        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 304, "", false, 3000, 2400));
+        listOfPlanets.add(new planetType("Damaged World", 2015, 2103, 22, "", false, 2600, 1200));
+        listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 40, "", false, 1800, 900));
+        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 100, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 115, "", false, 2700, 1300));
+        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 105, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
         //listOfPlanets.add();
 
     }
@@ -109,7 +109,7 @@ public class planetCore {
         boolean habitable;
 
         //Constructor method.
-        private planetType(String name, int objectID, int spawnWeight, String planetDesc, int climateID, boolean isHabitable, int sizeWeight, int sizeVariation){
+        private planetType(String name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation){
             this.className = name; //Name of the world's biome.
             this.planetID = objectID; //The ID used to reference the planet.
             this.spawnWeight = spawnWeight; //The weight assigned to this planet type. Determines how often it spawns relative to other planets in the same climate class.
