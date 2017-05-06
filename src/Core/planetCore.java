@@ -43,7 +43,7 @@ public class planetCore {
 
     //Pre-defined blueprints for different planet scales, and the modifiers that go with it.
     private void createPlanetSizes(){
-        listOfScales.add(new planetSizes("Tiny", 700, 15));
+        listOfScales.add(new planetSizes("Dwarf", 700, 15));
         listOfScales.add(new planetSizes("Small", 1500, 180));
         listOfScales.add(new planetSizes("Average", 2500, 360));
         listOfScales.add(new planetSizes("Large", 4000, 950));
@@ -91,11 +91,12 @@ public class planetCore {
         listOfPlanets.add(new planetType("Storm World", 2012, 2103, 56, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
         listOfPlanets.add(new planetType("Gas Giant", 2013, 2103, 92, "", false, 80000, 32000));
         listOfPlanets.add(new planetType("Barren World", 2014, 2105, 304, "", false, 3000, 2400));
-        listOfPlanets.add(new planetType("Damaged World", 2015, 2103, 22, "", false, 2600, 1200));
+        listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 22, "", false, 2600, 1200));
         listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 40, "", false, 1800, 900));
         listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 100, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
         listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 115, "", false, 2700, 1300));
         listOfPlanets.add(new planetType("Iron World", 2019, 2105, 105, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
+        listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 15, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
         //listOfPlanets.add();
 
     }

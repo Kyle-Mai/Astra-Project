@@ -22,9 +22,10 @@ public class starClass extends starCore {
     private int starIndex;
 
     public starClass(){
-        this.starIndex = chooseStarType();
+        this.starIndex = chooseStarType(); //The ID of the star type.
         this.surfaceTemp = determineSurfaceTemperature(starIndex);
         this.starSpectral = determineSpectralClass(surfaceTemp);
+
     }
 
     private int planetsToGenerate() {
