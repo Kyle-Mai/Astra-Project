@@ -1,5 +1,7 @@
 package Core;
 
+import java.util.ArrayList;
+
 /**
  *
  KM
@@ -20,15 +22,27 @@ public class starClass extends starCore {
     private int numOfPlanets; //number of planets orbiting this star
     private int surfaceTemp; //in kelvin
     private int starIndex;
+    private Double absLum;
+    private int habitableZoneMax;
+    private int habitableZoneMin;
+    private int mapLocationX;
+    private int mapLocationY;
 
-    public starClass(){
+    public starClass(int mapLocationX, int mapLocationY){
         this.starIndex = chooseStarType(); //The ID of the star type.
-        this.surfaceTemp = determineSurfaceTemperature(starIndex);
-        this.starIsHabitable = determineHabitability(starIndex);
-        this.starSpectral = determineSpectralClass(surfaceTemp);
-        this.starRadius = determineRadius(starIndex);
-        this.isBinarySystem = determineBinary();
-        this.numOfPlanets = determineNumOfPlanets(starIndex);
+        this.surfaceTemp = determineSurfaceTemperature(starIndex); //The surface temperature of the star
+        this.starIsHabitable = determineHabitability(starIndex); //Whether or not the star is habitable
+        this.starSpectral = determineSpectralClass(surfaceTemp); //The spectral class of the star
+        this.starRadius = determineRadius(starIndex); //The star's radius
+        this.isBinarySystem = determineBinary(); //Whether or not the star is in a binary system
+        this.numOfPlanets = determineNumOfPlanets(starIndex); //number of planets orbiting the star
+        this.absLum = determineLuminosity(starSpectral, starMagnitude); //the absolute luminosity of the star
+        this.habitableZoneMax = habitableZoneMax(absLum); //the upper end of the star's habitable zone
+        this.habitableZoneMin = habitableZoneMin(absLum); //the lower end of the star's habitable zone
+        this.mapLocationX = mapLocationX; //the X position of the star on the map grid
+        this.mapLocationY = mapLocationY; //the Y position of the star on the map grid
+
+
     }
 
 

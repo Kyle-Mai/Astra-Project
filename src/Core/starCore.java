@@ -24,6 +24,7 @@ public class starCore {
     //The stuff listed here, while variable, is not meant to change after the program starts. It is to simplify editing values going forwards, so only one value (which is easy to find) needs changing.
 
     private final double sunLuminosity = 3.828;
+    private final double bolometricEarthConst = 4.72; //bolometric constant for Earth
     private final int binaryChance = 56; //Chance for a star to be a part of a binary system (2 stars) Measured as 1 = 0.1%.
 
 
@@ -151,6 +152,7 @@ public class starCore {
                 return listOfStars.get(i-1).getStarID(); //Returns the ID of the star
             }
         }
+
         return 0; //redundancy
     }
 
@@ -170,7 +172,6 @@ public class starCore {
             } else {
                 spawnChance = spawnChance - 150;
             }
-
         }
 
         return planetsToSpawn;
@@ -222,7 +223,55 @@ public class starCore {
         } else if (surfaceTemperature < 400) {
             return "?"; //unknown, black hole generally
         }
+
         return "?";
+    }
+
+    //Determines the habitable zone of the star
+    protected Double determineLuminosity(String starSpectral, int starMagnitude){
+        //I don't like data type values, so I'm converting in and out of them.
+        Integer starMag = starMagnitude;
+        Double absLum; //absolute luminosity of the star
+        Double absMagnitude = starMag.doubleValue(); //absolute magnitude of the star, as a double
+        Double bolMagnitude; //bolometric magnitude
+        Double BC = new Double(0); //bolometric correction constant
+
+        Double upperBound, lowerBound; //closest and furthest range of the habitable zone (approximation)
+
+        //this calculates the bolometric correction for the star based on the spectral class
+        if (starSpectral == "B" || starSpectral == "M") {
+            BC = -2.0;
+        } else if (starSpectral.equals("A")) {
+            BC = -0.3;
+        } else if (starSpectral.equals("F")) {
+            BC = -0.15;
+        } else if (starSpectral.equals("G")) {
+            BC = -0.4;
+        } else if (starSpectral.equals("K")) {
+            BC = -0.8;
+        } else if (starSpectral.equals("O")) {
+            BC = -4.0;
+        }
+
+        //determines the bolometric magnitude of the star
+        bolMagnitude = absMagnitude + BC;
+
+        //determines the absolute luminosity of the star based on the bolometric magnitude and the constant for the Earth (4.72)
+        absLum = (Math.pow((10),(bolMagnitude - bolometricEarthConst) / -2.5));
+
+        return absLum;
+    }
+
+    protected int habitableZoneMax(Double absoluteLuminosity) {
+        Double upperBound = Math.sqrt(absoluteLuminosity / 0.53);
+        int habitableZoneUpper = upperBound.intValue();
+        return habitableZoneUpper;
+    }
+
+    protected int habitableZoneMin(Double absoluteLuminosity) {
+        Double lowerBound = Math.sqrt(absoluteLuminosity / 1.1);
+        int habitableZoneLower = lowerBound.intValue();
+        return habitableZoneLower;
     }
 
 
