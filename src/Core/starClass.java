@@ -17,7 +17,7 @@ public class starClass extends starCore {
     private String starSpectral; //type of star
     private boolean starIsHabitable; //whether or not the star can theoretically support life
     private boolean isBinarySystem; //whether or not the system will generate two stars
-    private boolean numOfPlanets; //number of planets orbiting this star
+    private int numOfPlanets; //number of planets orbiting this star
     private int surfaceTemp; //in kelvin
     private int starIndex;
 
@@ -26,8 +26,9 @@ public class starClass extends starCore {
         this.surfaceTemp = determineSurfaceTemperature(starIndex);
         this.starIsHabitable = determineHabitability(starIndex);
         this.starSpectral = determineSpectralClass(surfaceTemp);
+        this.starRadius = determineRadius(starIndex);
         this.isBinarySystem = determineBinary();
-
+        this.numOfPlanets = determineNumOfPlanets(starIndex);
     }
 
 
