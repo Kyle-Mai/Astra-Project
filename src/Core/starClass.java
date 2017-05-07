@@ -24,12 +24,10 @@ public class starClass extends starCore {
     public starClass(){
         this.starIndex = chooseStarType(); //The ID of the star type.
         this.surfaceTemp = determineSurfaceTemperature(starIndex);
+        this.starIsHabitable = determineHabitability(starIndex);
         this.starSpectral = determineSpectralClass(surfaceTemp);
+        this.isBinarySystem = determineBinary();
 
-    }
-
-    private int planetsToGenerate() {
-        return 0; //redundancy
     }
 
 

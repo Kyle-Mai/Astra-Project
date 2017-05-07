@@ -102,6 +102,9 @@ public class starCore {
         private int getSpawn() { return this.spawn; }
         private String getSpectral() { return this.spectral; }
         private int getStarID() { return this.starID; }
+        private boolean getHabitable() { return this.habitable; }
+        private int getSizeWeight() { return this.sizeWeight; }
+        private int getSizeVariation() { return this.sizeVariation; }
 
     }
 
@@ -152,6 +155,28 @@ public class starCore {
     //returns a randomized surface temperature of the star based on the upper and lower limits of the star class.
     protected int determineSurfaceTemperature(int starIndex){
         return randomNumber(listOfStars.get(starIndex).Temp[0], listOfStars.get(starIndex).Temp[1]);
+    }
+
+    protected boolean determineHabitability(int starIndex) {
+        return listOfStars.get(starIndex).getHabitable();
+    }
+
+    //checks whether or not the generated system will have a binary star
+    protected boolean determineBinary(){
+        if (randomNumber() < binaryChance) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //returns the radius of the star based on the weight and variation
+    //the weight determines the median size, and the variation determines the max and min
+    protected int determineRadius(int starIndex){
+        return randomNumber(
+                listOfStars.get(starIndex).getSizeWeight() - listOfStars.get(starIndex).getSizeVariation(),
+                listOfStars.get(starIndex).getSizeWeight() + listOfStars.get(starIndex).getSizeVariation()
+        );
     }
 
     //determines the spectral class of the star based on the surface temperature
