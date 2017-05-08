@@ -76,18 +76,18 @@ public class planetCore {
 
     //Sets all of the predefined blueprints into a variable ArrayList (listOfPlanets) to allow for dynamic addition/removal of planet types.
     private void createPlanetTypes(){
-        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 86, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
-        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 107, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
-        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 150, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
-        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 133, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300));
-        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 155, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800));
-        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 207,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400));
-        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 222, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000));
-        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 201, "", true, 2400, 600));
-        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 56, "", true, 2500, 900));
-        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2103, 106, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
-        listOfPlanets.add(new planetType("Frozen World", 2010, 2105, 76,  "", false, 2300, 1700));
-        listOfPlanets.add(new planetType("Molten World", 2011, 2102, 101, "", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 78, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
+        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 54, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
+        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 50, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
+        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 65, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300));
+        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 56, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800));
+        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 42,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400));
+        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 62, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000));
+        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 52, "", true, 2400, 600));
+        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 36, "", true, 2500, 900));
+        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2109, 20, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
+        listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 26,  "", false, 2300, 1700));
+        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 42, "", false, 3200, 2000));
         listOfPlanets.add(new planetType("Storm World", 2012, 2103, 56, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
         listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 92, "", false, 80000, 32000));
         listOfPlanets.add(new planetType("Barren World", 2014, 2105, 304, "", false, 3000, 2400));
@@ -96,10 +96,12 @@ public class planetCore {
         listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 100, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
         listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 115, "", false, 2700, 1300));
         listOfPlanets.add(new planetType("Iron World", 2019, 2105, 105, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
-        listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 15, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
-        listOfPlanets.add(new planetType("Shield World", 2021, 2107, 2, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
+        listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
+        listOfPlanets.add(new planetType("Shield World", 2021, 2107, 1, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
         //listOfPlanets.add();
         //TODO: Possibly redo the format of this to take advantage of external files in order to allow for 'modding' of the game? I.E Addition of planet types without accessing the code.
+
+        //TODO: Clean up and normalize spawn weights.
 
     }
 
@@ -188,7 +190,6 @@ public class planetCore {
         planetsToSpawn.clear();
 
         //if the planet is tidally locked, we want to give it a tidal climate
-        /** Tidally locked planets **/
         if (tidalLock) {
             for (int i = 0; i < listOfPlanets.size(); i++) {
                 if (listOfPlanets.get(i).getClimateID() == 2104) {
@@ -200,10 +201,7 @@ public class planetCore {
             }
         }
 
-        //TODO: Redo planet generation to fit the proper weighting system.
-
-        //planet has been spawned within the habitable zone of the star
-        /** Gas giants **/
+        //planet is very large, therefore spawn a gas giant
         if (planetRadius > 45000) {
             //Planet radius is very large, therefore it is going to be a Gas Giant.
             for (int i = 0; i < listOfPlanets.size(); i++) {
@@ -215,16 +213,100 @@ public class planetCore {
             }
         }
 
-        /** Habitable zone planets **/
+        //planet is within the habitable zone and not a gas giant
         else if (isHabitableZone) {
+            int hotSpawnMult = 0, coldSpawnMult = 0, tempSpawnMult = 0;
+            boolean guaranteeGaia = false;
 
-        } //planet is not within the star's habitable zone
-        else if (distanceFromStar < parentStar.getHabitableZoneMin()) {
-            //planet is closer to the star than the habitable zone, it'll be a hot planet
+            //planet is closer to the far reaches of the habitable zone, therefore should be slightly colder in bias
+            if (parentStar.getHabitableZoneMax() * AUtoKM - distanceFromStar > distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM) {
+                coldSpawnMult = 20;
+                hotSpawnMult = 0;
+                tempSpawnMult = 5;
+            } else if (parentStar.getHabitableZoneMax() * AUtoKM - distanceFromStar > distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM) {
+                hotSpawnMult = 20;
+                coldSpawnMult = 0;
+                tempSpawnMult = 5;
+            } else {
+                guaranteeGaia = true;
+            }
 
-        } else if (distanceFromStar > parentStar.getHabitableZoneMax()) {
-            //planet is further from the star than the habitable zone, it'll be a cold planet
+            //(Longest equation ever...) Temperate bias if the planet is close to the center of the habitable zone.
+            if ((parentStar.getHabitableZoneMax() * AUtoKM - parentStar.getHabitableZoneMin() * AUtoKM) / 2 < distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM && ((((parentStar.getHabitableZoneMax() * AUtoKM) - (parentStar.getHabitableZoneMin() * AUtoKM)) / 2) * 3) > distanceFromStar - (parentStar.getHabitableZoneMin() * AUtoKM)) {
+                tempSpawnMult = 50;
+            }
 
+            //if the planet is perfectly centered in the habitable zone, guarantee a gaia world
+            if (guaranteeGaia) {
+                for (int i = 0; i < listOfPlanets.size(); i++) {
+                    if (listOfPlanets.get(i).getClimateID() == 2106) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                    }
+                }
+            } else {
+                for (int i = 0; i < listOfPlanets.size(); i++) {
+                    //gather all of the habitable planets and place them into the list
+                    if (listOfPlanets.get(i).getClimateID() == 2106) { //Adds a weighted list of gaia type planets.
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    } else if (listOfPlanets.get(i).getClimateID() == 2100) { //Adds a weighted list of temperate planets.
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + tempSpawnMult; j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    } else if (listOfPlanets.get(i).getClimateID() == 2101) { //Adds a weighted list of hot planets.
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + hotSpawnMult; j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    } else if (listOfPlanets.get(i).getClimateID() == 2102) { //Adds a weighted list of cold planets.
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + coldSpawnMult; j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107 || listOfPlanets.get(i).getClimateID() == 2106 ) { //Adds a weighted list of different barren/extreme planets as well as gaia
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    }
+                }
+            }
+
+        }
+
+        //Planet is not within habitable zone, act accordingly
+        else if (distanceFromStar < parentStar.getHabitableZoneMin() * AUtoKM) { //planet is closer to the star than the habitable zone, it'll be an extreme warm planet
+            int extremeHotMult = 0;
+            if (distanceFromStar < parentStar.getStarRadius() * 5) { //Planet is very close to the star, going to be extreme hot.
+            extremeHotMult = 25;
+            }
+            for (int i = 0; i < listOfPlanets.size(); i++) {
+                if (listOfPlanets.get(i).getClimateID() == 2109) { //Adds a weighted list of extreme hot planets
+                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + extremeHotMult; j++) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                    }
+                } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107) { //Adds a weighted list of different barren/extreme planets
+                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                    }
+                }
+            }
+
+        } else if (distanceFromStar > parentStar.getHabitableZoneMax() * AUtoKM) {
+            //planet is further from the star than the habitable zone, it'll be a extreme cold planet
+            int extremeColdMult = 0;
+            if (distanceFromStar < parentStar.getStarRadius() * 5) { //Planet is very close to the star, going to be extreme hot.
+                extremeColdMult = 25;
+            }
+            for (int i = 0; i < listOfPlanets.size(); i++) {
+                if (listOfPlanets.get(i).getClimateID() == 2110) { //Adds a weighted list of extreme hot planets
+                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + extremeColdMult; j++) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                    }
+                } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107) { //Adds a weighted list of different barren/extreme planets
+                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                    }
+                }
+            }
         }
 
         randomPlanet = randomNumber(0, planetsToSpawn.size() - 1); //gets a random number from the list
@@ -301,7 +383,7 @@ public class planetCore {
     } //checks the size of the planet
 
     protected boolean isInHabitableZone(int distanceFromStar, int upperBound, int lowerBound) {
-        if ((lowerBound * AUtoKM) < distanceFromStar && (upperBound * AUtoKM) > distanceFromStar) {
+        if ((lowerBound * AUtoKM) <= distanceFromStar && (upperBound * AUtoKM) >= distanceFromStar) {
             return true; //within habitable zone, return true
         } else {
             return false; //outside of habitable zone, return false
