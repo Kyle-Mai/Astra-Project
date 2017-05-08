@@ -28,7 +28,6 @@ public class planetCore {
 
     //Conversion constants.
     protected final double AUtoKM = 14959.7870700; //converts au to million KM
-
     private final int tidalLockChance = 13; //chance that the planet will be tidally locked
 
 
@@ -76,32 +75,30 @@ public class planetCore {
 
     //Sets all of the predefined blueprints into a variable ArrayList (listOfPlanets) to allow for dynamic addition/removal of planet types.
     private void createPlanetTypes(){
-        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 78, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
-        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 54, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
-        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 50, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
-        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 65, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300));
-        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 56, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800));
-        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 42,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400));
-        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 62, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000));
-        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 52, "", true, 2400, 600));
-        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 36, "", true, 2500, 900));
-        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2109, 20, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
-        listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 26,  "", false, 2300, 1700));
-        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 42, "", false, 3200, 2000));
-        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 56, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
-        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 92, "", false, 80000, 32000));
-        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 304, "", false, 3000, 2400));
-        listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 22, "", false, 2600, 1200));
-        listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 40, "", false, 1800, 900));
-        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 100, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
-        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 115, "", false, 2700, 1300));
-        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 105, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
+        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 82, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
+        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 58, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
+        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 55, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
+        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 76, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300));
+        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 58, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800));
+        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 49,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400));
+        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 70, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000));
+        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 60, "", true, 2400, 600));
+        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 52, "", true, 2500, 900));
+        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2109, 28, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
+        listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 35,  "", false, 2300, 1700));
+        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 48, "", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 30, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
+        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 10, "", false, 80000, 32000));
+        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 65, "", false, 3000, 2400));
+        listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 14, "", false, 2600, 1200));
+        listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 10, "", false, 1800, 900));
+        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 19, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 24, "", false, 2700, 1300));
+        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 15, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
         listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
         listOfPlanets.add(new planetType("Shield World", 2021, 2107, 1, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
         //listOfPlanets.add();
         //TODO: Possibly redo the format of this to take advantage of external files in order to allow for 'modding' of the game? I.E Addition of planet types without accessing the code.
-
-        //TODO: Clean up and normalize spawn weights.
 
     }
 
@@ -164,6 +161,56 @@ public class planetCore {
 
     /** General Methods **/
     //General methods used by the global planetCore objects.
+
+    //Determines the planet's distance from the star
+    protected int determineDistanceFromStar(starClass parentStar, int planetNumber){
+        int distanceMin; //Values
+        int distanceMax;
+        Double maximumDistance; //Multipliers
+        Double minimumDistance;
+        int distanceFromStar;
+        boolean incompatible = true;
+
+        if (parentStar.getNumOfPlanets() > 6) {
+            maximumDistance = 4.2; //the minimum distance from the star that a planet will be generated, measured as a multiplier of the star's radius
+            minimumDistance = 1.4; //the minimum distance from the star that a planet will be generated
+
+        } else if (parentStar.getNumOfPlanets() < 3) {
+            maximumDistance = 6.4;
+            minimumDistance = 1.4;
+
+        } else {
+            maximumDistance = 8.5;
+            minimumDistance = 1.4;
+
+        }
+
+        //Calculates the range of the planet's possible orbits
+        distanceMin = (int)(parentStar.getStarRadius() * (minimumDistance * (planetNumber + 1)));
+        distanceMax = (int)(parentStar.getStarRadius() * (maximumDistance * (planetNumber + 1)));
+
+        distanceFromStar = randomNumber(distanceMin, distanceMax);
+
+        //If this isn't the first planet, we need to make sure the planet orbits don't overlap
+        if (planetNumber > 0) {
+            //until the conditions are met
+            while (incompatible) {
+                incompatible = false;
+                for (int i = 0; i < parentStar.planetList.size(); i++) { //check the other planets around the star
+                    //if this planet is too close to another,
+                    if (distanceFromStar < parentStar.planetList.get(i).getDistanceFromStar() + (parentStar.planetList.get(i).getPlanetRadius() * 4) || distanceFromStar > parentStar.planetList.get(i).getDistanceFromStar() - (parentStar.planetList.get(i).getPlanetRadius() * 4)) {
+                        incompatible = true;
+                    }
+                }
+                //if there's an incompatibility, regenerate the planet distance
+                if (incompatible) {
+                    distanceFromStar = randomNumber(distanceMin, distanceMax);
+                }
+            }
+        }
+
+        return distanceFromStar;
+    }
 
     //Checks whether or not the planet is tidally locked to the star.
     protected boolean checkTidalLock(int planetRadius, int starRadius){
@@ -315,7 +362,7 @@ public class planetCore {
 
     protected int calculateSize(int starRadius, int distanceFromStar){
 
-        if (distanceFromStar <= 3*starRadius) {
+        if (distanceFromStar <= 4*starRadius) {
 
             if (800 <= randomNumber()) { //what's this?! weighted planet sizes?!
                 //80% chance of being a fairly small planet
@@ -325,7 +372,7 @@ public class planetCore {
                 return (120 + (int)(Math.random() * 3800));
             }
 
-        } else if (distanceFromStar <= 15*starRadius && distanceFromStar > 3*starRadius) {
+        } else if (distanceFromStar <= 15*starRadius && distanceFromStar > 4*starRadius) {
 
             if (900 <= randomNumber()) {
                 //90% chance to be a fairly average planet

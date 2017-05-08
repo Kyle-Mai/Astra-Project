@@ -13,18 +13,21 @@ public class planetClass extends planetCore {
     /** planet construction methods **/
 
     //planet variables
-    private int distanceFromStar; //distance from the star, measured in million km
-    private int planetRadius; //radius, in km
-    private boolean isTidallyLocked; //checks to see if planet is tidally locked to sun >> 100% uninhabitable
-    private int planetType; //type of planet
+    private int distanceFromStar;
+    private int planetRadius;
+    private boolean isTidallyLocked;
+    private int planetType;
     private boolean isInHabitableZone;
     private starClass parentStar;
     private boolean isPlanetHabitable;
     private boolean isHabited;
+    private int planetNumber;
 
-    public planetClass(starClass parentStar) {
-        this.parentStar = parentStar;
-        this.planetRadius = calculateSize(parentStar.getStarRadius(), this.distanceFromStar);
+    public planetClass(starClass parentStar, int planetNumber) {
+        this.parentStar = parentStar; //the parent star of the planet
+        this.planetNumber = planetNumber; //the current planet being generated, with a higher number being further from the parent star
+        this.distanceFromStar = determineDistanceFromStar(this.parentStar, this.planetNumber);
+        this.planetRadius = calculateSize(parentStar.getStarRadius(), this.distanceFromStar); //determines the radius of the planet in km
         this.isTidallyLocked = checkTidalLock(this.planetRadius, parentStar.getStarRadius()); //runs a check to determine tidal lock
         this.isInHabitableZone = isInHabitableZone(this.distanceFromStar, parentStar.getHabitableZoneMax(), parentStar.getHabitableZoneMin());
         this.planetType = determinePlanetClass(this.distanceFromStar, this.planetRadius, this.isTidallyLocked, this.isInHabitableZone, this.parentStar); //determines the planet's class
@@ -37,5 +40,7 @@ public class planetClass extends planetCore {
 
     public boolean getHabited() { return this.isHabited; }
     public boolean getHabitability() { return this.isPlanetHabitable; }
+    public int getDistanceFromStar() { return this.distanceFromStar; }
+    public int getPlanetRadius() { return this.planetRadius; }
 
 }

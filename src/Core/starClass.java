@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class starClass extends starCore {
 
-    private ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
+    protected ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
 
     private int starRadius;
     private int starMagnitude;
@@ -50,7 +50,7 @@ public class starClass extends starCore {
     //generates the planets surrounding this star
     private void constructPlanets() {
         for (int i = 0; i <= numOfPlanets; i++) {
-            planetList.add(new planetClass(this));
+            planetList.add(new planetClass(this, i));
         }
 
     }
@@ -61,6 +61,7 @@ public class starClass extends starCore {
     public int getHabitableZoneMax() { return this.habitableZoneMax; }
     public int getHabitableZoneMin() { return this.habitableZoneMin; }
     public int getStarRadius() { return this.starRadius; }
+    public int getNumOfPlanets() { return this.numOfPlanets; }
 
 
 }
