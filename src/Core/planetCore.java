@@ -17,7 +17,7 @@ public class planetCore {
 
     /** ArrayLists **/
 
-    protected ArrayList<planetType> listOfPlanets = new ArrayList<>();
+    public static ArrayList<planetType> listOfPlanets = new ArrayList<>();
     protected ArrayList<planetSizes> listOfScales = new ArrayList<>();
     protected ArrayList<Integer> spawnWeights = new ArrayList<>();
     protected ArrayList<Integer> planetsToSpawn = new ArrayList<>();
@@ -103,7 +103,7 @@ public class planetCore {
     }
 
     //"Class" dedicated to building planet blueprints, which are used when creating different planets.
-    private static class planetType {
+    public static class planetType {
         //Variable declarations.
         String className;
         int planetID, climateID, sizeWeight, sizeVariation, spawnWeight;
@@ -111,7 +111,7 @@ public class planetCore {
         boolean habitable;
 
         //Constructor method.
-        private planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation){
+        public planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation){
             this.className = Name; //Name of the world's biome.
             this.planetID = objectID; //The ID used to reference the planet.
             this.spawnWeight = spawnWeight; //The weight assigned to this planet type. Determines how often it spawns relative to other planets in the same climate class.
