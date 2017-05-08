@@ -20,6 +20,7 @@ public class planetCore {
     protected ArrayList<planetType> listOfPlanets = new ArrayList<>();
     protected ArrayList<planetSizes> listOfScales = new ArrayList<>();
     protected ArrayList<Integer> spawnWeights = new ArrayList<>();
+    protected ArrayList<Integer> planetsToSpawn = new ArrayList<>();
 
 
     /** Constants **/
@@ -88,7 +89,7 @@ public class planetCore {
         listOfPlanets.add(new planetType("Frozen World", 2010, 2105, 76,  "", false, 2300, 1700));
         listOfPlanets.add(new planetType("Molten World", 2011, 2102, 101, "", false, 3200, 2000));
         listOfPlanets.add(new planetType("Storm World", 2012, 2103, 56, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
-        listOfPlanets.add(new planetType("Gas Giant", 2013, 2103, 92, "", false, 80000, 32000));
+        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 92, "", false, 80000, 32000));
         listOfPlanets.add(new planetType("Barren World", 2014, 2105, 304, "", false, 3000, 2400));
         listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 22, "", false, 2600, 1200));
         listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 40, "", false, 1800, 900));
@@ -128,6 +129,7 @@ public class planetCore {
         private String getClassName() { return this.className; }
         private String getClassDesc() { return this.classDesc; }
         private boolean getHabitable() { return this.habitable; }
+        private int getSpawnWeight() { return this.spawnWeight; }
 
     }
 
@@ -180,36 +182,53 @@ public class planetCore {
 
     //determines the class of the planet generated
     protected int determinePlanetClass(int distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar){ //sets the planetType of the planet
-        int randomPlanet = randomNumber();
+        int randomPlanet; //gets a random number to determine the type of planet generated
 
-        //if the planet is tidally locked, we want to give it a tidal climate, period.
+        //first, clear the planetsToSpawn arraylist so we don't mix spawns.
+        planetsToSpawn.clear();
+
+        //if the planet is tidally locked, we want to give it a tidal climate
+        /** Tidally locked planets **/
         if (tidalLock) {
-            return 6;
+            for (int i = 0; i < listOfPlanets.size(); i++) {
+                if (listOfPlanets.get(i).getClimateID() == 2104) {
+                    //this next check allows for spawn weighting, so a higher weight = higher chance to spawn
+                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID()); //adds all planets with the tidal climate type to the list
+                    }
+                }
+            }
         }
 
         //TODO: Redo planet generation to fit the proper weighting system.
 
         //planet has been spawned within the habitable zone of the star
+        /** Gas giants **/
         if (planetRadius > 45000) {
             //Planet radius is very large, therefore it is going to be a Gas Giant.
             for (int i = 0; i < listOfPlanets.size(); i++) {
-                if (listOfPlanets.get(i).getClassName().equals("Gas Giant")) { //redundant, can just return the ID of the Gas Giant correctly.
-                    return listOfPlanets.get(i).getPlanetID();
+                if (listOfPlanets.get(i).getClimateID() == 2108) {
+                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID()); //adds all planets with the gas giant type to the list
+                    }
                 }
             }
         }
+
+        /** Habitable zone planets **/
         else if (isHabitableZone) {
 
         } //planet is not within the star's habitable zone
         else if (distanceFromStar < parentStar.getHabitableZoneMin()) {
             //planet is closer to the star than the habitable zone, it'll be a hot planet
-            
+
         } else if (distanceFromStar > parentStar.getHabitableZoneMax()) {
             //planet is further from the star than the habitable zone, it'll be a cold planet
 
         }
 
-        return 0; //redundancy, declares a failure in the generation process
+        randomPlanet = randomNumber(0, planetsToSpawn.size() - 1); //gets a random number from the list
+        return planetsToSpawn.get(randomPlanet); //returns the planet ID of the planet generated
     }
 
     protected int calculateSize(int starRadius, int distanceFromStar){
