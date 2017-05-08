@@ -96,7 +96,9 @@ public class planetCore {
         listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 115, "", false, 2700, 1300));
         listOfPlanets.add(new planetType("Iron World", 2019, 2105, 105, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
         listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 15, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
+        listOfPlanets.add(new planetType("Shield World", 2021, 2107, 2, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
         //listOfPlanets.add();
+        //TODO: Possibly redo the format of this to take advantage of external files in order to allow for 'modding' of the game? I.E Addition of planet types without accessing the code.
 
     }
 
@@ -125,6 +127,7 @@ public class planetCore {
         private int getClimateID() { return this.climateID; }
         private String getClassName() { return this.className; }
         private String getClassDesc() { return this.classDesc; }
+        private boolean getHabitable() { return this.habitable; }
 
     }
 
@@ -158,8 +161,6 @@ public class planetCore {
     /** General Methods **/
     //General methods used by the global planetCore objects.
 
-    //TODO: Redo everything beyond this point, probably.
-
     //Checks whether or not the planet is tidally locked to the star.
     protected boolean checkTidalLock(int planetRadius, int starRadius){
         //in order to be tidally locked, the planet must be within 6* the star's radius
@@ -172,6 +173,12 @@ public class planetCore {
         return false;
     } //checks whether or not the planet is tidally locked
 
+    //gets the habitability of the planet class
+    protected boolean determineHabitability(int planetID) {
+        return listOfPlanets.get(planetID).getHabitable();
+    }
+
+    //determines the class of the planet generated
     protected int determinePlanetClass(boolean tidalLock, boolean isHabitableZone){ //sets the planetType of the planet
         int randomPlanet = randomNumber();
 
@@ -180,9 +187,10 @@ public class planetCore {
             return 6;
         }
 
+        //TODO: Redo planet generation to fit the proper weighting system.
+
         //planet has been spawned within the habitable zone of the star
         if (isHabitableZone) {
-
             if (randomPlanet <= 300) {
                 return 1; //temperate climate
             } else if (randomPlanet > 300 && randomPlanet <= 500) {
@@ -194,9 +202,7 @@ public class planetCore {
             } else {
                 return 5; //other climate
             }
-
         } //planet is not within the star's habitable zone
-
 
         return 0; //redundancy, declares a failure in the generation process
     }
