@@ -172,6 +172,35 @@ public class planetCore {
         return false;
     } //checks whether or not the planet is tidally locked
 
+    protected int determinePlanetClass(boolean tidalLock, boolean isHabitableZone){ //sets the planetType of the planet
+        int randomPlanet = randomNumber();
+
+        //if the planet is tidally locked, we want to give it a tidal climate, period.
+        if (tidalLock) {
+            return 6;
+        }
+
+        //planet has been spawned within the habitable zone of the star
+        if (isHabitableZone) {
+
+            if (randomPlanet <= 300) {
+                return 1; //temperate climate
+            } else if (randomPlanet > 300 && randomPlanet <= 500) {
+                return 2; //cold climate
+            } else if (randomPlanet > 500 && randomPlanet <= 700) {
+                return 3; //hot climate
+            } else if (randomPlanet > 700 && randomPlanet <= 900) {
+                return 4; //extreme climate
+            } else {
+                return 5; //other climate
+            }
+
+        } //planet is not within the star's habitable zone
+
+
+        return 0; //redundancy, declares a failure in the generation process
+    }
+
     protected int calculateSize(int starRadius, int distanceFromStar){
 
         if (distanceFromStar <= 3*starRadius) {
@@ -241,7 +270,7 @@ public class planetCore {
 
     } //checks the size of the planet
 
-    private boolean isInHabitableZone(int distanceFromStar, int upperBound, int lowerBound) {
+    protected boolean isInHabitableZone(int distanceFromStar, int upperBound, int lowerBound) {
         if ((lowerBound * AUtoKM) < distanceFromStar && (upperBound * AUtoKM) > distanceFromStar) {
             return true; //within habitable zone, return true
         } else {

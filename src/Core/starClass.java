@@ -45,5 +45,9 @@ public class starClass extends starCore {
 
     }
 
+    public int getHabitableZoneMax() { return this.habitableZoneMax; }
+    public int getHabitableZoneMin() { return this.habitableZoneMin; }
+    public int getStarRadius() { return this.starRadius; }
+
 
 }
