@@ -27,7 +27,7 @@ public class planetClass extends planetCore {
         this.planetRadius = calculateSize(parentStar.getStarRadius(), this.distanceFromStar);
         this.isTidallyLocked = checkTidalLock(this.planetRadius, parentStar.getStarRadius()); //runs a check to determine tidal lock
         this.isInHabitableZone = isInHabitableZone(this.distanceFromStar, parentStar.getHabitableZoneMax(), parentStar.getHabitableZoneMin());
-        this.planetType = determinePlanetClass(this.isTidallyLocked, this.isInHabitableZone); //whether or not the planet is within the habitable zone of the star
+        this.planetType = determinePlanetClass(this.distanceFromStar, this.planetRadius, this.isTidallyLocked, this.isInHabitableZone, this.parentStar); //determines the planet's class
         this.isPlanetHabitable = determineHabitability(this.planetType); //whether or not the planet can be colonized
         this.isHabited = false; //by default, the planet is not currently colonized
 

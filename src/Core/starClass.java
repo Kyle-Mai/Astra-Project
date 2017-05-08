@@ -16,13 +16,13 @@ public class starClass extends starCore {
 
     private ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
 
-    private int starRadius; //radius of the star
+    private int starRadius;
     private int starMagnitude;
-    private String starSpectral; //type of star
-    private boolean starIsHabitable; //whether or not the star can theoretically support life
-    private boolean isBinarySystem; //whether or not the system will generate two stars
-    private int numOfPlanets; //number of planets orbiting this star
-    private int surfaceTemp; //in kelvin
+    private String starSpectral;
+    private boolean starIsHabitable;
+    private boolean isBinarySystem;
+    private int numOfPlanets;
+    private int surfaceTemp;
     private int starIndex;
     private Double absLum;
     private int habitableZoneMax;
@@ -32,8 +32,8 @@ public class starClass extends starCore {
 
     public starClass(int mapLocationX, int mapLocationY){
         this.starIndex = chooseStarType(); //The ID of the star type.
-        this.surfaceTemp = determineSurfaceTemperature(this.starIndex); //The surface temperature of the star
-        this.starIsHabitable = determineHabitability(this.starIndex); //Whether or not the star is habitable
+        this.surfaceTemp = determineSurfaceTemperature(this.starIndex); //The surface temperature of the star (in kelvin)
+        this.starIsHabitable = determineHabitability(this.starIndex); //Whether or not the star can support habitable planets
         this.starSpectral = determineSpectralClass(this.surfaceTemp); //The spectral class of the star
         this.starRadius = determineRadius(this.starIndex); //The star's radius
         this.isBinarySystem = determineBinary(); //Whether or not the star is in a binary system

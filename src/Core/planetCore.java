@@ -111,8 +111,8 @@ public class planetCore {
         boolean habitable;
 
         //Constructor method.
-        private planetType(String name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation){
-            this.className = name; //Name of the world's biome.
+        private planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation){
+            this.className = Name; //Name of the world's biome.
             this.planetID = objectID; //The ID used to reference the planet.
             this.spawnWeight = spawnWeight; //The weight assigned to this planet type. Determines how often it spawns relative to other planets in the same climate class.
             this.climateID = climateID; //The ID of this planet's climate.
@@ -179,7 +179,7 @@ public class planetCore {
     }
 
     //determines the class of the planet generated
-    protected int determinePlanetClass(boolean tidalLock, boolean isHabitableZone){ //sets the planetType of the planet
+    protected int determinePlanetClass(int distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar){ //sets the planetType of the planet
         int randomPlanet = randomNumber();
 
         //if the planet is tidally locked, we want to give it a tidal climate, period.
@@ -190,19 +190,24 @@ public class planetCore {
         //TODO: Redo planet generation to fit the proper weighting system.
 
         //planet has been spawned within the habitable zone of the star
-        if (isHabitableZone) {
-            if (randomPlanet <= 300) {
-                return 1; //temperate climate
-            } else if (randomPlanet > 300 && randomPlanet <= 500) {
-                return 2; //cold climate
-            } else if (randomPlanet > 500 && randomPlanet <= 700) {
-                return 3; //hot climate
-            } else if (randomPlanet > 700 && randomPlanet <= 900) {
-                return 4; //extreme climate
-            } else {
-                return 5; //other climate
+        if (planetRadius > 45000) {
+            //Planet radius is very large, therefore it is going to be a Gas Giant.
+            for (int i = 0; i < listOfPlanets.size(); i++) {
+                if (listOfPlanets.get(i).getClassName().equals("Gas Giant")) { //redundant, can just return the ID of the Gas Giant correctly.
+                    return listOfPlanets.get(i).getPlanetID();
+                }
             }
+        }
+        else if (isHabitableZone) {
+
         } //planet is not within the star's habitable zone
+        else if (distanceFromStar < parentStar.getHabitableZoneMin()) {
+            //planet is closer to the star than the habitable zone, it'll be a hot planet
+            
+        } else if (distanceFromStar > parentStar.getHabitableZoneMax()) {
+            //planet is further from the star than the habitable zone, it'll be a cold planet
+
+        }
 
         return 0; //redundancy, declares a failure in the generation process
     }
