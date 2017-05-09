@@ -19,4 +19,13 @@
         <sizeWeight>6800</sizeWeight>
         <sizeVariation>1200</sizeVariation>
     </planet>
+    <planet id = "2023">
+        <name>Chthonian World</name>
+        <description>A planet that was once a gas giant, but is now nothing more than a dense core - the outer layers stripped away by the solar wind of the nearby star.</description>
+        <climate>2107</climate>
+        <spawnWeight>5</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <sizeWeight>6800</sizeWeight>
+        <sizeVariation>1600</sizeVariation>
+    </planet>
 </newPlanets>

@@ -15,12 +15,56 @@
     <star id = "1017">
         <name>Exotic Star</name>
         <description>A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.</description>
-        <spawnWeight>3</spawnWeight>
+        <spawnWeight>1</spawnWeight>
         <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
         <surfaceTempLow>700000</surfaceTempLow>
         <surfaceTempHigh>900000</surfaceTempHigh>
-        <sizeWeight>0</sizeWeight>
-        <sizeVariation>0</sizeVariation>
+        <sizeWeight>5</sizeWeight>
+        <sizeVariation>3</sizeVariation>
+        <planetWeight>0</planetWeight>
+    </star>
+    <star id = "1018">
+        <name>Blitzar</name>
+        <description>The rotation of this Pulsar is so rapid that it is slowly beginning to grow unstable. Within a few thousand years, it will likely reach a breaking point and collapse into a Black Hole.</description>
+        <spawnWeight>5</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>550000</surfaceTempLow>
+        <surfaceTempHigh>800000</surfaceTempHigh>
+        <sizeWeight>12</sizeWeight>
+        <sizeVariation>3</sizeVariation>
+        <planetWeight>2</planetWeight>
+    </star>
+    <star id = "1019">
+        <name>Frozen Star</name>
+        <description>This star contains an unusually high contentration of metallic elements, and very little hydrogen. The resulting lack of energy from fusing these metals makes the star incredibly cold.</description>
+        <spawnWeight>3</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>150</surfaceTempLow>
+        <surfaceTempHigh>500</surfaceTempHigh>
+        <sizeWeight>20000</sizeWeight>
+        <sizeVariation>14000</sizeVariation>
+        <planetWeight>6</planetWeight>
+    </star>
+    <star id = "1020">
+        <name>Population III Star</name>
+        <description>An extremely massive and short-lived star composed almost completely of hydrogen and helium, with no heavier elements.</description>
+        <spawnWeight>3</spawnWeight>
+        <isHabitable>1</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>150</surfaceTempLow>
+        <surfaceTempHigh>500</surfaceTempHigh>
+        <sizeWeight>20000</sizeWeight>
+        <sizeVariation>14000</sizeVariation>
+        <planetWeight>2</planetWeight>
+    </star>
+    <star id = "1021">
+        <name>Quasi-Star</name>
+        <description>A Quasi-Star is a Population III star with a Black Hole at its center, cannibalizing the star from the inside out. It is somewhat similar to the Thorne-Zytkow Object, but far more sinister.</description>
+        <spawnWeight>2</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>150</surfaceTempLow>
+        <surfaceTempHigh>500</surfaceTempHigh>
+        <sizeWeight>20000</sizeWeight>
+        <sizeVariation>14000</sizeVariation>
         <planetWeight>0</planetWeight>
     </star>
 </newStars>
