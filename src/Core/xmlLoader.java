@@ -9,16 +9,15 @@ package Core;
 import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+import org.w3c.dom.*;
 
 public class xmlLoader {
     //IS FINE COMRADE, NO PROBLEMS HERE
 
     final static File modFolder = new File("src/Mods");
     final static File exoticaFolder = new File("src/Expansions/Exotica");
+    final static File expansions = new File("src/Expansions");
 
     public static void loadXML(final File folder) {
         try {
@@ -30,6 +29,8 @@ public class xmlLoader {
                 modPlanets(doc.getChildNodes());
             } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
                 modStars(doc.getChildNodes());
+            } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
+                loadExpansions(doc.getChildNodes()); //loads the expansions
             } else {
                 System.out.println("A mod was detected, but the syntax was not valid for loading. Please ensure the element is moddable and that the syntax is correct.");
             }
@@ -41,6 +42,27 @@ public class xmlLoader {
 
 
     } //close loadMods
+
+    //Goes through the expansions and loads the enabled ones.
+    private static void loadExpansions(NodeList nodeList) {
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node tempNode = nodeList.item(i);
+            if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) tempNode;
+                if (eElement.getAttribute("name").equals("Exotica")) { //The pack we're loading is Exotica.
+                    if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Exotica is enabled, load its content.
+                        System.out.println("Loading Exotica content...");
+                        loadXML(exoticaFolder);
+                    } else {
+                        System.out.println("Exotica disabled.");
+                    }
+                    //If Exotica isn't enabled, don't load Exotica content.
+                }
+            }
+        }
+    }
+
+    //TODO: Redo modPlanets and modStars to fit a more simple format.
 
     private static void modPlanets(NodeList nodeList) {
         String className = "";

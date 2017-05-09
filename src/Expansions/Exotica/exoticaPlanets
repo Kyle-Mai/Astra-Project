@@ -13,7 +13,7 @@
     <planet id = "2022">
         <name>Gemstone World</name>
         <description>A strange planet with a surface composed of a high volume of gemstones. The high gravity well of the planet is the likely cause, fusing minerals in the core.</description>
-        <climate>2107</climate>
+        <climate>2105</climate>
         <spawnWeight>2</spawnWeight>
         <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
         <sizeWeight>6800</sizeWeight>
