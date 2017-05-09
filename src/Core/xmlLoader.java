@@ -21,30 +21,32 @@ public class xmlLoader {
     static File mod;
 
     public static void loadXML(final File folder) {
-        try {
-        for (final File fileEntry : folder.listFiles()) {
-            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = dBuilder.parse(fileEntry);
+        if (folder.exists()) {
+            try {
+                for (final File fileEntry : folder.listFiles()) {
+                    DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    Document doc = dBuilder.parse(fileEntry);
 
-            if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
-                modPlanets(doc.getChildNodes());
-            } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
-                modStars(doc.getChildNodes());
-            } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
-                loadExpansions(doc.getChildNodes()); //loads the expansions
-            } else if (doc.getDocumentElement().getNodeName().equals("loadMod")) {
-                loadMods(doc.getChildNodes());
-            } else {
-                System.out.println("A mod was detected, but the syntax was not valid for loading. Please ensure the element is moddable and that the syntax is correct.");
+                    if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
+                        modPlanets(doc.getChildNodes());
+                    } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
+                        modStars(doc.getChildNodes());
+                    } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
+                        loadExpansions(doc.getChildNodes()); //loads the expansions
+                    } else if (doc.getDocumentElement().getNodeName().equals("loadMod")) {
+                        loadMods(doc.getChildNodes());
+                    } else {
+                        errorPrint(7);
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
+        } else {
+            errorPrint(9);
         }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-
-    } //close loadMods
+    } //close loadXML
 
     //Goes through the expansions and loads the enabled ones.
     private static void loadExpansions(NodeList nodeList) {
@@ -55,7 +57,11 @@ public class xmlLoader {
                 if (eElement.getAttribute("name").equals("Exotica")) { //The pack we're loading is Exotica.
                     if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Exotica is enabled, load its content.
                         System.out.println("Loading Exotica content...");
-                        loadXML(exoticaFolder);
+                        if (exoticaFolder.exists()) {
+                            loadXML(exoticaFolder);
+                        } else {
+                            errorPrint(8);
+                        }
                     } else {
                         System.out.println("Exotica disabled.");
                     }
@@ -81,18 +87,22 @@ public class xmlLoader {
                                 if (node.getNodeName().equals("directoryName") && node.getTextContent() != null) { //gets the directory of the mod.
                                     directory = node.getTextContent();
                                 } else {
-                                    System.out.println("Error loading mod - directory declaration invalid.");
+                                    errorPrint(6);
                                 }
                             }
                         }
                         if (!directory.equals("")) {
                             mod = new File("src/Mods/" + directory);
-                            loadXML(mod);
+                            if (mod.exists()) {
+                                loadXML(mod);
+                            } else {
+                                errorPrint(5);
+                            }
                         }
                     } else {
                         System.out.println("Mod disabled.");
                     }
-                    //If Exotica isn't enabled, don't load Exotica content.
+                    //Mod isn't enabled, don't load content.
                 }
             }
         }
@@ -343,20 +353,8 @@ public class xmlLoader {
                         starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, Temp[0], Temp[1], habitable, sizeWeight, sizeVariation, planetWeight));
                         System.out.println("Modded star successfully loaded.");
                     } else { //something in this mod wasn't properly initialized, do not load it
-                        System.out.println("An error has occurred while loading user mods.");
-                        switch (errorMessage) {
-                            case 1:
-                                System.out.println("No ID was detected for the star. Please ensure an ID is properly declared.");
-                                break;
-                            case 2:
-                                System.out.println("One or more values was not found. Please ensure that all values have been entered and no blank values remain.");
-                                break;
-                            case 3:
-                                System.out.println("The ID entered for the star was invalid. Start IDs must be between 1050 and 1100.");
-                                break;
-                            case 4:
-                                System.out.println("The star attempts to use an already declared star ID. Please ensure the star's ID isn't already used.");
-                                break;
+                        System.out.println("An error has occurred while loading XML data.");
+                        errorPrint(errorMessage);
                         }
                     }
 
@@ -365,6 +363,37 @@ public class xmlLoader {
         }
 
     } //close modPlanets
+
+    private static void errorPrint(int errorMessage) {
+        switch (errorMessage) {
+            case 1:
+                System.out.println("No ID was detected for the star. Please ensure an ID is properly declared.");
+                break;
+            case 2:
+                System.out.println("One or more values was not found. Please ensure that all values have been entered and no blank values remain.");
+                break;
+            case 3:
+                System.out.println("The ID entered for the star was invalid. Start IDs must be between 1050 and 1100.");
+                break;
+            case 4:
+                System.out.println("The star attempts to use an already declared star ID. Please ensure the star's ID isn't already used.");
+                break;
+            case 5:
+                System.out.println("An error has occurred - the mod directory was not found.");
+                break;
+            case 6:
+                System.out.println("Error loading mod - directory declaration invalid.");
+                break;
+            case 7:
+                System.out.println("An XML file was detected, but the syntax doesn't match any known hierarchies. Please ensure the XML file uses valid syntax.");
+                break;
+            case 8:
+                System.out.println("An error has occurred while loading Exotica - directory was not valid.");
+                break;
+            case 9:
+                System.out.println("An error occurred loading XML data - the XML directory was not valid.");
+                break;
+    }
 
 
 }
