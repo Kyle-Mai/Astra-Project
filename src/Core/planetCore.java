@@ -228,6 +228,15 @@ public class planetCore {
         return listOfPlanets.get(planetID).getHabitable();
     }
 
+    protected int getPlanetFromID(int planetID) {
+        for (int i = 0; i < listOfPlanets.size(); i++) {
+            if (listOfPlanets.get(i).getPlanetID()== planetID) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     //determines the class of the planet generated
     protected int determinePlanetClass(int distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar){ //sets the planetType of the planet
         int randomPlanet; //gets a random number to determine the type of planet generated

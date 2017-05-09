@@ -77,7 +77,8 @@ public class starCore {
         String name;
         int spawn;
         String desc;
-        int[] Temp = new int[2];
+        int tempLow;
+        int tempHigh;
         boolean habitable;
         String spectral;
         int starID;
@@ -91,8 +92,8 @@ public class starCore {
             this.desc = starDesc; //the description for the star type
             this.starID = objectID; //the ID used to identify the star.
             this.spawn = spawnWeight; //chance of this star being generated, as a weighted system
-            this.Temp[0] = surfaceTempLow; //low end of the surface temperature of the star
-            this.Temp[1] = surfaceTempHigh; //high end of the surface temperature of the star
+            this.tempLow = surfaceTempLow; //low end of the surface temperature of the star
+            this.tempHigh = surfaceTempHigh; //high end of the surface temperature of the star
             this.habitable = isHabitable; //whether or not the planet generator will attempt to spawn habitable planets around this star
             this.sizeWeight = sizeWeight; //The average radius of this star type.
             this.sizeVariation = sizeVariation; //Adding and subtracted from the median to get the max/min radius of the star.
@@ -157,6 +158,15 @@ public class starCore {
         return 0; //redundancy
     }
 
+    protected int getStarFromID(int starID) {
+        for (int i = 0; i < listOfStars.size(); i++) {
+            if (listOfStars.get(i).getStarID() == starID) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     protected int determineNumOfPlanets(int starIndex){
         int weight = listOfStars.get(starIndex).getPlanetWeight();
         int planetsToSpawn = 0; //Number of planets to generate
@@ -180,7 +190,7 @@ public class starCore {
 
     //returns a randomized surface temperature of the star based on the upper and lower limits of the star class.
     protected int determineSurfaceTemperature(int starIndex){
-        return randomNumber(listOfStars.get(starIndex).Temp[0], listOfStars.get(starIndex).Temp[1]);
+        return randomNumber(listOfStars.get(starIndex).tempLow, listOfStars.get(starIndex).tempHigh);
     }
 
     protected boolean determineHabitability(int starIndex) {

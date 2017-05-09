@@ -4,6 +4,7 @@ package Core;
  KM
  May 08 2017
  Handles the loading of XML-based modded content.
+ XML core taken from: https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
  **/
 
 import java.io.File;
@@ -15,9 +16,7 @@ import org.w3c.dom.*;
 public class xmlLoader {
     //IS FINE COMRADE, NO PROBLEMS HERE
 
-    final static File modFolder = new File("src/Mods");
     final static File exoticaFolder = new File("src/Expansions/Exotica");
-    final static File expansions = new File("src/Expansions");
     static File mod;
 
     public static void loadXML(final File folder) {

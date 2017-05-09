@@ -29,15 +29,17 @@ public class starClass extends starCore {
     private int habitableZoneMin;
     private int mapLocationX;
     private int mapLocationY;
+    private int arrayLoc;
 
     public starClass(int mapLocationX, int mapLocationY){
         this.starIndex = chooseStarType(); //The ID of the star type.
-        this.surfaceTemp = determineSurfaceTemperature(this.starIndex); //The surface temperature of the star (in kelvin)
-        this.starIsHabitable = determineHabitability(this.starIndex); //Whether or not the star can support habitable planets
+        this.arrayLoc = getStarFromID(this.starIndex); //Finds the position in the array of the star.
+        this.surfaceTemp = determineSurfaceTemperature(arrayLoc); //The surface temperature of the star (in kelvin)
+        this.starIsHabitable = determineHabitability(arrayLoc); //Whether or not the star can support habitable planets
         this.starSpectral = determineSpectralClass(this.surfaceTemp); //The spectral class of the star
-        this.starRadius = determineRadius(this.starIndex); //The star's radius
+        this.starRadius = determineRadius(arrayLoc); //The star's radius
         this.isBinarySystem = determineBinary(); //Whether or not the star is in a binary system
-        this.numOfPlanets = determineNumOfPlanets(this.starIndex); //number of planets orbiting the star
+        this.numOfPlanets = determineNumOfPlanets(arrayLoc); //number of planets orbiting the star
         this.absLum = determineLuminosity(this.starSpectral, this.starMagnitude); //the absolute luminosity of the star
         this.habitableZoneMax = habitableZoneMax(this.absLum); //the upper end of the star's habitable zone
         this.habitableZoneMin = habitableZoneMin(this.absLum); //the lower end of the star's habitable zone

@@ -22,6 +22,7 @@ public class planetClass extends planetCore {
     private boolean isPlanetHabitable;
     private boolean isHabited;
     private int planetNumber;
+    private int arrayLoc;
 
     public planetClass(starClass parentStar, int planetNumber) {
         this.parentStar = parentStar; //the parent star of the planet
@@ -31,7 +32,8 @@ public class planetClass extends planetCore {
         this.isTidallyLocked = checkTidalLock(this.planetRadius, parentStar.getStarRadius()); //runs a check to determine tidal lock
         this.isInHabitableZone = isInHabitableZone(this.distanceFromStar, parentStar.getHabitableZoneMax(), parentStar.getHabitableZoneMin());
         this.planetType = determinePlanetClass(this.distanceFromStar, this.planetRadius, this.isTidallyLocked, this.isInHabitableZone, this.parentStar); //determines the planet's class
-        this.isPlanetHabitable = determineHabitability(this.planetType); //whether or not the planet can be colonized
+        this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.
+        this.isPlanetHabitable = determineHabitability(arrayLoc); //whether or not the planet can be colonized
         this.isHabited = false; //by default, the planet is not currently colonized
 
     }
