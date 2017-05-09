@@ -18,7 +18,7 @@ public class planetCore {
     /** ArrayLists **/
 
     public static ArrayList<planetType> listOfPlanets = new ArrayList<>();
-    protected ArrayList<planetSizes> listOfScales = new ArrayList<>();
+    protected static ArrayList<planetSizes> listOfScales = new ArrayList<>();
     protected ArrayList<Integer> spawnWeights = new ArrayList<>();
     protected ArrayList<Integer> planetsToSpawn = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class planetCore {
     //An ArrayList dedicated to storing variable related to planet size (listOfScales), atmosphere chance, etc, so that it can remain centralized.
 
     //Pre-defined blueprints for different planet scales, and the modifiers that go with it.
-    private void createPlanetSizes(){
+    private static void createPlanetSizes(){
         listOfScales.add(new planetSizes("Dwarf", 700, 15));
         listOfScales.add(new planetSizes("Small", 1500, 180));
         listOfScales.add(new planetSizes("Average", 2500, 360));
@@ -74,7 +74,7 @@ public class planetCore {
     //Used to create the blueprints for different planet types from a blueprint class (planetTypes).
 
     //Sets all of the predefined blueprints into a variable ArrayList (listOfPlanets) to allow for dynamic addition/removal of planet types.
-    private void createPlanetTypes(){
+    private static void createPlanetTypes(){
         listOfPlanets.add(new planetType("Continental World", 2000, 2100, 82, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
         listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 58, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
         listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 55, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
@@ -138,9 +138,10 @@ public class planetCore {
     /** Pre-loader Method **/
     //Method that MUST run before anything else in this class.
 
-    public void planetPreloader(){
+    public static void planetPreloader(){
         createPlanetSizes();
         createPlanetTypes();
+        System.out.println("Preloading of planetCore complete.");
 
     }
 

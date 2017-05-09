@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<newStars>
+    <star id = "1020">
+        <name>XML Star Alpha</name>
+        <description>A star generated through XML. Spooky.</description>
+        <spawnWeight>1</spawnWeight>
+        <isHabitable>1</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>500</surfaceTempLow>
+        <surfaceTempHigh>1000</surfaceTempHigh>
+        <sizeWeight>5000</sizeWeight>
+        <sizeVariation>3000</sizeVariation>
+    </star>
+    <star id = "1021">
+        <name>XML Star Beta</name>
+        <description>Another star generated through XML. Spooky.</description>
+        <spawnWeight>10</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>5000</surfaceTempLow>
+        <surfaceTempHigh>10000</surfaceTempHigh>
+        <sizeWeight>500</sizeWeight>
+        <sizeVariation>300</sizeVariation>
+    </star>
+</newStars>

@@ -16,8 +16,8 @@ public class starCore {
     /** ArrayLists **/
     //Used to store bulk information of like types.
 
-    private ArrayList<starType> listOfStars = new ArrayList<>(); //Stores a list of the different starType blueprints.
-    private ArrayList<Integer> spawnWeights = new ArrayList<>(); //Stores a list of the sums of the spawn weights of the star blueprints.
+    public static ArrayList<starType> listOfStars = new ArrayList<>(); //Stores a list of the different starType blueprints.
+    private static ArrayList<Integer> spawnWeights = new ArrayList<>(); //Stores a list of the sums of the spawn weights of the star blueprints.
 
 
     /** Constants **/
@@ -31,14 +31,14 @@ public class starCore {
     /** General variables **/
     //General variables used by the starCore class.
 
-    private int totalSpawnWeight; //spawn weight of all of the star types combined
+    private static int totalSpawnWeight; //spawn weight of all of the star types combined
 
 
     /** Star creation **/
     //Used to set the base description, class, etc of the star.
 
     //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
-    private void createStarTypes() {
+    private static void createStarTypes() {
         listOfStars.add(new starType("Red Giant", 1000, 210, "", 2800, 4600, true, 0, 0, 4));
         listOfStars.add(new starType("Blue Giant", 1001, 109, "", 20000, 50000, true, 0, 0, 4));
         listOfStars.add(new starType("Yellow Dwarf", 1002, 355, "", 5300, 6000, true, 0, 0, 5));
@@ -61,7 +61,7 @@ public class starCore {
     }
 
     //Gets the different spawnChance values of the star blueprints (listOfStars) and organizes them by sum in an ArrayList (spawnWeights).
-    private void starSpawnChanceWeighter() {
+    private static void starSpawnChanceWeighter() {
         spawnWeights.add(0); //adds the default 0 to the first slot in the spawn weights
         for (int i = 0; i < listOfStars.size(); i++) {
             //The total spawn weight amount of the stars combined, to simulate weights rather than percents
@@ -72,7 +72,7 @@ public class starCore {
     }
 
     //"Class" dedicated to storing star blueprints. Used sort-of like an array that can store multiple value types.
-    private static class starType {
+    public static class starType {
         //Variables dedicated to the starType blueprint. See constructor for detailed information.
         String name;
         int spawn;
@@ -86,7 +86,7 @@ public class starCore {
         int planetWeight;
 
         //Constructor for building different star blueprints in the createStarTypes method listed above.
-        private starType(String starName, int objectID, int spawnWeight, String starDesc, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable, int sizeWeight, int sizeVariation, int planetWeight){
+        public starType(String starName, int objectID, int spawnWeight, String starDesc, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable, int sizeWeight, int sizeVariation, int planetWeight){
             this.name = starName; //the type of star
             this.desc = starDesc; //the description for the star type
             this.starID = objectID; //the ID used to identify the star.
@@ -118,9 +118,10 @@ public class starCore {
     //Method that MUST be initialized when the class first runs -- ALWAYS! Or else the program will break.
 
     //Calls and runs all of the vital methods that must run before anything else.
-    public void starPreloader(){
+    public static void starPreloader(){
         createStarTypes();
         starSpawnChanceWeighter();
+        System.out.println("starCore successfully preloaded.");
 
     }
 
