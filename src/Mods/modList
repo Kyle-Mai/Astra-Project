@@ -3,7 +3,8 @@
 <loadMod>
     <mod name="Test Mod">
         <author>Donald Trump</author>
-        <version>1.0</version>
+        <modVersion>1.0</modVersion>
+        <gameVersion>1.0</gameVersion>
         <description>A test mod for testing modding.</description>
         <directoryName>testMod</directoryName>
 

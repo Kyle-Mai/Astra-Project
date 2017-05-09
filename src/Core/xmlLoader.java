@@ -125,9 +125,9 @@ public class xmlLoader {
                 if (tempNode.hasAttributes()) { //the node has valid attributes
                     NamedNodeMap nodeMap = tempNode.getAttributes(); //gathers the node's attributes
                     if (tempNode.getTextContent() != null) {
-                        if (Integer.parseInt(tempNode.getTextContent()) >= 2050 && Integer.parseInt(tempNode.getTextContent()) <= 2099) { //the ID is a valid planet ID
+                        if (Integer.parseInt(tempNode.getTextContent()) >= 2000 && Integer.parseInt(tempNode.getTextContent()) <= 2099) { //the ID is a valid planet ID
                             for (int k = 0; k < starClass.listOfStars.size(); k++) { //if the ID is already used, refuse the mod
-                                if (planetClass.listOfPlanets.get(k).getPlanetID() == Integer.parseInt(tempNode.getTextContent())) {
+                                if (planetClass.listOfPlanets.get(k).getPlanetID() == Integer.parseInt(tempNode.getTextContent())) { //TODO: Maybe redo this to instead overwrite existing objects?
                                     modIsValid = false;
                                     errorMessage = 4;
                                 }
@@ -210,21 +210,8 @@ public class xmlLoader {
                         planetClass.listOfPlanets.add(new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
                         System.out.println("Modded planet successfully loaded.");
                     } else { //something in this mod wasn't properly initialized, do not load it
-                        System.out.println("An error has occurred while loading user mods.");
-                        switch (errorMessage) {
-                            case 1:
-                                System.out.println("No ID was detected for the planet. Please ensure an ID is properly declared.");
-                                break;
-                            case 2:
-                                System.out.println("One or more values was not found. Please ensure that all values have been entered and no blank values remain.");
-                                break;
-                            case 3:
-                                System.out.println("The ID entered for the planet was invalid. Planet IDs must be between 2050 and 2100.");
-                                break;
-                            case 4:
-                                System.out.println("The planet attempts to use an already declared planet ID. Please ensure the planet's ID isn't already used.");
-                                break;
-                        }
+                        System.out.println("An error has occurred while loading planet XML data.");
+                        errorPrint(errorMessage);
                     }
 
                 }
@@ -254,7 +241,7 @@ public class xmlLoader {
                 if (tempNode.hasAttributes()) { //the node has valid attributes
                     NamedNodeMap nodeMap = tempNode.getAttributes(); //gathers the node's attributes
                     if (tempNode.getTextContent() != null) {
-                        if (Integer.parseInt(tempNode.getTextContent()) >= 1050 && Integer.parseInt(tempNode.getTextContent()) <= 1099) { //the ID is valid
+                        if (Integer.parseInt(tempNode.getTextContent()) >= 1000 && Integer.parseInt(tempNode.getTextContent()) <= 1099) { //the ID is valid
                             for (int k = 0; k < starClass.listOfStars.size(); k++) { //if the ID is already used, refuse the mod
                                 if (starClass.listOfStars.get(k).getStarID() == Integer.parseInt(tempNode.getTextContent())) {
                                     modIsValid = false;
@@ -353,27 +340,25 @@ public class xmlLoader {
                         starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, Temp[0], Temp[1], habitable, sizeWeight, sizeVariation, planetWeight));
                         System.out.println("Modded star successfully loaded.");
                     } else { //something in this mod wasn't properly initialized, do not load it
-                        System.out.println("An error has occurred while loading XML data.");
+                        System.out.println("An error has occurred while loading star XML data.");
                         errorPrint(errorMessage);
-                        }
                     }
-
                 }
+
             }
         }
-
     } //close modPlanets
 
     private static void errorPrint(int errorMessage) {
         switch (errorMessage) {
             case 1:
-                System.out.println("No ID was detected for the star. Please ensure an ID is properly declared.");
+                System.out.println("No ID was detected for the object. Please ensure an ID is properly declared.");
                 break;
             case 2:
                 System.out.println("One or more values was not found. Please ensure that all values have been entered and no blank values remain.");
                 break;
             case 3:
-                System.out.println("The ID entered for the star was invalid. Start IDs must be between 1050 and 1100.");
+                System.out.println("The ID entered for the object was invalid. Object IDs should not overwrite existing objects..");
                 break;
             case 4:
                 System.out.println("The star attempts to use an already declared star ID. Please ensure the star's ID isn't already used.");
@@ -393,6 +378,7 @@ public class xmlLoader {
             case 9:
                 System.out.println("An error occurred loading XML data - the XML directory was not valid.");
                 break;
+        }
     }
 
 
