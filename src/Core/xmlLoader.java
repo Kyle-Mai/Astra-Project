@@ -62,6 +62,11 @@ public class xmlLoader {
         }
     }
 
+    private static void loadMods(NodeList nodeList) {
+        //TODO: Fill this method out in order to load mods listed in the modList XML file.
+
+    }
+
     //TODO: Redo modPlanets and modStars to fit a more simple format.
 
     private static void modPlanets(NodeList nodeList) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<newPlanets>
+    <planet id = "2050">
+        <name>XML World</name>
+        <description>A world generated through the XML-based modding system. Spooky.</description>
+        <climate>2107</climate>
+        <spawnWeight>50</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <sizeWeight>666</sizeWeight>
+        <sizeVariation>333</sizeVariation>
+    </planet>
+</newPlanets>
