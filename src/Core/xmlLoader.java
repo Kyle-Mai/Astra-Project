@@ -18,6 +18,7 @@ public class xmlLoader {
     final static File modFolder = new File("src/Mods");
     final static File exoticaFolder = new File("src/Expansions/Exotica");
     final static File expansions = new File("src/Expansions");
+    static File mod;
 
     public static void loadXML(final File folder) {
         try {
@@ -31,6 +32,8 @@ public class xmlLoader {
                 modStars(doc.getChildNodes());
             } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
                 loadExpansions(doc.getChildNodes()); //loads the expansions
+            } else if (doc.getDocumentElement().getNodeName().equals("loadMod")) {
+                loadMods(doc.getChildNodes());
             } else {
                 System.out.println("A mod was detected, but the syntax was not valid for loading. Please ensure the element is moddable and that the syntax is correct.");
             }
@@ -63,8 +66,36 @@ public class xmlLoader {
     }
 
     private static void loadMods(NodeList nodeList) {
-        //TODO: Fill this method out in order to load mods listed in the modList XML file.
-
+        String directory = "";
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node tempNode = nodeList.item(i);
+            if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) tempNode;
+                if (eElement.getAttribute("name") != null) { //Mod has a valid name
+                    if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Mod is enabled, load its content.
+                        System.out.println("Loading mod content...");
+                        if (tempNode.hasAttributes()) { //looks through the modList's mod to find the directory of the mod
+                            NamedNodeMap nodeMap = tempNode.getAttributes();
+                            for (int j = 0; j < nodeMap.getLength(); j++) {
+                                Node node = nodeMap.item(j);
+                                if (node.getNodeName().equals("directoryName") && node.getTextContent() != null) { //gets the directory of the mod.
+                                    directory = node.getTextContent();
+                                } else {
+                                    System.out.println("Error loading mod - directory declaration invalid.");
+                                }
+                            }
+                        }
+                        if (!directory.equals("")) {
+                            mod = new File("src/Mods/" + directory);
+                            loadXML(mod);
+                        }
+                    } else {
+                        System.out.println("Mod disabled.");
+                    }
+                    //If Exotica isn't enabled, don't load Exotica content.
+                }
+            }
+        }
     }
 
     //TODO: Redo modPlanets and modStars to fit a more simple format.
