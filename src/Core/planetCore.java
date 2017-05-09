@@ -96,9 +96,7 @@ public class planetCore {
         listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 24, "", false, 2700, 1300));
         listOfPlanets.add(new planetType("Iron World", 2019, 2105, 15, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
         listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
-        listOfPlanets.add(new planetType("Shield World", 2021, 2107, 1, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
-        //listOfPlanets.add();
-        //TODO: Possibly redo the format of this to take advantage of external files in order to allow for 'modding' of the game? I.E Addition of planet types without accessing the code.
+        //listOfPlanets.add(new planetType("Shield World", 2021, 2107, 1, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
 
     }
 
@@ -123,7 +121,7 @@ public class planetCore {
         }
 
         //Accessor methods for calling the planet blueprint variables.
-        private int getPlanetID() { return this.planetID; }
+        public int getPlanetID() { return this.planetID; }
         private int getClimateID() { return this.climateID; }
         private String getClassName() { return this.className; }
         private String getClassDesc() { return this.classDesc; }

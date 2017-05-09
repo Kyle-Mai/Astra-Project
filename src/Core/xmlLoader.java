@@ -3,7 +3,7 @@ package Core;
 /**
  KM
  May 08 2017
- Handles the loading of XML data.
+ Handles the loading of XML-based modded content.
  **/
 
 import java.io.File;
@@ -13,15 +13,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import Mods.*;
-import Core.*;
 
-public class modLoader {
+public class xmlLoader {
     //IS FINE COMRADE, NO PROBLEMS HERE
 
-    final File folder = new File("src/Mods");
+    final static File modFolder = new File("src/Mods");
+    final static File exoticaFolder = new File("src/Expansions/Exotica");
 
-    public static void loadMods(final File folder) {
+    public static void loadXML(final File folder) {
         try {
         for (final File fileEntry : folder.listFiles()) {
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -58,8 +57,16 @@ public class modLoader {
                 if (tempNode.hasAttributes()) { //the node has valid attributes
                     NamedNodeMap nodeMap = tempNode.getAttributes(); //gathers the node's attributes
                     if (tempNode.getTextContent() != null) {
-                        if (Integer.parseInt(tempNode.getTextContent()) >= 2000 && Integer.parseInt(tempNode.getTextContent()) <= 2099) { //the ID is a valid planet ID
-                            planetID = Integer.parseInt(tempNode.getTextContent());
+                        if (Integer.parseInt(tempNode.getTextContent()) >= 2050 && Integer.parseInt(tempNode.getTextContent()) <= 2099) { //the ID is a valid planet ID
+                            for (int k = 0; k < starClass.listOfStars.size(); k++) { //if the ID is already used, refuse the mod
+                                if (planetClass.listOfPlanets.get(k).getPlanetID() == Integer.parseInt(tempNode.getTextContent())) {
+                                    modIsValid = false;
+                                    errorMessage = 4;
+                                }
+                            }
+                            if (modIsValid) {
+                                planetID = Integer.parseInt(tempNode.getTextContent());
+                            }
                         } else { //if it's not valid, dump an error
                             modIsValid = false;
                             errorMessage = 3;
@@ -144,7 +151,10 @@ public class modLoader {
                                 System.out.println("One or more values was not found. Please ensure that all values have been entered and no blank values remain.");
                                 break;
                             case 3:
-                                System.out.println("The ID entered for the planet was invalid. Planet IDs must be between 2000 and 2100.");
+                                System.out.println("The ID entered for the planet was invalid. Planet IDs must be between 2050 and 2100.");
+                                break;
+                            case 4:
+                                System.out.println("The planet attempts to use an already declared planet ID. Please ensure the planet's ID isn't already used.");
                                 break;
                         }
                     }
@@ -176,8 +186,16 @@ public class modLoader {
                 if (tempNode.hasAttributes()) { //the node has valid attributes
                     NamedNodeMap nodeMap = tempNode.getAttributes(); //gathers the node's attributes
                     if (tempNode.getTextContent() != null) {
-                        if (Integer.parseInt(tempNode.getTextContent()) >= 1000 && Integer.parseInt(tempNode.getTextContent()) <= 1099) { //the ID is a valid planet ID
-                            starID = Integer.parseInt(tempNode.getTextContent());
+                        if (Integer.parseInt(tempNode.getTextContent()) >= 1050 && Integer.parseInt(tempNode.getTextContent()) <= 1099) { //the ID is valid
+                            for (int k = 0; k < starClass.listOfStars.size(); k++) { //if the ID is already used, refuse the mod
+                                if (starClass.listOfStars.get(k).getStarID() == Integer.parseInt(tempNode.getTextContent())) {
+                                    modIsValid = false;
+                                    errorMessage = 4;
+                                }
+                            }
+                            if (modIsValid) {
+                                starID = Integer.parseInt(tempNode.getTextContent());
+                            }
                         } else { //if it's not valid, dump an error
                             modIsValid = false;
                             errorMessage = 3;
@@ -276,7 +294,10 @@ public class modLoader {
                                 System.out.println("One or more values was not found. Please ensure that all values have been entered and no blank values remain.");
                                 break;
                             case 3:
-                                System.out.println("The ID entered for the star was invalid. Start IDs must be between 1000 and 1100.");
+                                System.out.println("The ID entered for the star was invalid. Start IDs must be between 1050 and 1100.");
+                                break;
+                            case 4:
+                                System.out.println("The star attempts to use an already declared star ID. Please ensure the star's ID isn't already used.");
                                 break;
                         }
                     }

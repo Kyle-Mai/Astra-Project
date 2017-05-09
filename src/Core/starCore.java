@@ -54,9 +54,9 @@ public class starCore {
         listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0));
         listOfStars.add(new starType("Magnetar", 1013, 26, "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 500000, 720000, false, 12, 4, 3));
         listOfStars.add(new starType("Hypergiant", 1014, 17, "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 4000, 35000, false, 0, 0, 7));
-        listOfStars.add(new starType("Gravastar", 1015, 6, "A Gravastar forms when a collapsing star's mass causes the gravitational acceleration to exceed Planck's length. This creates a region around the star that is a void in the fabric of space-time - a gravitational vacuum. It is theorized that a Gravastar may be responsible for the creation of the known universe.", 0, 0, false, 0, 0, 0));
+        //listOfStars.add(new starType("Gravastar", 1015, 6, "A Gravastar forms when a collapsing star's mass causes the gravitational acceleration to exceed Planck's length. This creates a region around the star that is a void in the fabric of space-time - a gravitational vacuum. It is theorized that a Gravastar may be responsible for the creation of the known universe.", 0, 0, false, 0, 0, 0));
         listOfStars.add(new starType("Thorne-Zytkow Object", 1016, 15, "While appearing to look like a Supergiant, the core of this star is actually an active Neutron star. The Neutron star's incredibly high heat emission allows for uncommon isotopes to be formed during this star's fusion processes.", 540000, 780000, false, 0, 0, 5));
-        listOfStars.add(new starType("Exotic Star", 1017, 3, "A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.", 700000, 900000, false, 0, 0, 0));
+        //listOfStars.add(new starType("Exotic Star", 1017, 3, "A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.", 700000, 900000, false, 0, 0, 0));
 
     }
 
@@ -103,7 +103,7 @@ public class starCore {
         // Accessor methods for calling the variables of the starType blueprints.
         private int getSpawn() { return this.spawn; }
         private String getSpectral() { return this.spectral; }
-        private int getStarID() { return this.starID; }
+        public int getStarID() { return this.starID; }
         private boolean getHabitable() { return this.habitable; }
         private int getSizeWeight() { return this.sizeWeight; }
         private int getSizeVariation() { return this.sizeVariation; }

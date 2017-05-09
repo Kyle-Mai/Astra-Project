@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<newPlanets>
+    <planet id = "2021">
+        <name>Shield World</name>
+        <description>This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.</description>
+        <climate>2107</climate>
+        <spawnWeight>1</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <sizeWeight>2400</sizeWeight>
+        <sizeVariation>700</sizeVariation>
+    </planet>
+    <planet id = "2022">
+        <name>Gemstone World</name>
+        <description>A strange planet with a surface composed of a high volume of gemstones. The high gravity well of the planet is the likely cause, fusing minerals in the core.</description>
+        <climate>2107</climate>
+        <spawnWeight>2</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <sizeWeight>6800</sizeWeight>
+        <sizeVariation>1200</sizeVariation>
+    </planet>
+</newPlanets>

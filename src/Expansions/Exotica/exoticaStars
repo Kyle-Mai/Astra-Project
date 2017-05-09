@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<newStars>
+    <star id = "1015">
+        <name>Gravastar</name>
+        <description>A Gravastar forms when a collapsing star's mass causes the gravitational acceleration to exceed Planck's length. This creates a region around the star that is a void in the fabric of space-time - a gravitational vacuum. It is theorized that a Gravastar may be responsible for the creation of the known universe.</description>
+        <spawnWeight>6</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>0</surfaceTempLow>
+        <surfaceTempHigh>0</surfaceTempHigh>
+        <sizeWeight>0</sizeWeight>
+        <sizeVariation>0</sizeVariation>
+        <planetWeight>0</planetWeight>
+    </star>
+    <star id = "1017">
+        <name>Exotic Star</name>
+        <description>A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.</description>
+        <spawnWeight>3</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>700000</surfaceTempLow>
+        <surfaceTempHigh>900000</surfaceTempHigh>
+        <sizeWeight>0</sizeWeight>
+        <sizeVariation>0</sizeVariation>
+        <planetWeight>0</planetWeight>
+    </star>
+</newStars>
