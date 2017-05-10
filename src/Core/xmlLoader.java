@@ -3,26 +3,21 @@ package Core;
 /**
  KM
  May 08 2017
- Handles the loading of XML-based modded content.
- XML core taken from: https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
+ Handles the loading of XML-based content.
+ Basis for XML core structure taken from: https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
  **/
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.*;
 
 public class xmlLoader {
-    //IS FINE COMRADE, NO PROBLEMS HERE
-
+    //grabs the file locations for the folders
     final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions");
     final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
-    final static String xmlTag = ".xml";
+    final static String xmlTag = ".xml"; //unused, may be necessary in the future
 
     public static void loadXML(final File folder) {
         if (folder.exists()) {
@@ -145,8 +140,6 @@ public class xmlLoader {
             errorPrint(15);
         }
     }
-
-    //TODO: Redo modPlanets and modStars to fit a more simple format.
 
     private static void modPlanets(NodeList nodeList) {
         String className = "";

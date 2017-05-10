@@ -39,7 +39,7 @@ public class starCore {
 
     //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
     private static void createStarTypes() {
-        listOfStars.add(new starType("Red Giant", 1000, 210, "", 2800, 4600, true, 0, 0, 4));
+        listOfStars.add(new starType("Red Giant", 1000, 186, "", 2800, 4600, true, 0, 0, 4));
         listOfStars.add(new starType("Blue Giant", 1001, 109, "", 20000, 50000, true, 0, 0, 4));
         listOfStars.add(new starType("Yellow Dwarf", 1002, 355, "", 5300, 6000, true, 0, 0, 5));
         listOfStars.add(new starType("Red Dwarf", 1003, 290, "", 2500, 4000, true, 0, 0, 0));
@@ -54,14 +54,12 @@ public class starCore {
         listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0));
         listOfStars.add(new starType("Magnetar", 1013, 26, "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 500000, 720000, false, 12, 4, 3));
         listOfStars.add(new starType("Hypergiant", 1014, 17, "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 4000, 35000, false, 0, 0, 7));
-        //listOfStars.add(new starType("Gravastar", 1015, 6, "A Gravastar forms when a collapsing star's mass causes the gravitational acceleration to exceed Planck's length. This creates a region around the star that is a void in the fabric of space-time - a gravitational vacuum. It is theorized that a Gravastar may be responsible for the creation of the known universe.", 0, 0, false, 0, 0, 0));
-        //listOfStars.add(new starType("Thorne-Zytkow Object", 1016, 15, "While appearing to look like a Supergiant, the core of this star is actually an active Neutron star. The Neutron star's incredibly high heat emission allows for uncommon isotopes to be formed during this star's fusion processes.", 540000, 780000, false, 0, 0, 5));
-        //listOfStars.add(new starType("Exotic Star", 1017, 3, "A strange compact star, composed of quarks or bosons rather than the protons, neutrons, and electrons of conventional stars. While extraordinarily dense, they are unable to collapse due to quantum degeneracy pressure.", 700000, 900000, false, 0, 0, 0));
 
     }
 
     //Gets the different spawnChance values of the star blueprints (listOfStars) and organizes them by sum in an ArrayList (spawnWeights).
     private static void starSpawnChanceWeighter() {
+        spawnWeights.clear();
         spawnWeights.add(0); //adds the default 0 to the first slot in the spawn weights
         for (int i = 0; i < listOfStars.size(); i++) {
             //The total spawn weight amount of the stars combined, to simulate weights rather than percents
@@ -121,7 +119,6 @@ public class starCore {
     //Calls and runs all of the vital methods that must run before anything else.
     public static void starPreloader(){
         createStarTypes();
-        starSpawnChanceWeighter();
         System.out.println("starCore successfully preloaded.");
 
     }
@@ -145,6 +142,7 @@ public class starCore {
 
     //determines the star's type / class
     protected int chooseStarType(){
+        starSpawnChanceWeighter(); //reweights the star spawns in case something changes
         int starToGenerate = randomNumber(1, totalSpawnWeight);
 
         //go through the spawn weights arraylist to determine which star is being spawned

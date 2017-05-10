@@ -35,7 +35,7 @@ public class planetClass extends planetCore {
         this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.
         this.isPlanetHabitable = determineHabitability(arrayLoc); //whether or not the planet can be colonized
         this.isHabited = false; //by default, the planet is not currently colonized
-
+        System.out.println("Planet (ID" + planetType + ") successfully generated.");
     }
 
     /** Accessor Methods **/

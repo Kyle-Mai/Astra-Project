@@ -26,7 +26,11 @@ public class gameLoader {
         xmlLoader.loadXML(mods);
 
         //Tests star
-        starClass testStar = new starClass(1, 2);
+        starClass testStar1 = new starClass(1, 1);
+        starClass testStar2 = new starClass(1, 2);
+        starClass testStar3 = new starClass(1, 3);
+        starClass testStar4 = new starClass(1, 4);
+        starClass testStar5 = new starClass(1, 5);
 
     }
 }

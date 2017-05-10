@@ -190,8 +190,8 @@ public class planetCore {
 
         distanceFromStar = randomNumber(distanceMin, distanceMax);
 
-        //If this isn't the first planet, we need to make sure the planet orbits don't overlap
-        if (planetNumber > 0) {
+        //If this isn't the first planet, we need to make sure the planet orbits don't overlap //TODO: Code is broken and freezes here. Need to fix.
+        /*if (planetNumber > 0) {
             //until the conditions are met
             while (incompatible) {
                 incompatible = false;
@@ -206,7 +206,7 @@ public class planetCore {
                     distanceFromStar = randomNumber(distanceMin, distanceMax);
                 }
             }
-        }
+        } */
 
         return distanceFromStar;
     }
