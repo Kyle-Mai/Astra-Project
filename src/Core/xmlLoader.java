@@ -8,6 +8,7 @@ package Core;
  **/
 
 import java.io.File;
+import java.io.FileInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -24,7 +25,7 @@ public class xmlLoader {
             try {
                 for (final File fileEntry : folder.listFiles()) {
                     DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                    Document doc = dBuilder.parse(fileEntry);
+                    Document doc = dBuilder.parse(new FileInputStream(fileEntry));
 
                     if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
                         modPlanets(doc.getChildNodes());
