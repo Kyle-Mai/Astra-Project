@@ -20,8 +20,8 @@ import org.w3c.dom.*;
 public class xmlLoader {
     //IS FINE COMRADE, NO PROBLEMS HERE
 
-    final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions/");
-    static File mod;
+    final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions");
+    final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
     final static String xmlTag = ".xml";
 
     public static void loadXML(final File folder) {
@@ -48,7 +48,7 @@ public class xmlLoader {
                                     errorPrint(7);
                                 }
                         } else {
-                            errorPrint(11);
+                            //errorPrint(11);
                         }
                     } else {
                         errorPrint(10);
@@ -66,23 +66,28 @@ public class xmlLoader {
     //Goes through the expansions and loads the enabled ones.
     private static void loadExpansions(NodeList nodeList) {
         String nodeName;
-        System.out.println("Loading expansions");
+        System.out.println("Expansion pack directory found. Loading expansions...");
         File newExpansion;
-        int expansionID;
+        String expansionID;
 
         if (nodeList != null) { //checks to ensure the input isn't null
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node parentNode = nodeList.item(i);
                 if (parentNode.getNodeName().equals("expansion")) { //checks the subnode of the XML to see what we're loading
-                    System.out.println("Expansion found.");
-                    NodeList nodes = parentNode.getChildNodes(); //TODO: Correctly parse expansion ID and subnode data.
-                    expansionID = Integer.parseInt(parentNode.getTextContent());
-                    newExpansion = new File(expansionFolder + parentNode.getNodeValue());
+                    System.out.println("Expansion pack found. Attempting to load...");
+                    NodeList nodes = parentNode.getChildNodes();
+                    expansionID = parentNode.getAttributes().getNamedItem("id").getNodeValue();
+                    newExpansion = new File( expansionFolder + "/" + expansionID);
                     for (int j = 0; j < nodes.getLength(); j++) {
                         if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) { //valid node type
-                            if (nodes.item(i).getNodeName().equals("enabled")) {
-                                System.out.println("Loading expansion " + expansionID);
-                                loadXML(newExpansion);
+                            if (nodes.item(j).getNodeName().equals("enabled") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //check to see if it is enabled
+                                System.out.println("Loading expansion " + expansionID + " from " + newExpansion);
+                                if (newExpansion.exists()) {
+                                    loadXML(newExpansion);
+                                } else {
+                                    errorPrint(14);
+                                }
+                            } else {
                             }
                         } else {
                         }
@@ -94,47 +99,50 @@ public class xmlLoader {
         } else {
             errorPrint(12);
         }
+
+
+
     }
 
     private static void loadMods(NodeList nodeList) {
-        System.out.println("Loading mods");
-        String directory = "";
-        if (nodeList != null) {
+        String nodeName;
+        System.out.println("Mod directory found. Loading mods...");
+        File newMod;
+        String modID = "";
+        boolean modIsActive = false;
+        String modName = "";
+
+        if (nodeList != null) { //checks to ensure the input isn't null
             for (int i = 0; i < nodeList.getLength(); i++) {
-                Node tempNode = nodeList.item(i);
-                if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) tempNode;
-                    if (eElement.getAttribute("name") != null) { //Mod has a valid name
-                        if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Mod is enabled, load its content.
-                            System.out.println("Loading mod content...");
-                            if (tempNode.hasAttributes()) { //looks through the modList's mod to find the directory of the mod
-                                NamedNodeMap nodeMap = tempNode.getAttributes();
-                                for (int j = 0; j < nodeMap.getLength(); j++) {
-                                    Node node = nodeMap.item(j);
-                                    if (node.getNodeName().equals("directoryName") && node.getTextContent() != null) { //gets the directory of the mod.
-                                        directory = node.getTextContent();
-                                    } else {
-                                        errorPrint(6);
-                                    }
-                                }
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("mod")) { //checks the subnode of the XML to see what we're loading
+                    System.out.println("Mod found. Attempting to load...");
+                    modName = parentNode.getAttributes().getNamedItem("name").getNodeValue();
+                    NodeList nodes = parentNode.getChildNodes();
+                    for (int j = 0; j < nodes.getLength(); j++) {
+                        if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) { //valid node type
+                            if (nodes.item(j).getNodeName().equals("modActive") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //check to see if it is enabled
+                                modIsActive = true;
+                            } else if (nodes.item(j).getNodeName().equals("directoryName")) {
+                                modID = nodes.item(j).getTextContent();
                             }
-                            if (!directory.equals("")) {
-                                mod = new File("/src/Mods/" + directory);
-                                if (mod.exists()) {
-                                    loadXML(mod);
-                                } else {
-                                    errorPrint(5);
-                                }
-                            }
-                        } else {
-                            System.out.println("Mod disabled.");
                         }
-                        //Mod isn't enabled, don't load content.
                     }
+                } else {
+                    //errorPrint(13);
                 }
             }
         } else {
             errorPrint(12);
+        }
+
+        newMod = new File( modFolder + "/" + modID); //gets the mod directory
+
+        if (modIsActive && newMod.exists() && !modID.equals("")) { //checks to ensure it is valid and enabled
+            System.out.println("Mod directory successfully parsed.\nAttempting to load mod data of mod '" + modName + "' from " + newMod);
+            loadXML(newMod); //attempts to load mod data
+        } else {
+            errorPrint(15);
         }
     }
 
@@ -148,237 +156,183 @@ public class xmlLoader {
         boolean modIsValid = true;
         int errorMessage = 0;
 
-        System.out.println("Loading new planets");
+        System.out.println("Loading new planet data...");
         //gather all of the nodes
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node tempNode = nodeList.item(i);
-            if (tempNode.getNodeType() == Node.ELEMENT_NODE) { //this is an element (aka planet)
-                if (tempNode.hasAttributes()) { //the node has valid attributes
-                    NamedNodeMap nodeMap = tempNode.getAttributes(); //gathers the node's attributes
-                    if (tempNode.getTextContent() != null) {
-                        if (Integer.parseInt(tempNode.getTextContent()) >= 2000 && Integer.parseInt(tempNode.getTextContent()) <= 2099) { //the ID is a valid planet ID
-                            for (int k = 0; k < starClass.listOfStars.size(); k++) { //if the ID is already used, refuse the mod
-                                if (planetClass.listOfPlanets.get(k).getPlanetID() == Integer.parseInt(tempNode.getTextContent())) { //TODO: Maybe redo this to instead overwrite existing objects?
-                                    modIsValid = false;
-                                    errorMessage = 4;
-                                }
+
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("planet")) {
+                    System.out.println("New planet found. Attempting to load data...");
+                    planetID = Integer.parseInt(parentNode.getAttributes().getNamedItem("id").getNodeValue());
+                    if (planetID >= 2000 && planetID < 3000) {
+                        modIsValid = true;
+                        for (int j = 0; j < starClass.listOfStars.size(); j++) {
+                            if (starClass.listOfStars.get(j).getStarID() == planetID) {
+                                starClass.listOfStars.remove(j); //remove the content using the same ID
                             }
-                            if (modIsValid) {
-                                planetID = Integer.parseInt(tempNode.getTextContent());
+                        }
+                        NodeList nodes = parentNode.getChildNodes();
+                        for (int k = 0; k < nodes.getLength(); k++) {
+                            if (nodes.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                                if (nodes.item(k).getNodeName().equals("name") && nodes.item(k).getTextContent() != null) {
+                                    className = nodes.item(k).getTextContent();
+                                } else if (nodes.item(k).getNodeName().equals("description") && nodes.item(k).getTextContent() != null) {
+                                    classDesc = nodes.item(k).getTextContent();
+                                } else if (nodes.item(k).getNodeName().equals("climate") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 2100 && Integer.parseInt(nodes.item(k).getTextContent()) < 2200) {
+                                        climateID = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        climateID = 2107; //defaults climate ID to avoid major errors
+                                    }
+                                } else if (nodes.item(k).getNodeName().equals("isHabitable") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) == 1) {
+                                        habitable = true;
+                                    } else if (Integer.parseInt(nodes.item(k).getTextContent()) == 0) {
+                                        habitable = false;
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("sizeWeight") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        sizeWeight = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("sizeVariation") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        sizeVariation = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("spawnWeight") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        spawnWeight = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                } //if it doesn't fit any of the necessary info, ignore it
                             }
-                        } else { //if it's not valid, dump an error
-                            modIsValid = false;
-                            errorMessage = 3;
                         }
                     } else {
-                        modIsValid = false;
-                        errorMessage = 1;
+                        errorPrint(16);
                     }
-                    //collects the data from the different nodes
-                    for (int j = 0; j < nodeMap.getLength(); j++) {
-                        Node node = nodeMap.item(j);
-                        if (node.getNodeName().equals("name")) {
-                            if (node.getTextContent() != null) {
-                                className = node.getTextContent();
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("description")) {
-                            if (node.getTextContent() != null) {
-                                classDesc = node.getTextContent();
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("climate")) {
-                            if (node.getTextContent() != null) {
-                                climateID = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("spawnWeight")) {
-                            if (node.getTextContent() != null) {
-                                spawnWeight = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("isHabitable")) {
-                            if (node.getTextContent() != null) {
-                                if (Integer.parseInt(node.getTextContent()) == 1) {
-                                    habitable = true;
-                                } else {
-                                    habitable = false;
-                                }
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("sizeWeight")) {
-                            if (node.getTextContent() != null) {
-                                sizeWeight = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("sizeVariation")) {
-                            if (node.getTextContent() != null) {
-                                sizeVariation = Integer.parseInt(node.getTextContent());
-                                if (sizeVariation > sizeWeight) {
-                                    sizeVariation = sizeWeight - 1;
-                                }
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        }
-                    }
-
                     if (modIsValid) { //valid mod, load it in
                         //adds the new planet to the planet list.
                         planetClass.listOfPlanets.add(new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
-                        System.out.println("Modded planet successfully loaded.");
+                        System.out.println("New planet successfully loaded - " + className + " (ID" + planetID + ")");
                     } else { //something in this mod wasn't properly initialized, do not load it
                         System.out.println("An error has occurred while loading planet XML data.");
-                        errorPrint(errorMessage);
                     }
-
                 }
             }
+        } else {
+            errorPrint(12);
         }
-
+        System.out.println("Loading complete.");
     } //close modPlanets
 
     private static void modStars(NodeList nodeList) {
         String name = "";
         int spawn = 0;
         String desc = "";
-        int[] Temp = new int[2];
+        int tempLow = 0, tempHigh = 0;
         boolean habitable = false;
         String spectral = "";
         int starID = 0;
         int sizeWeight = 0;
         int sizeVariation = 0;
         int planetWeight = 0;
-        boolean modIsValid = true;
+        boolean modIsValid = false;
         int errorMessage = 0;
+        int replaceID = -1;
 
-        System.out.println("Loading new stars");
+        System.out.println("Loading new star data...");
         //gather all of the nodes
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node tempNode = nodeList.item(i);
-            if (tempNode.getNodeType() == Node.ELEMENT_NODE) { //this is an element (aka planet)
-                if (tempNode.hasAttributes()) { //the node has valid attributes
-                    NamedNodeMap nodeMap = tempNode.getAttributes(); //gathers the node's attributes
-                    if (tempNode.getTextContent() != null) {
-                        if (Integer.parseInt(tempNode.getTextContent()) >= 1000 && Integer.parseInt(tempNode.getTextContent()) <= 1099) { //the ID is valid
-                            for (int k = 0; k < starClass.listOfStars.size(); k++) { //if the ID is already used, refuse the mod
-                                if (starClass.listOfStars.get(k).getStarID() == Integer.parseInt(tempNode.getTextContent())) {
-                                    modIsValid = false;
-                                    errorMessage = 4;
-                                }
+
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("star")) {
+                    System.out.println("New star found. Attempting to load data...");
+                    starID = Integer.parseInt(parentNode.getAttributes().getNamedItem("id").getNodeValue());
+                    if (starID >= 1000 && starID < 2000) {
+                        modIsValid = true;
+                        for (int j = 0; j < starClass.listOfStars.size(); j++) {
+                            if (starClass.listOfStars.get(j).getStarID() == starID) {
+                                starClass.listOfStars.remove(j); //remove the content using the same ID
                             }
-                            if (modIsValid) {
-                                starID = Integer.parseInt(tempNode.getTextContent());
+                        }
+                        NodeList nodes = parentNode.getChildNodes();
+                        for (int k = 0; k < nodes.getLength(); k++) {
+                            if (nodes.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                                if (nodes.item(k).getNodeName().equals("name") && nodes.item(k).getTextContent() != null) {
+                                    name = nodes.item(k).getTextContent();
+                                } else if (nodes.item(k).getNodeName().equals("description") && nodes.item(k).getTextContent() != null) {
+                                    desc = nodes.item(k).getTextContent();
+                                } else if (nodes.item(k).getNodeName().equals("spawnWeight") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        spawn = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                } else if (nodes.item(k).getNodeName().equals("isHabitable") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) == 1) {
+                                        habitable = true;
+                                    } else if (Integer.parseInt(nodes.item(k).getTextContent()) == 0) {
+                                        habitable = false;
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("surfaceTempLow") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        tempLow = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("surfaceTempHigh") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        tempHigh = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("sizeWeight") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        sizeWeight = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("sizeVariation") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        sizeVariation = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                }  else if (nodes.item(k).getNodeName().equals("planetWeight") && nodes.item(k).getTextContent() != null) {
+                                    if (Integer.parseInt(nodes.item(k).getTextContent()) >= 0) {
+                                        planetWeight = Integer.parseInt(nodes.item(k).getTextContent());
+                                    } else {
+                                        errorPrint(17);
+                                    }
+                                } //if it doesn't fit any of the necessary info, ignore it
                             }
-                        } else { //if it's not valid, dump an error
-                            modIsValid = false;
-                            errorMessage = 3;
                         }
                     } else {
-                        modIsValid = false;
-                        errorMessage = 1;
+                        errorPrint(16);
                     }
-                    //collects the data from the different nodes
-                    for (int j = 0; j < nodeMap.getLength(); j++) {
-                        Node node = nodeMap.item(j);
-                        if (node.getNodeName().equals("name")) {
-                            if (node.getTextContent() != null) {
-                                name = node.getTextContent();
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("description")) {
-                            if (node.getTextContent() != null) {
-                                desc = node.getTextContent();
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("spawnWeight")) {
-                            if (node.getTextContent() != null) {
-                                spawn = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("isHabitable")) {
-                            if (node.getTextContent() != null) {
-                                if (Integer.parseInt(node.getTextContent()) == 1) {
-                                    habitable = true;
-                                } else {
-                                    habitable = false;
-                                }
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("surfaceTempHigh")) {
-                            if (node.getTextContent() != null) {
-                                Temp[1] = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("surfaceTempLow")) {
-                            if (node.getTextContent() != null) {
-                                Temp[0] = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("planetWeight")) {
-                            if (node.getTextContent() != null) {
-                                planetWeight = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("sizeWeight")) {
-                            if (node.getTextContent() != null) {
-                                sizeWeight = Integer.parseInt(node.getTextContent());
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        } else if (node.getNodeName().equals("sizeVariation")) {
-                            if (node.getTextContent() != null) {
-                                sizeVariation = Integer.parseInt(node.getTextContent());
-                                if (sizeVariation > sizeWeight) {
-                                    sizeVariation = sizeWeight - 1;
-                                }
-                            } else {
-                                modIsValid = false;
-                                errorMessage = 2;
-                            }
-                        }
-                    }
-
                     if (modIsValid) { //valid mod, load it in
                         //adds the new planet to the planet list.
-                        starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, Temp[0], Temp[1], habitable, sizeWeight, sizeVariation, planetWeight));
-                        System.out.println("Modded star successfully loaded.");
+                        starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight));
+                        System.out.println("New star successfully loaded - " + name + " (ID" + starID + ")");
                     } else { //something in this mod wasn't properly initialized, do not load it
                         System.out.println("An error has occurred while loading star XML data.");
-                        errorPrint(errorMessage);
                     }
                 }
-
             }
+        } else {
+            errorPrint(12);
         }
+        System.out.println("Loading complete.");
     } //close modPlanets
 
     private static void errorPrint(int errorMessage) {
@@ -421,6 +375,21 @@ public class xmlLoader {
                 break;
             case 13:
                 System.out.println("Error when parsing XML data. Sub-node was incorrectly declared.");
+                break;
+            case 14:
+                System.out.println("Error - Content directory was not found. Please ensure the XML content directory is valid.");
+                break;
+            case 15:
+                System.out.println("Error while parsing mod info - Either the directory was not properly declared, or the mod is disabled.");
+                break;
+            case 16:
+                System.out.println("Error while loading star data - star does not have a valid ID code.");
+                break;
+            case 17:
+                System.out.println("Error while loading star data - invalid data.");
+                break;
+            case 18:
+                System.out.println("Error while loading planet data - invalid data.");
                 break;
         }
     }
