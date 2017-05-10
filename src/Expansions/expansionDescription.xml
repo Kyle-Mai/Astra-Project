@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <expansionDescription>
-    <expansion name="Exotica">
+    <expansion id="1">
+        <expansionName>Exotica</expansionName>
         <subtitle>Into the vast unknown.</subtitle>
         <description>Exotica adds a wide variety of hypothetical and fictional planets and stars to the game, expanding reality into the unknown. Explore the theoretics of the universe with Exotic stars, Shield worlds, Quasi-stars, and more.</description>
         <enabled>0</enabled> <!--1 = true, 0 = false -->

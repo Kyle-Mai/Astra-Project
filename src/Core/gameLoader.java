@@ -19,8 +19,10 @@ public class gameLoader {
         starCore.starPreloader();
         planetCore.planetPreloader();
         //Loads expansion content.
+        System.out.println("Attempting to load expansion files...");
         xmlLoader.loadXML(expansions);
         //Loads mod content.
+        System.out.println("Attempting to load mods...");
         xmlLoader.loadXML(mods);
 
         //Tests star

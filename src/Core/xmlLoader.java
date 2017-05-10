@@ -20,8 +20,9 @@ import org.w3c.dom.*;
 public class xmlLoader {
     //IS FINE COMRADE, NO PROBLEMS HERE
 
-    final static File exoticaFolder = new File(System.getProperty("user.dir") + "/src/Expansions/Exotica");
+    final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions/");
     static File mod;
+    final static String xmlTag = ".xml";
 
     public static void loadXML(final File folder) {
         if (folder.exists()) {
@@ -31,18 +32,21 @@ public class xmlLoader {
                     if (!fileEntry.isDirectory()) { //makes sure we don't try to read a directory as a standalone
                         Document doc = dBuilder.parse(fileEntry);
                         if (doc.hasChildNodes()) { //check to see if the file has any nodes
-                            System.out.println("XML file successfully parsed"); //TODO: Fix error here. Document doesn't parse XML.
-                            if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
-                                modPlanets(doc.getChildNodes());
-                            } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
-                                modStars(doc.getChildNodes());
-                            } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
-                                loadExpansions(doc.getChildNodes()); //loads the expansions
-                            } else if (doc.getDocumentElement().getNodeName().equals("loadMod")) {
-                                loadMods(doc.getChildNodes());
-                            } else {
-                                errorPrint(7);
-                            }
+                            doc.getDocumentElement().normalize();
+                            String baseNode = doc.getDocumentElement().getNodeName();
+                            NodeList elements = doc.getDocumentElement().getChildNodes();
+                            System.out.println("XML file successfully parsed");
+                                if (baseNode.equals("newPlanets")) { //this mods is adding or changing planets
+                                    modPlanets(elements);
+                                } else if (baseNode.equals("newStars")) {
+                                    modStars(elements);
+                                } else if (baseNode.equals("expansionDescription")) {
+                                    loadExpansions(elements); //loads the expansions
+                                } else if (baseNode.equals("loadMod")) {
+                                    loadMods(elements);
+                                } else {
+                                    errorPrint(7);
+                                }
                         } else {
                             errorPrint(11);
                         }
@@ -61,63 +65,76 @@ public class xmlLoader {
 
     //Goes through the expansions and loads the enabled ones.
     private static void loadExpansions(NodeList nodeList) {
+        String nodeName;
         System.out.println("Loading expansions");
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node tempNode = nodeList.item(i);
-            if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) tempNode;
-                if (eElement.getAttribute("name").equals("Exotica")) { //The pack we're loading is Exotica.
-                    if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Exotica is enabled, load its content.
-                        System.out.println("Loading Exotica content...");
-                        if (exoticaFolder.exists()) {
-                            loadXML(exoticaFolder);
+        File newExpansion;
+        int expansionID;
+
+        if (nodeList != null) { //checks to ensure the input isn't null
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("expansion")) { //checks the subnode of the XML to see what we're loading
+                    System.out.println("Expansion found.");
+                    NodeList nodes = parentNode.getChildNodes(); //TODO: Correctly parse expansion ID and subnode data.
+                    expansionID = Integer.parseInt(parentNode.getTextContent());
+                    newExpansion = new File(expansionFolder + parentNode.getNodeValue());
+                    for (int j = 0; j < nodes.getLength(); j++) {
+                        if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) { //valid node type
+                            if (nodes.item(i).getNodeName().equals("enabled")) {
+                                System.out.println("Loading expansion " + expansionID);
+                                loadXML(newExpansion);
+                            }
                         } else {
-                            errorPrint(8);
                         }
-                    } else {
-                        System.out.println("Exotica disabled.");
                     }
-                    //If Exotica isn't enabled, don't load Exotica content.
+                } else {
+                    //errorPrint(13);
                 }
             }
+        } else {
+            errorPrint(12);
         }
     }
 
     private static void loadMods(NodeList nodeList) {
         System.out.println("Loading mods");
         String directory = "";
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node tempNode = nodeList.item(i);
-            if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) tempNode;
-                if (eElement.getAttribute("name") != null) { //Mod has a valid name
-                    if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Mod is enabled, load its content.
-                        System.out.println("Loading mod content...");
-                        if (tempNode.hasAttributes()) { //looks through the modList's mod to find the directory of the mod
-                            NamedNodeMap nodeMap = tempNode.getAttributes();
-                            for (int j = 0; j < nodeMap.getLength(); j++) {
-                                Node node = nodeMap.item(j);
-                                if (node.getNodeName().equals("directoryName") && node.getTextContent() != null) { //gets the directory of the mod.
-                                    directory = node.getTextContent();
-                                } else {
-                                    errorPrint(6);
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node tempNode = nodeList.item(i);
+                if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) tempNode;
+                    if (eElement.getAttribute("name") != null) { //Mod has a valid name
+                        if (Integer.parseInt(eElement.getElementsByTagName("enabled").item(0).getTextContent()) == 1) { //Mod is enabled, load its content.
+                            System.out.println("Loading mod content...");
+                            if (tempNode.hasAttributes()) { //looks through the modList's mod to find the directory of the mod
+                                NamedNodeMap nodeMap = tempNode.getAttributes();
+                                for (int j = 0; j < nodeMap.getLength(); j++) {
+                                    Node node = nodeMap.item(j);
+                                    if (node.getNodeName().equals("directoryName") && node.getTextContent() != null) { //gets the directory of the mod.
+                                        directory = node.getTextContent();
+                                    } else {
+                                        errorPrint(6);
+                                    }
                                 }
                             }
-                        }
-                        if (!directory.equals("")) {
-                            mod = new File("/src/Mods/" + directory);
-                            if (mod.exists()) {
-                                loadXML(mod);
-                            } else {
-                                errorPrint(5);
+                            if (!directory.equals("")) {
+                                mod = new File("/src/Mods/" + directory);
+                                if (mod.exists()) {
+                                    loadXML(mod);
+                                } else {
+                                    errorPrint(5);
+                                }
                             }
+                        } else {
+                            System.out.println("Mod disabled.");
                         }
-                    } else {
-                        System.out.println("Mod disabled.");
+                        //Mod isn't enabled, don't load content.
                     }
-                    //Mod isn't enabled, don't load content.
                 }
             }
+        } else {
+            errorPrint(12);
         }
     }
 
@@ -398,6 +415,12 @@ public class xmlLoader {
                 break;
             case 11:
                 System.out.println("Error - XML file not loaded. Data not found in the directory.");
+                break;
+            case 12:
+                System.out.println("Error - XML loader attempted to index a null node list.");
+                break;
+            case 13:
+                System.out.println("Error when parsing XML data. Sub-node was incorrectly declared.");
                 break;
         }
     }
