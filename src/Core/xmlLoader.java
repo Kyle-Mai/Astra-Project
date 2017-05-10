@@ -26,12 +26,12 @@ public class xmlLoader {
     public static void loadXML(final File folder) {
         if (folder.exists()) {
             try {
-                for (File fileEntry : folder.listFiles()) {
+                for (File fileEntry : folder.listFiles()) { //look through the directory for files
                     DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                     if (!fileEntry.isDirectory()) { //makes sure we don't try to read a directory as a standalone
                         Document doc = dBuilder.parse(fileEntry);
-                        System.out.println("XML file successfully parsed"); //TODO: Fix error here. Document doesn't parse XML.
-                        if (doc.hasChildNodes()) {
+                        if (doc.hasChildNodes()) { //check to see if the file has any nodes
+                            System.out.println("XML file successfully parsed"); //TODO: Fix error here. Document doesn't parse XML.
                             if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
                                 modPlanets(doc.getChildNodes());
                             } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
@@ -105,7 +105,7 @@ public class xmlLoader {
                             }
                         }
                         if (!directory.equals("")) {
-                            mod = new File("src/Mods/" + directory);
+                            mod = new File("/src/Mods/" + directory);
                             if (mod.exists()) {
                                 loadXML(mod);
                             } else {
@@ -398,6 +398,7 @@ public class xmlLoader {
                 break;
             case 11:
                 System.out.println("Error - XML file not loaded. Data not found in the directory.");
+                break;
         }
     }
 

@@ -46,14 +46,15 @@ public class starClass extends starCore {
         this.mapLocationX = mapLocationX; //the X position of the star on the map grid
         this.mapLocationY = mapLocationY; //the Y position of the star on the map grid
         System.out.println("Star successfully generated at the coordinates " + mapLocationX + "|" + mapLocationY);
-        constructPlanets();
+        constructPlanets(this.numOfPlanets);
 
 
     }
 
     //generates the planets surrounding this star
-    private void constructPlanets() {
-        for (int i = 0; i <= this.numOfPlanets; i++) {
+    private void constructPlanets(int planetsToConstruct) {
+        System.out.println("Constructing " + planetsToConstruct + " planets.");
+        for (int i = 0; i <= planetsToConstruct; i++) {
             planetList.add(new planetClass(this, i));
         }
 
