@@ -19,7 +19,16 @@ public class xmlLoader {
     final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
     final static String xmlTag = ".xml"; //unused, may be necessary in the future
 
-    public static void loadXML(final File folder) {
+    //loads the XML content
+    public static void loadContent() {
+        System.out.println("Attempting to load expansion files...");
+        loadXML(expansionFolder);
+        System.out.println("Attempting to load mods...");
+        loadXML(modFolder);
+
+    }
+
+    private static void loadXML(final File folder) {
         if (folder.exists()) {
             try {
                 for (File fileEntry : folder.listFiles()) { //look through the directory for files
