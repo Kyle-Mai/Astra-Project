@@ -1,16 +1,6 @@
-**[Test Environment d6]**
-
-Test build for running experimental features before they are pushed to the master in order to avoid damaging content.
-
-All content here is subject to change before being pushed to the master project, and most is unlikely to see past this build.
-
----
-
 ### ICS4U 2017 - Final Project
 
 # Project Astra
-
-Project Version v;A0.33d6
 
 ## Description [WIP]
 
