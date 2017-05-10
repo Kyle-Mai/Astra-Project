@@ -12,8 +12,8 @@ public class gameLoader {
 
     public static void main(String args[]){
 
-        final File expansions = new File("src/Expansions");
-        final File mods = new File("src/Mods");
+        final File expansions = new File(System.getProperty("user.dir") + "/src/Expansions");
+        final File mods = new File(System.getProperty("user.dir") + "/src/Mods");
 
         //Preloads planets and stars.
         starCore.starPreloader();

@@ -9,6 +9,9 @@ package Core;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -17,26 +20,34 @@ import org.w3c.dom.*;
 public class xmlLoader {
     //IS FINE COMRADE, NO PROBLEMS HERE
 
-    final static File exoticaFolder = new File("src/Expansions/Exotica");
+    final static File exoticaFolder = new File(System.getProperty("user.dir") + "/src/Expansions/Exotica");
     static File mod;
 
     public static void loadXML(final File folder) {
         if (folder.exists()) {
             try {
-                for (final File fileEntry : folder.listFiles()) {
+                for (File fileEntry : folder.listFiles()) {
                     DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                    Document doc = dBuilder.parse(new FileInputStream(fileEntry));
-
-                    if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
-                        modPlanets(doc.getChildNodes());
-                    } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
-                        modStars(doc.getChildNodes());
-                    } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
-                        loadExpansions(doc.getChildNodes()); //loads the expansions
-                    } else if (doc.getDocumentElement().getNodeName().equals("loadMod")) {
-                        loadMods(doc.getChildNodes());
+                    if (!fileEntry.isDirectory()) { //makes sure we don't try to read a directory as a standalone
+                        Document doc = dBuilder.parse(fileEntry);
+                        System.out.println("XML file successfully parsed"); //TODO: Fix error here. Document doesn't parse XML.
+                        if (doc.hasChildNodes()) {
+                            if (doc.getDocumentElement().getNodeName().equals("newPlanets")) { //this mods is adding or changing planets
+                                modPlanets(doc.getChildNodes());
+                            } else if (doc.getDocumentElement().getNodeName().equals("newStars")) {
+                                modStars(doc.getChildNodes());
+                            } else if (doc.getDocumentElement().getNodeName().equals("expansionDescription")) {
+                                loadExpansions(doc.getChildNodes()); //loads the expansions
+                            } else if (doc.getDocumentElement().getNodeName().equals("loadMod")) {
+                                loadMods(doc.getChildNodes());
+                            } else {
+                                errorPrint(7);
+                            }
+                        } else {
+                            errorPrint(11);
+                        }
                     } else {
-                        errorPrint(7);
+                        errorPrint(10);
                     }
                 }
 
@@ -50,6 +61,7 @@ public class xmlLoader {
 
     //Goes through the expansions and loads the enabled ones.
     private static void loadExpansions(NodeList nodeList) {
+        System.out.println("Loading expansions");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node tempNode = nodeList.item(i);
             if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -72,6 +84,7 @@ public class xmlLoader {
     }
 
     private static void loadMods(NodeList nodeList) {
+        System.out.println("Loading mods");
         String directory = "";
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node tempNode = nodeList.item(i);
@@ -118,6 +131,7 @@ public class xmlLoader {
         boolean modIsValid = true;
         int errorMessage = 0;
 
+        System.out.println("Loading new planets");
         //gather all of the nodes
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node tempNode = nodeList.item(i);
@@ -234,6 +248,7 @@ public class xmlLoader {
         boolean modIsValid = true;
         int errorMessage = 0;
 
+        System.out.println("Loading new stars");
         //gather all of the nodes
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node tempNode = nodeList.item(i);
@@ -378,6 +393,11 @@ public class xmlLoader {
             case 9:
                 System.out.println("An error occurred loading XML data - the XML directory was not valid.");
                 break;
+            case 10:
+                System.out.println("Ignoring directory.");
+                break;
+            case 11:
+                System.out.println("Error - XML file not loaded. Data not found in the directory.");
         }
     }
 

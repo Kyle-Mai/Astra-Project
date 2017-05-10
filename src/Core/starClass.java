@@ -45,6 +45,7 @@ public class starClass extends starCore {
         this.habitableZoneMin = habitableZoneMin(this.absLum); //the lower end of the star's habitable zone
         this.mapLocationX = mapLocationX; //the X position of the star on the map grid
         this.mapLocationY = mapLocationY; //the Y position of the star on the map grid
+        System.out.println("Star successfully generated at the coordinates " + mapLocationX + "|" + mapLocationY);
         constructPlanets();
 
 
@@ -52,7 +53,7 @@ public class starClass extends starCore {
 
     //generates the planets surrounding this star
     private void constructPlanets() {
-        for (int i = 0; i <= numOfPlanets; i++) {
+        for (int i = 0; i <= this.numOfPlanets; i++) {
             planetList.add(new planetClass(this, i));
         }
 
