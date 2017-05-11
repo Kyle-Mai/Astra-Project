@@ -14,12 +14,25 @@ public class gameLoader {
         final int yScale = 20; //y scale of the map
         final int starDensity = 6; //one in every x tiles has a star
 
+        /** Preloads content before the game loads **/
+
         //Preloads planets and stars.
         starCore.starPreloader();
         planetCore.planetPreloader();
 
+        /** Loads the UI core and the launcher **/
+
+        System.out.println("Loading UI core...");
+        coreUI UI = new coreUI("Black", 500, 500); //loads the UI core
+        UI.setVisible(true);
+        UI.loadUI("Astra Project Launcher", false);
+
+        /** Loads after the launcher "play" button is pressed **/
+
         //loads XML based content
         xmlLoader.loadContent();
+
+        /** Loads when a new game is played **/
 
         //loads the map data
         mapGenerator map = new mapGenerator(xScale, yScale, starDensity);
