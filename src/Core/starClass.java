@@ -82,7 +82,7 @@ public class starClass extends starCore {
     //generates the planets surrounding this star
     private void constructPlanets(int planetsToConstruct) {
         System.out.println("Constructing " + planetsToConstruct + " planets.");
-        for (int i = 0; i <= planetsToConstruct; i++) {
+        for (int i = 1; i <= planetsToConstruct; i++) {
             planetList.add(new planetClass(this, i));
         }
 

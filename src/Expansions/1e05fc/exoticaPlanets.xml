@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <newPlanets>
-    <planet id = "2021">
+    <planet id = "2022">
         <name>Shield World</name>
         <description>This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.</description>
         <climate>2107</climate>
@@ -10,7 +10,7 @@
         <sizeWeight>2400</sizeWeight>
         <sizeVariation>700</sizeVariation>
     </planet>
-    <planet id = "2022">
+    <planet id = "2023">
         <name>Gemstone World</name>
         <description>A strange planet with a surface composed of a high volume of gemstones. The high gravity well of the planet is the likely cause, fusing minerals in the core.</description>
         <climate>2105</climate>
@@ -19,7 +19,7 @@
         <sizeWeight>6800</sizeWeight>
         <sizeVariation>1200</sizeVariation>
     </planet>
-    <planet id = "2023">
+    <planet id = "2024">
         <name>Chthonian World</name>
         <description>A planet that was once a gas giant, but is now nothing more than a dense core - the outer layers stripped away by the solar wind of the nearby star.</description>
         <climate>2107</climate>

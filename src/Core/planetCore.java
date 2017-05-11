@@ -88,7 +88,7 @@ public class planetCore {
         listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 35,  "", false, 2300, 1700));
         listOfPlanets.add(new planetType("Molten World", 2011, 2109, 48, "", false, 3200, 2000));
         listOfPlanets.add(new planetType("Storm World", 2012, 2103, 30, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
-        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 10, "", false, 80000, 32000));
+        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 17, "", false, 80000, 32000));
         listOfPlanets.add(new planetType("Barren World", 2014, 2105, 65, "", false, 3000, 2400));
         listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 14, "", false, 2600, 1200));
         listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 10, "", false, 1800, 900));
@@ -96,7 +96,7 @@ public class planetCore {
         listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 24, "", false, 2700, 1300));
         listOfPlanets.add(new planetType("Iron World", 2019, 2105, 15, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
         listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
-        //listOfPlanets.add(new planetType("Shield World", 2021, 2107, 1, "This world is encompassed by a strange shield of unknown origin. Attempts to scan the surface through the shield are unsuccessful, and it's unknown what lies within.", false, 2400, 700));
+        listOfPlanets.add(new planetType("Ice Giant", 2021, 2108, 10, "An ice giant, while similar to gas giants, contains more 'icey' elements such as water, ammonia, and methane.", false, 320000, 10000));
 
     }
 
@@ -238,7 +238,7 @@ public class planetCore {
     }
 
     //determines the class of the planet generated
-    protected int determinePlanetClass(int distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar){ //sets the planetType of the planet
+    protected int determinePlanetClass(long distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar){ //sets the planetType of the planet
         int randomPlanet; //gets a random number to determine the type of planet generated
 
         //first, clear the planetsToSpawn arraylist so we don't mix spawns.
@@ -368,7 +368,7 @@ public class planetCore {
         return planetsToSpawn.get(randomPlanet); //returns the planet ID of the planet generated
     }
 
-    protected int calculateSize(int starRadius, int distanceFromStar){
+    protected int calculateSize(int starRadius, long distanceFromStar){
 
         if (distanceFromStar <= 4*starRadius) {
 
@@ -437,7 +437,7 @@ public class planetCore {
 
     } //checks the size of the planet
 
-    protected boolean isInHabitableZone(int distanceFromStar, int upperBound, int lowerBound) {
+    protected boolean isInHabitableZone(long distanceFromStar, int upperBound, int lowerBound) {
         if ((lowerBound * AUtoKM) <= distanceFromStar && (upperBound * AUtoKM) >= distanceFromStar) {
             return true; //within habitable zone, return true
         } else {
