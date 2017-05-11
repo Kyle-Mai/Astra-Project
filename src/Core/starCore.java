@@ -59,7 +59,10 @@ public class starCore {
 
     //Gets the different spawnChance values of the star blueprints (listOfStars) and organizes them by sum in an ArrayList (spawnWeights).
     private static void starSpawnChanceWeighter() {
+        //resets data
         spawnWeights.clear();
+        totalSpawnWeight = 0;
+
         spawnWeights.add(0); //adds the default 0 to the first slot in the spawn weights
         for (int i = 0; i < listOfStars.size(); i++) {
             //The total spawn weight amount of the stars combined, to simulate weights rather than percents

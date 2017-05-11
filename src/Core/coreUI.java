@@ -13,12 +13,75 @@ import java.lang.reflect.Field;
 
 public class coreUI extends JPanel {
 
-    private int defaultScreenScaleX, defaultScreenScaleY; //Screen size
+    private int[] currentUIScale = {400, 600}; //default screen scale
+
+    public int getUIScaleX() {
+        return this.currentUIScale[0];
+    }
+
+    public int getUIScaleY() {
+        return this.currentUIScale[1];
+    }
+
+    //sets the window size to the chosen monitor scale
+    public void rescaleScreen(int option) {
+        switch(option) {
+            case 1: //4K
+                currentUIScale[0] = 3840;
+                currentUIScale[1] = 2160;
+                break;
+            case 2: //2K
+                currentUIScale[0] = 2560;
+                currentUIScale[1] = 1440;
+                break;
+            case 3: //standard monitor
+                currentUIScale[0] = 1920;
+                currentUIScale[1] = 1080;
+                break;
+            case 4:
+                currentUIScale[0] = 1600;
+                currentUIScale[1] = 900;
+                break;
+            case 5:
+                currentUIScale[0] = 1366;
+                currentUIScale[1] = 768;
+                break;
+            case 6:
+                currentUIScale[0] = 1280;
+                currentUIScale[1] = 720;
+                break;
+            case 7:
+                currentUIScale[0] = 1600;
+                currentUIScale[1] = 1200;
+                break;
+            case 8:
+                currentUIScale[0] = 1280;
+                currentUIScale[1] = 1024;
+                break;
+            case 9:
+                currentUIScale[0] = 1024;
+                currentUIScale[1] = 768;
+                break;
+            case 10:
+                currentUIScale[0] = 800;
+                currentUIScale[1] = 600;
+                break;
+            default:
+                currentUIScale[0] = 400;
+                currentUIScale[1] = 600;
+                break;
+        }
+
+        this.setPreferredSize(new Dimension(this.currentUIScale[0], this.currentUIScale[1]));
+
+        System.out.println("UI rescaled.");
+
+    }
 
     public coreUI() {
     }
 
-    public coreUI(String bgColour, int scaleX, int scaleY) {
+    public coreUI(String bgColour) {
         //adds mouse and key listeners to the frame
         mouseHandler mouseEvents = new mouseHandler();
         keyHandler keyboardEvents = new keyHandler();
@@ -26,27 +89,14 @@ public class coreUI extends JPanel {
         addKeyListener(keyboardEvents);
         addMouseListener(mouseEvents);
 
-        this.defaultScreenScaleX = scaleX;
-        this.defaultScreenScaleY = scaleY;
+        this.setPreferredSize(new Dimension(this.currentUIScale[0], this.currentUIScale[1]));
         this.setBackground(colourValue(bgColour));
-        this.setPreferredSize(new Dimension(this.defaultScreenScaleX, this.defaultScreenScaleY));
 
         System.out.println("Successfully loaded UI core.");
 
     }
 
     //TODO: Separate into another class.
-
-    public void loadUI(String screenName, boolean isResizable) {
-        JFrame GUIbuilder = new JFrame(screenName);
-
-        GUIbuilder.getContentPane().add(this);
-        GUIbuilder.setResizable(isResizable);
-        GUIbuilder.setDefaultCloseOperation(3);
-        GUIbuilder.pack();
-        GUIbuilder.setVisible(true);
-
-    }
 
     @Override
     public void paintComponent(Graphics gc) {
@@ -61,13 +111,13 @@ public class coreUI extends JPanel {
         @Override
         public void mouseMoved(MouseEvent event) { //Move the car with the mouse.
             //carObject.moveMouse(event.getX(), event.getY());
-            repaint();
+            //repaint();
         }
 
         @Override
         public void mouseDragged(MouseEvent event) { //Moves the car in tandem with the mouse.
             //carObject.moveMouse(event.getX(), event.getY());
-            repaint();  //will manually re-call the paintComponent method
+            //repaint();  //will manually re-call the paintComponent method
         }
 
 
@@ -75,19 +125,19 @@ public class coreUI extends JPanel {
         public void mousePressed(MouseEvent event) { //Activates the headlights when the mouse button is pressed.
             if (event.getButton() == 1) { //Left mouse button.
             }
-            repaint();
+            //repaint();
         }
 
         @Override
         public void mouseReleased(MouseEvent event) {
             //carObject.setHeadlights(false);
-            repaint();  //will manually re-call the paintComponent method
+            //repaint();  //will manually re-call the paintComponent method
         }
 
         @Override
         public void mouseClicked(MouseEvent event) {
             //carObject.setHeadlights(true);
-            repaint();  //will manually re-call the paintComponent method
+            //repaint();  //will manually re-call the paintComponent method
         }
 
         @Override

@@ -23,9 +23,11 @@ public class gameLoader {
         /** Loads the UI core and the launcher **/
 
         System.out.println("Loading UI core...");
-        coreUI UI = new coreUI("Black", 500, 500); //loads the UI core
+        coreUI UI = new coreUI("Black"); //loads the UI core
         UI.setVisible(true);
-        UI.loadUI("Astra Project Launcher", false);
+        launcherUI launcher = new launcherUI(UI);
+        launcher.loadUI("Astra Project Launcher", 9);
+        launcher.addContent();
 
         /** Loads after the launcher "play" button is pressed **/
 
