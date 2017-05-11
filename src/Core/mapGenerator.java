@@ -13,6 +13,7 @@ public class mapGenerator {
     /** ArrayLists **/
 
     private ArrayList<mapTile> mapTiles = new ArrayList<>();
+    public static ArrayList<starClass> predefinedStars = new ArrayList<>();
 
     /** Constants **/
 
@@ -21,19 +22,22 @@ public class mapGenerator {
     /** Map Constructor **/
     //Necessary in order to store all of the map data together.
 
+    // sets up map tile object, which is assigned to every tile on the map
     private class mapTile {
+        //variables assigned to each tile of the map
         boolean isVisible;
         boolean hasStar;
         starClass star;
         int xPos;
         int yPos;
 
+        //generates a random tile
         private mapTile(boolean generateStar, int xPos, int yPos) {
             this.xPos = xPos;
             this.yPos = yPos;
             this.hasStar = generateStar;
             this.isVisible = false;
-            if (generateStar) {
+            if (generateStar) { //if the tile is set to generate a star, generate a random star
                 newStar();
                 this.hasStar = true;
             } else {
@@ -41,22 +45,33 @@ public class mapGenerator {
             }
         }
 
+        //generates a tile with a pre-defined star
+        private mapTile(starClass star, int xPos, int yPos) {
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.hasStar = true;
+            this.isVisible = false;
+            this.star = star;
+
+        }
+
 
         //Base methods
 
-        private void newStar() {
+        private void newStar() { //creates a new star at this tile
             this.star = new starClass(this.xPos, this.yPos);
 
         }
 
         //Accessor methods
 
-        void setVisiblity(boolean tileVisible) {
+        void setVisiblity(boolean tileVisible) { //sets the visibility of this tile
             this.isVisible = tileVisible;
 
         }
     }
 
+    //variables for the map as a whole
     int xScale;
     int yScale;
     int starDensity;
@@ -87,6 +102,7 @@ public class mapGenerator {
 
     /** Standard Methods **/
 
+    //decides whether or not the tile will have a star generated on it as a ratio of star density to the map area.
     private boolean willGenerateStar() {
         int ran = randomNumber(1, this.mapArea);
         if (this.mapArea / this.starDensity > ran) {
@@ -96,22 +112,37 @@ public class mapGenerator {
         }
     }
 
+    //generates tiles on the map
     public void generateTiles() {
         int indexX = 1, indexY = 1;
         boolean genStar;
+        boolean preDefined = false;
         this.mapTiles.clear(); //safety net, just to be safe (obviously)
 
         System.out.println("Generating map tiles...");
 
         for (int i = 0; i < this.mapArea; i++) {
-            genStar = willGenerateStar();
-            this.mapTiles.add(new mapTile(genStar, indexX, indexY));
+            for (int j = 0; j < predefinedStars.size(); j++) {
+                if (indexX == predefinedStars.get(j).getMapLocationX() && indexY == predefinedStars.get(j).getMapLocationY()) {
+                    this.mapTiles.add(new mapTile(predefinedStars.get(j), indexX, indexY));
+                    System.out.println("Loading predefined system " + predefinedStars.get(j).getStarName() + " (ID" + predefinedStars.get(j).getStarIndex() + ") at the location " + indexX + "|" + indexY);
+                    preDefined = true;
+                }
+            }
+
+            if (!preDefined) { //if a predefined star wasn't already generated, generate a random tile
+                genStar = willGenerateStar();
+                this.mapTiles.add(new mapTile(genStar, indexX, indexY));
+            }
+
             if (indexX < this.xScale) { //moves the index as it generates tiles
                 indexX++;
             } else {
                 indexX = 1;
                 indexY++;
             }
+
+            preDefined = false;
 
         }
         System.out.println("Map generation complete.");

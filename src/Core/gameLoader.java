@@ -1,7 +1,5 @@
 package Core;
 
-import java.io.File;
-
 /**
     KM
     May 09 2017
@@ -23,8 +21,13 @@ public class gameLoader {
         //loads XML based content
         xmlLoader.loadContent();
 
-        //generates the map
+        //loads the map data
         mapGenerator map = new mapGenerator(xScale, yScale, starDensity);
+
+        //testing pre-defined star system
+        starClass solSystem = new starClass(10, 10, "Sol", 1002, true, "A", 4.83, 695700, false, 8, true);
+
+        //generates the map
         map.generateTiles();
 
     }

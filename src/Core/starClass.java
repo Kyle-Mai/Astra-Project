@@ -17,7 +17,7 @@ public class starClass extends starCore {
     protected ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
 
     private int starRadius;
-    private int starMagnitude;
+    private Double starMagnitude = 0.0;
     private String starSpectral;
     private boolean starIsHabitable;
     private boolean isBinarySystem;
@@ -30,7 +30,9 @@ public class starClass extends starCore {
     private int mapLocationX;
     private int mapLocationY;
     private int arrayLoc;
+    private String starName;
 
+    //creates a randomized star
     public starClass(int mapLocationX, int mapLocationY){
         this.starIndex = chooseStarType(); //The ID of the star type.
         this.arrayLoc = getStarFromID(this.starIndex); //Finds the position in the array of the star.
@@ -53,6 +55,30 @@ public class starClass extends starCore {
 
     }
 
+    //creates a pre-defined star
+    public starClass(int mapLocationX, int mapLocationY, String starName, int starIndex, boolean isHabitable, String spectralClass, Double magnitude, int radius, boolean isBinary, int numOfPlanets, boolean randomPlanets) {
+        System.out.println("Added new pre-defined star system - " + starName + " System (ID" + starIndex + ")");
+
+        this.mapLocationX = mapLocationX;
+        this.mapLocationY = mapLocationY;
+        this.starName = starName;
+        this.starIndex = starIndex;
+        this.arrayLoc = getStarFromID(this.starIndex);
+        this.starIsHabitable = isHabitable;
+        this.starSpectral = spectralClass;
+        this.starRadius = radius;
+        this.isBinarySystem = isBinary;
+        this.numOfPlanets = numOfPlanets;
+        this.starMagnitude = magnitude;
+        this.absLum = determineLuminosity(this.starSpectral, this.starMagnitude);
+
+        if (randomPlanets) { //if the planets aren't pre-defined, generate them randomly
+            constructPlanets(this.numOfPlanets);
+        }
+
+        mapGenerator.predefinedStars.add(this); //adds the star to the map generator to be added when it is run
+    }
+
     //generates the planets surrounding this star
     private void constructPlanets(int planetsToConstruct) {
         System.out.println("Constructing " + planetsToConstruct + " planets.");
@@ -69,6 +95,10 @@ public class starClass extends starCore {
     public int getHabitableZoneMin() { return this.habitableZoneMin; }
     public int getStarRadius() { return this.starRadius; }
     public int getNumOfPlanets() { return this.numOfPlanets; }
+    public int getMapLocationX() { return this.mapLocationX; }
+    public int getMapLocationY() { return this.mapLocationY; }
+    public String getStarName() { return this.starName; }
+    public int getStarIndex() { return this.starIndex; }
 
 
 }

@@ -237,11 +237,9 @@ public class starCore {
     }
 
     //Determines the habitable zone of the star
-    protected Double determineLuminosity(String starSpectral, int starMagnitude){
+    protected Double determineLuminosity(String starSpectral, Double starMagnitude){
         //I don't like data type values, so I'm converting in and out of them.
-        Integer starMag = starMagnitude;
         Double absLum; //absolute luminosity of the star
-        Double absMagnitude = starMag.doubleValue(); //absolute magnitude of the star, as a double
         Double bolMagnitude; //bolometric magnitude
         Double BC = new Double(0); //bolometric correction constant
 
@@ -263,7 +261,7 @@ public class starCore {
         }
 
         //determines the bolometric magnitude of the star
-        bolMagnitude = absMagnitude + BC;
+        bolMagnitude = starMagnitude + BC;
 
         //determines the absolute luminosity of the star based on the bolometric magnitude and the constant for the Earth (4.72)
         absLum = (Math.pow((10),(bolMagnitude - bolometricEarthConst) / -2.5));
