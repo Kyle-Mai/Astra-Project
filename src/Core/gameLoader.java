@@ -10,29 +10,40 @@ public class gameLoader {
 
     public static void main(String args[]){
 
-        final int xScale = 20; //x scale of the map
-        final int yScale = 20; //y scale of the map
-        final int starDensity = 6; //one in every x tiles has a star
+        /** Loads the UI core and the launcher **/
+
+        UILoader();
 
         /** Preloads content before the game loads **/
 
-        //Preloads planets and stars.
-        starCore.starPreloader();
-        planetCore.planetPreloader();
-
-        /** Loads the UI core and the launcher **/
-
-        System.out.println("Loading UI core...");
-        coreUI UI = new coreUI("Black", 500, 500); //loads the UI core
-        UI.setVisible(true);
-        UI.loadUI("Astra Project Launcher", false);
+        preloadCoreContent();
 
         /** Loads after the launcher "play" button is pressed **/
 
-        //loads XML based content
-        xmlLoader.loadContent();
+        loadXMLData();
 
         /** Loads when a new game is played **/
+
+        mapLoader(20, 20, 6);
+
+    }
+
+    //loads UI related elements
+    public static void UILoader() {
+
+        System.out.println("Loading UI core...");
+
+        coreUI UI = new coreUI("Black"); //loads the UI core
+        UI.setVisible(true);
+        launcherUI launcher = new launcherUI(UI);
+        launcher.loadLauncherUI();
+
+    }
+
+    //loads map related elements
+    public static void mapLoader(int xScale, int yScale, int starDensity){
+
+        System.out.println("Loading new map...");
 
         //loads the map data
         mapGenerator map = new mapGenerator(xScale, yScale, starDensity);
@@ -53,4 +64,24 @@ public class gameLoader {
         map.generateTiles();
 
     }
+
+    //loads the XML data into the memory
+    public static void loadXMLData(){
+
+        System.out.println("Loading XML-based content...");
+
+        xmlLoader.loadContent();
+
+    }
+
+    //preloads all core content into the active memory
+    public static void preloadCoreContent(){
+
+        //preloads default planet and star types
+        starCore.starPreloader();
+        planetCore.planetPreloader();
+
+
+    }
+
 }

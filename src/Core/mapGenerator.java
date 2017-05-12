@@ -12,7 +12,7 @@ public class mapGenerator {
 
     /** ArrayLists **/
 
-    private ArrayList<mapTile> mapTiles = new ArrayList<>();
+    private ArrayList<ArrayList<mapTile>> mapTiles = new ArrayList<ArrayList<mapTile>>();
     public static ArrayList<starClass> predefinedStars = new ArrayList<>();
 
     /** Constants **/
@@ -114,17 +114,28 @@ public class mapGenerator {
 
     //generates tiles on the map
     public void generateTiles() {
+
+        //refresh the index
         int indexX = 1, indexY = 1;
+
         boolean genStar;
         boolean preDefined = false;
-        this.mapTiles.clear(); //safety net, just to be safe (obviously)
+
+        this.mapTiles.clear(); //safety net, clears all existing content
 
         System.out.println("Generating map tiles...");
 
+        //fills out the 2D array so that it supports a list of lists
+        for (int i = 0; i < this.yScale; i++) {
+            mapTiles.add(new ArrayList<mapTile>());
+        }
+
+        //goes through and adds tiles to the 2D arraylist
         for (int i = 0; i < this.mapArea; i++) {
+
             for (int j = 0; j < predefinedStars.size(); j++) {
                 if (indexX == predefinedStars.get(j).getMapLocationX() && indexY == predefinedStars.get(j).getMapLocationY()) {
-                    this.mapTiles.add(new mapTile(predefinedStars.get(j), indexX, indexY));
+                    this.mapTiles.get(indexY - 1).add(new mapTile(predefinedStars.get(j), indexX, indexY));
                     System.out.println("Loading predefined system " + predefinedStars.get(j).getStarName() + " (ID" + predefinedStars.get(j).getStarIndex() + ") at the location " + indexX + "|" + indexY);
                     preDefined = true;
                 }
@@ -132,7 +143,7 @@ public class mapGenerator {
 
             if (!preDefined) { //if a predefined star wasn't already generated, generate a random tile
                 genStar = willGenerateStar();
-                this.mapTiles.add(new mapTile(genStar, indexX, indexY));
+                this.mapTiles.get(indexY - 1).add(new mapTile(genStar, indexX, indexY));
             }
 
             if (indexX < this.xScale) { //moves the index as it generates tiles
