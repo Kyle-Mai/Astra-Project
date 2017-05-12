@@ -1,34 +1,47 @@
 package Core;
 
+//import all relevant stuff
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 
 /**
     KM
     May 11 2017
-    Handles the generation and display of UI elements.
+    Handles the management and display of the UI elements.
  */
 
 public class coreUI extends JPanel {
 
-    private int[] currentUIScale = {400, 600}; //default screen scale
+    private File resourcesFolder = new File(("user.dir") + "/src/Resources"); //stores the resources folder
 
-    public int getUIScaleX() {
-        return this.currentUIScale[0];
-    }
+    /** Stores resource declarations **/
+    protected ImageIcon gameIcon = new ImageIcon(resourcesFolder + "/icon.png");
 
-    public int getUIScaleY() {
-        return this.currentUIScale[1];
-    }
+    protected JFrame GUI; //stores the main frame
+
+    /** UI scaling code**/
+    //handles the scaling of the UI
+
+    private int[] currentUIScale = {0, 0}; //default screen scale
+
+    //methods to return the UI elements
+    public int getUIScaleX() { return this.currentUIScale[0]; }
+
+    public int getUIScaleY() { return this.currentUIScale[1]; }
 
     //sets the window size to the chosen monitor scale
     public void rescaleScreen(int option) {
         switch(option) {
+            //Widescreen monitors
             case 1: //4K
-                currentUIScale[0] = 3840;
-                currentUIScale[1] = 2160;
+                currentUIScale[0] = 3840; //X scale
+                currentUIScale[1] = 2160; //Y scale
                 break;
             case 2: //2K
                 currentUIScale[0] = 2560;
@@ -50,6 +63,7 @@ public class coreUI extends JPanel {
                 currentUIScale[0] = 1280;
                 currentUIScale[1] = 720;
                 break;
+                //4:3 and similar monitor scales
             case 7:
                 currentUIScale[0] = 1600;
                 currentUIScale[1] = 1200;
@@ -66,17 +80,23 @@ public class coreUI extends JPanel {
                 currentUIScale[0] = 800;
                 currentUIScale[1] = 600;
                 break;
-            default:
+            case 11: //Launcher UI scale
                 currentUIScale[0] = 400;
                 currentUIScale[1] = 600;
                 break;
+            default:
+                currentUIScale[0] = 500;
+                currentUIScale[1] = 500;
+                break;
         }
 
-        this.setPreferredSize(new Dimension(this.currentUIScale[0], this.currentUIScale[1]));
+        this.setSize(new Dimension(this.currentUIScale[1], this.currentUIScale[0]));
 
         System.out.println("UI rescaled.");
 
     }
+
+    /** Constructors for the UI core **/
 
     public coreUI() {
     }
@@ -89,11 +109,46 @@ public class coreUI extends JPanel {
         addKeyListener(keyboardEvents);
         addMouseListener(mouseEvents);
 
-        this.setPreferredSize(new Dimension(this.currentUIScale[0], this.currentUIScale[1]));
         this.setBackground(colourValue(bgColour));
 
         System.out.println("Successfully loaded UI core.");
 
+    }
+
+    /** Loads core UI elements **/
+
+    //loads a JFrame
+    public void loadFrame(String screenName, int UIscaleOption, boolean unDecorated) {
+        this.rescaleScreen(UIscaleOption);
+
+        this.GUI = new JFrame(screenName);
+
+        if (gameIcon != null) {
+            GUI.setIconImage(gameIcon.getImage()); //sets the icon
+        } else {
+            System.out.println("Error - Game icon is null, may indicate a corrupted resources folder.");
+        }
+
+        GUI.getContentPane().add(this); //adds the JFrame to the JPanel
+        GUI.setResizable(false); //not resizable
+        GUI.setSize(this.getUIScaleX(), this.getUIScaleY()); //scales it to the user scaling
+        GUI.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //when closed, dispose of everything
+        GUI.setUndecorated(unDecorated); //whether or not we want the buttons at the top, generally no
+        GUI.pack(); //packs the new frame
+        GUI.setVisible(true); //sets it to visible
+
+        System.out.println("UI frame loaded.");
+
+    }
+
+    //removes the JFrame and all of its elements from the active pane
+    public void unloadFrame() {
+        GUI.dispose();
+    }
+
+    public void refreshFrame(){ //refreshes the UI scaling
+        this.setSize(this.getUIScaleY(), this.getUIScaleX());
+        GUI.setSize(this.getUIScaleY(), this.getUIScaleX());
     }
 
     //TODO: Separate into another class.
@@ -169,7 +224,9 @@ public class coreUI extends JPanel {
     }
 
     /** Base Methods **/
+    //Methods used by the UI core and most UI elements.
 
+    //Takes colour input as a string, verifies that it is a legitimate colour via java colours and outputs it.
     public Color colourValue(String getColour) { //Verifies the colour values.
         String colour = getColour;
         Color colour2;
@@ -179,7 +236,7 @@ public class coreUI extends JPanel {
             Field field = Class.forName("java.awt.Color").getField(colour); //Checks to ensure the colour entered is valid.
             colour2 = (Color)field.get(null); //If it is valid, then we're set.
         } catch (Exception e) { //Otherwise, it isn't defined.
-            colour2 = Color.black; // Not defined, default to black
+            colour2 = Color.black; // Not defined/valid, default to black
             System.out.println("Invalid colour.");
         }
         return (colour2); //Returns the colour value.

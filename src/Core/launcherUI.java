@@ -10,32 +10,22 @@ public class launcherUI extends coreUI {
 
     coreUI UI;
     Graphics gc;
-    JFrame GUI;
 
     public launcherUI(coreUI UI) {
         this.UI = UI;
     }
 
-    public void loadUI(String screenName, int UIscaleOption) {
-        UI.rescaleScreen(UIscaleOption);
-
-        this.GUI = new JFrame(screenName);
-
-        GUI.getContentPane().add(UI);
-        GUI.setResizable(false);
-        GUI.setSize(UI.getUIScaleX(), UI.getUIScaleY());
-        GUI.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        GUI.setUndecorated(true);
-        GUI.pack();
-        GUI.setVisible(true);
-
+    public void loadLauncherUI() {
+        UI.loadFrame("Astra Project Launcher", 11, false);
+        addContent();
     }
 
-    public void addContent() {
+    private void addContent() {
+        UI.refreshFrame();
         JButton close = new JButton("Close");
-        close.setBounds(300, 300, 200, 80);
-        GUI.getContentPane().add(close);
+        UI.GUI.getContentPane().add(close);
         close.addActionListener(new CloseListener());
+        close.setBounds(300, 300, 200, 80); //posx, posy, scalx, scaly
 
     }
 
