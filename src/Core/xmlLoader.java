@@ -168,12 +168,6 @@ public class xmlLoader {
                     planetID = Integer.parseInt(parentNode.getAttributes().getNamedItem("id").getNodeValue());
                     if (planetID >= 2000 && planetID < 3000) {
                         modIsValid = true;
-                        for (int j = 0; j < planetClass.listOfPlanets.size(); j++) {
-                            if (planetClass.listOfPlanets.get(j).getPlanetID() == planetID) {
-                                planetClass.listOfPlanets.remove(j); //remove the content using the same ID
-                                break; //duplicate already found, no point in continuing the index
-                            }
-                        }
                         NodeList nodes = parentNode.getChildNodes();
                         for (int k = 0; k < nodes.getLength(); k++) {
                             if (nodes.item(k).getNodeType() == Node.ELEMENT_NODE) {
@@ -233,9 +227,19 @@ public class xmlLoader {
                         errorPrint(16);
                     }
                     if (modIsValid) { //valid mod, load it in
-                        //adds the new planet to the planet list.
-                        planetClass.listOfPlanets.add(new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
-                        System.out.println("New planet successfully loaded - " + className + " (ID" + planetID + ")");
+                        boolean replacesContent = false;
+                        for (int j = 0; j < planetClass.listOfPlanets.size(); j++) {
+                            if (planetClass.listOfPlanets.get(j).getPlanetID() == planetID) {
+                                planetClass.listOfPlanets.add(j, new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
+                                System.out.println("[OVERWRITE] Planet successfully loaded - " + className + " (ID" + planetID + ")");
+                                break; //duplicate already found and replaced, no point in continuing the index
+                            }
+                        }
+                        //adds the new planet to the planet list if it wasn't already added
+                        if (!replacesContent) {
+                            planetClass.listOfPlanets.add(new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
+                            System.out.println("[NEW] Planet successfully loaded - " + className + " (ID" + planetID + ")");
+                        }
                     } else { //something in this mod wasn't properly initialized, do not load it
                         System.out.println("An error has occurred while loading planet XML data. Loading aborted.");
                     }
@@ -275,12 +279,6 @@ public class xmlLoader {
                     starID = Integer.parseInt(parentNode.getAttributes().getNamedItem("id").getNodeValue());
                     if (starID >= 1000 && starID < 2000) {
                         modIsValid = true;
-                        for (int j = 0; j < starClass.listOfStars.size(); j++) {
-                            if (starClass.listOfStars.get(j).getStarID() == starID) {
-                                starClass.listOfStars.remove(j); //remove the content using the same ID
-                                break; //no point in continuing to index since we've already located the duplicate ID
-                            }
-                        }
                         NodeList nodes = parentNode.getChildNodes();
                         for (int k = 0; k < nodes.getLength(); k++) {
                             if (nodes.item(k).getNodeType() == Node.ELEMENT_NODE) {
@@ -356,9 +354,20 @@ public class xmlLoader {
                         errorPrint(16);
                     }
                     if (modIsValid) { //valid mod, load it in
-                        //adds the new planet to the planet list.
-                        starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight));
-                        System.out.println("New star successfully loaded - " + name + " (ID" + starID + ")");
+                        boolean replacesContent = false;
+                        for (int j = 0; j < starClass.listOfStars.size(); j++) {
+                            if (starClass.listOfStars.get(j).getStarID() == starID) {
+                                replacesContent = true;
+                                starClass.listOfStars.remove(j); //remove the content using the same ID
+                                System.out.println("[OVERWRITE] Star successfully loaded - " + name + " (ID" + starID + ")");
+                                break; //no point in continuing to index since we've already located the duplicate ID
+                            }
+                        }
+                        //adds the new planet to the planet list if one hasn't already been added
+                        if (!replacesContent) {
+                            starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight));
+                            System.out.println("[NEW] Star successfully loaded - " + name + " (ID" + starID + ")");
+                        }
                     } else { //something in this mod wasn't properly initialized, do not load it
                         System.out.println("An error has occurred while loading star XML data.");
                     }

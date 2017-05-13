@@ -4,7 +4,7 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 ---
 
-**MAY 12 2017** (ver.PTB-A)
+**MAY 12 2017** (ver.PTB-A) (U1)
 
 - Added changelog file to keep track of a more detailed list of changes to the program.
 
@@ -30,9 +30,9 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 - Added some more comments to better describe the purpose of different program elements.
 
-**MAY 12 2017** (ver.PTB-A)
+**MAY 12 2017** (ver.PTB-A) (U2)
 
-- Reworked Ui framework from the ground up.
+- Reworked UI framework from the ground up.
 
     - Old UI was clunky and pretty broken, reworked it into a newer, more flexible format that'll hopefully suit my needs better down the road.
 
@@ -41,4 +41,10 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Fixed issue with changelog file type.
 
 - Slightly adjusted formatting in gameLoader.
+
+**MAY 12 2017** (ver.PTB-A) (U3)
+
+- Patched a major bug in the XML loader that would potentially cause the program to break if all vanilla content was replaced with broken XML. This is as a result of the program removing the vanilla content with the same ID without verifying that the new content is actually valid. A slight rework of the order has fixed this issue.
+
+
 
