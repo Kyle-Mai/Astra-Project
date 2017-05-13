@@ -28,15 +28,17 @@ public class gameLoader {
 
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    /** Loader methods **/
+    //Load different sections of the program based on what is needed at the time
+
     //loads UI related elements
     public static void UILoader() {
 
         System.out.println("Loading UI core...");
-
-        coreUI UI = new coreUI("Black"); //loads the UI core
-        UI.setVisible(true);
-        launcherUI launcher = new launcherUI(UI);
-        launcher.loadLauncherUI();
+        //creates a new UI with which to run off of
+        guiCore UI = new guiCore("Test", true);
 
     }
 

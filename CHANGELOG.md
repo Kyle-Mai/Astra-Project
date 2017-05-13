@@ -30,3 +30,15 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 - Added some more comments to better describe the purpose of different program elements.
 
+**MAY 12 2017** (ver.PTB-A)
+
+- Reworked Ui framework from the ground up.
+
+    - Old UI was clunky and pretty broken, reworked it into a newer, more flexible format that'll hopefully suit my needs better down the road.
+
+- Removed old UI code.
+
+- Fixed issue with changelog file type.
+
+- Slightly adjusted formatting in gameLoader.
+
