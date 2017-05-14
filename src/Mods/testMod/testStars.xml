@@ -1,0 +1,13 @@
+<newStars>
+    <star id = "1025">
+        <name>Dyson Sphere</name>
+        <description>This star is encased in a massive Dyson sphere, which is collecting the star's entire energy output.</description>
+        <spawnWeight>23</spawnWeight>
+        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <surfaceTempLow>0</surfaceTempLow>
+        <surfaceTempHigh>0</surfaceTempHigh>
+        <sizeWeight>350000</sizeWeight>
+        <sizeVariation>15000</sizeVariation>
+        <planetWeight>0</planetWeight>
+    </star>
+</newStars>

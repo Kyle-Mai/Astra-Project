@@ -19,7 +19,6 @@ public class planetCore {
 
     public static ArrayList<planetType> listOfPlanets = new ArrayList<>();
     protected static ArrayList<planetSizes> listOfScales = new ArrayList<>();
-    protected ArrayList<Integer> spawnWeights = new ArrayList<>();
     protected ArrayList<Integer> planetsToSpawn = new ArrayList<>();
 
 
@@ -42,30 +41,31 @@ public class planetCore {
 
     //Pre-defined blueprints for different planet scales, and the modifiers that go with it.
     private static void createPlanetSizes(){
-        listOfScales.add(new planetSizes("Dwarf", 700, 15));
-        listOfScales.add(new planetSizes("Small", 1500, 180));
-        listOfScales.add(new planetSizes("Average", 2500, 360));
-        listOfScales.add(new planetSizes("Large", 4000, 950));
-        listOfScales.add(new planetSizes("Huge", 40000, 1000));
+        listOfScales.add(new planetSizes("Dwarf", 0, 0));
+        listOfScales.add(new planetSizes("Small", 1500, 1));
+        listOfScales.add(new planetSizes("Average", 2500, 2));
+        listOfScales.add(new planetSizes("Large", 4000, 5));
+        listOfScales.add(new planetSizes("Huge", 40000, 50));
+        listOfScales.add(new planetSizes("Absurd", 10000000, 0)); //redundancy just to make my moon weighter work a little nicer for now, will need to recode eventually
 
     }
 
     private static class planetSizes {
-        int atmosphereChance;
+        int moonWeight;
         int planetScale;
         String sizeName;
 
         //Constructor for building the ArrayList.
-        private planetSizes(String sizeName, int planetScaleKM, int atmosphereChance) {
+        private planetSizes(String sizeName, int planetScaleKM, int moonWeight) {
 
             this.sizeName = sizeName; //Name of the scale, redundant, just used for identification.
-            this.planetScale = planetScaleKM; //Radius of the planet, listed in KM.
-            this.atmosphereChance = atmosphereChance; //Chance of a planet within this scale having an atmosphere.
+            this.planetScale = planetScaleKM; //Minimum radius of the planet for it to fit in this class
+            this.moonWeight = moonWeight; //number of moons average for a planet of this scale
         }
 
         //Accessor methods for calling variables related to planet size.
         private int getPlanetScale() { return this.planetScale; }
-        private int getAtmosphereChance() { return this.atmosphereChance; }
+        private int getMoonWeight() { return this.moonWeight; }
 
     }
 
@@ -121,12 +121,12 @@ public class planetCore {
         }
 
         //Accessor methods for calling the planet blueprint variables.
-        public int getPlanetID() { return this.planetID; }
-        private int getClimateID() { return this.climateID; }
-        private String getClassName() { return this.className; }
-        private String getClassDesc() { return this.classDesc; }
-        private boolean getHabitable() { return this.habitable; }
-        private int getSpawnWeight() { return this.spawnWeight; }
+        protected int getPlanetID() { return this.planetID; }
+        protected int getClimateID() { return this.climateID; }
+        protected String getClassName() { return this.className; }
+        protected String getClassDesc() { return this.classDesc; }
+        protected boolean getHabitable() { return this.habitable; }
+        protected int getSpawnWeight() { return this.spawnWeight; }
 
     }
 
@@ -160,6 +160,26 @@ public class planetCore {
 
     /** General Methods **/
     //General methods used by the global planetCore objects.
+
+    //gets the number of moons orbiting the planet based on the size of the planet
+    protected int determineMoons(int planetRadius) {
+
+        int moons = 0; //keep track of the number of moons
+        int moonsAverage = 0; //average moons to be generated
+
+        //index the list of planet sizes to see what category this planet falls under
+        for (int i = 0; i < listOfScales.size(); i++) {
+            if (planetRadius < listOfScales.get(i).getPlanetScale()) {
+                moonsAverage = listOfScales.get(i - 1).getMoonWeight();
+                break; //indexing complete, close the for loop
+            }
+        }
+
+
+
+
+        return 0;
+    }
 
     //Determines the planet's distance from the star
     protected int determineDistanceFromStar(starClass parentStar, int planetNumber){

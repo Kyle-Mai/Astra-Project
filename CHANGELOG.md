@@ -47,4 +47,17 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Patched a major bug in the XML loader that would potentially cause the program to break if all vanilla content was replaced with broken XML. This is as a result of the program removing the vanilla content with the same ID without verifying that the new content is actually valid. A slight rework of the order has fixed this issue.
 
 
+**MAY 13 2017** (ver.PTB-A) (U1)
+
+- Updated planetCore/planetClass
+
+    - Implemented new moon weight system. Allows planets to have moons and whatnot that are randomly determined upon generation.
+
+    - Removed redundant ArrayList declaration.
+
+- Patched error in xmlLoader. Forgot a line when implementing yesterday's patch that caused planets to double generate when replacing content. Not intentional.
+
+- Updated test mod. Gave it more interesting content.
+
+- Added basis for the tech tree handler (techCore class). Might need a full rework to fit in XML format.
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <loadMod>
-    <mod name="Test Mod">
+    <mod name="Beyond the Horizons">
         <author>Donald Trump</author>
-        <modVersion>1.0</modVersion>
+        <modVersion>0.1</modVersion>
         <gameVersion>1.0</gameVersion>
         <description>A test mod for testing modding.</description>
         <directoryName>testMod</directoryName>

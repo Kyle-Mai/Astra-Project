@@ -39,7 +39,8 @@ public class planetClass extends planetCore {
         this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.
         this.isPlanetHabitable = determineHabitability(arrayLoc); //whether or not the planet can be colonized
         this.isHabited = false; //by default, the planet is not currently colonized
-        System.out.println("Planet (ID" + planetType + ") successfully generated.");
+        System.out.println("Planet '" + listOfPlanets.get(arrayLoc).getClassName() + "' (ID" + planetType + ") successfully generated.");
+
     }
 
     //generates a pre-defined planet
@@ -56,7 +57,7 @@ public class planetClass extends planetCore {
         this.isPlanetHabitable = isPlanetHabitable;
         this.isTidallyLocked = isTidallyLocked;
         this.numOfMoons = numOfMoons;
-        System.out.println("Predefined planet " + this.planetName + " (ID" + planetType + ") successfully generated in the " + parentStar.getStarName() + " system.");
+        System.out.println("Predefined planet '" + listOfPlanets.get(arrayLoc).getClassName() + " [" + this.planetName + "] (ID" + planetType + ") successfully generated in the " + parentStar.getStarName() + " system.");
 
     }
 

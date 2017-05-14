@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <newPlanets>
-    <planet id = "2050">
-        <name>XML World</name>
-        <description>A world generated through the XML-based modding system. Spooky.</description>
+    <planet id = "2025">
+        <name>Shell World</name>
+        <description>A shell world takes the structure of a planet - but with a hollow interior. It can be many layers thick, and generally contains an artificial sun as a core.</description>
         <climate>2107</climate>
-        <spawnWeight>50</spawnWeight>
-        <isHabitable>0</isHabitable> <!--1 = true, 0 = false -->
+        <spawnWeight>8</spawnWeight>
+        <isHabitable>1</isHabitable> <!--1 = true, 0 = false -->
+        <sizeWeight>666</sizeWeight>
+        <sizeVariation>333</sizeVariation>
+    </planet>
+    <planet id = "2026">
+        <name>Ring World</name>
+        <description>A giant floating ring with a massive habitat module spanning the interior of the band.</description>
+        <climate>2107</climate>
+        <spawnWeight>5</spawnWeight>
+        <isHabitable>1</isHabitable> <!--1 = true, 0 = false -->
         <sizeWeight>666</sizeWeight>
         <sizeVariation>333</sizeVariation>
     </planet>

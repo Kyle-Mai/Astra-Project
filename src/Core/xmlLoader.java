@@ -152,7 +152,7 @@ public class xmlLoader {
     private static void modPlanets(NodeList nodeList) {
         String className = "";
         int planetID = 0, climateID = 0, sizeWeight = 0, sizeVariation = 0, spawnWeight = 0;
-        String classDesc = "";
+        String classDesc = "Not found.";
         boolean habitable = false;
         boolean modIsValid = true;
         int errorMessage = 0;
@@ -232,6 +232,7 @@ public class xmlLoader {
                             if (planetClass.listOfPlanets.get(j).getPlanetID() == planetID) {
                                 planetClass.listOfPlanets.add(j, new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
                                 System.out.println("[OVERWRITE] Planet successfully loaded - " + className + " (ID" + planetID + ")");
+                                replacesContent = true;
                                 break; //duplicate already found and replaced, no point in continuing the index
                             }
                         }
