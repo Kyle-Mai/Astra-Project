@@ -84,6 +84,8 @@ public class techCore {
             this.Rarity = techRarity; //how rare the tech is
 
         }
+
+        public int getID() { return this.ID; }
     }
 
 

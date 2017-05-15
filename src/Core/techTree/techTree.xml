@@ -34,7 +34,7 @@
             <range>2</range> <!-- FTL travel range -->
         </newModule>
 
-        <newShip id="3100"> <!-- ID used to store the ship -->
+        <newShip id="3200"> <!-- ID used to store the ship -->
             <type>2</type> <!-- The of ship, with 1 being military, 2 being exploration, 3 being infrastructure, and 4 being colonization -->
             <name>Trailblazer</name>
             <description>The Trailblazer is a sub-FTL ship that is used to lay down string-lines for FTL ships to travel along. By sending these ships out to nearby stars, we can begin laying down the framework to more efficiently expand our empire and explore the galaxy's mysteries.</description>
@@ -43,7 +43,7 @@
             <buildTime>5</buildTime> <!-- Number of months it takes to build the drive. -->
         </newShip>
 
-        <newShip id="3101"> <!-- ID used to store the ship -->
+        <newShip id="3201"> <!-- ID used to store the ship -->
             <type>4</type>
             <name>Colony Ship</name>
             <description>The colony ship is a massive ship designed to house and sustain a large enough population to colonize new worlds.</description>
@@ -52,7 +52,7 @@
             <buildTime>12</buildTime> <!-- Number of months it takes to build the drive. -->
         </newShip>
 
-        <newShip id="3102"> <!-- ID used to store the ship -->
+        <newShip id="3202"> <!-- ID used to store the ship -->
             <type>3</type>
             <name>Construction Ship</name>
             <description></description>

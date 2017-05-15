@@ -141,8 +141,22 @@ public class xmlLoader {
                     }
 
                     if (techIsValid) {
-                        techCore.techTree.get(techLine - 1).add(new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
-                        System.out.println("New tech '" + techName + "' successfully added.");
+                        boolean replacesContent = false;
+
+                        for (int k = 0; k < techCore.techTree.size(); k++) { //find duplicate IDs
+                            for (int j = 0; j < techCore.techTree.get(k).size(); j++) {
+                                if (techCore.techTree.get(k).get(j).getID() == techID) {
+                                    replacesContent = true;
+                                    techCore.techTree.get(k).add(j, new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
+                                    System.out.println("[OVERWRITE] Tech '" + techName + "' successfully added.");
+                                    break; //once the duplicate is found, there's no need to continue indexing
+                                }
+                            }
+                        }
+                        if (!replacesContent) {
+                            techCore.techTree.get(techLine - 1).add(new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
+                            System.out.println("[NEW] Tech '" + techName + "' successfully added.");
+                        }
                     } else {
                         System.out.println("An error has occurred while loading tech tree XML data. Loading aborted.");
                     }
