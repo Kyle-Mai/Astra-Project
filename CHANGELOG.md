@@ -61,3 +61,12 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 - Added basis for the tech tree handler (techCore class). Might need a full rework to fit in XML format.
 
+**MAY 14 2017** (ver.PTB-A) (U1)
+
+- Transferred the tech tree data over to XML format.
+
+- Added in a new section to the XML loader to read tech tree data (moddable techs!)
+
+- Patched a minor syntax error in the XML loader. Was accidentally using the wrong variable when indexing.
+
+- Updated gameLoader for the new information.

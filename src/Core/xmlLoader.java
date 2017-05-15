@@ -17,10 +17,13 @@ public class xmlLoader {
     //grabs the file locations for the folders
     final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions");
     final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
+    final static File techTreeFolder = new File(System.getProperty("user.dir") + "/src/Core/Core.techTree");
     final static String xmlTag = ".xml"; //unused, may be necessary in the future
 
     //loads the XML content
     public static void loadContent() {
+        System.out.println("Attempting to load tech tree data...");
+        loadXML(techTreeFolder); //loads the tech tree content
         System.out.println("Attempting to load expansion files...");
         loadXML(expansionFolder); //loads the content in the expansion pack folder
         System.out.println("Attempting to load mods...");
@@ -40,15 +43,17 @@ public class xmlLoader {
                             String baseNode = doc.getDocumentElement().getNodeName();
                             NodeList elements = doc.getDocumentElement().getChildNodes();
                             System.out.println("XML file successfully parsed");
-                                if (baseNode.equals("newPlanets")) { //this mods is adding or changing planets
+                                if (baseNode.equals("newPlanets")) { //adding or changing planets
                                     modPlanets(elements);
-                                } else if (baseNode.equals("newStars")) {
+                                } else if (baseNode.equals("newStars")) { //adding/changing stars
                                     modStars(elements);
-                                } else if (baseNode.equals("expansionDescription")) {
-                                    loadExpansions(elements); //loads the expansions
-                                } else if (baseNode.equals("loadMod")) {
+                                } else if (baseNode.equals("expansionDescription")) { //loading expansions
+                                    loadExpansions(elements);
+                                } else if (baseNode.equals("loadMod")) { //loading mods
                                     loadMods(elements);
-                                } else {
+                                } else if (baseNode.equals("techTree")) {
+
+                                } else { //the stuff found was not valid XML
                                     errorPrint(7);
                                 }
                         } else {
@@ -67,6 +72,87 @@ public class xmlLoader {
         }
     } //close loadXML
 
+    private static void loadTechTree(NodeList nodeList) {
+        final int numOfTechLines = 6; //easy access when editing the total types of techs
+
+        String nodeName;
+        System.out.println("Tech tree data found, attempting to load...");
+        File newTech;
+        boolean techIsValid = false;
+
+        int techLine = 0;
+        int techID = 0;
+        int techCost = 0;
+        int techLevel = 0;
+        String techName = "NO NAME";
+        String techDesc = "No description.";
+        int techRarity = 0;
+
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("newTech")) {
+                    System.out.println("New tech found. Attempting to load...");
+                    NodeList nodes = parentNode.getChildNodes();
+                    techLine = Integer.parseInt(parentNode.getAttributes().getNamedItem("techLine").getNodeValue()); //gets the ID of the tech
+                    if (techLine > 0 && techLine < numOfTechLines) {
+                        techIsValid = true; //probably valid, begin indexing information
+                        for (int j = 0; j < nodes.getLength(); j++) {
+                            if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                if (nodes.item(j).getNodeName().equals("name") && nodes.item(j).getTextContent() != null) {
+                                    techName = nodes.item(j).getTextContent();
+                                } else if (nodes.item(j).getNodeName().equals("description")) {
+                                    if (nodes.item(j).getTextContent() != null) { //don't try to parse nothing, safety net code
+                                        techDesc = nodes.item(j).getTextContent();
+                                    }
+                                } else if (nodes.item(j).getNodeName().equals("id") && nodes.item(j).getTextContent() != null) {
+                                    techID = Integer.parseInt(nodes.item(j).getTextContent());
+                                    if (techID > 200 || techID < 1) { //invalid ID
+                                        techIsValid = false;
+                                        break;
+                                    }
+                                } else if (nodes.item(j).getNodeName().equals("level") && nodes.item(j).getTextContent() != null) {
+                                    techLevel = Integer.parseInt(nodes.item(j).getTextContent());
+                                    if (techLevel < 0 && techLevel > 10) { //tech is not a valid level
+                                        techIsValid = false;
+                                        break;
+                                    }
+                                } else if (nodes.item(j).getNodeName().equals("cost") && nodes.item(j).getTextContent() != null) {
+                                    techCost = Integer.parseInt(nodes.item(j).getTextContent());
+                                    if (techCost < 1) {
+                                        techIsValid = false;
+                                        break;
+                                    }
+                                } else if (nodes.item(j).getNodeName().equals("rarity") && nodes.item(j).getTextContent() != null) {
+                                    techRarity = Integer.parseInt(nodes.item(j).getTextContent());
+                                    if (techRarity < 0) {
+                                        techIsValid = false;
+                                        break;
+                                    }
+                                }
+                                //TODO: Add handling for the different things that techs unlock.
+
+                            } else {
+                                //not an element node, don't attempt to index
+                            }
+                        }
+                    } else {
+                        //invalid tech ID, mod should not be loaded
+                    }
+
+                    if (techIsValid) {
+                        techCore.techTree.get(techLine - 1).add(new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
+                        System.out.println("New tech '" + techName + "' successfully added.");
+                    } else {
+                        System.out.println("An error has occurred while loading tech tree XML data. Loading aborted.");
+                    }
+                }
+            }
+        } else {
+            errorPrint(12);
+        }
+    }
+
     //Goes through the expansions and loads the enabled ones.
     private static void loadExpansions(NodeList nodeList) {
         String nodeName;
@@ -83,7 +169,7 @@ public class xmlLoader {
                     expansionID = parentNode.getAttributes().getNamedItem("id").getNodeValue();
                     newExpansion = new File( expansionFolder + "/" + expansionID);
                     for (int j = 0; j < nodes.getLength(); j++) {
-                        if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) { //valid node type
+                        if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) { //valid node type
                             if (nodes.item(j).getNodeName().equals("enabled") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //check to see if it is enabled
                                 System.out.println("Loading expansion " + expansionID + " from " + newExpansion);
                                 if (newExpansion.exists()) {
@@ -122,7 +208,7 @@ public class xmlLoader {
                     modName = parentNode.getAttributes().getNamedItem("name").getNodeValue();
                     NodeList nodes = parentNode.getChildNodes();
                     for (int j = 0; j < nodes.getLength(); j++) {
-                        if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) { //valid node type
+                        if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) { //valid node type
                             if (nodes.item(j).getNodeName().equals("modActive") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //check to see if it is enabled
                                 modIsActive = true;
                             } else if (nodes.item(j).getNodeName().equals("directoryName")) {

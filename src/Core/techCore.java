@@ -9,11 +9,11 @@ import java.util.ArrayList;
  */
 public class techCore {
 
-    ArrayList<ArrayList<tech>> techTree = new ArrayList<ArrayList<tech>>(); //arraylist that stores all of the different techs
+    public static ArrayList<ArrayList<tech>> techTree = new ArrayList<ArrayList<tech>>(); //arraylist that stores all of the different techs
 
     /** Constants **/
 
-    final String[] techPaths = {"FTL Travel", "Infrastructure", "Kinetics", ""}; //Names of the different tech paths
+    final static String[] techPaths = {"Propulsion", "Infrastructure", "", ""}; //Names of the different tech paths
 
 
     /** Variable declarations **/
@@ -32,13 +32,11 @@ public class techCore {
 
     /** Pre-loader method **/
 
-    public void techPreloader() {
+    public static void techPreloader() {
         //go through and finish setting up the arraylist of techs
         for (int i = 0; i < techPaths.length; i++) {
             techTree.add(new ArrayList<tech>());
         }
-
-        fillTechTree(); //fills out the tech tree with level
 
         System.out.println("Tech tree data finished pre-loading.");
     }
@@ -66,54 +64,26 @@ public class techCore {
     /** Tech list **/
     //Stores the different technologies the player can unlock
 
-    private class tech {
+    public static class tech {
 
-        private double Cost;
+        private int Line;
+        private int ID;
+        private int Cost;
         private int Level;
         private String Name;
         private String Desc;
         private int Rarity;
 
-        private tech(String techName, String techDesc, int techLevel, double techCost, int techRarity) {
+        public tech(String techName, String techDesc, int techID, int techLine, int techLevel, int techCost, int techRarity) {
             this.Name = techName; //the name of the technology
             this.Desc = techDesc; //description of what the tech does
+            this.ID = techID;
+            this.Line = techLine; //the type of tech
             this.Level = techLevel; //the level of tech it is
             this.Cost = techCost; //how much the tech costs to research
-            this.Rarity = techRarity;
+            this.Rarity = techRarity; //how rare the tech is
 
         }
-    }
-
-    //fills the tech tree with all necessary information
-    private void fillTechTree() {
-        //TODO: Maybe convert techs over to XML format...? Unknown as to the best format to handle this.
-
-        //goofy method of sorting different techs using a for/switch
-        for (int i = 0; i < techPaths.length; i++) {
-            switch (i) {
-
-                case 0: // FTL Drive tech line
-                    techTree.get(i).add(new tech(
-                            "String Drive", "Our research into the mystery behind FTL travel is nearly complete. With this final step, we should be able to create a working FTL drive large enough to use on interstellar spacecraft.", 1, 50 * techMultiplier, 1
-                    ));
-
-                    techTree.get(i).add(new tech(
-                            "Advanced String Drive", "By improving the efficiency of the string drive, we should be able to reduce the amount of material needed to maintain the string-lines.", 2, 120 * techMultiplier, 1
-                    ));
-                    break;
-                case 1: //Infrastructure tech line
-                    techTree.get(i).add(new tech(
-                            "", "", 2, 80 * techMultiplier, 1
-                    ));
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-            }
-        }
-
-
     }
 
 

@@ -80,6 +80,7 @@ public class gameLoader {
     public static void preloadCoreContent(){
 
         //preloads default planet and star types
+        techCore.techPreloader();
         starCore.starPreloader();
         planetCore.planetPreloader();
 
