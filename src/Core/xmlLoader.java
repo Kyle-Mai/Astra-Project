@@ -17,7 +17,7 @@ public class xmlLoader {
     //grabs the file locations for the folders
     final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions");
     final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
-    final static File techTreeFolder = new File(System.getProperty("user.dir") + "/src/Core/Core.techTree");
+    final static File techTreeFolder = new File(System.getProperty("user.dir") + "/src/Core/techTree");
     final static String xmlTag = ".xml"; //unused, may be necessary in the future
 
     //loads the XML content
@@ -52,7 +52,7 @@ public class xmlLoader {
                                 } else if (baseNode.equals("loadMod")) { //loading mods
                                     loadMods(elements);
                                 } else if (baseNode.equals("techTree")) {
-
+                                    loadTechTree(elements);
                                 } else { //the stuff found was not valid XML
                                     errorPrint(7);
                                 }
@@ -76,7 +76,7 @@ public class xmlLoader {
         final int numOfTechLines = 6; //easy access when editing the total types of techs
 
         String nodeName;
-        System.out.println("Tech tree data found, attempting to load...");
+        System.out.println("Attempting to load tech tree data from " + techTreeFolder);
         File newTech;
         boolean techIsValid = false;
 
@@ -94,7 +94,7 @@ public class xmlLoader {
                 if (parentNode.getNodeName().equals("newTech")) {
                     System.out.println("New tech found. Attempting to load...");
                     NodeList nodes = parentNode.getChildNodes();
-                    techLine = Integer.parseInt(parentNode.getAttributes().getNamedItem("techLine").getNodeValue()); //gets the ID of the tech
+                    techLine = Integer.parseInt(parentNode.getAttributes().getNamedItem("techline").getNodeValue()); //gets the ID of the tech
                     if (techLine > 0 && techLine < numOfTechLines) {
                         techIsValid = true; //probably valid, begin indexing information
                         for (int j = 0; j < nodes.getLength(); j++) {
@@ -148,14 +148,14 @@ public class xmlLoader {
                                 if (techCore.techTree.get(k).get(j).getID() == techID) {
                                     replacesContent = true;
                                     techCore.techTree.get(k).add(j, new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
-                                    System.out.println("[OVERWRITE] Tech '" + techName + "' successfully added.");
+                                    System.out.println("[OVERWRITE] Tech '" + techName + "' successfully added to " + techCore.techPaths[techLine -1]);
                                     break; //once the duplicate is found, there's no need to continue indexing
                                 }
                             }
                         }
                         if (!replacesContent) {
                             techCore.techTree.get(techLine - 1).add(new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
-                            System.out.println("[NEW] Tech '" + techName + "' successfully added.");
+                            System.out.println("[NEW] Tech '" + techName + "' successfully added to line #" + techLine + " - " + techCore.techPaths[techLine -1]);
                         }
                     } else {
                         System.out.println("An error has occurred while loading tech tree XML data. Loading aborted.");

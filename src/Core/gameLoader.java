@@ -12,7 +12,7 @@ public class gameLoader {
 
         /** Loads the UI core and the launcher **/
 
-        UILoader();
+        //UILoader();
 
         /** Preloads content before the game loads **/
 
@@ -21,10 +21,11 @@ public class gameLoader {
         /** Loads after the launcher "play" button is pressed **/
 
         loadXMLData();
+        cleanContent();
 
         /** Loads when a new game is played **/
 
-        mapLoader(20, 20, 6);
+        //mapLoader(20, 20, 6);
 
     }
 
@@ -73,6 +74,14 @@ public class gameLoader {
         System.out.println("Loading XML-based content...");
 
         xmlLoader.loadContent();
+
+    }
+
+    //goes through and makes the data more efficient
+    public static void cleanContent() {
+
+        //sorts the data in the arraylists by ID for slightly faster indexing (in theory)
+        techCore.sortTechs();
 
     }
 

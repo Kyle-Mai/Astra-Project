@@ -1,6 +1,7 @@
 package Core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
     KM
@@ -13,7 +14,7 @@ public class techCore {
 
     /** Constants **/
 
-    final static String[] techPaths = {"Propulsion", "Infrastructure", "", ""}; //Names of the different tech paths
+    final static String[] techPaths = {"Propulsion", "Infrastructure"}; //Names of the different tech paths
 
 
     /** Variable declarations **/
@@ -59,6 +60,30 @@ public class techCore {
     /** General Methods **/
     //General methods related to the tech core.
 
+    public static void sortTechs() { //sorts the data in the tech tree arrays
+
+        ArrayList<tech> sortingList = new ArrayList<>();
+        System.out.println("Sorting tech tree data...");
+        for (int i = 0; i < techTree.size(); i++) {
+            sortingList.clear(); //wipes the array
+            for (int j = 0; j < techTree.get(i).size(); j++) {
+                //uses a very fast sort to quickly and efficiently sort the tech tree data by ID
+                for (int m = 0; m < techTree.get(i).get(j).getID() - 1; m++) {
+                    sortingList.add(null);
+                }
+                sortingList.add(techTree.get(i).get(j).getID() - 1, techTree.get(i).get(j)); //sorts them according to ID
+            }
+            techTree.get(i).clear(); //wipes the original array
+            sortingList.removeAll(Collections.singleton(null)); //removes all null entries from the list
+            for (int k = 0; k < sortingList.size(); k++) {
+                techTree.get(i).add(sortingList.get(k)); //adds the information back into the tech tree array
+                System.out.println("Tech ID#" + techTree.get(i).get(k).getID() + " '" + techTree.get(i).get(k).getName() + "' sorted.");
+            }
+            System.out.println(techPaths[i] + " data sorted successfully.");
+        }
+        System.out.println("All data successfully sorted.");
+    }
+
 
 
     /** Tech list **/
@@ -86,6 +111,7 @@ public class techCore {
         }
 
         public int getID() { return this.ID; }
+        public String getName() { return this.Name; }
     }
 
 

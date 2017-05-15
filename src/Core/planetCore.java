@@ -86,15 +86,15 @@ public class planetCore {
         listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 52, "", true, 2500, 900));
         listOfPlanets.add(new planetType("Greenhouse World", 2009, 2109, 28, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
         listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 35,  "", false, 2300, 1700));
-        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 48, "", false, 3200, 2000));
-        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 30, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
+        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 42, "", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 11, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
         listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 17, "", false, 80000, 32000));
-        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 65, "", false, 3000, 2400));
+        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 84, "", false, 3000, 2400));
         listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 14, "", false, 2600, 1200));
         listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 10, "", false, 1800, 900));
-        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 19, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
-        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 24, "", false, 2700, 1300));
-        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 15, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
+        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 12, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
+        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 18, "", false, 2700, 1300));
+        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 10, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
         listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
         listOfPlanets.add(new planetType("Ice Giant", 2021, 2108, 10, "An ice giant, while similar to gas giants, contains more 'icey' elements such as water, ammonia, and methane.", false, 320000, 10000));
 
