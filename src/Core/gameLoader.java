@@ -1,5 +1,7 @@
 package Core;
 
+import Core.GUI.guiCore;
+
 /**
     KM
     May 09 2017
@@ -12,7 +14,7 @@ public class gameLoader {
 
         /** Loads the UI core and the launcher **/
 
-        //UILoader();
+        UILoader();
 
         /** Preloads content before the game loads **/
 
@@ -39,7 +41,8 @@ public class gameLoader {
 
         System.out.println("Loading UI core...");
         //creates a new UI with which to run off of
-        guiCore UI = new guiCore("Test", true);
+        guiCore UI = new guiCore(11);
+        UI.loadLauncherScreen();
 
     }
 
