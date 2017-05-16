@@ -72,6 +72,41 @@ public class xmlLoader {
         }
     } //close loadXML
 
+    private static void writeXML(final File folder, String name, int action) {
+        if (folder.exists()) { //obviously, the folder must exist if we want to examine it
+            try {
+                for (File fileEntry : folder.listFiles()) { //look through the directory for files
+                    DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    if (!fileEntry.isDirectory()) { //makes sure we don't try to read a directory as a standalone
+                        Document doc = dBuilder.parse(fileEntry);
+                        if (doc.hasChildNodes()) { //check to see if the file has any nodes
+                            doc.getDocumentElement().normalize();
+                            String baseNode = doc.getDocumentElement().getNodeName();
+                            NodeList elements = doc.getDocumentElement().getChildNodes();
+                            System.out.println("XML file successfully parsed");
+                            if (baseNode.equals("expansionDescription")) { //loading expansions
+                                changeExpansions(elements, name, action);
+                            } else if (baseNode.equals("loadMod")) { //loading mods
+
+                            }  else { //the stuff found was not valid XML
+                                errorPrint(7);
+                            }
+                        } else {
+                            errorPrint(11);
+                        }
+                    } else {
+                        //The file indexed was a directory file (folder), and should NOT be read
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println("Exception when parsing XML data: " + e.getMessage());
+            }
+        } else {
+            errorPrint(9);
+        }
+    } //close loadXML
+
     private static void loadTechTree(NodeList nodeList) {
         final int numOfTechLines = 6; //easy access when editing the total types of techs
 
@@ -167,9 +202,58 @@ public class xmlLoader {
         }
     }
 
+    //collects the expansion pack list information, and also changes the enabled status
+    private static void changeExpansions(NodeList nodeList, String expansion, int action) {
+        File expansionList;
+        String expansionID;
+
+        int enabledStatus; //whether or not the pack is enabled or disabled, represented by 1 and 0 respectively
+        //name, subtitle, and description of the expansion pack
+        String name;
+        String subtitle;
+        String desc;
+
+        if (nodeList != null) { //no input > no output
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("expansion")) {
+                    NodeList nodes = parentNode.getChildNodes();
+                    expansionID = parentNode.getAttributes().getNamedItem("id").getNodeValue();
+                    if (expansionID == expansion) { //this is the mod we're editing
+                        for (int j = 0; j < nodes.getLength(); j++) {
+                            if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                if (nodes.item(j).getNodeName().equals("enabled")) { //gets the status of whether or not the mod is enabled
+                                    if (action == 1 || action == 0) { //enabling/disabling the expansion
+                                        nodes.item(j).setTextContent(Integer.toString(action));
+                                        System.out.println("Expansion pack " + expansionID + " enabled status changed to " + action);
+                                    }
+                                    if (nodes.item(j).getTextContent().equals("1") || nodes.item(j).getTextContent().equals("0")) {
+                                        enabledStatus = Integer.parseInt(nodes.item(j).getTextContent());
+                                    } else {
+                                        nodes.item(j).setTextContent("0"); //if the value returned by the enabled status is invalid, default it to 0 (disabled)
+                                        enabledStatus = 0;
+                                    }
+                                } else if (nodes.item(j).getNodeName().equals("expansionName")) { //gets the name of the expansion pack
+                                    name = nodes.item(j).getTextContent();
+                                } else if (nodes.item(j).getNodeName().equals("subtitle")) {
+                                    subtitle = nodes.item(j).getTextContent();
+                                } else if (nodes.item(j).getNodeName().equals("description")) {
+                                    desc = nodes.item(j).getTextContent();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //TODO: Add code in to send this information to the UI for display.
+        } else {
+            errorPrint((12));
+        }
+
+    }
+
     //Goes through the expansions and loads the enabled ones.
     private static void loadExpansions(NodeList nodeList) {
-        String nodeName;
         System.out.println("Expansion pack directory found. Loading expansions...");
         File newExpansion;
         String expansionID;
@@ -184,13 +268,13 @@ public class xmlLoader {
                     newExpansion = new File( expansionFolder + "/" + expansionID);
                     for (int j = 0; j < nodes.getLength(); j++) {
                         if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) { //valid node type
-                            if (nodes.item(j).getNodeName().equals("enabled") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //check to see if it is enabled
-                                System.out.println("Loading expansion " + expansionID + " from " + newExpansion);
-                                if (newExpansion.exists()) {
-                                    loadXML(newExpansion);
-                                } else {
-                                    errorPrint(14);
-                                }
+                            if (nodes.item(j).getNodeName().equals("enabled") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //checks the status of the enabled parameter
+                                    System.out.println("Loading expansion " + expansionID + " from " + newExpansion);
+                                    if (newExpansion.exists()) { //check to ensure the directory is valid
+                                        loadXML(newExpansion);
+                                    } else {
+                                        errorPrint(14);
+                                    }
                             } else {
                             }
                         } else {
@@ -203,6 +287,7 @@ public class xmlLoader {
         } else {
             errorPrint(12);
         }
+
 
     }
 
@@ -223,9 +308,9 @@ public class xmlLoader {
                     NodeList nodes = parentNode.getChildNodes();
                     for (int j = 0; j < nodes.getLength(); j++) {
                         if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) { //valid node type
-                            if (nodes.item(j).getNodeName().equals("modActive") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //check to see if it is enabled
-                                modIsActive = true;
-                            } else if (nodes.item(j).getNodeName().equals("directoryName")) {
+                            if (nodes.item(j).getNodeName().equals("modActive") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //checking to see if mod is active before we load the mod
+                                modIsActive = true; //mod is enabled, load the information
+                            } else if (nodes.item(j).getNodeName().equals("directoryName")) { //get the mod's directory
                                 modID = nodes.item(j).getTextContent();
                             }
                         }
@@ -238,7 +323,7 @@ public class xmlLoader {
             errorPrint(12);
         }
 
-        newMod = new File( modFolder + "/" + modID); //gets the mod directory
+        newMod = new File(modFolder + "/" + modID); //gets the mod directory
 
         if (modIsActive && newMod.exists() && !modID.equals("")) { //checks to ensure it is valid and enabled
             System.out.println("Mod directory successfully parsed.\nAttempting to load mod data of mod '" + modName + "' from " + newMod);

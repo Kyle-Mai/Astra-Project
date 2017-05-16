@@ -70,3 +70,22 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Patched a minor syntax error in the XML loader. Was accidentally using the wrong variable when indexing.
 
 - Updated gameLoader for the new information.
+
+**MAY 15 2017** (ver.PTB-A) (U1)
+
+- Added a new sorting algorithm to the techCore. Essentially just sorts the information by ID. Likely won't make a difference to performance, but we'll see.
+
+- Updated gameLoader with new methods.
+
+- Slightly adjusted planet spawn weights based on testing.
+
+- Adding in missing code to call the tech tree loader in the xmlLoader.
+
+    - Fixed syntax error when calling the techTree folder.
+
+    - Fixed syntax error when parsing tech tree data.
+
+**MAY 15 2017** (ver.PTB-A) (U2)
+
+- Added new writing method to the XML loader to change the enabled state of mods / expansion packs.
+
