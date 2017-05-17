@@ -37,12 +37,16 @@ public class guiCoreV4 {
     ArrayList<JLabel> lblExpanDesc = new ArrayList<>();
     ArrayList<JButton> btnExpanEnable = new ArrayList<>();
     ArrayList<JLabel> lblExpanID = new ArrayList<>();
+    ArrayList<enableAL> actionEnabler = new ArrayList<>();
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
     double screenWidth = screenSize.getWidth();
     double screenHeight = screenSize.getHeight();
     JFrame window;
+    JLayeredPane layers; //sorts the layers of the screen
     newPanel screen;
+    JPanel contentController;
+    JScrollPane contentList;
 
     ImageIcon gameIcon = new ImageIcon(resourcesFolder + "/icon.png");
 
@@ -178,7 +182,6 @@ public class guiCoreV4 {
 
     public void loadLauncherScreen() {
         System.out.println("Loading launcher data...");
-        JLayeredPane layers; //sorts the layers of the screen
         BufferedImage launcherBG;
         JLabel imgBackground;
 
@@ -186,6 +189,8 @@ public class guiCoreV4 {
         //initialize the layers
         layers = new JLayeredPane();
         layers.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        //add the layered window to the content pane
+        window.getContentPane().add(layers);
 
         //attempt to load images
         try {
@@ -270,29 +275,54 @@ public class guiCoreV4 {
         lblVersion.setVisible(true);
 
         //load the scroll window
-        JPanel contentController = new JPanel();
-
+        contentController = new JPanel();
         layers.add(contentController, new Integer(5), 0);
+        contentList = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        layers.add(contentList, new Integer(6), 0);
+
         contentController.setBounds(getUIScaleX() - 305, 110, 300, 300);
         contentController.setOpaque(true);
         contentController.setLayout(null);
         contentController.setBackground(clrBackground);
         contentController.setVisible(true);
 
-        JScrollPane contentList = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        layers.add(contentList, new Integer(6), 0);
         contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 5), 110, contentController.getWidth(), 300);
         contentList.setViewportView(contentController);
         contentList.setOpaque(false);
         contentList.setVisible(true);
 
+        loadLauncherExpansions();
+
+        //make sure the content is visible and render it
+        window.revalidate();
+        window.repaint();
+
+    }
+
+    public void loadLauncherExpansions() { //Loads the expansion content for the launcher
+
+        String expansionID;
+        int expansionEnabled;
+
+        //empties and refactors content
+        if (pnlExpansions.size() > 0) {
+            contentController.removeAll();
+            pnlExpansions.clear();
+            lblExpansions.clear();
+            lblExpanDesc.clear();
+            btnExpanEnable.clear();
+            lblExpanID.clear();
+        }
+
         for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
+
             pnlExpansions.add(new JPanel());
             lblExpansions.add(new JLabel());
             lblExpanDesc.add(new JLabel());
             btnExpanEnable.add(new JButton());
             lblExpanID.add(new JLabel());
+
+            expansionID = xmlLoader.listOfExpansions.get(i).getID();
 
             contentController.add(pnlExpansions.get(i)); //moves all of the content to the content controller
 
@@ -329,17 +359,28 @@ public class guiCoreV4 {
             btnExpanEnable.get(i).setFocusable(false);
             btnExpanEnable.get(i).setFont(txtSubtitle);
 
+            actionEnabler.add(new enableAL());
+
+            btnExpanEnable.get(i).addActionListener(actionEnabler.get(i));
+            actionEnabler.get(i).setExpID(expansionID);
+
             if (xmlLoader.listOfExpansions.get(i).getEnabledStatus()) {
+                System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is enabled.");
                 btnExpanEnable.get(i).setText("-");
                 btnExpanEnable.get(i).setToolTipText("Disable");
+                expansionEnabled = 1;
                 btnExpanEnable.get(i).setBackground(clrEnable);
                 btnExpanEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
             } else {
+                System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is disabled.");
                 btnExpanEnable.get(i).setText("+");
                 btnExpanEnable.get(i).setToolTipText("Enable");
+                expansionEnabled = 0;
                 btnExpanEnable.get(i).setBackground(clrDisable);
                 btnExpanEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
             }
+
+            actionEnabler.get(i).setEnable(expansionEnabled);
 
             lblExpanID.get(i).setBounds(contentController.getWidth() - 85, 35, 55, 25);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
@@ -355,25 +396,50 @@ public class guiCoreV4 {
             lblExpansions.get(i).setVisible(true);
             pnlExpansions.get(i).setVisible(true);
 
-            System.out.println("Loaded expansion data into GUI.");
+        }
+
+        System.out.println("Loaded expansion data into GUI.");
+
+        window.revalidate();
+        window.repaint();
+    }
+
+    private class enableAL implements ActionListener {
+
+        public enableAL() {
+        }
+
+        int enable;
+        String expID;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (enable == 1) {
+                enable = 0;
+                System.out.println("Disabling content for " + expID);
+            } else {
+                enable = 1;
+                System.out.println("Enabling content for " + expID);
+            }
+
+            xmlLoader.changeExpansionInfo(expID, enable);
+
+            System.out.println("Refreshing UI...");
+
+            loadLauncherExpansions();
 
         }
 
+        public void setEnable(int enabled) {
+            this.enable = enabled;
+        }
 
-
-
-
-
-
-        //add the layered window to the content pane
-        window.getContentPane().add(layers);
-
-        //make sure the content is visible and render it
-        window.revalidate();
-        window.repaint();
+        public void setExpID(String ID) {
+            this.expID = ID;
+        }
 
     }
-
 
 
 
