@@ -18,7 +18,7 @@ public class gameLoader {
 
         /** Preloads content before the game loads **/
 
-        //preloadCoreContent();
+        preloadCoreContent();
 
         /** Loads after the launcher "play" button is pressed **/
 
@@ -39,9 +39,10 @@ public class gameLoader {
     //loads UI related elements
     public static void UILoader() {
 
-        System.out.println("Loading UI core...");
+        System.out.println("Getting XML data...");
         xmlLoader.getExpansionInfo(); //get the information for the different files
         //creates a new UI with which to run off of
+        System.out.println("Loading UI core...");
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 guiCoreV4 UI = new guiCoreV4(11);

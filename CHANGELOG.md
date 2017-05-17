@@ -103,4 +103,8 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 - Added support to the XML loader for reading and storing information about the XML.
 
+**MAY 17 2017** (ver.PTB-A) (U2)
+
+- Slightly adjusted UI design.
+
 

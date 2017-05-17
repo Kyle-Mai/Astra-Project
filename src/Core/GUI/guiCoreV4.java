@@ -48,7 +48,7 @@ public class guiCoreV4 {
 
     /** Stores UI element design properties **/
 
-    final String gameVersion = "PTB-A Build 62a";
+    final String gameVersion = "PTB-A Build 62b";
 
     final Color clrBlk = new Color(25, 35, 35, 255);
     final Color clrDGrey = new Color(55, 55, 55, 255);
@@ -56,6 +56,7 @@ public class guiCoreV4 {
     final Color clrDisable = new Color(135, 15, 55, 255);
     final Color clrEnable = new Color(0, 155, 105, 255);
     final Color clrDark = new Color(0, 105, 45, 100);
+    final Color clrButtonBackground = new Color(0, 125, 90, 220);
     final Color clrBackground = new Color(0, 185, 140, 105);
     final Color clrForeground = new Color(0, 185, 110, 155);
     final Color clrText = new Color(255, 255, 255, 255);
@@ -202,11 +203,11 @@ public class guiCoreV4 {
 
         layers.add(btnExit, new Integer(1), 0);
         btnExit.setBounds(getUIScaleX() - 35, 5, 30, 30);
-        btnExit.setBackground(clrBackground);
+        btnExit.setBackground(clrButtonBackground);
         btnExit.setFocusPainted(false);
         btnExit.setForeground(clrText);
         //btnExit.setBorderPainted(false);
-        btnExit.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnExit.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
         btnExit.setOpaque(false);
         btnExit.setFont(txtStandard);
         btnExit.setText("X");
@@ -225,11 +226,11 @@ public class guiCoreV4 {
 
         layers.add(btnMinimize, new Integer(2), 0);
         btnMinimize.setBounds(getUIScaleX() - 70, 5, 30, 30);
-        btnMinimize.setBackground(clrBackground);
+        btnMinimize.setBackground(clrButtonBackground);
         btnMinimize.setFocusPainted(false);
         btnMinimize.setForeground(clrText);
         //btnMinimize.setBorderPainted(false);
-        btnMinimize.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnMinimize.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
         btnMinimize.setOpaque(false);
         btnMinimize.setFont(txtStandard);
         btnMinimize.setText("-");
@@ -247,6 +248,7 @@ public class guiCoreV4 {
 
         layers.add(lblTitle, new Integer(3), 0);
         lblTitle.setBounds(20, 20, 300, 75);
+        lblTitle.setVerticalAlignment(SwingConstants.TOP);
         lblTitle.setOpaque(false);
         lblTitle.setFocusable(false);
         lblTitle.setFont(txtTitle);
