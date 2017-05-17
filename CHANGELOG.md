@@ -89,3 +89,18 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 - Added new writing method to the XML loader to change the enabled state of mods / expansion packs.
 
+**MAY 16 2017** (ver.PTB-A) (U1)
+
+- Reworked the GUI core yet again...
+
+**MAY 17 2017** (ver.PTB-A) (U1)
+
+- Reworked the GUI framework for the fourth time, finally got something working.
+
+    - GUI core now functions and supports multiple windows and dynamic addition of content.
+
+    - All colours and fonts are predefined and easily changed if needed.
+
+- Added support to the XML loader for reading and storing information about the XML.
+
+

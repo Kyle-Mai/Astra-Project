@@ -1,6 +1,6 @@
 package Core;
 
-import Core.GUI.guiCore;
+import Core.GUI.guiCoreV4;
 
 /**
     KM
@@ -18,12 +18,12 @@ public class gameLoader {
 
         /** Preloads content before the game loads **/
 
-        preloadCoreContent();
+        //preloadCoreContent();
 
         /** Loads after the launcher "play" button is pressed **/
 
-        loadXMLData();
-        cleanContent();
+        //loadXMLData();
+        //cleanContent();
 
         /** Loads when a new game is played **/
 
@@ -40,9 +40,14 @@ public class gameLoader {
     public static void UILoader() {
 
         System.out.println("Loading UI core...");
+        xmlLoader.getExpansionInfo(); //get the information for the different files
         //creates a new UI with which to run off of
-        guiCore UI = new guiCore(11);
-        UI.loadLauncherScreen();
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                guiCoreV4 UI = new guiCoreV4(11);
+                UI.loadLauncherScreen();
+            }
+        } );
 
     }
 

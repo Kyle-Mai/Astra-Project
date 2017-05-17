@@ -9,6 +9,7 @@ package Core;
  **/
 
 import java.io.File;
+import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.*;
@@ -20,6 +21,9 @@ public class xmlLoader {
     final static File techTreeFolder = new File(System.getProperty("user.dir") + "/src/Core/techTree");
     final static String xmlTag = ".xml"; //unused, may be necessary in the future
 
+    //stores content
+    public static ArrayList<expansionContent> listOfExpansions = new ArrayList<>();
+
     //loads the XML content
     public static void loadContent() {
         System.out.println("Attempting to load tech tree data...");
@@ -29,6 +33,10 @@ public class xmlLoader {
         System.out.println("Attempting to load mods...");
         loadXML(modFolder); //loads the content in the mod folder
 
+    }
+
+    public static void getExpansionInfo() {
+        writeXML(expansionFolder, "", 3);
     }
 
     private static void loadXML(final File folder) {
@@ -205,13 +213,13 @@ public class xmlLoader {
     //collects the expansion pack list information, and also changes the enabled status
     private static void changeExpansions(NodeList nodeList, String expansion, int action) {
         File expansionList;
-        String expansionID;
+        String expansionID = "";
 
-        int enabledStatus; //whether or not the pack is enabled or disabled, represented by 1 and 0 respectively
+        int enabledStatus = 0; //whether or not the pack is enabled or disabled, represented by 1 and 0 respectively
         //name, subtitle, and description of the expansion pack
-        String name;
-        String subtitle;
-        String desc;
+        String name = "";
+        String subtitle = "";
+        String desc = "";
 
         if (nodeList != null) { //no input > no output
             for (int i = 0; i < nodeList.getLength(); i++) {
@@ -219,7 +227,7 @@ public class xmlLoader {
                 if (parentNode.getNodeName().equals("expansion")) {
                     NodeList nodes = parentNode.getChildNodes();
                     expansionID = parentNode.getAttributes().getNamedItem("id").getNodeValue();
-                    if (expansionID == expansion) { //this is the mod we're editing
+                 //   if (expansionID == expansion) { //this is the mod we're editing
                         for (int j = 0; j < nodes.getLength(); j++) {
                             if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
                                 if (nodes.item(j).getNodeName().equals("enabled")) { //gets the status of whether or not the mod is enabled
@@ -242,7 +250,25 @@ public class xmlLoader {
                                 }
                             }
                         }
-                    }
+
+                        if (action == 3) { //parsing content
+                            System.out.println("Attempting to parse...");
+                            boolean parseContent = true;
+                            for (int m = 0; m < listOfExpansions.size(); m++) {
+                                if (name.equals(listOfExpansions.get(m).getID())) {
+                                    parseContent = false;
+                                }
+                            }
+                            if (parseContent) {
+                                listOfExpansions.add(new expansionContent(name, subtitle, desc, enabledStatus, expansionID));
+                                System.out.println("New expansion pack '" + name + "' (" + expansionID + ") successfully loaded into active memory.");
+                            } else {
+                                System.out.println("Expansion pack was not parsed. Duplicate ID found.");
+                            }
+
+                        }
+
+                  //  }
                 }
             }
             //TODO: Add code in to send this information to the UI for display.
@@ -640,6 +666,39 @@ public class xmlLoader {
                 System.out.println("Error when loading star data - planet spawn weight not found. Defaulting to 0.");
                 break;
         }
+    }
+
+    public static class expansionContent { //stores the mod information
+        String name;
+        String subtitle;
+        String desc;
+        String ID;
+        boolean enabledStatus;
+
+        private expansionContent(String name, String subtitle, String desc, int enabled, String ID) {
+            this.name = name;
+            this.subtitle = subtitle;
+            this.desc = desc;
+            this.ID = ID;
+
+            if (enabled == 1) { //sets the enabled status
+                this.enabledStatus = true;
+            } else {
+                this.enabledStatus = false;
+            }
+
+
+        }
+
+        //accessors
+
+        public String getID() { return this.ID; }
+        public String getName() { return this.name; }
+        public String getSubtitle() { return this.subtitle; }
+        public String getDesc() { return this.desc; }
+        public boolean getEnabledStatus() { return this.enabledStatus; }
+
+
     }
 
 }

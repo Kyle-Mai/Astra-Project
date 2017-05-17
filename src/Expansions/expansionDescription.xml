@@ -7,4 +7,11 @@
         <description>Exotica adds a wide variety of hypothetical and fictional planets and stars to the game, expanding reality into the unknown. Explore the theoretics of the universe with Exotic stars, Shield worlds, Quasi-stars, and more.</description>
         <enabled>1</enabled> <!--1 = true, 0 = false -->
     </expansion>
+
+    <expansion id="d92kf0">
+        <expansionName>Steve Harvey's Revenge</expansionName>
+        <subtitle>Wahaho</subtitle>
+        <description>Literally just a test expansion.</description>
+        <enabled>0</enabled> <!--1 = true, 0 = false -->
+    </expansion>
 </expansionDescription>
