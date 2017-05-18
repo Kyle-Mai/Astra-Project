@@ -10,12 +10,22 @@ package Core;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.*;
 
 public class xmlLoader {
+    //TODO: Possibly eventually swap over to a SAX parser instead of DOM parser (faster)
+
     //grabs the file locations for the folders
     final static File expansionFolder = new File(System.getProperty("user.dir") + "/src/Expansions");
     final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
@@ -56,7 +66,7 @@ public class xmlLoader {
                             doc.getDocumentElement().normalize();
                             String baseNode = doc.getDocumentElement().getNodeName();
                             NodeList elements = doc.getDocumentElement().getChildNodes();
-                            System.out.println("XML file successfully parsed");
+                            System.out.println("XML file successfully parsed.");
                                 if (baseNode.equals("newPlanets")) { //adding or changing planets
                                     modPlanets(elements);
                                 } else if (baseNode.equals("newStars")) { //adding/changing stars
@@ -97,12 +107,12 @@ public class xmlLoader {
                             doc.getDocumentElement().normalize();
                             String baseNode = doc.getDocumentElement().getNodeName();
                             NodeList elements = doc.getDocumentElement().getChildNodes();
-                            System.out.println("XML file successfully parsed");
+                            System.out.println("XML file successfully parsed.");
                             if (baseNode.equals("expansionDescription")) { //loading expansions
                                 System.out.println("Expansion declaration file found.");
-                                changeExpansions(elements, name, action);
+                                changeExpansions(elements, name, action, doc, fileEntry);
                             } else if (baseNode.equals("loadMod")) { //loading mods
-
+                                //TODO: Add handling for changing mod content.
                             }  else { //the stuff found was not valid XML
                                 errorPrint(7);
                             }
@@ -217,8 +227,26 @@ public class xmlLoader {
         }
     }
 
+    //writes content into the XML file
+    private static void writeToFile(Document docSource, File path) {
+        try {
+            //gets the file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(docSource);
+            StreamResult result = new StreamResult(path);
+            transformer.transform(source, result); //attempts to write the content
+
+            System.out.println("XML successfully rewritten.");
+
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+
+    }
+
     //collects the expansion pack list information, and also changes the enabled status
-    private static void changeExpansions(NodeList nodeList, String expansion, int action) {
+    private static void changeExpansions(NodeList nodeList, String expansion, int action, Document source, File path) {
         File expansionList;
         String expansionID = "";
 
@@ -241,7 +269,20 @@ public class xmlLoader {
                                     if (action == 1 || action == 0) { //enabling/disabling the expansion
                                         if (expansion.equals(expansionID)) {
                                             nodes.item(j).setTextContent(Integer.toString(action));
-                                            System.out.println("Expansion pack " + expansionID + " enabled status changed to " + action);
+                                            writeToFile(source, path); //writes the new content into the XML file
+                                            System.out.print("Expansion pack " + expansionID + " enabled status changed to " + nodes.item(j).getTextContent());
+
+                                            for (int k = 0; k < listOfExpansions.size(); k++) {
+                                                if (listOfExpansions.get(k).getID().equals(expansionID)) {
+                                                    if (nodes.item(j).getTextContent().equals("1")) {
+                                                        System.out.print(" - Enabled.\n");
+                                                        listOfExpansions.get(k).setEnabledStatus(true);
+                                                    } else {
+                                                        System.out.print(" - Disabled.\n");
+                                                        listOfExpansions.get(k).setEnabledStatus(false);
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                     if (nodes.item(j).getTextContent().equals("1") || nodes.item(j).getTextContent().equals("0")) {
@@ -274,27 +315,10 @@ public class xmlLoader {
                             } else {
                                 System.out.println("Expansion pack was not parsed. Duplicate ID found.");
                             }
-                        } else if (action == 0 || action == 1) { //TODO: FIX
-                            System.out.println("Refreshing parsed XML data...");
-                            for (int k = 0; k < listOfExpansions.size(); k++) {
-                                if (listOfExpansions.get(k).getID().equals(expansionID)) {
-                                    System.out.println("Changing enabled value of " + expansionID);
-                                    if (action == 1) {
-                                        System.out.print(" - Enabled.\n");
-                                        listOfExpansions.get(k).setEnabledStatus(true);
-                                    } else {
-                                        System.out.print(" - Disabled.\n");
-                                        listOfExpansions.get(k).setEnabledStatus(false);
-                                    }
-                                }
-                            }
-                            System.out.println("Complete.");
                         }
-
                   //  }
                 }
             }
-            //TODO: Add code in to send this information to the UI for display.
         } else {
             errorPrint((12));
         }
@@ -724,7 +748,6 @@ public class xmlLoader {
         public void setEnabledStatus(boolean isEnabled) {
             this.enabledStatus = isEnabled;
         }
-
 
     }
 

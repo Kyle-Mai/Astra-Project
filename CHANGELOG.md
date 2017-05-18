@@ -107,4 +107,14 @@ While Github's built in system is generally sufficient for keeping track of gene
 
 - Slightly adjusted UI design.
 
+**MAY 18 2017** (ver.PTB-A) (U1)
 
+- Patched error with writing XML, added the needed method.
+
+- Added multithreading support.
+
+- Added base core for SFX.
+
+    - Supports audio multithreading and will automatically kill threads when the audio finishes.
+
+- Added new loading screen to the UI core.

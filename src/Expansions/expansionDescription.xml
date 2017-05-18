@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<expansionDescription>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><expansionDescription>
     <expansion id="1e05fc">
         <expansionName>Exotica</expansionName>
         <subtitle>Into the vast unknown.</subtitle>
@@ -12,6 +10,6 @@
         <expansionName>Steve Harvey's Revenge</expansionName>
         <subtitle>Wahaho</subtitle>
         <description>Literally just a test expansion.</description>
-        <enabled>0</enabled> <!--1 = true, 0 = false -->
+        <enabled>1</enabled> <!--1 = true, 0 = false -->
     </expansion>
 </expansionDescription>

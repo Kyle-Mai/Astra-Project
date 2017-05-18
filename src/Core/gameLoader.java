@@ -43,7 +43,7 @@ public class gameLoader {
         xmlLoader.getExpansionInfo(); //get the information for the different files
         //creates a new UI with which to run off of
         System.out.println("Loading UI core...");
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() { //open up a new thread for the UI
             public void run() {
                 guiCoreV4 UI = new guiCoreV4(11);
                 UI.loadLauncherScreen();
