@@ -7,9 +7,17 @@
     </expansion>
 
     <expansion id="d92kf0">
-        <expansionName>Steve Harvey's Revenge</expansionName>
+        <expansionName>Doomsday</expansionName>
         <subtitle>Wahaho</subtitle>
         <description>Literally just a test expansion.</description>
-        <enabled>1</enabled> <!--1 = true, 0 = false -->
+        <enabled>0</enabled> <!--1 = true, 0 = false -->
     </expansion>
+
+    <expansion id="9e88mv">
+        <expansionName>Megastructures</expansionName>
+        <subtitle>We're going to need a bigger boat.</subtitle>
+        <description>Literally just a test expansion.</description>
+        <enabled>0</enabled> <!--1 = true, 0 = false -->
+    </expansion>
+
 </expansionDescription>

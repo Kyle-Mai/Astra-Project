@@ -55,7 +55,11 @@ public class guiCoreV4 {
     private JPanel pnlExpansionHeader;
     private JLabel lblExpHeaderText;
     private JProgressBar loadingBar;
+    private JLabel bgPanel;
+    private JLabel imgLogo;
     private int screenScaleChoice;
+    private BufferedImage backgroundImage;
+    private BufferedImage gameLogo;
 
     private int musicVolume = 70;
     private int UIVolume = 70;
@@ -66,18 +70,18 @@ public class guiCoreV4 {
 
     /** Stores UI element design properties **/
 
-    final String gameVersion = "PTB-A Build 63a";
+    final String gameVersion = "PTB-A Build 64a";
 
     private final Color clrBlk = new Color(25, 35, 35, 255);
-    private final Color clrDGrey = new Color(55, 55, 55, 255);
+    private final Color clrDGrey = new Color(45, 55, 75, 255);
     private final Color clrDisableBorder = new Color(75, 5, 25, 255);
     private final Color clrDisable = new Color(135, 15, 55, 255);
-    private final Color clrEnable = new Color(0, 155, 105, 255);
-    private  final Color clrDark = new Color(0, 135, 110, 255);
-    private final Color clrButtonBackground = new Color(0, 125, 90, 220);
-    private final Color clrButtonMain = new Color(0, 145, 110, 255);
-    private final Color clrBackground = new Color(0, 185, 140, 105);
-    private final Color clrForeground = new Color(0, 185, 110, 155);
+    private final Color clrEnable = new Color(0, 165, 225, 255);
+    private final Color clrDark = new Color(0, 90, 145, 255);
+    private final Color clrButtonBackground = new Color(0, 90, 125, 220);
+    private final Color clrButtonMain = new Color(0, 110, 145, 255);
+    private final Color clrBackground = new Color(0, 130, 195, 105);
+    private final Color clrForeground = new Color(0, 110, 185, 155);
     private final Color clrText = new Color(255, 255, 255, 255);
 
     private final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
@@ -200,6 +204,13 @@ public class guiCoreV4 {
 
     /** Screen Builders **/
 
+    private void clearUI() {
+        //clears the content off of the UI
+        screen.removeAll();
+        layers.removeAll(); //clean the layer slate
+        window.getContentPane().add(layers);
+    }
+
     private void buttonAudio() {
         audioCore buttonPress = new audioCore("menu_press.wav", UIVolume, 0, 1000);
         buttonPress.start();
@@ -219,8 +230,13 @@ public class guiCoreV4 {
         //attempt to load images
         try {
             launcherBG = ImageIO.read(this.getClass().getResource("Resources/launcherBG.jpg"));
+            gameLogo = ImageIO.read(this.getClass().getResource("Resources/icon.png"));
             imgBackground = new JLabel(new ImageIcon(launcherBG)); //TODO: Add a way to rescale images.
+            imgLogo = new JLabel(new ImageIcon(gameLogo));
             layers.add(imgBackground, new Integer(0), 0);
+            layers.add(imgLogo, new Integer(9), 0);
+            imgLogo.setBounds(20, 20, 50, 60);
+            imgLogo.setVisible(true);
             imgBackground.setBounds(0, 0, getUIScaleX(), getUIScaleY());
             imgBackground.setVisible(true);
         } catch (IOException e) {
@@ -293,12 +309,12 @@ public class guiCoreV4 {
         JLabel lblTitle = new JLabel();
 
         layers.add(lblTitle, new Integer(3), 0);
-        lblTitle.setBounds(20, 20, 300, 75);
+        lblTitle.setBounds(60, 30, 300, 75);
         lblTitle.setVerticalAlignment(SwingConstants.TOP);
         lblTitle.setOpaque(false);
         lblTitle.setFocusable(false);
         lblTitle.setFont(txtTitle);
-        lblTitle.setText("Astra Project");
+        lblTitle.setText("stra Project");
         lblTitle.setForeground(clrText);
         lblTitle.setVisible(true);
 
@@ -369,7 +385,8 @@ public class guiCoreV4 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Launching game...");
-                screen.removeAll();
+                window.setTitle("Astra Project");
+                clearUI();
                 mainMusic.interrupt();
                 buttonAudio();
                 loadLoadingScreen();
@@ -421,14 +438,14 @@ public class guiCoreV4 {
 
             pnlExpansions.get(i).setLayout(null);
 
-            if (5 + (75 * i) + (pnlExpansionHeader.getHeight() + 5) > contentController.getHeight()) { //increases the window size if needed
+            if (5 + 5 + (65 * i) + (pnlExpansionHeader.getHeight() + 5) > contentController.getHeight()) { //increases the window size if needed
                 System.out.println("Resizing content window.");
                 contentController.setBounds(contentController.getX(), contentController.getY(), contentController.getWidth(), contentController.getHeight() + 75);
             } else {
                 contentController.setBounds(getUIScaleX() - 305, 110, 300, 300);
             }
 
-            pnlExpansions.get(i).setBounds(5, 5 + (75 * i) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 25, 70);
+            pnlExpansions.get(i).setBounds(5, 5 + (65 * i) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 25, 60);
             pnlExpansions.get(i).setBackground(clrForeground);
             pnlExpansions.get(i).add(lblExpansions.get(i));
             pnlExpansions.get(i).add(lblExpanDesc.get(i));
@@ -436,14 +453,14 @@ public class guiCoreV4 {
             pnlExpansions.get(i).add(lblExpanID.get(i));
             pnlExpansions.get(i).setOpaque(true);
 
-            lblExpansions.get(i).setBounds(5, 5, 195, 35);
+            lblExpansions.get(i).setBounds(5, 5, 195, 25);
             lblExpansions.get(i).setForeground(clrText);
             lblExpansions.get(i).setOpaque(false);
             lblExpansions.get(i).setFont(txtSubheader);
             lblExpansions.get(i).setText(xmlLoader.listOfExpansions.get(i).getName());
             lblExpansions.get(i).setVerticalAlignment(SwingConstants.TOP);
 
-            lblExpanDesc.get(i).setBounds(5, 40, 170, 25);
+            lblExpanDesc.get(i).setBounds(5, 35, 170, 20);
             lblExpanDesc.get(i).setOpaque(false);
             lblExpanDesc.get(i).setForeground(clrText);
             lblExpanDesc.get(i).setFont(txtItalSubtitle);
@@ -481,10 +498,11 @@ public class guiCoreV4 {
 
             actionEnabler.get(i).setEnable(expansionEnabled); //update the action listener tied to the enable button with the current status of the content
 
-            lblExpanID.get(i).setBounds(contentController.getWidth() - 85, 35, 55, 25);
+            lblExpanID.get(i).setBounds(contentController.getWidth() - 85, 35, 55, 20);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
             lblExpanID.get(i).setForeground(clrText);
             lblExpanID.get(i).setFont(txtTiny);
+            lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
             lblExpanID.get(i).setText(xmlLoader.listOfExpansions.get(i).getID());
 
 
@@ -511,15 +529,10 @@ public class guiCoreV4 {
         //TODO: Eventually re-sort swing objects so I don't have a bunch of a empty ones lying around. Arraylists are the best bet.
 
         Icon loadingIcon;
-        BufferedImage backgroundImage;
-        JLabel bgPanel;
         JLabel bgLoadIcon;
 
         mainMusic = new audioCore("imperial_fleet.mp3", musicVolume);
         mainMusic.start();
-
-        layers.removeAll(); //clean the layer slate
-        window.getContentPane().add(layers);
 
         rescaleScreen(screenScaleChoice);
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
@@ -556,7 +569,7 @@ public class guiCoreV4 {
         loadingBar.setOpaque(true);
         loadingBar.setValue(0);
         loadingBar.setFont(txtSubheader);
-        loadingBar.setForeground(clrButtonMain);
+        loadingBar.setForeground(clrEnable);
         loadingBar.setBackground(clrDGrey);
         loadingBar.setStringPainted(true);
         loadingBar.setBorderPainted(false);
@@ -617,8 +630,45 @@ public class guiCoreV4 {
         protected void done() {
 
             loadingBar.setString("Complete");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.getStackTrace();
+            }
+
+            loadMainMenu();
+
         }
     }
+
+    private void loadMainMenu() {
+
+        clearUI();
+
+        try {
+            backgroundImage = ImageIO.read(this.getClass().getResource("Resources/menuBG.jpg"));
+            bgPanel = new JLabel(new ImageIcon(backgroundImage));
+            layers.add(bgPanel, new Integer(0), 0);
+            bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+            bgPanel.setOpaque(true);
+            bgPanel.setFocusable(false);
+            bgPanel.setVisible(true);
+
+            gameLogo = ImageIO.read(this.getClass().getResource("Resources/icon_large.png"));
+            imgLogo = new JLabel(new ImageIcon(gameLogo));
+            layers.add(imgLogo, new Integer(1), 0);
+            imgLogo.setBounds(20, 20, 120, 120);
+            imgLogo.setVisible(true);
+
+            //TODO: Add a way to rescale images.
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+
+    }
+
 
     private class propertyListener implements PropertyChangeListener {
 

@@ -118,3 +118,17 @@ While Github's built in system is generally sufficient for keeping track of gene
     - Supports audio multithreading and will automatically kill threads when the audio finishes.
 
 - Added new loading screen to the UI core.
+
+**MAY 18 2017** (ver.PTB-A) (U2)
+
+- Added main menu method to the UI core, still need to add information.
+
+    - Moved some variables to class variables from local variables in order to reuse content.
+
+    - Slightly improved audio and thread handling in the UI.
+
+    - Adjusted UI colour and design.
+
+    - Updated logo, added it to the launcher and main menu.
+
+- Added another test expansion pack.
