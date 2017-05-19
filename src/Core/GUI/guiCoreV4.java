@@ -69,7 +69,7 @@ public class guiCoreV4 {
 
     /** Stores UI element design properties **/
 
-    final String gameVersion = "PTB-A Build 64a";
+    final String gameVersion = "PTB-A Build 64b";
 
     private final Color clrBlk = new Color(25, 35, 35, 255);
     private final Color clrDGrey = new Color(45, 55, 75, 255);
@@ -687,6 +687,16 @@ public class guiCoreV4 {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+
+        JPanel pnlMenuBarH = new JPanel();
+
+        layers.add(pnlMenuBarH, new Integer(2), 0);
+        pnlMenuBarH.setBounds(0, getUIScaleY() - 250, getUIScaleX(), 250);
+        pnlMenuBarH.setLayout(null);
+        pnlMenuBarH.setBackground(clrForeground);
+        pnlMenuBarH.setFocusable(false);
+        pnlMenuBarH.setBorder(null);
+        pnlMenuBarH.setVisible(true);
 
         JButton btnNewGame = new JButton();
         layers.add(btnNewGame, new Integer(7), 0);
