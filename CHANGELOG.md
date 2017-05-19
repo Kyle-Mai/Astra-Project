@@ -132,3 +132,29 @@ While Github's built in system is generally sufficient for keeping track of gene
     - Updated logo, added it to the launcher and main menu.
 
 - Added another test expansion pack.
+
+**MAY 18 2017** (ver.PTB-A) (U3)
+
+- Added gfxRepository to store GFX content.
+
+    - Has loader methods to pre-load images so they don't bog the program down.
+
+- Add custom scrollbar functionality.
+
+- Added new SFX core functionality.
+
+    - Attempted to add support for music looping/shuffling (is broken)
+
+    - Moved audio declarations to be handled in the repository for more simple manipulation and storage.
+
+- Updated the launcher UI design.
+
+    - Added new border, changed object positions, colours slightly.
+
+- Add more functionality in the guiCore
+
+    - Loading scree is now semi-dynamic.
+
+    - Variables are slightly more organized.
+
+    - Added "new game" button to test map generation and game content.

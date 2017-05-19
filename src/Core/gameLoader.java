@@ -1,5 +1,6 @@
 package Core;
 
+import Core.GUI.gfxRepository;
 import Core.GUI.guiCoreV4;
 
 /**
@@ -38,6 +39,8 @@ public class gameLoader {
 
     //loads UI related elements
     public static void UILoader() {
+
+        gfxRepository.gfxPreloader(); //preload GFX content
 
         System.out.println("Getting XML data...");
         xmlLoader.getExpansionInfo(); //get the information for the different files

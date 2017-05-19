@@ -2,6 +2,7 @@ package Core.GUI;
 
 //import all relevant stuff
 import Core.SFX.audioCore;
+import Core.SFX.audioRepository;
 import Core.gameLoader;
 import Core.xmlLoader;
 
@@ -60,13 +61,11 @@ public class guiCoreV4 {
     private int screenScaleChoice;
     private BufferedImage backgroundImage;
     private BufferedImage gameLogo;
+    private audioCore music;
 
-    private int musicVolume = 70;
-    private int UIVolume = 70;
+    private int load;
 
     private backgroundLoader loader;
-
-    private audioCore mainMusic;
 
     /** Stores UI element design properties **/
 
@@ -79,7 +78,7 @@ public class guiCoreV4 {
     private final Color clrEnable = new Color(0, 165, 225, 255);
     private final Color clrDark = new Color(0, 90, 145, 255);
     private final Color clrButtonBackground = new Color(0, 90, 125, 220);
-    private final Color clrButtonMain = new Color(0, 110, 145, 255);
+    private final Color clrButtonMain = new Color(0, 90, 155, 255);
     private final Color clrBackground = new Color(0, 130, 195, 105);
     private final Color clrForeground = new Color(0, 110, 185, 155);
     private final Color clrText = new Color(255, 255, 255, 255);
@@ -183,11 +182,8 @@ public class guiCoreV4 {
         screen = new newPanel();
 
         rescaleScreen(screenScaleOption);
-        try {
-            window.setIconImage(ImageIO.read(this.getClass().getResource("Resources/icon.png")));
-        } catch (IOException e) {
-            System.out.println("Error loading game icon: " + e);
-        }
+
+        window.setIconImage(gfxRepository.gameLogo);
         window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         screen.setLayout(null); //CARDINAL SIN, BUT I DON'T REALLY CARE AT THIS POINT
         screen.setVisible(true);
@@ -211,15 +207,9 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
     }
 
-    private void buttonAudio() {
-        audioCore buttonPress = new audioCore("menu_press.wav", UIVolume, 0, 1000);
-        buttonPress.start();
-    }
-
     public void loadLauncherScreen() {
         System.out.println("Loading launcher data...");
-        BufferedImage launcherBG;
-        JLabel imgBackground;
+        JLabel imgBackground, imgBorder;
 
         //initialize the layers
         layers = new JLayeredPane();
@@ -228,26 +218,27 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
 
         //attempt to load images
-        try {
-            launcherBG = ImageIO.read(this.getClass().getResource("Resources/launcherBG.jpg"));
-            gameLogo = ImageIO.read(this.getClass().getResource("Resources/icon.png"));
-            imgBackground = new JLabel(new ImageIcon(launcherBG)); //TODO: Add a way to rescale images.
-            imgLogo = new JLabel(new ImageIcon(gameLogo));
-            layers.add(imgBackground, new Integer(0), 0);
-            layers.add(imgLogo, new Integer(9), 0);
-            imgLogo.setBounds(20, 20, 50, 60);
-            imgLogo.setVisible(true);
-            imgBackground.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-            imgBackground.setVisible(true);
-        } catch (IOException e) {
-            System.out.println("Error when loading images: " + e.getMessage());
-        }
+        imgBackground = new JLabel(new ImageIcon(gfxRepository.launcherBackground)); //TODO: Add a way to rescale images.
+
+        imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogo));
+        layers.add(imgBackground, new Integer(0), 0);
+        layers.add(imgLogo, new Integer(9), 0);
+        imgLogo.setBounds(40, 20, 50, 60);
+        imgLogo.setVisible(true);
+        imgBackground.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        imgBackground.setVisible(true);
+
+        imgBorder = new JLabel(new ImageIcon(gfxRepository.launcherBorder));
+        layers.add(imgBorder, new Integer(1), 0);
+        imgBorder.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        imgBorder.setFocusable(false);
+        imgBorder.setVisible(true);
 
         //load exit button
         JButton btnExit = new JButton();
 
-        layers.add(btnExit, new Integer(1), 0);
-        btnExit.setBounds(getUIScaleX() - 35, 5, 30, 30);
+        layers.add(btnExit, new Integer(2), 0);
+        btnExit.setBounds(getUIScaleX() - 55, 10, 30, 30);
         btnExit.setBackground(clrButtonBackground);
         btnExit.setFocusPainted(false);
         btnExit.setForeground(clrText);
@@ -260,7 +251,7 @@ public class guiCoreV4 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Killing program.");
-                buttonAudio();
+                audioRepository.buttonClick();
                 window.dispose(); //ensure the thread dies
                 System.exit(0); //close the program
             }
@@ -271,7 +262,7 @@ public class guiCoreV4 {
         JButton btnMinimize = new JButton();
 
         layers.add(btnMinimize, new Integer(2), 0);
-        btnMinimize.setBounds(getUIScaleX() - 70, 5, 30, 30);
+        btnMinimize.setBounds(getUIScaleX() - 90, 10, 30, 30);
         btnMinimize.setBackground(clrButtonBackground);
         btnMinimize.setFocusPainted(false);
         btnMinimize.setForeground(clrText);
@@ -285,7 +276,7 @@ public class guiCoreV4 {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Minimizing program.");
                 window.setState(Frame.ICONIFIED);
-                buttonAudio();
+                audioRepository.buttonClick();
             }
         });
         btnMinimize.setVisible(true);
@@ -294,7 +285,7 @@ public class guiCoreV4 {
         JButton btnSettings = new JButton();
 
         layers.add(btnSettings, new Integer(3), 0);
-        btnSettings.setBounds(getUIScaleX() - 105, 5, 30, 30);
+        btnSettings.setBounds(getUIScaleX() - 125, 10, 30, 30);
         btnSettings.setBackground(clrButtonBackground);
         btnSettings.setFocusPainted(false);
         btnSettings.setForeground(clrText);
@@ -309,7 +300,7 @@ public class guiCoreV4 {
         JLabel lblTitle = new JLabel();
 
         layers.add(lblTitle, new Integer(3), 0);
-        lblTitle.setBounds(60, 30, 300, 75);
+        lblTitle.setBounds(imgLogo.getX() + 45, 30, 300, 75);
         lblTitle.setVerticalAlignment(SwingConstants.TOP);
         lblTitle.setOpaque(false);
         lblTitle.setFocusable(false);
@@ -322,13 +313,13 @@ public class guiCoreV4 {
         JLabel lblVersion = new JLabel();
 
         layers.add(lblVersion, new Integer(4), 0);
-        lblVersion.setBounds(getUIScaleX() - 205, getUIScaleY() - 40, 200, 35);
+        lblVersion.setBounds(25, getUIScaleY() - 50, 200, 35);
         lblVersion.setOpaque(false);
         lblVersion.setFocusable(false);
-        lblVersion.setFont(txtSubtitle);
+        lblVersion.setFont(txtTiny);
         lblVersion.setText("Version; " + gameVersion);
         lblVersion.setForeground(clrText);
-        lblVersion.setHorizontalAlignment(SwingConstants.RIGHT); //sets the text to center to the right side instead of the left
+        lblVersion.setVerticalAlignment(SwingConstants.BOTTOM);
         lblVersion.setVisible(true);
 
         //load the scroll window
@@ -337,14 +328,25 @@ public class guiCoreV4 {
         contentList = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         layers.add(contentList, new Integer(6), 0);
 
-        contentController.setBounds(getUIScaleX() - 305, 40, 300, 300);
+        JScrollBar contentScroller = new JScrollBar();
+
+        contentList.add(contentScroller);
+        contentScroller.setBorder(null);
+        contentScroller.setUI(new customScrollbar());
+        contentScroller.setBounds(contentController.getX() + contentController.getWidth() - 20, contentController.getY(), 15, contentController.getHeight());
+        contentScroller.setOpaque(true);
+        contentScroller.setVisible(true);
+
+        contentController.setBounds(getUIScaleX() - 325, 45, 300, 320);
         contentController.setOpaque(true);
         contentController.setLayout(null);
         contentController.setBackground(clrBackground);
         contentController.setVisible(true);
 
-        contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 5), 40, contentController.getWidth(), 300);
+        contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 25), 45, contentController.getWidth(), contentController.getHeight());
         contentList.setViewportView(contentController);
+        contentList.setVerticalScrollBar(contentScroller); //custom scroll bar design
+        contentList.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0)); //dirty way of changing scroll bar width
         contentList.setOpaque(false);
         contentList.setVisible(true);
         contentList.setBorder(null);
@@ -352,7 +354,7 @@ public class guiCoreV4 {
         //load the expansion header
         pnlExpansionHeader = new JPanel();
         pnlExpansionHeader.setLayout(null);
-        pnlExpansionHeader.setBounds(5, 5, contentController.getWidth() - 25, 25);
+        pnlExpansionHeader.setBounds(5, 5, contentController.getWidth() - 20, 25);
         pnlExpansionHeader.setOpaque(true);
         pnlExpansionHeader.setBackground(clrDark);
         pnlExpansionHeader.setVisible(true);
@@ -371,7 +373,7 @@ public class guiCoreV4 {
         //load launch button
         JButton btnLaunch = new JButton();
         layers.add(btnLaunch, new Integer(7), 0);
-        btnLaunch.setBounds(contentController.getX(), contentController.getY() + contentController.getWidth() + 5, contentController.getWidth(), 60);
+        btnLaunch.setBounds(contentController.getX(), contentController.getY() + contentController.getHeight() + 5, contentController.getWidth(), 55);
         btnLaunch.setBackground(clrButtonMain);
         btnLaunch.setForeground(clrText);
         btnLaunch.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
@@ -387,15 +389,17 @@ public class guiCoreV4 {
                 System.out.println("Launching game...");
                 window.setTitle("Astra Project");
                 clearUI();
-                mainMusic.interrupt();
-                buttonAudio();
-                loadLoadingScreen();
+                audioRepository.buttonClick();
+                music.interrupt();
+                music = new audioCore("imperial_fleet.mp3", audioRepository.musicVolume);
+                music.start();
+                loadLoadingScreen(1);
 
             }
         });
 
-        mainMusic = new audioCore("new_dawn.mp3", musicVolume);
-        mainMusic.start();
+        music = new audioCore("new_dawn.mp3", audioRepository.musicVolume);
+        music.start();
 
         loadLauncherExpansions();
 
@@ -442,10 +446,10 @@ public class guiCoreV4 {
                 System.out.println("Resizing content window.");
                 contentController.setBounds(contentController.getX(), contentController.getY(), contentController.getWidth(), contentController.getHeight() + 75);
             } else {
-                contentController.setBounds(getUIScaleX() - 305, 110, 300, 300);
+                contentController.setBounds(getUIScaleX() - 325, 110, 300, 300);
             }
 
-            pnlExpansions.get(i).setBounds(5, 5 + (65 * i) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 25, 60);
+            pnlExpansions.get(i).setBounds(5, 5 + (65 * i) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
             pnlExpansions.get(i).setBackground(clrForeground);
             pnlExpansions.get(i).add(lblExpansions.get(i));
             pnlExpansions.get(i).add(lblExpanDesc.get(i));
@@ -466,7 +470,7 @@ public class guiCoreV4 {
             lblExpanDesc.get(i).setFont(txtItalSubtitle);
             lblExpanDesc.get(i).setText(xmlLoader.listOfExpansions.get(i).getSubtitle());
 
-            btnExpanEnable.get(i).setBounds(contentController.getWidth() - 55, 5, 25, 25);
+            btnExpanEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
             btnExpanEnable.get(i).setForeground(clrText);
             btnExpanEnable.get(i).setOpaque(true);
             btnExpanEnable.get(i).setFocusable(false);
@@ -498,7 +502,7 @@ public class guiCoreV4 {
 
             actionEnabler.get(i).setEnable(expansionEnabled); //update the action listener tied to the enable button with the current status of the content
 
-            lblExpanID.get(i).setBounds(contentController.getWidth() - 85, 35, 55, 20);
+            lblExpanID.get(i).setBounds(contentController.getWidth() - 80, 35, 55, 20);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
             lblExpanID.get(i).setForeground(clrText);
             lblExpanID.get(i).setFont(txtTiny);
@@ -522,45 +526,38 @@ public class guiCoreV4 {
     }
 
     //load the loading screen and game content
-    public void loadLoadingScreen() {
+    public void loadLoadingScreen(int toLoad) {
 
         screenScaleChoice = 8;
 
         //TODO: Eventually re-sort swing objects so I don't have a bunch of a empty ones lying around. Arraylists are the best bet.
 
-        Icon loadingIcon;
         JLabel bgLoadIcon;
 
-        mainMusic = new audioCore("imperial_fleet.mp3", musicVolume);
-        mainMusic.start();
+        load = toLoad;
+
 
         rescaleScreen(screenScaleChoice);
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         layers.setBounds(0, 0, getUIScaleX(), getUIScaleY()); //reset the size
 
-        try {
-            backgroundImage = ImageIO.read(this.getClass().getResource("Resources/loadingBG.jpg"));
-            bgPanel = new JLabel(new ImageIcon(backgroundImage));
-            layers.add(bgPanel, new Integer(0), 0);
-            bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-            bgPanel.setOpaque(true);
-            bgPanel.setFocusable(false);
-            bgPanel.setVisible(true);
+        bgPanel = new JLabel(new ImageIcon(gfxRepository.loaderBackground));
+        layers.add(bgPanel, new Integer(0), 0);
+        bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        bgPanel.setOpaque(true);
+        bgPanel.setFocusable(false);
+        bgPanel.setVisible(true);
 
-            loadingIcon = new ImageIcon(this.getClass().getResource("Resources/ok_hand.gif"));
-            bgLoadIcon = new JLabel(loadingIcon);
-            layers.add(bgLoadIcon, new Integer(1), 0);
-            bgLoadIcon.setBounds((getUIScaleX() / 2) - 150, getUIScaleY() - 380, 300, 300);
-            bgLoadIcon.setOpaque(false);
-            bgLoadIcon.setFocusable(false);
-            bgLoadIcon.setVisible(true);
+        bgLoadIcon = new JLabel(gfxRepository.loadingIcon);
+        layers.add(bgLoadIcon, new Integer(1), 0);
+        bgLoadIcon.setBounds((getUIScaleX() / 2) - 150, getUIScaleY() - 380, 300, 300);
+        bgLoadIcon.setOpaque(false);
+        bgLoadIcon.setFocusable(false);
+        bgLoadIcon.setVisible(true);
 
-            //TODO: Add a way to rescale images.
+        //TODO: Add a way to rescale images.
 
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
 
         loadingBar = new JProgressBar(0, 100);
         layers.add(loadingBar, new Integer(2), 0);
@@ -606,23 +603,44 @@ public class guiCoreV4 {
             Random random = new Random();
             int progress;
 
+
             for (int i = 1; i <= 100; i++) {
                 progress = i;
                 setProgress(Math.min(progress, 100));
-                Thread.sleep(100 + random.nextInt(600)); //unnecessary, but will help to reduce load
 
-                switch (i) { //using a switch so i can set individual functions to each % up to 100%
-                    case 21:
-                        gameLoader.loadXMLData();
-                        break;
-                    case 84:
-                        gameLoader.cleanContent();
-                        break;
+                if (load == 1) { //loading core content
+
+                    Thread.sleep(80 + random.nextInt(600)); //unnecessary, but will help to reduce load
+
+                    switch (i) { //using a switch so i can set individual functions to each % up to 100%
+                        case 21:
+                            gfxRepository.loadMainGFX();
+                            break;
+                        case 42:
+                            gameLoader.loadXMLData();
+                            break;
+                        case 84:
+                            gameLoader.cleanContent();
+                            break;
+                    }
+                } else if (load == 2) {
+
+                    Thread.sleep(40 + random.nextInt(180)); //unnecessary, but will help to reduce load
+
+                    switch(i) {
+                        case 11:
+                            gameLoader.mapLoader(20, 20, 6); //TODO: Assign variables
+                            break;
+
+                    }
+
                 }
 
             }
 
             setProgress(100);
+
+            Thread.sleep(2000); //wait a couple before loading main screen
 
             return null;
         }
@@ -630,13 +648,17 @@ public class guiCoreV4 {
         protected void done() {
 
             loadingBar.setString("Complete");
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.getStackTrace();
+
+            if (load == 1) { //load main menu
+
+                loadMainMenu();
+
+            } else if (load == 2) { //load map
+
+
+
             }
 
-            loadMainMenu();
 
         }
     }
@@ -666,6 +688,32 @@ public class guiCoreV4 {
             ioe.printStackTrace();
         }
 
+        JButton btnNewGame = new JButton();
+        layers.add(btnNewGame, new Integer(7), 0);
+        btnNewGame.setBounds(5, getUIScaleY() - 60, 180, 55);
+        btnNewGame.setBackground(clrButtonMain);
+        btnNewGame.setForeground(clrText);
+        btnNewGame.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnNewGame.setFont(txtHeader);
+        btnNewGame.setOpaque(true); //TODO: Find a way to do semi-transparent buttons
+        btnNewGame.setFocusPainted(false);
+        btnNewGame.setHorizontalAlignment(SwingConstants.CENTER);
+        btnNewGame.setVerticalAlignment(SwingConstants.CENTER);
+        btnNewGame.setText("NEW GAME");
+        btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Loading new game");
+                clearUI();
+                audioRepository.buttonClick();
+                music.interrupt();
+                music = new audioCore("to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
+                music.start();
+                loadLoadingScreen(2);
+
+            }
+        });
+
 
     }
 
@@ -694,7 +742,7 @@ public class guiCoreV4 {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            buttonAudio();
+            audioRepository.buttonClick();
 
             if (enable == 1) {
                 enable = 0;
