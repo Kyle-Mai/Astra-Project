@@ -78,5 +78,15 @@ public class audioRepository {
         buttonPress.start();
     }
 
+    public static void buttonEnable() {
+        audioCore buttonPress = new audioCore("menu_select.wav", uiVolume, 0, 500);
+        buttonPress.start();
+    }
+
+    public static void buttonDisable() {
+        audioCore buttonPress = new audioCore("menu_close.wav", uiVolume, 0, 500);
+        buttonPress.start();
+    }
+
 
 }

@@ -4,10 +4,24 @@ package Core;
  KM
  May 08 2017
  Handles the loading of XML-based content.
- Basis for XML core structure taken from: https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
+
+ Sources:
+ Mkyong: Basis for XML core structure taken from: https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
+ I used it in order to sort out my syntax and basic method structure. Since then, I've essentially rewritten everything sans
+ the 'loadXML' and 'writeXML' methods.
+
+ Stack Overflow: Used Stack Overflow to help me sort out why the changes to XML weren't actually writing to files.
+ The 'writeToFile' method was created through this assistance.
+ Also used Stack Overflow to sort out an efficient method of locating the program directory, and the System.getproperty("user.dir")
+ came from this.
+
+ Self: Everything else was coded using personal experimentation. Most of the XML structures are rewritten and used according
+ to my own ideas, using the Mkyong XML example as a basis for understanding how to do it.
+
  WARNING: The code here is very poorly optimized for space, but functions fairly well.
  **/
 
+//import required stuff
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,10 +60,12 @@ public class xmlLoader {
 
     }
 
+    //gets the information for the expansion packs
     public static void getExpansionInfo() {
         writeXML(expansionFolder, "", 3);
     }
 
+    //rewrites the data in the expansion packs
     public static void changeExpansionInfo(String name, int action) {
         System.out.println("Attempting to change XML data...");
         writeXML(expansionFolder, name, action);
@@ -96,6 +112,7 @@ public class xmlLoader {
         }
     } //close loadXML
 
+    //used to write new content to the XML as well as read the data
     private static void writeXML(final File folder, String name, int action) {
         if (folder.exists()) { //obviously, the folder must exist if we want to examine it
             try {
@@ -132,6 +149,7 @@ public class xmlLoader {
         }
     } //close loadXML
 
+    //reads tech tree XML data
     private static void loadTechTree(NodeList nodeList) {
         final int numOfTechLines = 6; //easy access when editing the total types of techs
 

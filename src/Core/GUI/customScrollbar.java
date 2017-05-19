@@ -5,8 +5,14 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
 /**
+ * KM
+ * May 19 2017
  * Creates a custom scroll bar design.
  * lol I literally have no f///ing clue what I'm doing here
+
+ * SOURCES:
+ * Stack Overflow - Used Stack Overflow to help me understand how to create a custom scrollbar to begin with.
+ * Java API - Used Java API to help me understand the methods I needed to replace, along with Stack Overflow.
  */
 public class customScrollbar extends BasicScrollBarUI {
 

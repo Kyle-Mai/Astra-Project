@@ -27,8 +27,13 @@ import java.util.Random;
 /**
  KM
  May 16 2017
- Round FOUR of attempting to create a GUI core to manage and display UI elements.
- Just kill me now.
+ Fourth iteration of my UI core.
+ Handles the creation and display of all UI elements, as well as the general event calls.
+
+ SOURCES:
+ Stack Overflow - Gif handling syntax, idea/syntax for creating layered panes, syntax for declaring new fonts.
+ Java API - Multithreading syntax, handling of the loading bar's work.
+ Self - All non-cited work.
  */
 
 
@@ -613,8 +618,10 @@ public class guiCoreV4 {
                     Thread.sleep(80 + random.nextInt(600)); //unnecessary, but will help to reduce load
 
                     switch (i) { //using a switch so i can set individual functions to each % up to 100%
-                        case 21:
+                        case 1:
                             gfxRepository.loadMainGFX();
+                            break;
+                        case 20:
                             break;
                         case 42:
                             gameLoader.loadXMLData();
@@ -668,7 +675,6 @@ public class guiCoreV4 {
         clearUI();
 
         try {
-            backgroundImage = ImageIO.read(this.getClass().getResource("Resources/menuBG.jpg"));
             bgPanel = new JLabel(new ImageIcon(backgroundImage));
             layers.add(bgPanel, new Integer(0), 0);
             bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
@@ -752,12 +758,12 @@ public class guiCoreV4 {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            audioRepository.buttonClick();
-
             if (enable == 1) {
+                audioRepository.buttonDisable();
                 enable = 0;
                 System.out.println("Disabling content for " + expID);
             } else {
+                audioRepository.buttonEnable();
                 enable = 1;
                 System.out.println("Enabling content for " + expID);
             }

@@ -2,64 +2,13 @@
 
 <techTree>
 
-    <newTech techline="1"> <!-- Technology -->
-        <name>String Drive Prototype</name>
-        <description>Our research into the mystery behind FTL travel is nearly complete. With this final step, we should be able to create a working FTL drive large enough to use on interstellar spacecraft.</description>
-        <id>1</id> <!-- ID of this tech -->
-        <level>0</level> <!-- Tech level, lower = earlier it'll pop up in the research -->
-        <cost>50</cost> <!-- Research cost -->
-        <rarity>150</rarity> <!-- How rare this tech is (i.e. how often it'll appear on the tech roster) Higher = less rare. -->
-
-        <newModule id="3000"> <!-- ID used to store the drive -->
-            <type>1</type> <!-- Type 1 = FTL drive -->
-            <size>0</size> <!-- Size of the FTL drive -->
-            <name>Chemical Engine</name>
-            <description>A primitive drive, powered by simple chemical reactions. Slow and inefficient, but sturdy and reliable.</description>
-            <materialCost>30</materialCost>
-            <maintenanceCost>0.32</maintenanceCost> <!-- Money cost per month to maintain -->
-            <speedFTL>0.6</speedFTL> <!-- How fast the drive is in FTL travel -->
-            <speedSublight>1.0</speedSublight> <!-- speed in sublight travel -->
-            <range>2</range> <!-- FTL travel range -->
-        </newModule>
-
-        <newModule id="3001"> <!-- ID used to store the drive -->
-            <type>1</type> <!-- Type 1 = FTL drive -->
-            <size>1</size> <!-- Size of the FTL drive -->
-            <name>String Drive Prototype</name>
-            <description>The string drive is the result of our experiments into FTL technology. The final hurdle - staying on course - was solved by laying a long line of specially manufactured material, known as the string-line. String drives utilize this material to maintain course, allowing for extremely fast and efficient travel through the galaxy.</description>
-            <materialCost>75</materialCost>
-            <maintenanceCost>0.97</maintenanceCost> <!-- Money cost per month to maintain -->
-            <speedFTL>1.0</speedFTL> <!-- How fast the drive is in FTL travel -->
-            <speedSublight>1.0</speedSublight> <!-- speed in sublight travel -->
-            <range>2</range> <!-- FTL travel range -->
-        </newModule>
-
-        <newShip id="3200"> <!-- ID used to store the ship -->
-            <type>2</type> <!-- The of ship, with 1 being military, 2 being exploration, 3 being infrastructure, and 4 being colonization -->
-            <name>Trailblazer</name>
-            <description>The Trailblazer is a sub-FTL ship that is used to lay down string-lines for FTL ships to travel along. By sending these ships out to nearby stars, we can begin laying down the framework to more efficiently expand our empire and explore the galaxy's mysteries.</description>
-            <drives>0</drives> <!-- Types of FTL drives this ship can use, by size -->
-            <buildCost>120</buildCost> <!-- Cost to build the ship. -->
-            <buildTime>5</buildTime> <!-- Number of months it takes to build the drive. -->
-        </newShip>
-
-        <newShip id="3201"> <!-- ID used to store the ship -->
-            <type>4</type>
-            <name>Colony Ship</name>
-            <description>The colony ship is a massive ship designed to house and sustain a large enough population to colonize new worlds.</description>
-            <drives>4</drives> <!-- Types of FTL drives this ship can use, by size -->
-            <buildCost>350</buildCost> <!-- Cost to build the ship. -->
-            <buildTime>12</buildTime> <!-- Number of months it takes to build the drive. -->
-        </newShip>
-
-        <newShip id="3202"> <!-- ID used to store the ship -->
-            <type>3</type>
-            <name>Construction Ship</name>
-            <description></description>
-            <drives>2</drives> <!-- Types of FTL drives this ship can use, by size -->
-            <buildCost>180</buildCost> <!-- Cost to build the ship. -->
-            <buildTime>6</buildTime> <!-- Number of months it takes to build the drive. -->
-        </newShip>
+    <newTech techline="3"> <!-- Technology -->
+        <name>Dyson Sphere</name>
+        <description>owo what's this</description>
+        <id>6</id> <!-- ID of this tech -->
+        <level>9</level> <!-- Tech level, lower = earlier it'll pop up in the research -->
+        <cost>5500</cost> <!-- Research cost -->
+        <rarity>8</rarity> <!-- How rare this tech is (i.e. how often it'll appear on the tech roster) Higher = less rare. -->
 
     </newTech>
 
