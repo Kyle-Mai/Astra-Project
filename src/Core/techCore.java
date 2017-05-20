@@ -14,7 +14,7 @@ public class techCore {
 
     /** Constants **/
 
-    final static String[] techPaths = {"Propulsion", "Infrastructure"}; //Names of the different tech paths
+    final static String[] techPaths = {"Propulsion", "Infrastructure", "Military Sciences"}; //Names of the different tech paths
 
 
     /** Variable declarations **/

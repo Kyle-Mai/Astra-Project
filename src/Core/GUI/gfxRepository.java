@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -28,10 +29,11 @@ public class gfxRepository {
     static BufferedImage titleScreenBackground;
     static BufferedImage launcherBorder;
 
-    static BufferedImage[] loaderBGList = new BufferedImage[7];
+    static ArrayList<BufferedImage> loadingScreenBGList = new ArrayList<>();
 
     static BufferedImage gameLogo;
     static BufferedImage gameLogoLarge;
+    static BufferedImage menuShip;
 
     static Icon loadingIcon;
 
@@ -42,7 +44,7 @@ public class gfxRepository {
 
         try {
             launcherBackground = ImageIO.read(new File(imageFolder + "/Resources/launcherBG.jpg"));
-            loaderBGList[0] = ImageIO.read(new File(imageFolder + "/Resources/loadingBG.jpg"));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG.jpg")));
             gameLogo = ImageIO.read(new File(imageFolder + "/Resources/icon.png"));
             launcherBorder = ImageIO.read(new File(imageFolder + "/Resources/launcherBorder.png"));
             loadingIcon = new ImageIcon(imageFolder + "/Resources/ok_hand.gif");
@@ -57,8 +59,8 @@ public class gfxRepository {
 
     public static void randomBackground() {
         Random randBG = new Random();
-        int randomBackground = 1 + randBG.nextInt(4);
-        loaderBackground = loaderBGList[randomBackground];
+        int randomBackground = randBG.nextInt(loadingScreenBGList.size());
+        loaderBackground = loadingScreenBGList.get(randomBackground);
         
     }
 
@@ -67,20 +69,24 @@ public class gfxRepository {
         System.out.println("Loading main GFX content...");
 
         try {
-            loaderBGList[1] = ImageIO.read(new File(imageFolder + "/Resources/loadingBG_2.jpg"));
-            loaderBGList[2] = ImageIO.read(new File(imageFolder + "/Resources/loadingBG_3.jpg"));
-            loaderBGList[3] = ImageIO.read(new File(imageFolder + "/Resources/loadingBG_4.jpg"));
-            loaderBGList[4] = ImageIO.read(new File(imageFolder + "/Resources/loadingBG_5.jpg"));
-            loaderBGList[6] = ImageIO.read(new File(imageFolder + "/Resources/loadingBG_6.jpg"));
             titleScreenBackground = ImageIO.read(new File(imageFolder + "/Resources/menuBG.jpg"));
             gameLogoLarge = ImageIO.read(new File(imageFolder + "/Resources/icon_large.png"));
+            menuShip = ImageIO.read(new File(imageFolder + "/Resources/spacecraft_gfx_small.png"));
+
+            //adds other papers to the loading screen randomize
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_2.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_3.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_4.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_5.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_6.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_7.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_8.jpg")));
+
+            System.out.println("GFX content loaded successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("GFX content loaded.");
-
 
     }
 

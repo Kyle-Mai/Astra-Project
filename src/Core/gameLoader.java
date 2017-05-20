@@ -2,6 +2,7 @@ package Core;
 
 import Core.GUI.gfxRepository;
 import Core.GUI.guiCoreV4;
+import Core.Player.playerData;
 
 /**
     KM
@@ -40,6 +41,8 @@ public class gameLoader {
     //loads UI related elements
     public static void UILoader() {
 
+        playerData player = new playerData();
+
         gfxRepository.gfxPreloader(); //preload GFX content
 
         System.out.println("Getting XML data...");
@@ -56,15 +59,12 @@ public class gameLoader {
     }
 
     //loads map related elements
-    public static void mapLoader(int xScale, int yScale, int starDensity){
+    public static void mapLoader(mapGenerator map){
 
         System.out.println("Loading new map...");
 
-        //loads the map data
-        mapGenerator map = new mapGenerator(xScale, yScale, starDensity);
-
         //testing pre-defined star system
-        starClass solSystem = new starClass(xScale / 2, yScale / 2, "Sol", 1002, true, "A", 4.83, 695700, false, 8, false);
+        starClass solSystem = new starClass(map.getxScale() / 2, map.getyScale() / 2, "Sol", 1002, true, "A", 4.83, 695700, false, 8, false);
 
         solSystem.planetList.add(new planetClass(solSystem, "Mercury", 2014, 1, 57909050L, 2440, false, false, false, false, 0));
         solSystem.planetList.add(new planetClass(solSystem, "Venus", 2009, 2, 108208000L, 6051, true, false, false, false, 0));

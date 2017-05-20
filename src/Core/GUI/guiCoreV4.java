@@ -1,9 +1,11 @@
 package Core.GUI;
 
 //import all relevant stuff
+import Core.Player.playerData;
 import Core.SFX.audioCore;
 import Core.SFX.audioRepository;
 import Core.gameLoader;
+import Core.mapGenerator;
 import Core.xmlLoader;
 
 import javax.imageio.ImageIO;
@@ -64,11 +66,17 @@ public class guiCoreV4 {
     private JLabel bgPanel;
     private JLabel imgLogo;
     private int screenScaleChoice;
-    private BufferedImage backgroundImage;
     private BufferedImage gameLogo;
     private audioCore music;
+    private animCore testAnimation;
+
+    playerData playerInfo = new playerData();
+    mapGenerator newMap;
 
     private int load;
+    private int mapScaleX = 20;
+    private int mapScaleY = 20;
+    private int mapStarDensity = 6;
 
     private backgroundLoader loader;
 
@@ -396,7 +404,7 @@ public class guiCoreV4 {
                 clearUI();
                 audioRepository.buttonClick();
                 music.interrupt();
-                music = new audioCore("imperial_fleet.mp3", audioRepository.musicVolume);
+                music = new audioCore("creation_and_beyond.mp3", audioRepository.musicVolume);
                 music.start();
                 loadLoadingScreen(1);
 
@@ -541,6 +549,7 @@ public class guiCoreV4 {
 
         load = toLoad;
 
+        gfxRepository.randomBackground();
 
         rescaleScreen(screenScaleChoice);
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
@@ -630,20 +639,36 @@ public class guiCoreV4 {
                             gameLoader.cleanContent();
                             break;
                     }
-                } else if (load == 2) {
+                } else if (load == 2) { //loading new game //TODO: fix map
 
                     Thread.sleep(40 + random.nextInt(180)); //unnecessary, but will help to reduce load
 
                     switch(i) {
-                        case 11:
-                            gameLoader.mapLoader(20, 20, 6); //TODO: Assign variables
+                        case 1:
+                            playerInfo.newPlayer("Test Player");
                             break;
-
+                        case 11:
+                            newMap = new mapGenerator(mapScaleX, mapScaleY, mapStarDensity);
+                            break;
+                        case 13:
+                            newMap.generateTiles();
+                            break;
+                        case 18:
+                            playerInfo.addMapString(newMap);
+                            break;
+                        case 20:
+                            playerInfo.addStarString(newMap);
+                            break;
+                        case 24:
+                            playerInfo.addPlanetString(newMap);
+                            break;
                     }
 
                 }
 
             }
+
+            System.out.println("Loading of [" + load + "] complete.");
 
             setProgress(100);
 
@@ -662,7 +687,7 @@ public class guiCoreV4 {
 
             } else if (load == 2) { //load map
 
-
+                loadMapView();
 
             }
 
@@ -675,7 +700,7 @@ public class guiCoreV4 {
         clearUI();
 
         try {
-            bgPanel = new JLabel(new ImageIcon(backgroundImage));
+            bgPanel = new JLabel(new ImageIcon(gfxRepository.titleScreenBackground));
             layers.add(bgPanel, new Integer(0), 0);
             bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
             bgPanel.setOpaque(true);
@@ -693,6 +718,9 @@ public class guiCoreV4 {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+
+        testAnimation = new animCore(new ImageIcon(gfxRepository.menuShip), 1, layers, window);
+        testAnimation.start();
 
         JPanel pnlMenuBarH = new JPanel();
 
@@ -716,19 +744,29 @@ public class guiCoreV4 {
         btnNewGame.setHorizontalAlignment(SwingConstants.CENTER);
         btnNewGame.setVerticalAlignment(SwingConstants.CENTER);
         btnNewGame.setText("NEW GAME");
+
         btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Loading new game");
+                testAnimation.setPlaying(false);
                 clearUI();
                 audioRepository.buttonClick();
-                music.interrupt();
-                music = new audioCore("to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
-                music.start();
                 loadLoadingScreen(2);
 
             }
         });
+
+
+    }
+
+    private void loadMapView() {
+
+        //TODO: Fill out.
+
+        music.interrupt();
+        music = new audioCore("to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
+        music.start();
 
 
     }

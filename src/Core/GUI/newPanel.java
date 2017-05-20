@@ -1,5 +1,12 @@
 package Core.GUI;
 
+/**
+ * KM
+ * May 15 2017
+ * Used as a core for some panel declarations, more freedom of manipulation.
+ */
+
+
 //import all relevant stuff
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,6 +26,7 @@ public class newPanel extends JPanel {
 
     public newPanel() {
         this.setBackground(newColour("black"));
+        //this.setLayout(null);
 
     }
 
@@ -28,7 +36,7 @@ public class newPanel extends JPanel {
 
     //paints components onto the main window
     @Override
-    public void paintComponent(Graphics gfx) {
+    protected void paintComponent(Graphics gfx) {
         super.paintComponent(gfx);
 
     }

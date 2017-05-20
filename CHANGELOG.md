@@ -158,3 +158,17 @@ While Github's built in system is generally sufficient for keeping track of gene
     - Variables are slightly more organized.
 
     - Added "new game" button to test map generation and game content.
+
+**MAY 20 2017** (ver.PTB-A) (U1)
+
+- Added some framework for game/user data saving.
+
+- Adjusted some planet/star weights.
+
+- Updated the GFX repository to allow for randomized loading screen backgrounds.
+
+- Added playerData class for storing the player's data.
+
+- Added an animation core.
+
+- Removed some unused variables from the XML loader.

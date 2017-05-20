@@ -153,9 +153,7 @@ public class xmlLoader {
     private static void loadTechTree(NodeList nodeList) {
         final int numOfTechLines = 6; //easy access when editing the total types of techs
 
-        String nodeName;
-        System.out.println("Attempting to load tech tree data from " + techTreeFolder);
-        File newTech;
+        System.out.println("Attempting to load tech tree data...");
         boolean techIsValid = false;
 
         int techLine = 0;
@@ -219,6 +217,7 @@ public class xmlLoader {
                     }
 
                     if (techIsValid) {
+                        System.out.println("New tech valid. Initializing...");
                         boolean replacesContent = false;
 
                         for (int k = 0; k < techCore.techTree.size(); k++) { //find duplicate IDs
@@ -265,7 +264,7 @@ public class xmlLoader {
 
     //collects the expansion pack list information, and also changes the enabled status
     private static void changeExpansions(NodeList nodeList, String expansion, int action, Document source, File path) {
-        File expansionList;
+
         String expansionID = "";
 
         int enabledStatus = 0; //whether or not the pack is enabled or disabled, represented by 1 and 0 respectively
@@ -383,7 +382,7 @@ public class xmlLoader {
     }
 
     private static void loadMods(NodeList nodeList) {
-        String nodeName;
+
         System.out.println("Mod directory found. Loading mods...");
         File newMod;
         String modID = "";
@@ -431,7 +430,6 @@ public class xmlLoader {
         String classDesc = "Not found.";
         boolean habitable = false;
         boolean modIsValid = true;
-        int errorMessage = 0;
 
         System.out.println("Loading new planet data...");
         //gather all of the nodes
@@ -542,8 +540,6 @@ public class xmlLoader {
         int sizeVariation = 0;
         int planetWeight = 0;
         boolean modIsValid = false;
-        int errorMessage = 0;
-        int replaceID = -1;
 
         System.out.println("Loading new star data...");
         //gather all of the nodes

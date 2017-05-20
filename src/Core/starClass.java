@@ -1,5 +1,6 @@
 package Core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,9 +13,37 @@ import java.util.ArrayList;
 
 //TODO: Add methods, begin filling out.
 
-public class starClass extends starCore {
+public class starClass extends starCore implements Serializable {
 
-    protected ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toString() { //used when writing to a save file
+
+        StringBuffer data = new StringBuffer();
+
+        data.append("/");
+        data.append(this.getMapLocationX());
+        data.append("-");
+        data.append(this.getMapLocationY());
+        data.append("-");
+        data.append(this.getStarIndex());
+        data.append("-");
+        data.append(this.starRadius);
+        data.append("-");
+        data.append(this.starIsHabitable);
+        data.append("-");
+        data.append(this.isBinarySystem);
+        data.append("-");
+        data.append(this.starSpectral);
+        data.append("-");
+        data.append(this.numOfPlanets);
+
+        return data.toString();
+
+    }
+
+    public ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
 
     private int starRadius;
     private Double starMagnitude = 0.0;

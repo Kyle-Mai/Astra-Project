@@ -1,14 +1,58 @@
 package Core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
     KM
     May 10 2017
     Class that handles the generation of the star map, including generating the stars and planets.
+
+    SOURCES:
+
+    Mkyong - Serialization and storing of object data via https://www.mkyong.com/java/how-to-write-an-object-to-file-in-java/
+    Java API - Used Java API to help me understand how to use 2D ArrayLists.
+    Self - Everything else.
  */
 
-public class mapGenerator {
+public class mapGenerator implements Serializable {
+
+    public ArrayList<starClass> generatedStars = new ArrayList<>();
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toString() {
+        System.out.println("Writing map data to string...");
+
+        StringBuffer data = new StringBuffer();
+
+        //refresh the index
+        int indexX = 1, indexY = 1;
+
+        for (int i = 0; i < this.mapArea; i++) {
+            data.append("/");
+            data.append(indexX);
+            data.append("-");
+            data.append(indexY);
+            data.append("-");
+            data.append(mapTiles.get(indexY - 1).get(indexX - 1).writeVisiblity());
+            data.append("-");
+            data.append(mapTiles.get(indexY - 1).get(indexX - 1).writeStar());
+
+            if (indexX < this.xScale) { //moves the index as it generates tiles
+                indexX++;
+            } else {
+                indexX = 1;
+                indexY++;
+            }
+        }
+
+        System.out.println("Map data successfully written.");
+
+        return data.toString();
+
+    }
 
     /** ArrayLists **/
 
@@ -25,11 +69,11 @@ public class mapGenerator {
     // sets up map tile object, which is assigned to every tile on the map
     private class mapTile {
         //variables assigned to each tile of the map
-        boolean isVisible;
-        boolean hasStar;
-        starClass star;
-        int xPos;
-        int yPos;
+        private boolean isVisible;
+        private boolean hasStar;
+        private starClass star;
+        private int xPos;
+        private int yPos;
 
         //generates a random tile
         private mapTile(boolean generateStar, int xPos, int yPos) {
@@ -40,6 +84,7 @@ public class mapGenerator {
             if (generateStar) { //if the tile is set to generate a star, generate a random star
                 newStar();
                 this.hasStar = true;
+                generatedStars.add(this.star);
             } else {
                 this.hasStar = false;
             }
@@ -52,9 +97,27 @@ public class mapGenerator {
             this.hasStar = true;
             this.isVisible = false;
             this.star = star;
+            generatedStars.add(this.star);
 
         }
 
+        public boolean getVisibility() { return this.isVisible; }
+        public boolean getStar() { return this.hasStar; }
+
+        private String writeVisiblity() { //gets the visibility of the tile as a string for easier writing to file
+            if (this.getVisibility()) {
+                return "t";
+            } else {
+                return "f";
+            }
+        }
+        private String writeStar() {
+            if (this.getStar()) {
+                return "t";
+            } else {
+                return "f";
+            }
+        }
 
         //Base methods
 
@@ -78,7 +141,7 @@ public class mapGenerator {
     int mapArea;
 
     public mapGenerator(int xScale, int yScale, int starDensity) {
-        System.out.println("Generating new map...");
+        System.out.println("Creating new map...");
 
         this.xScale = xScale; //x scale of the map
         this.yScale = yScale; //y scale of the map
@@ -86,6 +149,10 @@ public class mapGenerator {
         this.mapArea = this.xScale * this.yScale; //gets the total number of tiles generated
 
     }
+
+    public int getxScale() { return this.xScale; }
+    public int getyScale() { return this.yScale; }
+    public int getStarDensity() { return this.starDensity; }
 
     /** Simple Methods **/
     //Simple methods used many times over.

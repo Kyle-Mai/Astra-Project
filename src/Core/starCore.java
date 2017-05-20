@@ -39,17 +39,17 @@ public class starCore {
 
     //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
     private static void createStarTypes() {
-        listOfStars.add(new starType("Red Giant", 1000, 186, "", 2800, 4600, true, 0, 0, 4));
-        listOfStars.add(new starType("Blue Giant", 1001, 109, "", 20000, 50000, true, 0, 0, 4));
-        listOfStars.add(new starType("Yellow Dwarf", 1002, 355, "", 5300, 6000, true, 0, 0, 5));
-        listOfStars.add(new starType("Red Dwarf", 1003, 290, "", 2500, 4000, true, 0, 0, 0));
+        listOfStars.add(new starType("Red Giant", 1000, 196, "", 2800, 4600, true, 0, 0, 5));
+        listOfStars.add(new starType("Blue Giant", 1001, 109, "", 20000, 50000, true, 0, 0, 5));
+        listOfStars.add(new starType("Yellow Dwarf", 1002, 358, "", 5300, 6000, true, 0, 0, 6));
+        listOfStars.add(new starType("Red Dwarf", 1003, 290, "", 2500, 4000, true, 0, 0, 4));
         listOfStars.add(new starType("White Dwarf", 1004, 135, "", 100000, 180000, true, 15, 5, 2));
         listOfStars.add(new starType("Brown Dwarf", 1005, 87, "", 700, 1300, false, 0, 0, 0));
         listOfStars.add(new starType("Wolf Rayet Star", 1006, 32, "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 30000, 200000, false, 0, 0, 3));
         listOfStars.add(new starType("Neutron Star", 1007, 62, "", 500000, 720000, false, 12, 4, 3));
         listOfStars.add(new starType("Pulsar", 1008, 45, "A highly magnetized, rotating neutron star with a powerful focused beam of electromagnetic radiation ejected from both poles of the star. The fast, regular rotation of the star allows for incredible accuracy in keeping time - like a stellar clock.", 520000, 750000, false, 12, 4, 3));
         listOfStars.add(new starType("Black Hole", 1009, 31, "", 0, 0, false, 0, 0, 0));
-        listOfStars.add(new starType("Protostar", 1010, 98, "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.",2000, 3000, true, 0, 0, 2));
+        listOfStars.add(new starType("Protostar", 1010, 98, "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.",2000, 3000, true, 0, 0, 3));
         listOfStars.add(new starType("Supergiant", 1011, 22, "", 3500, 4500, true, 0, 0, 6));
         listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0));
         listOfStars.add(new starType("Magnetar", 1013, 26, "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 500000, 720000, false, 12, 4, 3));

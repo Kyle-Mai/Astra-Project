@@ -1,14 +1,50 @@
 package Core;
 
+import java.io.Serializable;
+
 /**
     KM
     April 19 2017
     Handles the construction and manipulation of the planet class.
+
+    SOURCES:
+    Mkyong - See map generator class for Serializable sourcing.
+    Self - Everything else.
  */
 
 //TODO: Rebuild in the same format as the starClass/starCore.
 
-public class planetClass extends planetCore {
+public class planetClass extends planetCore implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toString() { //used when writing to a save file
+
+        StringBuffer data = new StringBuffer();
+
+        data.append("/");
+        data.append(this.parentStar.getMapLocationX());
+        data.append("-");
+        data.append(this.parentStar.getMapLocationY());
+        data.append("-");
+        data.append(this.planetNumber);
+        data.append("-");
+        data.append(this.planetType);
+        data.append("-");
+        data.append(this.planetRadius);
+        data.append("-");
+        data.append(this.distanceFromStar);
+        data.append("-");
+        data.append(this.isInHabitableZone);
+        data.append("-");
+        data.append(this.isTidallyLocked);
+        data.append("-");
+        data.append(this.numOfMoons);
+
+        return data.toString();
+
+    }
 
     /** planet construction methods **/
 
