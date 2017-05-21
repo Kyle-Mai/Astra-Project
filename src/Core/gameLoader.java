@@ -47,6 +47,7 @@ public class gameLoader {
 
         System.out.println("Getting XML data...");
         xmlLoader.getExpansionInfo(); //get the information for the different files
+        xmlLoader.getModInfo();
         //creates a new UI with which to run off of
         System.out.println("Loading UI core...");
         javax.swing.SwingUtilities.invokeLater(new Runnable() { //open up a new thread for the UI

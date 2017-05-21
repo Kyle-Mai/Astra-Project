@@ -51,6 +51,16 @@ public class guiCoreV4 {
     private ArrayList<JButton> btnExpanEnable = new ArrayList<>();
     private ArrayList<JLabel> lblExpanID = new ArrayList<>();
     private ArrayList<addExpAL> actionEnabler = new ArrayList<>();
+    private JPanel pnlExpansionHeader;
+    private JLabel lblExpHeaderText;
+
+    private ArrayList<JPanel> pnlMods = new ArrayList<>();
+    private ArrayList<JLabel> lblMods = new ArrayList<>();
+    private ArrayList<JLabel> lblModAuthor = new ArrayList<>();
+    private ArrayList<JButton> btnModEnable = new ArrayList<>();
+    private ArrayList<addModAL> modEnabler = new ArrayList<>();
+    private JPanel pnlModHeader;
+    private JLabel lblModHeaderText;
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
     private double screenWidth = screenSize.getWidth();
@@ -60,15 +70,16 @@ public class guiCoreV4 {
     private newPanel screen;
     private JPanel contentController;
     private JScrollPane contentList;
-    private JPanel pnlExpansionHeader;
-    private JLabel lblExpHeaderText;
     private JProgressBar loadingBar;
     private JLabel bgPanel;
     private JLabel imgLogo;
     private int screenScaleChoice;
     private BufferedImage gameLogo;
     private audioCore music;
+    private audioCore ambiance;
     private animCore testAnimation;
+
+    private int launcherContentLoaded = 0;
 
     playerData playerInfo = new playerData();
     mapGenerator newMap;
@@ -82,7 +93,7 @@ public class guiCoreV4 {
 
     /** Stores UI element design properties **/
 
-    final String gameVersion = "PTB-A Build 64b";
+    final String gameVersion = "PTB-A Build 66a";
 
     private final Color clrBlk = new Color(25, 35, 35, 255);
     private final Color clrDGrey = new Color(45, 55, 75, 255);
@@ -297,7 +308,7 @@ public class guiCoreV4 {
         //load settings button
         JButton btnSettings = new JButton();
 
-        layers.add(btnSettings, new Integer(3), 0);
+        layers.add(btnSettings, new Integer(2), 0);
         btnSettings.setBounds(getUIScaleX() - 125, 10, 30, 30);
         btnSettings.setBackground(clrButtonBackground);
         btnSettings.setFocusPainted(false);
@@ -374,6 +385,7 @@ public class guiCoreV4 {
 
         //load expansion header text
         lblExpHeaderText = new JLabel();
+        pnlExpansionHeader.add(lblExpHeaderText);
         lblExpHeaderText.setBounds(5, 5, pnlExpansionHeader.getWidth() - 10, pnlExpansionHeader.getHeight() - 10);
         lblExpHeaderText.setOpaque(false);
         lblExpHeaderText.setFont(txtSubheader);
@@ -382,6 +394,26 @@ public class guiCoreV4 {
         lblExpHeaderText.setHorizontalAlignment(SwingConstants.CENTER);
         lblExpHeaderText.setVerticalAlignment(SwingConstants.CENTER);
         lblExpHeaderText.setVisible(true);
+
+        //load the mod header
+        pnlModHeader = new JPanel();
+        pnlModHeader.setLayout(null);
+        pnlModHeader.setBounds(5, pnlExpansionHeader.getY() + pnlExpansionHeader.getHeight() + 5, contentController.getWidth() - 20, 25);
+        pnlModHeader.setOpaque(true);
+        pnlModHeader.setBackground(clrDark);
+        pnlModHeader.setVisible(true);
+
+        //adds the mod header text data
+        lblModHeaderText = new JLabel();
+        pnlModHeader.add(lblModHeaderText);
+        lblModHeaderText.setBounds(5, 5, pnlModHeader.getWidth() - 10, pnlModHeader.getHeight() - 10);
+        lblModHeaderText.setOpaque(false);
+        lblModHeaderText.setFont(txtSubheader);
+        lblModHeaderText.setForeground(clrText);
+        lblModHeaderText.setText("Mods");
+        lblModHeaderText.setHorizontalAlignment(SwingConstants.CENTER);
+        lblModHeaderText.setVerticalAlignment(SwingConstants.CENTER);
+        lblModHeaderText.setVisible(true);
 
         //load launch button
         JButton btnLaunch = new JButton();
@@ -411,7 +443,7 @@ public class guiCoreV4 {
             }
         });
 
-        music = new audioCore("new_dawn.mp3", audioRepository.musicVolume);
+        music = new audioCore("new_dawn.mp3", audioRepository.musicVolume, true);
         music.start();
 
         loadLauncherExpansions();
@@ -426,6 +458,7 @@ public class guiCoreV4 {
 
         String expansionID;
         int expansionEnabled;
+        launcherContentLoaded = 0;
 
         //empties and refactors content
         if (pnlExpansions.size() > 0) {
@@ -435,11 +468,11 @@ public class guiCoreV4 {
             lblExpanDesc.clear();
             btnExpanEnable.clear();
             lblExpanID.clear();
+            actionEnabler.clear();
         }
 
         //add the expansion pack header to the content window
         contentController.add(pnlExpansionHeader);
-        pnlExpansionHeader.add(lblExpHeaderText);
 
         for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
 
@@ -455,14 +488,7 @@ public class guiCoreV4 {
 
             pnlExpansions.get(i).setLayout(null);
 
-            if (5 + 5 + (65 * i) + (pnlExpansionHeader.getHeight() + 5) > contentController.getHeight()) { //increases the window size if needed
-                System.out.println("Resizing content window.");
-                contentController.setBounds(contentController.getX(), contentController.getY(), contentController.getWidth(), contentController.getHeight() + 75);
-            } else {
-                contentController.setBounds(getUIScaleX() - 325, 110, 300, 300);
-            }
-
-            pnlExpansions.get(i).setBounds(5, 5 + (65 * i) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
+            pnlExpansions.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
             pnlExpansions.get(i).setBackground(clrForeground);
             pnlExpansions.get(i).add(lblExpansions.get(i));
             pnlExpansions.get(i).add(lblExpanDesc.get(i));
@@ -522,7 +548,6 @@ public class guiCoreV4 {
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
             lblExpanID.get(i).setText(xmlLoader.listOfExpansions.get(i).getID());
 
-
             //enable everything lel
             lblExpanID.get(i).setVisible(true);
             btnExpanEnable.get(i).setVisible(true);
@@ -530,16 +555,109 @@ public class guiCoreV4 {
             lblExpansions.get(i).setVisible(true);
             pnlExpansions.get(i).setVisible(true);
 
+            launcherContentLoaded++;
+
         }
 
         System.out.println("Loaded expansion data into GUI.");
 
-        window.revalidate();
-        window.repaint();
+        loadLauncherMods();
+
     }
 
+    //loads the mods to the launcher
+    public void loadLauncherMods() { //TODO: Fix weird bug changing x-scale of entries and fix the lack of scaling on the contentViewer UI.
+
+        String modID;
+        int modEnabled;
+
+        if (pnlMods.size() > 0) {
+            pnlMods.clear();
+            lblMods.clear();
+            lblModAuthor.clear();
+            btnModEnable.clear();
+            modEnabler.clear();
+        }
+
+        contentController.add(pnlModHeader);
+        pnlModHeader.setBounds(5, pnlExpansions.get(pnlExpansions.size() - 1).getY() + pnlExpansions.get(pnlExpansions.size() - 1).getHeight() + 5, pnlModHeader.getWidth(), pnlModHeader.getHeight());
+
+        for (int i = 0; i < xmlLoader.listOfMods.size(); i++) {
+
+            pnlMods.add(new JPanel());
+            lblMods.add(new JLabel());
+            btnModEnable.add(new JButton());
+            lblModAuthor.add(new JLabel());
+
+            contentController.add(pnlMods.get(i));
+
+            modID = xmlLoader.listOfMods.get(i).getModName();
+
+            pnlMods.get(i).setLayout(null);
+
+            pnlMods.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlModHeader.getHeight() + 5) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
+            pnlMods.get(i).setBackground(clrForeground);
+            pnlMods.get(i).add(lblMods.get(i));
+            pnlMods.get(i).add(btnModEnable.get(i));
+
+            lblMods.get(i).setBounds(5, 5, 195, 25);
+            lblMods.get(i).setForeground(clrText);
+            lblMods.get(i).setOpaque(false);
+            lblMods.get(i).setFont(txtSubheader);
+            lblMods.get(i).setText(xmlLoader.listOfMods.get(i).getModName());
+            lblMods.get(i).setVerticalAlignment(SwingConstants.TOP);
+
+            btnModEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
+            btnModEnable.get(i).setForeground(clrText);
+            btnModEnable.get(i).setOpaque(true);
+            btnModEnable.get(i).setFocusable(false);
+            btnModEnable.get(i).setFont(txtSubheader);
+
+            modEnabler.add(new addModAL());
+
+            btnModEnable.get(i).addActionListener(modEnabler.get(i));
+            modEnabler.get(i).setModID(modID);
+
+            //adjust the enable/disable button based on the current status of the content
+            if (xmlLoader.listOfMods.get(i).getModEnabled()) {
+                //content is enabled, set the button accordingly
+                System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is enabled.");
+                btnModEnable.get(i).setText("-");
+                btnModEnable.get(i).setToolTipText("Disable");
+                modEnabled = 1;
+                btnModEnable.get(i).setBackground(clrEnable);
+                btnModEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+            } else {
+                //content is disabled, set the button accordingly
+                System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is disabled.");
+                btnModEnable.get(i).setText("+");
+                btnModEnable.get(i).setToolTipText("Enable");
+                modEnabled = 0;
+                btnModEnable.get(i).setBackground(clrDisable);
+                btnModEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+            }
+
+            modEnabler.get(i).setEnable(modEnabled);
+
+            //enable all
+            pnlMods.get(i).setVisible(true);
+            lblMods.get(i).setVisible(true);
+            btnModEnable.get(i).setVisible(true);
+
+            launcherContentLoaded++;
+
+        }
+
+        System.out.println("Loaded mod data into GUI.");
+
+        window.revalidate();
+        window.repaint();
+
+    }
+
+
     //load the loading screen and game content
-    public void loadLoadingScreen(int toLoad) {
+    private void loadLoadingScreen(int toLoad) {
 
         screenScaleChoice = 8;
 
@@ -767,6 +885,8 @@ public class guiCoreV4 {
         music.interrupt();
         music = new audioCore("to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
         music.start();
+        ambiance = new audioCore("space_ambient01.wav", audioRepository.ambianceVolume, true);
+        ambiance.start();
 
 
     }
@@ -801,12 +921,12 @@ public class guiCoreV4 {
                 enable = 0;
                 System.out.println("Disabling content for " + expID);
             } else {
-                audioRepository.buttonEnable();
+                audioRepository.buttonClick();
                 enable = 1;
                 System.out.println("Enabling content for " + expID);
             }
 
-            xmlLoader.changeExpansionInfo(expID, enable);
+            xmlLoader.changeExpansionInfo(this.expID, this.enable);
 
             System.out.println("Refreshing UI...");
 
@@ -820,6 +940,46 @@ public class guiCoreV4 {
 
         public void setExpID(String ID) {
             this.expID = ID;
+        }
+
+    }
+
+    //action listened for enabling/disabling mods
+    private class addModAL implements ActionListener {
+
+        public addModAL() {
+        }
+
+        int enable;
+        String modID;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (enable == 1) {
+                audioRepository.buttonDisable();
+                enable = 0;
+                System.out.println("Disabling content for " + modID);
+            } else {
+                audioRepository.buttonClick();
+                enable = 1;
+                System.out.println("Enabling content for " + modID);
+            }
+
+            xmlLoader.changeModInfo(this.modID, this.enable);
+
+            System.out.println("Refreshing UI...");
+
+            loadLauncherExpansions();
+
+        }
+
+        public void setEnable(int enabled) {
+            this.enable = enabled;
+        }
+
+        public void setModID(String ID) {
+            this.modID = ID;
         }
 
     }

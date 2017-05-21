@@ -172,3 +172,11 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Added an animation core.
 
 - Removed some unused variables from the XML loader.
+
+**MAY 20 2017** (ver.PTB-A) (U2)
+
+- Added support for looping audio to the audioCore.
+
+- Added support for the loading and changing of mod content from the launcher. Still working out some bugs.
+
+- Added a new test mod to play around with the launcher UI limitations.

@@ -57,13 +57,6 @@ public class playerData {
 
     }
 
-    private String currentDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date current = new Date();
-
-        return dateFormat.format(current);
-    }
-
     public void existingPlayer() {
 
     }
@@ -73,6 +66,13 @@ public class playerData {
         SecureRandom random = new SecureRandom();
 
         return new BigInteger(130, random).toString(32);
+    }
+
+    private String currentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date current = new Date();
+
+        return dateFormat.format(current);
     }
 
     public void addMapString(mapGenerator map) { //saves the map data to the user data

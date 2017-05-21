@@ -48,6 +48,7 @@ public class xmlLoader {
 
     //stores content
     public static ArrayList<expansionContent> listOfExpansions = new ArrayList<>();
+    public static ArrayList<modContent> listOfMods = new ArrayList<>();
 
     //loads the XML content
     public static void loadContent() {
@@ -63,6 +64,13 @@ public class xmlLoader {
     //gets the information for the expansion packs
     public static void getExpansionInfo() {
         writeXML(expansionFolder, "", 3);
+    }
+
+    public static void getModInfo() { writeXML(modFolder, "", 3); }
+
+    public static void changeModInfo(String name, int action) {
+        System.out.println("Attempting to change XML data...");
+        writeXML(modFolder, name, action);
     }
 
     //rewrites the data in the expansion packs
@@ -129,7 +137,8 @@ public class xmlLoader {
                                 System.out.println("Expansion declaration file found.");
                                 changeExpansions(elements, name, action, doc, fileEntry);
                             } else if (baseNode.equals("loadMod")) { //loading mods
-                                //TODO: Add handling for changing mod content.
+                                System.out.println("Mod declaration file found.");
+                                changeMods(elements, name, action, doc, fileEntry);
                             }  else { //the stuff found was not valid XML
                                 errorPrint(7);
                             }
@@ -262,6 +271,86 @@ public class xmlLoader {
 
     }
 
+    private static void changeMods(NodeList nodeList, String mod, int action, Document source, File path) {
+
+        int enabledStatus = 0;
+
+        String name = "";
+        String desc = "";
+        String author = "";
+        String directory = "";
+        String modVer = "";
+
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node parentNode = nodeList.item(i);
+                if (parentNode.getNodeName().equals("mod")) {
+                    NodeList nodes = parentNode.getChildNodes();
+                    name = parentNode.getAttributes().getNamedItem("name").getNodeValue();
+                    for (int j = 0; j < nodes.getLength(); j++) {
+                        if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE || nodes.item(j).getNodeType() == Node.TEXT_NODE ) {
+                            if (nodes.item(j).getNodeName().equals("modActive")) {
+                                if (action == 1 || action == 0) {
+                                    if (mod.equals(name)) {
+                                        nodes.item(j).setTextContent(Integer.toString(action));
+                                        writeToFile(source, path);
+                                        System.out.print("Mod " + name + " enabled status changed to " + nodes.item(j).getTextContent());
+
+                                        for (int k = 0; k < listOfMods.size(); k++) {
+                                            if (listOfMods.get(k).getModName().equals(name)) {
+                                                if (nodes.item(j).getTextContent().equals("1")) {
+                                                    System.out.print(" - Enabled.\n");
+                                                    listOfMods.get(k).setModEnabled(true);
+                                                } else {
+                                                    System.out.print(" - Disabled.\n");
+                                                    listOfMods.get(k).setModEnabled(false);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (nodes.item(j).getTextContent().equals("1") || nodes.item(j).getTextContent().equals("0")) {
+                                    enabledStatus = Integer.parseInt(nodes.item(j).getTextContent());
+                                } else {
+                                    nodes.item(j).setTextContent("0");
+                                    System.out.println("Enabled status invalid. Defaulting to zero.");
+                                }
+                            } else if (nodes.item(j).getNodeName().equals("author")) {
+                                author = nodes.item(j).getTextContent();
+                            } else if (nodes.item(j).getNodeName().equals("directoryName")) {
+                                directory = nodes.item(j).getTextContent();
+                            } else if (nodes.item(j).getNodeName().equals("description")) {
+                                desc = nodes.item(j).getTextContent();
+                            } else if (nodes.item(j).getNodeName().equals("modVersion")) {
+                                modVer = nodes.item(j).getTextContent();
+                            }
+                        }
+                    }
+
+                    if (action == 3) {
+                        System.out.println("Attempting to parse...");
+                        boolean parseContent = true;
+                        for (int m = 0; m < listOfMods.size(); m++) {
+                            if (name.equals(listOfMods.get(m).getModName())) {
+                                parseContent = false;
+                            }
+                        }
+                        if (parseContent) {
+                            listOfMods.add(new modContent(name, author, desc, modVer, directory, enabledStatus));
+                            System.out.println("New mod '" + name + "' successfully loaded into active memory.");
+                        } else {
+                            System.out.println("Mod not loaded. Duplicate ID error.");
+                        }
+                    }
+                }
+            }
+        } else {
+            errorPrint(12);
+        }
+
+
+    }
+
     //collects the expansion pack list information, and also changes the enabled status
     private static void changeExpansions(NodeList nodeList, String expansion, int action, Document source, File path) {
 
@@ -281,7 +370,7 @@ public class xmlLoader {
                     expansionID = parentNode.getAttributes().getNamedItem("id").getNodeValue();
                  //   if (expansionID == expansion) { //this is the mod we're editing
                         for (int j = 0; j < nodes.getLength(); j++) {
-                            if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE ||nodes.item(j).getNodeType() == Node.TEXT_NODE) {
+                            if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE || nodes.item(j).getNodeType() == Node.TEXT_NODE) {
                                 if (nodes.item(j).getNodeName().equals("enabled")) { //gets the status of whether or not the mod is enabled
                                     if (action == 1 || action == 0) { //enabling/disabling the expansion
                                         if (expansion.equals(expansionID)) {
@@ -727,6 +816,45 @@ public class xmlLoader {
                 System.out.println("Error when loading star data - planet spawn weight not found. Defaulting to 0.");
                 break;
         }
+    }
+
+    public static class modContent {
+        String modName;
+        String modAuthor;
+        String modDesc;
+        String modVersion;
+        String modDirectory;
+        boolean modEnabled;
+
+        private modContent(String name, String author, String desc, String version, String directory, int enabled) {
+            this.modName = name;
+            this.modAuthor = author;
+            this.modDesc = desc;
+            this.modVersion = version;
+            this.modDirectory = directory;
+
+            if (enabled == 1) {
+                this.modEnabled = true;
+            } else {
+                this.modEnabled = false;
+            }
+
+
+        }
+
+        //accessors
+
+        public String getModName() { return this.modName; }
+        public String getModAuthor() { return this.modAuthor; }
+        public String getModDesc() { return this.modDesc; }
+        public String getModDirectory() { return this.modDirectory; }
+        public boolean getModEnabled() { return this.modEnabled; }
+
+        public void setModEnabled(boolean isEnabled) {
+            this.modEnabled = isEnabled;
+        }
+
+
     }
 
     public static class expansionContent { //stores the mod information

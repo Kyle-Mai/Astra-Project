@@ -13,7 +13,7 @@ public class audioRepository {
 
     public static int uiVolume = 70;
     public static int musicVolume = 70;
-    public static int ambianceVolume = 70;
+    public static int ambianceVolume = 30;
     public static int voiceVolume = 70;
     public static audioCore music;
 
@@ -78,7 +78,7 @@ public class audioRepository {
         buttonPress.start();
     }
 
-    public static void buttonEnable() {
+    public static void buttonSelect() {
         audioCore buttonPress = new audioCore("menu_select.wav", uiVolume, 0, 500);
         buttonPress.start();
     }

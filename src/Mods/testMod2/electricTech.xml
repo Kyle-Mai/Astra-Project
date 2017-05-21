@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<techTree>
+
+    <newTech techline="3"> <!-- Technology -->
+        <name>Dyson Sphere</name>
+        <description>owo what's this</description>
+        <id>6</id> <!-- ID of this tech -->
+        <level>9</level> <!-- Tech level, lower = earlier it'll pop up in the research -->
+        <cost>5500</cost> <!-- Research cost -->
+        <rarity>8</rarity> <!-- How rare this tech is (i.e. how often it'll appear on the tech roster) Higher = less rare. -->
+
+    </newTech>
+
+</techTree>
