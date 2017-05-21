@@ -190,3 +190,11 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Adjusted volume levels slightly.
 
 - Added in code for a couple of other menu sounds.
+
+**MAY 21 2017** (ver.PTB-A) (U2)
+
+- Added in some more UI to the main menu for choosing settings when starting a new game. Incomplete.
+
+- Added gameSettings class for storing game settings.
+
+- Added extendedLabel class to add more constructors/functionality to JLabels.

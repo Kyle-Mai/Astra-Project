@@ -5,6 +5,7 @@ import Core.Player.playerData;
 import Core.SFX.audioCore;
 import Core.SFX.audioRepository;
 import Core.gameLoader;
+import Core.gameSettings;
 import Core.mapGenerator;
 import Core.xmlLoader;
 
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 /**
@@ -79,6 +81,7 @@ public class guiCoreV4 {
     private audioCore ambiance;
     private animCore testAnimation;
     private GridLayout contentLayout = new GridLayout(0, 1);
+    private JPanel settingsMenu;
 
     private int launcherContentLoaded = 0;
 
@@ -848,7 +851,7 @@ public class guiCoreV4 {
             gameLogo = ImageIO.read(this.getClass().getResource("Resources/icon_large.png"));
             imgLogo = new JLabel(new ImageIcon(gameLogo));
             layers.add(imgLogo, new Integer(1), 0);
-            imgLogo.setBounds(20, 20, 120, 120);
+            imgLogo.setBounds(window.getWidth() - 20, 20, 120, 120);
             imgLogo.setVisible(true);
 
             //TODO: Add a way to rescale images.
@@ -863,7 +866,7 @@ public class guiCoreV4 {
         JPanel pnlMenuBarH = new JPanel();
 
         layers.add(pnlMenuBarH, new Integer(2), 0);
-        pnlMenuBarH.setBounds(0, getUIScaleY() - 250, getUIScaleX(), 250);
+        pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
         pnlMenuBarH.setLayout(null);
         pnlMenuBarH.setBackground(clrForeground);
         pnlMenuBarH.setFocusable(false);
@@ -884,17 +887,112 @@ public class guiCoreV4 {
         btnNewGame.setText("NEW GAME");
 
         btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
+            boolean isActive = false;
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Loading new game");
-                testAnimation.setPlaying(false);
-                clearUI();
+
+                if (!isActive) {
+                    //testAnimation.setPlaying(false);
+                    //clearUI();
+                    //loadLoadingScreen(2);
+
+                    loadNewsettingsMenu();
+                    isActive = true;
+                } else {
+                    isActive = false;
+                    settingsMenu.removeAll();
+                    window.revalidate();
+                    window.repaint();
+                }
+
                 audioRepository.buttonClick();
-                loadLoadingScreen(2);
 
             }
         });
 
+        settingsMenu = new JPanel();
+        settingsMenu.setLayout(null);
+        layers.add(settingsMenu, new Integer(4), 0);
+        settingsMenu.setVisible(true);
+        settingsMenu.setOpaque(false);
+        settingsMenu.setBorder(null);
+        settingsMenu.setBounds(0, 0, 400, window.getHeight() - pnlMenuBarH.getHeight());
+
+        window.revalidate();
+        window.repaint();
+
+    }
+
+    //loads the menu to set up a new game
+    private void loadNewsettingsMenu() {
+
+        JPanel pnlSettings = new JPanel();
+        pnlSettings.setLayout(null);
+        pnlSettings.setBounds(settingsMenu.getX(), settingsMenu.getY(), settingsMenu.getWidth(), settingsMenu.getHeight());
+        pnlSettings.setBackground(clrBackground);
+        pnlSettings.setVisible(true);
+        pnlSettings.setOpaque(true);
+        settingsMenu.add(pnlSettings);
+
+        //TODO: Add listeners to the sliders to change settings with values.
+
+        //sets up settings option for resource abundance
+        JLabel lblResources = new JLabel();
+        JSlider sldResources = new JSlider(JSlider.HORIZONTAL, gameSettings.resourceAbundanceMin, gameSettings.resourceAbundanceHigh, gameSettings.resourceAbundanceAvg);
+        pnlSettings.add(lblResources);
+        pnlSettings.add(sldResources);
+        lblResources.setBounds(5, 15, settingsMenu.getWidth() - 5, 25);
+        lblResources.setForeground(clrText);
+        lblResources.setFont(txtSubheader);
+        lblResources.setHorizontalAlignment(SwingConstants.CENTER);
+        lblResources.setVerticalAlignment(SwingConstants.CENTER);
+        lblResources.setText("Resource Abundance");
+        lblResources.setVisible(true);
+        sldResources.setMajorTickSpacing(25);
+        sldResources.setMinorTickSpacing(5);
+        sldResources.setPaintTicks(true);
+        Hashtable hshResources = new Hashtable();
+        hshResources.put(new Integer(gameSettings.resourceAbundanceMin), new extendedLabel("Sparse", txtTiny, clrText));
+        hshResources.put(new Integer(gameSettings.resourceAbundanceHigh), new extendedLabel("Abundant", txtTiny, clrText));
+        hshResources.put(new Integer(gameSettings.resourceAbundanceAvg), new extendedLabel("Average", txtTiny, clrText));
+        sldResources.setLabelTable(hshResources);
+        sldResources.setPaintLabels(true);
+        sldResources.setFont(txtTiny);
+        sldResources.setForeground(clrText);
+        sldResources.setBounds(20, 45, settingsMenu.getWidth() - 20, 50);
+        sldResources.setOpaque(false);
+        sldResources.setVisible(true);
+
+        //sets up settings option for star abundance
+        JLabel lblStarFreq = new JLabel();
+        JSlider sldStarFreq = new JSlider(JSlider.HORIZONTAL, gameSettings.starFreqMin, gameSettings.starFreqHigh, gameSettings.starFreqAvg);
+        pnlSettings.add(lblStarFreq);
+        pnlSettings.add(sldStarFreq);
+        lblStarFreq.setBounds(5, sldResources.getY() + sldResources.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
+        lblStarFreq.setForeground(clrText);
+        lblStarFreq.setFont(txtSubheader);
+        lblStarFreq.setHorizontalAlignment(SwingConstants.CENTER);
+        lblStarFreq.setVerticalAlignment(SwingConstants.CENTER);
+        lblStarFreq.setText("Star Frequency");
+        lblStarFreq.setVisible(true);
+        sldStarFreq.setMajorTickSpacing(5);
+        sldStarFreq.setMinorTickSpacing(1);
+        sldStarFreq.setPaintTicks(true);
+        Hashtable hshStarFreq = new Hashtable();
+        hshStarFreq.put(new Integer(gameSettings.starFreqMin), new extendedLabel("Few", txtTiny, clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new extendedLabel("Many", txtTiny, clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqAvg), new extendedLabel("Average", txtTiny, clrText));
+        sldStarFreq.setLabelTable(hshStarFreq);
+        sldStarFreq.setPaintLabels(true);
+        sldStarFreq.setFont(txtTiny);
+        sldStarFreq.setForeground(clrText);
+        sldStarFreq.setBounds(20, lblStarFreq.getY() + lblStarFreq.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
+        sldStarFreq.setOpaque(false);
+        sldStarFreq.setVisible(true);
+
+        window.revalidate();
+        window.repaint();
 
     }
 
