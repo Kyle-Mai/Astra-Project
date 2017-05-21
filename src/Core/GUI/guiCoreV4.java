@@ -78,6 +78,7 @@ public class guiCoreV4 {
     private audioCore music;
     private audioCore ambiance;
     private animCore testAnimation;
+    private GridLayout contentLayout = new GridLayout(0, 1);
 
     private int launcherContentLoaded = 0;
 
@@ -93,7 +94,7 @@ public class guiCoreV4 {
 
     /** Stores UI element design properties **/
 
-    final String gameVersion = "PTB-A Build 66a";
+    final String gameVersion = "PTB-A Build 66b";
 
     private final Color clrBlk = new Color(25, 35, 35, 255);
     private final Color clrDGrey = new Color(45, 55, 75, 255);
@@ -362,13 +363,19 @@ public class guiCoreV4 {
         contentScroller.setVisible(true);
 
         contentController.setBounds(getUIScaleX() - 325, 45, 300, 320);
+        contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight()));
         contentController.setOpaque(true);
+        contentLayout.setVgap(5);
+        contentLayout.setHgap(5);
+        //contentController.setLayout(contentLayout); //Testing layout...
         contentController.setLayout(null);
-        contentController.setBackground(clrBackground);
+        contentController.setBackground(clrDGrey);
         contentController.setVisible(true);
 
         contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 25), 45, contentController.getWidth(), contentController.getHeight());
+        contentList.setPreferredSize(new Dimension(contentList.getWidth(), contentList.getHeight()));
         contentList.setViewportView(contentController);
+        contentList.getViewport().setPreferredSize(new Dimension(contentList.getWidth(), contentList.getHeight()));
         contentList.setVerticalScrollBar(contentScroller); //custom scroll bar design
         contentList.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0)); //dirty way of changing scroll bar width
         contentList.setOpaque(false);
@@ -471,8 +478,11 @@ public class guiCoreV4 {
             actionEnabler.clear();
         }
 
+        contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentList.getHeight()));
+
         //add the expansion pack header to the content window
         contentController.add(pnlExpansionHeader);
+        //contentLayout.layoutContainer(pnlExpansionHeader);
 
         for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
 
@@ -554,6 +564,11 @@ public class guiCoreV4 {
             lblExpanDesc.get(i).setVisible(true);
             lblExpansions.get(i).setVisible(true);
             pnlExpansions.get(i).setVisible(true);
+
+            if (contentController.getHeight() < 10 + (65 * launcherContentLoaded) + pnlExpansionHeader.getHeight()) {
+                System.out.println("Increasing content window scale.");
+                contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight() + 70));
+            }
 
             launcherContentLoaded++;
 
@@ -643,6 +658,11 @@ public class guiCoreV4 {
             pnlMods.get(i).setVisible(true);
             lblMods.get(i).setVisible(true);
             btnModEnable.get(i).setVisible(true);
+
+            if (contentController.getHeight() < 15 + (65 * launcherContentLoaded) + pnlExpansionHeader.getHeight() + pnlModHeader.getHeight()) {
+                System.out.println("Increasing content window scale.");
+                contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight() + 70));
+            }
 
             launcherContentLoaded++;
 

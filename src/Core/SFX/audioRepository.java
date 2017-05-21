@@ -12,8 +12,8 @@ public class audioRepository {
 
 
     public static int uiVolume = 70;
-    public static int musicVolume = 70;
-    public static int ambianceVolume = 30;
+    public static int musicVolume = 60;
+    public static int ambianceVolume = 20;
     public static int voiceVolume = 70;
     public static audioCore music;
 
@@ -71,8 +71,6 @@ public class audioRepository {
     }
     */
 
-
-
     public static void buttonClick() {
         audioCore buttonPress = new audioCore("menu_press.wav", uiVolume, 0, 500);
         buttonPress.start();
@@ -85,6 +83,16 @@ public class audioRepository {
 
     public static void buttonDisable() {
         audioCore buttonPress = new audioCore("menu_close.wav", uiVolume, 0, 500);
+        buttonPress.start();
+    }
+
+    public static void menuTab() {
+        audioCore buttonPress = new audioCore("menu_tab.wav", uiVolume, 0, 500);
+        buttonPress.start();
+    }
+
+    public static void buttonConfirm() {
+        audioCore buttonPress = new audioCore("menu_confirm.wav", uiVolume, 0, 500);
         buttonPress.start();
     }
 

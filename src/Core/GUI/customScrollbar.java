@@ -19,7 +19,7 @@ public class customScrollbar extends BasicScrollBarUI {
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(new Color(65, 125, 185, 255));
+        g.setColor(new Color(55, 65, 95, 255));
         g2d.fill(trackBounds);
         g2d.draw(trackBounds);
 
@@ -28,7 +28,7 @@ public class customScrollbar extends BasicScrollBarUI {
     @Override
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(new Color(45, 55, 75, 255));
+        g.setColor(new Color(85, 105, 140, 255));
         g2d.fill(thumbBounds);
 
     }

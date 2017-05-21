@@ -180,3 +180,13 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Added support for the loading and changing of mod content from the launcher. Still working out some bugs.
 
 - Added a new test mod to play around with the launcher UI limitations.
+
+**MAY 21 2017** (ver.PTB-A) (U1)
+
+- Patched error in resizing the content window on the launcher. Will now correctly resize itself as new content is added.
+
+- Adjusted UI colours slightly.
+
+- Adjusted volume levels slightly.
+
+- Added in code for a couple of other menu sounds.
