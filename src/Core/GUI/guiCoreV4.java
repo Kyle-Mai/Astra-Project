@@ -78,12 +78,13 @@ public class guiCoreV4 {
     private JLabel bgPanel;
     private JLabel imgLogo;
     private int screenScaleChoice;
-    private BufferedImage gameLogo;
     private audioCore music;
     private audioCore ambiance;
     private animCore testAnimation;
     private GridLayout contentLayout = new GridLayout(0, 1);
     private JPanel settingsMenu;
+    private JButton btnNewGame;
+    private animCore menuSpaceport;
 
     private int launcherContentLoaded = 0;
 
@@ -102,15 +103,15 @@ public class guiCoreV4 {
     final String gameVersion = "PTB-A Build 66b";
 
     private final Color clrBlk = new Color(25, 35, 35, 255);
-    private final Color clrDGrey = new Color(45, 55, 75, 255);
+    private final Color clrDGrey = new Color(45, 75, 65, 255);
     private final Color clrDisableBorder = new Color(75, 5, 25, 255);
     private final Color clrDisable = new Color(135, 15, 55, 255);
-    private final Color clrEnable = new Color(0, 165, 225, 255);
-    private final Color clrDark = new Color(0, 90, 145, 255);
-    private final Color clrButtonBackground = new Color(0, 90, 125, 220);
-    private final Color clrButtonMain = new Color(0, 90, 155, 255);
-    private final Color clrBackground = new Color(0, 130, 195, 105);
-    private final Color clrForeground = new Color(0, 110, 185, 155);
+    private final Color clrEnable = new Color(0, 225, 165, 255);
+    private final Color clrDark = new Color(0, 145, 90, 255);
+    private final Color clrButtonBackground = new Color(0, 125, 90, 220);
+    private final Color clrButtonMain = new Color(0, 155, 90, 255);
+    private final Color clrBackground = new Color(0, 195, 130, 105);
+    private final Color clrForeground = new Color(0, 185, 110, 155);
     private final Color clrText = new Color(255, 255, 255, 255);
 
     private final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
@@ -248,7 +249,7 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
 
         //attempt to load images
-        imgBackground = new JLabel(new ImageIcon(gfxRepository.launcherBackground)); //TODO: Add a way to rescale images.
+        imgBackground = new JLabel(new ImageIcon(gfxRepository.mainBackground)); //TODO: Add a way to rescale images.
 
         imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogo));
         layers.add(imgBackground, new Integer(0), 0);
@@ -699,7 +700,7 @@ public class guiCoreV4 {
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         layers.setBounds(0, 0, getUIScaleX(), getUIScaleY()); //reset the size
 
-        bgPanel = new JLabel(new ImageIcon(gfxRepository.loaderBackground));
+        bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
         layers.add(bgPanel, new Integer(0), 0);
         bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         bgPanel.setOpaque(true);
@@ -791,7 +792,7 @@ public class guiCoreV4 {
                             playerInfo.newPlayer("Test Player");
                             break;
                         case 11:
-                            newMap = new mapGenerator(mapScaleX, mapScaleY, mapStarDensity);
+                            newMap = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
                             break;
                         case 13:
                             newMap.generateTiles();
@@ -804,6 +805,9 @@ public class guiCoreV4 {
                             break;
                         case 24:
                             playerInfo.addPlanetString(newMap);
+                            break;
+                        case 45:
+                            gfxRepository.loadMapGFX();
                             break;
                     }
 
@@ -826,7 +830,9 @@ public class guiCoreV4 {
 
             if (load == 1) { //load main menu
 
+                clearUI();
                 loadMainMenu();
+                loadMainMenuAnimation();
 
             } else if (load == 2) { //load map
 
@@ -838,44 +844,51 @@ public class guiCoreV4 {
         }
     }
 
+    //separates the main menu animation loading
+    private void loadMainMenuAnimation() {
+
+        menuSpaceport = new animCore(new ImageIcon(gfxRepository.menuSpaceport), 2, layers, window);
+        menuSpaceport.wait = 1000;
+        menuSpaceport.start();
+
+    }
+
     private void loadMainMenu() {
 
-        clearUI();
+        bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
+        layers.add(bgPanel, new Integer(0), 0);
+        bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        bgPanel.setOpaque(true);
+        bgPanel.setFocusable(false);
+        bgPanel.setVisible(true);
 
-        try {
-            bgPanel = new JLabel(new ImageIcon(gfxRepository.titleScreenBackground));
-            layers.add(bgPanel, new Integer(0), 0);
-            bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-            bgPanel.setOpaque(true);
-            bgPanel.setFocusable(false);
-            bgPanel.setVisible(true);
+        imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogoLarge));
+        layers.add(imgLogo, new Integer(5), 0);
+        imgLogo.setBounds(window.getWidth() - 140, 20, 120, 120);
 
-            gameLogo = ImageIO.read(this.getClass().getResource("Resources/icon_large.png"));
-            imgLogo = new JLabel(new ImageIcon(gameLogo));
-            layers.add(imgLogo, new Integer(1), 0);
-            imgLogo.setBounds(window.getWidth() - 140, 20, 120, 120);
-            imgLogo.setVisible(true);
+        JLabel menuPlanet = new JLabel(new ImageIcon(gfxRepository.menuPlanet));
+        layers.add(menuPlanet, new Integer(3), 0);
+        menuPlanet.setBounds(window.getWidth() - 1100, 0, 1500, 450);
+        menuPlanet.setOpaque(false);
+        menuPlanet.setFocusable(false);
+        menuPlanet.setVisible(true);
 
-            //TODO: Add a way to rescale images.
+        imgLogo.setVisible(true);
 
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        testAnimation = new animCore(new ImageIcon(gfxRepository.menuShip), 1, layers, window);
-        testAnimation.start();
+        //testAnimation = new animCore(new ImageIcon(gfxRepository.menuShip), 1, layers, window);
+        //testAnimation.start();
 
         JPanel pnlMenuBarH = new JPanel();
 
         layers.add(pnlMenuBarH, new Integer(2), 0);
         pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
         pnlMenuBarH.setLayout(null);
-        pnlMenuBarH.setBackground(clrForeground);
+        pnlMenuBarH.setBackground(clrBackground);
         pnlMenuBarH.setFocusable(false);
         pnlMenuBarH.setBorder(null);
         pnlMenuBarH.setVisible(true);
 
-        JButton btnNewGame = new JButton();
+        btnNewGame = new JButton();
         layers.add(btnNewGame, new Integer(7), 0);
         btnNewGame.setBounds(5, getUIScaleY() - 60, 180, 55);
         btnNewGame.setBackground(clrButtonMain);
@@ -889,37 +902,13 @@ public class guiCoreV4 {
         btnNewGame.setText("NEW GAME");
 
         btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
-            boolean isActive = false;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                if (!isActive) {
-                    //testAnimation.setPlaying(false);
-                    //clearUI();
-                    //loadLoadingScreen(2);
-
-                    loadNewsettingsMenu();
-                    isActive = true;
-                } else {
-                    isActive = false;
-                    settingsMenu.removeAll();
-                    window.revalidate();
-                    window.repaint();
-                }
-
+                btnNewGame.setVisible(false);
+                loadNewSettingsMenu();
                 audioRepository.buttonClick();
-
             }
         });
-
-        settingsMenu = new JPanel();
-        settingsMenu.setLayout(null);
-        layers.add(settingsMenu, new Integer(4), 0);
-        settingsMenu.setVisible(true);
-        settingsMenu.setOpaque(false);
-        settingsMenu.setBorder(null);
-        settingsMenu.setBounds(0, 0, 400, window.getHeight() - pnlMenuBarH.getHeight());
 
         window.revalidate();
         window.repaint();
@@ -927,7 +916,15 @@ public class guiCoreV4 {
     }
 
     //loads the menu to set up a new game
-    private void loadNewsettingsMenu() {
+    private void loadNewSettingsMenu() {
+
+        settingsMenu = new JPanel();
+        settingsMenu.setLayout(null);
+        layers.add(settingsMenu, new Integer(4), 0);
+        settingsMenu.setVisible(true);
+        settingsMenu.setOpaque(false);
+        settingsMenu.setBorder(null);
+        settingsMenu.setBounds(0, 0, 400, window.getHeight() - 250);
 
         JPanel pnlSettings = new JPanel();
         pnlSettings.setLayout(null);
@@ -939,22 +936,47 @@ public class guiCoreV4 {
 
         JButton launchNewGame = new JButton();
         pnlSettings.add(launchNewGame);
-        launchNewGame.setBounds(5, pnlSettings.getHeight() - 55, pnlSettings.getWidth() - 10, 50);
-        launchNewGame.setBackground(clrButtonBackground);
+        launchNewGame.setBounds(5, pnlSettings.getHeight() - 110, pnlSettings.getWidth() - 10, 50);
+        launchNewGame.setBackground(clrButtonMain);
+        launchNewGame.setFocusPainted(false);
         launchNewGame.setForeground(clrText);
         launchNewGame.setFont(txtSubheader);
         launchNewGame.setText("Start");
-        launchNewGame.setVisible(true);
-        launchNewGame.setOpaque(false);
-        launchNewGame.setFocusable(false);
+        launchNewGame.setOpaque(true);
         launchNewGame.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        launchNewGame.setVisible(true);
 
         launchNewGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 audioRepository.buttonConfirm();
+                menuSpaceport.playing = false;
+                menuSpaceport.interrupt();
+                clearUI();
+                loadLoadingScreen(2);
             }
         });
+
+        JButton btnBack = new JButton();
+        pnlSettings.add(btnBack);
+        btnBack.setBounds(5, pnlSettings.getHeight() - 55, pnlSettings.getWidth() - 10, 50);
+        btnBack.setBackground(clrButtonMain);
+        btnBack.setFocusPainted(false);
+        btnBack.setForeground(clrText);
+        btnBack.setFont(txtSubheader);
+        btnBack.setOpaque(true);
+        btnBack.setText("Back");
+        btnBack.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnBack.setVisible(true);
+
+        btnBack.addActionListener((new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                btnNewGame.setVisible(true);
+                audioRepository.buttonDisable();
+                settingsMenu.removeAll();
+            }
+        }));
 
         //sets up settings option for resource abundance
         JLabel lblResources = new JLabel();
@@ -978,6 +1000,7 @@ public class guiCoreV4 {
         sldResources.setLabelTable(hshResources);
         sldResources.setPaintLabels(true);
         sldResources.setFont(txtTiny);
+        sldResources.setFocusable(false);
         sldResources.setForeground(clrText);
         sldResources.setBounds(20, 45, settingsMenu.getWidth() - 20, 50);
         sldResources.setOpaque(false);
@@ -988,8 +1011,9 @@ public class guiCoreV4 {
             public void stateChanged(ChangeEvent changeEvent) {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
-                    int resources = source.getValue();
-                    gameSettings.currentResources = resources;
+                    gameSettings.currentResources = source.getValue();
+                    window.revalidate();
+                    window.repaint();
                 }
             }
         });
@@ -1006,16 +1030,17 @@ public class guiCoreV4 {
         lblStarFreq.setVerticalAlignment(SwingConstants.CENTER);
         lblStarFreq.setText("Star Frequency");
         lblStarFreq.setVisible(true);
-        sldStarFreq.setMajorTickSpacing(5);
-        sldStarFreq.setMinorTickSpacing(1);
+        sldStarFreq.setMajorTickSpacing(10);
+        sldStarFreq.setMinorTickSpacing(2);
         sldStarFreq.setPaintTicks(true);
         Hashtable hshStarFreq = new Hashtable();
-        hshStarFreq.put(new Integer(gameSettings.starFreqMin), new extendedLabel("Few", txtTiny, clrText));
-        hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new extendedLabel("Many", txtTiny, clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqMin), new extendedLabel("Many", txtTiny, clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new extendedLabel("Few", txtTiny, clrText));
         hshStarFreq.put(new Integer(gameSettings.starFreqAvg), new extendedLabel("Average", txtTiny, clrText));
         sldStarFreq.setLabelTable(hshStarFreq);
         sldStarFreq.setPaintLabels(true);
         sldStarFreq.setFont(txtTiny);
+        sldStarFreq.setFocusable(false);
         sldStarFreq.setForeground(clrText);
         sldStarFreq.setBounds(20, lblStarFreq.getY() + lblStarFreq.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
         sldStarFreq.setOpaque(false);
@@ -1025,11 +1050,15 @@ public class guiCoreV4 {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 JSlider source = (JSlider)changeEvent.getSource();
-                int stars = source.getValue();
-                gameSettings.starFrequency = stars;
+                if (source.getValueIsAdjusting()) {
+                    gameSettings.starFrequency = source.getValue();
+                    window.revalidate();
+                    window.repaint();
+                }
             }
         });
 
+        //sets up settings option for map scaling
         JLabel lblMapScale = new JLabel();
         JSlider sldMapScale = new JSlider(JSlider.HORIZONTAL, gameSettings.mapScaleMin, gameSettings.mapScaleHigh, gameSettings.mapScaleAvg);
         pnlSettings.add(lblMapScale);
@@ -1047,9 +1076,10 @@ public class guiCoreV4 {
         Hashtable hshMapScale = new Hashtable();
         hshMapScale.put(new Integer(gameSettings.mapScaleMin), new extendedLabel("Small", txtTiny, clrText));
         hshMapScale.put(new Integer(gameSettings.mapScaleHigh), new extendedLabel("Huge", txtTiny, clrText));
-        hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new extendedLabel("Average", txtTiny, clrText));
+        hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new extendedLabel("Normal", txtTiny, clrText));
         sldMapScale.setLabelTable(hshMapScale);
         sldMapScale.setPaintLabels(true);
+        sldMapScale.setFocusable(false);
         sldMapScale.setFont(txtTiny);
         sldMapScale.setForeground(clrText);
         sldMapScale.setBounds(20, lblMapScale.getY() + lblMapScale.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
@@ -1060,9 +1090,51 @@ public class guiCoreV4 {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 JSlider source = (JSlider)changeEvent.getSource();
-                int scale = source.getValue();
-                gameSettings.currMapScaleX = scale;
-                gameSettings.currMapScaleY = scale;
+                if (source.getValueIsAdjusting()) {
+                    gameSettings.currMapScaleX = source.getValue();
+                    gameSettings.currMapScaleY = source.getValue();
+                    window.revalidate();
+                    window.repaint();
+                }
+            }
+        });
+
+        JLabel lblDiffOverall = new JLabel();
+        JSlider sldDiffOverall = new JSlider(JSlider.HORIZONTAL, gameSettings.overallDifficultyMin, gameSettings.overallDifficultyHigh, gameSettings.overallDifficultyAvg);
+        pnlSettings.add(lblDiffOverall);
+        pnlSettings.add(sldDiffOverall);
+        lblDiffOverall.setBounds(5, sldMapScale.getY() + sldMapScale.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
+        lblDiffOverall.setForeground(clrText);
+        lblDiffOverall.setFont(txtSubheader);
+        lblDiffOverall.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDiffOverall.setVerticalAlignment(SwingConstants.CENTER);
+        lblDiffOverall.setText("Overall Difficulty");
+        lblDiffOverall.setVisible(true);
+        sldDiffOverall.setMajorTickSpacing(25);
+        sldDiffOverall.setMinorTickSpacing(5);
+        sldDiffOverall.setPaintTicks(true);
+        Hashtable hshDiffOverall = new Hashtable();
+        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyMin), new extendedLabel("Easy", txtTiny, clrText));
+        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyHigh), new extendedLabel("Hard", txtTiny, clrText));
+        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyAvg), new extendedLabel("Normal", txtTiny, clrText));
+        sldDiffOverall.setLabelTable(hshDiffOverall);
+        sldDiffOverall.setPaintLabels(true);
+        sldDiffOverall.setFocusable(false);
+        sldDiffOverall.setFont(txtTiny);
+        sldDiffOverall.setForeground(clrText);
+        sldDiffOverall.setBounds(20, lblDiffOverall.getY() + lblDiffOverall.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
+        sldDiffOverall.setOpaque(false);
+        sldDiffOverall.setVisible(true);
+
+        sldDiffOverall.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider source = (JSlider)changeEvent.getSource();
+                if (source.getValueIsAdjusting()) {
+                    gameSettings.currDifficulty = source.getValue();
+                    window.revalidate();
+                    window.repaint();
+                }
             }
         });
 
@@ -1072,15 +1144,26 @@ public class guiCoreV4 {
 
     }
 
+    //loads the map view
     private void loadMapView() {
 
         //TODO: Fill out.
+
+        clearUI();
 
         music.interrupt();
         music = new audioCore("to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
         music.start();
         ambiance = new audioCore("space_ambient01.wav", audioRepository.ambianceVolume, true);
         ambiance.start();
+
+        bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
+        layers.add(bgPanel, new Integer(0), 0);
+        bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        bgPanel.setOpaque(true);
+        bgPanel.setFocusable(false);
+        bgPanel.setVisible(true);
+
 
 
     }

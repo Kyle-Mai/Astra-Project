@@ -26,7 +26,7 @@ public class animCore extends Thread {
     int animationType;
     rotatedIcon newImage;
     ImageIcon image;
-    JLabel rotatedImage;
+    JLabel displayedImage;
     JLayeredPane layers;
     JFrame main;
     JPanel animationPane = new JPanel();
@@ -34,8 +34,8 @@ public class animCore extends Thread {
     boolean playing = true;
     int rotationDir = 1;
 
-    double smooth = 0.1;
-    long wait = 60;
+    public double smooth = 1;
+    public long wait = 100;
 
     //loads the image to be rendered
     public animCore(ImageIcon image, int animationType, JLayeredPane layers, JFrame main) {
@@ -84,12 +84,12 @@ public class animCore extends Thread {
                     }
 
                     newImage = new rotatedIcon(image, currrot);
-                    rotatedImage = new JLabel(newImage);
+                    displayedImage = new JLabel(newImage);
                     animationPane.removeAll();
 
-                    animationPane.add(rotatedImage);
-                    rotatedImage.setVisible(true);
-                    rotatedImage.setBounds(main.getWidth() - 600, 50, 500, 500);
+                    animationPane.add(displayedImage);
+                    displayedImage.setVisible(true);
+                    displayedImage.setBounds(main.getWidth() - 600, 50, 500, 500);
 
                     main.revalidate();
                     main.repaint();
@@ -98,6 +98,47 @@ public class animCore extends Thread {
                 }
             break;
 
+            case 2: //main menu spaceport
+                System.out.println("Playing menu spaceport animation.");
+
+                int positionY = 0;
+                int positionX = 0;
+                int moveX = 1;
+                int moveY = 1;
+                //add the animation layer to the UI
+                layers.add(animationPane, new Integer(4), 0);
+                animationPane.setLayout(null);
+                animationPane.setBounds(0,0, main.getWidth(), main.getHeight());
+                animationPane.setOpaque(false);
+                animationPane.setVisible(true);
+
+                displayedImage = new JLabel(image);
+                animationPane.add(displayedImage);
+                displayedImage.setVisible(true);
+                displayedImage.setBounds(main.getWidth() - 700, 70, 600, 500);
+
+                while (playing) {
+
+                    displayedImage.setLocation(main.getWidth() - 700, 70 + positionY);
+
+                    if (positionY < 20 && moveY == 1) {
+                        positionY = positionY + (int)smooth;
+                    } else if (positionY > (-15) && moveY == 0) {
+                        positionY = positionY - (int)smooth;
+                    } else if (positionY <= (-15)) {
+                        moveY = 1;
+                        positionY = positionY + (int)smooth;
+                    } else if (positionY >= 20) {
+                        moveY = 0;
+                        positionY = positionY - (int)smooth;
+                    }
+
+                    main.revalidate();
+                    main.repaint();
+
+                    pauseThread();
+                }
+                break;
         }
 
     }

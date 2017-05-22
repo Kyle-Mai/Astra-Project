@@ -39,7 +39,7 @@ public class audioCore extends Thread {
             playAudio(); //otherwise, just play the audio file
         }
 
-        System.out.println("Audio thread closed.");
+        //System.out.println("Audio thread closed.");
 
         Thread.currentThread().interrupt(); //closes the thread down
     }
@@ -47,7 +47,7 @@ public class audioCore extends Thread {
     private void initializeAudioData() {
 
         URL file = this.getClass().getResource("Resources/" + this.sound);
-        System.out.println("Playing audio file : " + file);
+        //System.out.println("Playing audio file : " + file);
 
         media = new Media(file.toString());
         mediaPlayer = new MediaPlayer(media);
@@ -71,7 +71,7 @@ public class audioCore extends Thread {
         mediaPlayer.play(); //plays the audio
 
         try {
-            System.out.println("Closing audio thread when music ends in " + ((long)duration / 1000) + " s");
+            //System.out.println("Closing audio thread when music ends in " + ((long)duration / 1000) + " s");
             Thread.sleep((long)duration);                 //1000 milliseconds is one second.
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();

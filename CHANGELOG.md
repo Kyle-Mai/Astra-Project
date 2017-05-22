@@ -202,3 +202,13 @@ While Github's built in system is generally sufficient for keeping track of gene
 **MAY 21 2017** (ver.PTB-A) (U3)
 
 - Added more UI options for setting up a new game.
+
+**MAY 22 2017** (ver.PTB-A) (U1)
+
+- Added new GFX content.
+
+- Reworked main menu GUI design and added new buttons.
+
+- Played around more with the animation core.
+
+- Adjusted some game settings.

@@ -19,9 +19,9 @@ public class gameSettings {
 
     //how often star systems will spawn
 
-    public static final int starFreqMin = 5;
-    public static final int starFreqAvg = 25;
-    public static final int starFreqHigh = 75;
+    public static final int starFreqMin = 10;
+    public static final int starFreqAvg = 30;
+    public static final int starFreqHigh = 80;
 
     public static int starFrequency = 25;
 
@@ -31,8 +31,8 @@ public class gameSettings {
     public static final int mapScaleAvg = 80;
     public static final int mapScaleHigh = 200;
 
-    public static int currMapScaleX;
-    public static int currMapScaleY;
+    public static int currMapScaleX = 80;
+    public static int currMapScaleY = 80;
 
     //variables for overall difficulty (tech progression speed, taxation, etc)
 
@@ -40,6 +40,6 @@ public class gameSettings {
     public static final int overallDifficultyAvg = 100;
     public static final int overallDifficultyHigh = 150;
 
-    public static int currDifficulty;
+    public static int currDifficulty = 100;
 
 }
