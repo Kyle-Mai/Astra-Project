@@ -198,3 +198,7 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Added gameSettings class for storing game settings.
 
 - Added extendedLabel class to add more constructors/functionality to JLabels.
+
+**MAY 21 2017** (ver.PTB-A) (U3)
+
+- Added more UI options for setting up a new game.

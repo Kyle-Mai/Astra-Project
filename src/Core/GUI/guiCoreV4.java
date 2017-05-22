@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
@@ -851,7 +853,7 @@ public class guiCoreV4 {
             gameLogo = ImageIO.read(this.getClass().getResource("Resources/icon_large.png"));
             imgLogo = new JLabel(new ImageIcon(gameLogo));
             layers.add(imgLogo, new Integer(1), 0);
-            imgLogo.setBounds(window.getWidth() - 20, 20, 120, 120);
+            imgLogo.setBounds(window.getWidth() - 140, 20, 120, 120);
             imgLogo.setVisible(true);
 
             //TODO: Add a way to rescale images.
@@ -935,7 +937,24 @@ public class guiCoreV4 {
         pnlSettings.setOpaque(true);
         settingsMenu.add(pnlSettings);
 
-        //TODO: Add listeners to the sliders to change settings with values.
+        JButton launchNewGame = new JButton();
+        pnlSettings.add(launchNewGame);
+        launchNewGame.setBounds(5, pnlSettings.getHeight() - 55, pnlSettings.getWidth() - 10, 50);
+        launchNewGame.setBackground(clrButtonBackground);
+        launchNewGame.setForeground(clrText);
+        launchNewGame.setFont(txtSubheader);
+        launchNewGame.setText("Start");
+        launchNewGame.setVisible(true);
+        launchNewGame.setOpaque(false);
+        launchNewGame.setFocusable(false);
+        launchNewGame.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+
+        launchNewGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                audioRepository.buttonConfirm();
+            }
+        });
 
         //sets up settings option for resource abundance
         JLabel lblResources = new JLabel();
@@ -964,6 +983,17 @@ public class guiCoreV4 {
         sldResources.setOpaque(false);
         sldResources.setVisible(true);
 
+        sldResources.addChangeListener(new ChangeListener() { //adds a listener to keep track of the slider's value and translate it to the gameSettings class
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider source = (JSlider)changeEvent.getSource();
+                if (source.getValueIsAdjusting()) {
+                    int resources = source.getValue();
+                    gameSettings.currentResources = resources;
+                }
+            }
+        });
+
         //sets up settings option for star abundance
         JLabel lblStarFreq = new JLabel();
         JSlider sldStarFreq = new JSlider(JSlider.HORIZONTAL, gameSettings.starFreqMin, gameSettings.starFreqHigh, gameSettings.starFreqAvg);
@@ -990,6 +1020,52 @@ public class guiCoreV4 {
         sldStarFreq.setBounds(20, lblStarFreq.getY() + lblStarFreq.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
         sldStarFreq.setOpaque(false);
         sldStarFreq.setVisible(true);
+
+        sldStarFreq.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider source = (JSlider)changeEvent.getSource();
+                int stars = source.getValue();
+                gameSettings.starFrequency = stars;
+            }
+        });
+
+        JLabel lblMapScale = new JLabel();
+        JSlider sldMapScale = new JSlider(JSlider.HORIZONTAL, gameSettings.mapScaleMin, gameSettings.mapScaleHigh, gameSettings.mapScaleAvg);
+        pnlSettings.add(lblMapScale);
+        pnlSettings.add(sldMapScale);
+        lblMapScale.setBounds(5, sldStarFreq.getY() + sldStarFreq.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
+        lblMapScale.setForeground(clrText);
+        lblMapScale.setFont(txtSubheader);
+        lblMapScale.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMapScale.setVerticalAlignment(SwingConstants.CENTER);
+        lblMapScale.setText("Map Scale");
+        lblMapScale.setVisible(true);
+        sldMapScale.setMajorTickSpacing(20);
+        sldMapScale.setMinorTickSpacing(5);
+        sldMapScale.setPaintTicks(true);
+        Hashtable hshMapScale = new Hashtable();
+        hshMapScale.put(new Integer(gameSettings.mapScaleMin), new extendedLabel("Small", txtTiny, clrText));
+        hshMapScale.put(new Integer(gameSettings.mapScaleHigh), new extendedLabel("Huge", txtTiny, clrText));
+        hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new extendedLabel("Average", txtTiny, clrText));
+        sldMapScale.setLabelTable(hshMapScale);
+        sldMapScale.setPaintLabels(true);
+        sldMapScale.setFont(txtTiny);
+        sldMapScale.setForeground(clrText);
+        sldMapScale.setBounds(20, lblMapScale.getY() + lblMapScale.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
+        sldMapScale.setOpaque(false);
+        sldMapScale.setVisible(true);
+
+        sldMapScale.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider source = (JSlider)changeEvent.getSource();
+                int scale = source.getValue();
+                gameSettings.currMapScaleX = scale;
+                gameSettings.currMapScaleY = scale;
+            }
+        });
+
 
         window.revalidate();
         window.repaint();

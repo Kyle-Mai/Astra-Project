@@ -6,7 +6,7 @@
         <description>A test mod for testing modding.</description>
         <directoryName>testMod</directoryName>
 
-        <modActive>0</modActive> <!--1 = true, 0 = false -->
+        <modActive>1</modActive> <!--1 = true, 0 = false -->
     </mod>
     <mod name="New Expanse">
         <author>Mike Pence</author>

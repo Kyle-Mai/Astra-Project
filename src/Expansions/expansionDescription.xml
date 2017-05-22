@@ -10,7 +10,7 @@
         <expansionName>Doomsday</expansionName>
         <subtitle>Wahaho</subtitle>
         <description>Literally just a test expansion.</description>
-        <enabled>0</enabled> <!--1 = true, 0 = false -->
+        <enabled>1</enabled> <!--1 = true, 0 = false -->
     </expansion>
 
     <expansion id="9e88mv">

@@ -1,5 +1,6 @@
 package Core.Player;
 
+import Core.gameSettings;
 import Core.mapGenerator;
 
 import java.math.BigInteger;
@@ -37,6 +38,8 @@ public class playerData {
     private String starData;
     private String planetData;
 
+    private int difficulty;
+
 
     public playerData() {
     }
@@ -53,11 +56,16 @@ public class playerData {
         this.research = 0;
         this.techLevel = 0;
 
+        this.difficulty = gameSettings.currDifficulty; //saves the selected user difficulty
+
+
+
+
         System.out.println("Player data successfully created.");
 
     }
 
-    public void existingPlayer() {
+    public void existingPlayer(String playerID) {
 
     }
 
