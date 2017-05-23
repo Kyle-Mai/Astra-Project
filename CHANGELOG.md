@@ -220,3 +220,11 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Adjusted some map generation settings and defaults.
 
 - Reformatted SFX into a more organized system, added in some more SFX content.
+
+**MAY 23 2017** (ver.PTB-B) (U1)
+
+Version moved to PTB-B with the creation of the colonyCore class.
+
+- Added colonyCore for handling planet colonies.
+
+- Adjusted planet/star data saving to reduce characters.

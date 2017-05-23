@@ -40,6 +40,11 @@ public class playerData {
 
     private int difficulty;
 
+    private double resources;
+    private double funds;
+
+    private double taxMultiplier = 1;
+    private double productionMultiplier = 1;
 
     public playerData() {
     }
@@ -122,7 +127,13 @@ public class playerData {
 
     }
 
+    public double getTaxMultiplier() { return this.taxMultiplier; }
 
+    public double getProductionMultiplier() { return this.productionMultiplier; }
+
+    public double getResources() { return this.resources; }
+
+    public double getFunds() { return this.funds; }
 
 
 

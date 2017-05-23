@@ -24,26 +24,33 @@ public class planetClass extends planetCore implements Serializable {
         StringBuffer data = new StringBuffer();
 
         data.append("/");
-        data.append(this.parentStar.getMapLocationX());
+        data.append(this.getParentStar().getMapLocationX());
         data.append("-");
-        data.append(this.parentStar.getMapLocationY());
+        data.append(this.getParentStar().getMapLocationY());
         data.append("-");
-        data.append(this.planetNumber);
+        data.append(this.getPlanetNumber());
         data.append("-");
-        data.append(this.planetType);
+        data.append(this.getPlanetType());
         data.append("-");
-        data.append(this.planetRadius);
+        data.append(this.getPlanetRadius());
         data.append("-");
-        data.append(this.distanceFromStar);
+        data.append(this.getDistanceFromStar());
         data.append("-");
-        data.append(this.isInHabitableZone);
+        data.append(this.getResources());
         data.append("-");
-        data.append(this.isTidallyLocked);
+        data.append(this.writeTidalLock());
         data.append("-");
-        data.append(this.numOfMoons);
+        data.append(this.getNumOfMoons());
 
         return data.toString();
+    }
 
+    private String writeTidalLock() {
+        if (this.getHabitability()) {
+            return "t";
+        } else {
+            return "f";
+        }
     }
 
     /** planet construction methods **/
@@ -62,6 +69,8 @@ public class planetClass extends planetCore implements Serializable {
     private String planetName;
     private String planetDesc;
     private int numOfMoons;
+    private colonyCore planetColony;
+    private double resources;
 
     //generates a random planet
     public planetClass(starClass parentStar, int planetNumber) {
@@ -103,6 +112,27 @@ public class planetClass extends planetCore implements Serializable {
     public boolean getHabitability() { return this.isPlanetHabitable; }
     public long getDistanceFromStar() { return this.distanceFromStar; }
     public int getPlanetRadius() { return this.planetRadius; }
-    public String getPlanetNmae() { return this.planetName; }
+    public String getPlanetName() { return this.planetName; }
+    public boolean getTidalLock() { return this.isTidallyLocked; }
+    public starClass getParentStar() { return this.parentStar; }
+    public int getPlanetNumber() { return this.planetNumber; }
+    public int getPlanetType() { return this.planetType; }
+    public int getNumOfMoons() { return this.numOfMoons; }
+    public colonyCore getPlanetColony() { return this.planetColony; }
+    public double getResources() { return this.resources; }
+
+    /** Setter methods **/
+
+    public void setPlanetColony(colonyCore colony) {
+        this.planetColony = colony;
+    }
+
+    public void setHabited(boolean isHabited) {
+        this.isHabited = isHabited;
+    }
+
+    public void setResources(double used) {
+        this.resources = this.resources - used;
+    }
 
 }

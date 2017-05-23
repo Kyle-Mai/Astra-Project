@@ -29,18 +29,33 @@ public class starClass extends starCore implements Serializable {
         data.append("-");
         data.append(this.getStarIndex());
         data.append("-");
-        data.append(this.starRadius);
+        data.append(this.getStarRadius());
         data.append("-");
-        data.append(this.starIsHabitable);
+        data.append(writeHabitability());
         data.append("-");
-        data.append(this.isBinarySystem);
+        data.append(writeBinary());
         data.append("-");
-        data.append(this.starSpectral);
+        data.append(this.getStarSpectral());
         data.append("-");
-        data.append(this.numOfPlanets);
+        data.append(this.getNumOfPlanets());
 
         return data.toString();
+    }
 
+    private String writeHabitability() { //writes the star's habitability boolean as a single character string
+        if (this.starIsHabitable) {
+            return "t";
+        } else {
+            return "f";
+        }
+    }
+
+    private String writeBinary() { //gets the isBinarySystem variable's boolean as a single character string to write to file.
+        if (this.isBinarySystem) {
+            return "t";
+        } else {
+            return "f";
+        }
     }
 
     public ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
@@ -128,6 +143,7 @@ public class starClass extends starCore implements Serializable {
     public int getMapLocationY() { return this.mapLocationY; }
     public String getStarName() { return this.starName; }
     public int getStarIndex() { return this.starIndex; }
+    public String getStarSpectral() { return this.starSpectral; }
 
 
 }
