@@ -35,6 +35,8 @@ public class gfxRepository {
     static BufferedImage menuShip;
     static BufferedImage menuSpaceport;
 
+    static BufferedImage planetIcon;
+
     static Icon loadingIcon;
 
 
@@ -98,6 +100,7 @@ public class gfxRepository {
 
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/mapBG.png"));
+            planetIcon = ImageIO.read(new File(imageFolder + "/Resources/no_moon.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -85,11 +85,11 @@ public class guiCoreV4 {
     private JPanel settingsMenu;
     private JButton btnNewGame;
     private animCore menuSpaceport;
+    private mapGenerator map;
 
     private int launcherContentLoaded = 0;
 
     playerData playerInfo = new playerData();
-    mapGenerator newMap;
 
     private int load;
     private int mapScaleX = 20;
@@ -449,14 +449,14 @@ public class guiCoreV4 {
                 clearUI();
                 audioRepository.buttonClick();
                 music.interrupt();
-                music = new audioCore("creation_and_beyond.mp3", audioRepository.musicVolume);
+                music = new audioCore("/music/creation_and_beyond.mp3", audioRepository.musicVolume);
                 music.start();
                 loadLoadingScreen(1);
 
             }
         });
 
-        music = new audioCore("new_dawn.mp3", audioRepository.musicVolume, true);
+        music = new audioCore("/music/new_dawn.mp3", audioRepository.musicVolume, true);
         music.start();
 
         loadLauncherExpansions();
@@ -761,7 +761,6 @@ public class guiCoreV4 {
             Random random = new Random();
             int progress;
 
-
             for (int i = 1; i <= 100; i++) {
                 progress = i;
                 setProgress(Math.min(progress, 100));
@@ -791,20 +790,20 @@ public class guiCoreV4 {
                         case 1:
                             playerInfo.newPlayer("Test Player");
                             break;
-                        case 11:
-                            newMap = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
+                        case 5:
+                            map = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
                             break;
-                        case 13:
-                            newMap.generateTiles();
+                        case 11:
+                            gameLoader.mapLoader(map);
                             break;
                         case 18:
-                            playerInfo.addMapString(newMap);
+                            playerInfo.addMapString(map);
                             break;
                         case 20:
-                            playerInfo.addStarString(newMap);
+                            playerInfo.addStarString(map);
                             break;
                         case 24:
-                            playerInfo.addPlanetString(newMap);
+                            playerInfo.addPlanetString(map);
                             break;
                         case 45:
                             gfxRepository.loadMapGFX();
@@ -1030,8 +1029,8 @@ public class guiCoreV4 {
         lblStarFreq.setVerticalAlignment(SwingConstants.CENTER);
         lblStarFreq.setText("Star Frequency");
         lblStarFreq.setVisible(true);
-        sldStarFreq.setMajorTickSpacing(10);
-        sldStarFreq.setMinorTickSpacing(2);
+        sldStarFreq.setMajorTickSpacing(15);
+        sldStarFreq.setMinorTickSpacing(5);
         sldStarFreq.setPaintTicks(true);
         Hashtable hshStarFreq = new Hashtable();
         hshStarFreq.put(new Integer(gameSettings.starFreqMin), new extendedLabel("Many", txtTiny, clrText));
@@ -1152,9 +1151,9 @@ public class guiCoreV4 {
         clearUI();
 
         music.interrupt();
-        music = new audioCore("to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
+        music = new audioCore("/music/to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
         music.start();
-        ambiance = new audioCore("space_ambient01.wav", audioRepository.ambianceVolume, true);
+        ambiance = new audioCore("/ambiance/space_ambient01.wav", audioRepository.ambianceVolume, true);
         ambiance.start();
 
         bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
@@ -1163,6 +1162,45 @@ public class guiCoreV4 {
         bgPanel.setOpaque(true);
         bgPanel.setFocusable(false);
         bgPanel.setVisible(true);
+
+        JScrollPane mapView = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        layers.add(mapView, new Integer(3), 0);
+        mapView.setViewportView(bgPanel);
+        mapView.setOpaque(false);
+        mapView.setBounds(0, 0, window.getWidth(), window.getHeight());
+        mapView.setVisible(true);
+
+        ArrayList<ArrayList<JLabel>> mapGFX = new ArrayList<>();
+
+        int positionX;
+        int positionY = 0;
+        int tileSize = 30;
+
+        for (int i = 0; i < map.mapTiles.size(); i++) {
+            mapGFX.add(new ArrayList<JLabel>());
+            positionX = 0;
+
+            for (int j = 0; j < map.mapTiles.get(i).size(); j++) {
+                if (map.mapTiles.get(i).get(j).getStar()) {
+                    mapGFX.get(i).add(new JLabel(new ImageIcon(gfxRepository.planetIcon)));
+                } else {
+                    mapGFX.get(i).add(new JLabel());
+                }
+                bgPanel.add(mapGFX.get(i).get(j));
+                mapGFX.get(i).get(j).setBounds(tileSize * positionX, tileSize * positionY, tileSize, tileSize);
+                mapGFX.get(i).get(j).setFont(txtTiny);
+                mapGFX.get(i).get(j).setForeground(clrText);
+                //mapGFX.get(i).get(j).setText("");
+                mapGFX.get(i).get(j).setVisible(true);
+
+                positionX++;
+            }
+
+            positionY++;
+        }
+
+        window.revalidate();
+        window.repaint();
 
 
 

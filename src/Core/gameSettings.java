@@ -19,11 +19,11 @@ public class gameSettings {
 
     //how often star systems will spawn
 
-    public static final int starFreqMin = 10;
-    public static final int starFreqAvg = 30;
-    public static final int starFreqHigh = 80;
+    public static final int starFreqMin = 25;
+    public static final int starFreqAvg = 55;
+    public static final int starFreqHigh = 100;
 
-    public static int starFrequency = 25;
+    public static int starFrequency = 55;
 
     //variables for the map scale
 

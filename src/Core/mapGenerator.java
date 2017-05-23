@@ -2,6 +2,7 @@ package Core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
     KM
@@ -56,7 +57,7 @@ public class mapGenerator implements Serializable {
 
     /** ArrayLists **/
 
-    private ArrayList<ArrayList<mapTile>> mapTiles = new ArrayList<ArrayList<mapTile>>();
+    public ArrayList<ArrayList<mapTile>> mapTiles = new ArrayList<>();
     public static ArrayList<starClass> predefinedStars = new ArrayList<>();
 
     /** Constants **/
@@ -67,7 +68,7 @@ public class mapGenerator implements Serializable {
     //Necessary in order to store all of the map data together.
 
     // sets up map tile object, which is assigned to every tile on the map
-    private class mapTile {
+    public class mapTile {
         //variables assigned to each tile of the map
         private boolean isVisible;
         private boolean hasStar;
@@ -180,7 +181,7 @@ public class mapGenerator implements Serializable {
     }
 
     //generates tiles on the map
-    public void generateTiles() {
+    public void generateTiles() { //TODO: Weighted spawns to avoid clusters.
 
         //refresh the index
         int indexX = 1, indexY = 1;

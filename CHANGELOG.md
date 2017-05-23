@@ -212,3 +212,11 @@ While Github's built in system is generally sufficient for keeping track of gene
 - Played around more with the animation core.
 
 - Adjusted some game settings.
+
+**MAY 23 2017** (ver.PTB-A) (U1)
+
+- Added experimental map to GUI.
+
+- Adjusted some map generation settings and defaults.
+
+- Reformatted SFX into a more organized system, added in some more SFX content.

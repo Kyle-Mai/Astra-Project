@@ -72,27 +72,27 @@ public class audioRepository {
     */
 
     public static void buttonClick() {
-        audioCore buttonPress = new audioCore("menu_press.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_press.wav", uiVolume, 0, 500);
         buttonPress.start();
     }
 
     public static void buttonSelect() {
-        audioCore buttonPress = new audioCore("menu_select.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_select.wav", uiVolume, 0, 500);
         buttonPress.start();
     }
 
     public static void buttonDisable() {
-        audioCore buttonPress = new audioCore("menu_close.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_close.wav", uiVolume, 0, 500);
         buttonPress.start();
     }
 
     public static void menuTab() {
-        audioCore buttonPress = new audioCore("menu_tab.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_tab.wav", uiVolume, 0, 500);
         buttonPress.start();
     }
 
     public static void buttonConfirm() {
-        audioCore buttonPress = new audioCore("menu_confirm.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_confirm.wav", uiVolume, 0, 500);
         buttonPress.start();
     }
 
