@@ -1,5 +1,6 @@
 package Core.Player;
 
+import Core.colonyCore;
 import Core.gameSettings;
 import Core.mapGenerator;
 
@@ -7,6 +8,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -45,6 +47,8 @@ public class playerData {
 
     private double taxMultiplier = 1;
     private double productionMultiplier = 1;
+
+    private ArrayList<colonyCore> playerColonies = new ArrayList<>();
 
     public playerData() {
     }
@@ -125,6 +129,10 @@ public class playerData {
 
         System.out.println("Planet data saved " + this.planetData);
 
+    }
+
+    public void addPlanetColony(colonyCore colony) { //adds colonies to the player's data
+        playerColonies.add(colony);
     }
 
     public double getTaxMultiplier() { return this.taxMultiplier; }

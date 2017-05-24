@@ -789,12 +789,13 @@ public class guiCoreV4 {
                     switch(i) {
                         case 1:
                             playerInfo.newPlayer("Test Player");
+                            gameSettings.player = playerInfo;
                             break;
                         case 5:
                             map = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
                             break;
                         case 11:
-                            gameLoader.mapLoader(map);
+                            gameLoader.mapLoader(map, playerInfo);
                             break;
                         case 18:
                             playerInfo.addMapString(map);
@@ -809,7 +810,6 @@ public class guiCoreV4 {
                             gfxRepository.loadMapGFX();
                             break;
                     }
-
                 }
 
             }
@@ -838,8 +838,6 @@ public class guiCoreV4 {
                 loadMapView();
 
             }
-
-
         }
     }
 
@@ -1146,8 +1144,6 @@ public class guiCoreV4 {
     //loads the map view
     private void loadMapView() {
 
-        //TODO: Fill out.
-
         clearUI();
 
         music.interrupt();
@@ -1199,10 +1195,40 @@ public class guiCoreV4 {
             positionY++;
         }
 
+        loadPlayerBar();
+
         window.revalidate();
         window.repaint();
 
 
+
+    }
+
+    private void loadPlayerBar() { //loads the bar at the top of the screen with the relevant player information
+
+        JPanel pnlTopBar = new JPanel();
+        pnlTopBar.setLayout(null);
+        layers.add(pnlTopBar, new Integer(8), 0);
+        pnlTopBar.setBounds(0, 0, screen.getWidth(), 60);
+        pnlTopBar.setBackground(clrDGrey);
+
+        JButton btnMenu = new JButton();
+        pnlTopBar.add(btnMenu);
+        btnMenu.setBounds(pnlTopBar.getWidth() - 85, 5, 80, pnlTopBar.getHeight() - 10);
+        btnMenu.setOpaque(false);
+        btnMenu.setForeground(clrText);
+        btnMenu.setBackground(clrButtonMain);
+        btnMenu.setFont(txtSubheader);
+        btnMenu.setText("Menu");
+        btnMenu.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnMenu.setVisible(true);
+
+        btnMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                audioRepository.buttonClick();
+            }
+        });
 
     }
 

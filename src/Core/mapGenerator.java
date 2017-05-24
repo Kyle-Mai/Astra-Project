@@ -55,6 +55,16 @@ public class mapGenerator implements Serializable {
 
     }
 
+    //decides whether or not the tile will have a star generated on it as a ratio of star density to the map area.
+    private boolean willGenerateStar() {
+        int ran = randomNumber(1, this.mapArea);
+        if (this.mapArea / this.starDensity > ran) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /** ArrayLists **/
 
     public ArrayList<ArrayList<mapTile>> mapTiles = new ArrayList<>();
@@ -169,16 +179,6 @@ public class mapGenerator implements Serializable {
     }
 
     /** Standard Methods **/
-
-    //decides whether or not the tile will have a star generated on it as a ratio of star density to the map area.
-    private boolean willGenerateStar() {
-        int ran = randomNumber(1, this.mapArea);
-        if (this.mapArea / this.starDensity > ran) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     //generates tiles on the map
     public void generateTiles() { //TODO: Weighted spawns to avoid clusters.

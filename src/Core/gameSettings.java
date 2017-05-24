@@ -1,5 +1,7 @@
 package Core;
 
+import Core.Player.playerData;
+
 /**
  * KM
  * May 21 2017
@@ -8,6 +10,12 @@ package Core;
 
 
 public class gameSettings {
+
+    //variables to store the core classes of each type to allow them to be passed around to whatever requests them
+
+    public static mapGenerator map;
+
+    public static playerData player;
 
     //variables for the resource abundance
 
@@ -41,5 +49,13 @@ public class gameSettings {
     public static final int overallDifficultyHigh = 150;
 
     public static int currDifficulty = 100;
+
+    //variables for time scale
+
+    public static final int[] timeScale = {500, 1000, 1500, 2000, 2500}; //essentially how fast each turn ticks
+
+    //variables for star/planet IDing
+
+    public static int objectIDValue = 6000;
 
 }

@@ -71,6 +71,7 @@ public class planetClass extends planetCore implements Serializable {
     private int numOfMoons;
     private colonyCore planetColony;
     private double resources;
+    private int colonyID;
 
     //generates a random planet
     public planetClass(starClass parentStar, int planetNumber) {
@@ -122,6 +123,8 @@ public class planetClass extends planetCore implements Serializable {
     public double getResources() { return this.resources; }
 
     /** Setter methods **/
+
+    public void setColonyID(int idnum) { this.colonyID = idnum; }
 
     public void setPlanetColony(colonyCore colony) {
         this.planetColony = colony;

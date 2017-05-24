@@ -228,3 +228,13 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added colonyCore for handling planet colonies.
 
 - Adjusted planet/star data saving to reduce characters.
+
+**MAY 23 2017** (ver.PTB-B) (U2)
+
+- Added some more SFX content.
+
+- Added onto the colony core.
+
+- Adjusted some of the methods and variables in the planetClass, etc.
+
+- Added onto the GUI core slightly.
