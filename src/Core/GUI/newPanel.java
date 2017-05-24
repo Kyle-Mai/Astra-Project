@@ -24,9 +24,10 @@ public class newPanel extends JPanel {
 
     /** Main Constructor **/
 
-    public newPanel() {
-        this.setBackground(newColour("black"));
-        //this.setLayout(null);
+    public newPanel(Color backgroundColor) {
+        this.setLayout(null);
+        this.setBackground(backgroundColor);
+        this.setFocusable(false);
 
     }
 
@@ -41,22 +42,6 @@ public class newPanel extends JPanel {
 
     }
 
-    //Takes colour input as a string, verifies that it is a legitimate colour via java colours and outputs it.
-    public Color newColour(String getColour) { //Verifies the colour values.
-        String colour = getColour;
-        Color colour2;
-
-        colour = colour.toUpperCase(); //Converts the string to all uppercase.
-        try {
-            Field field = Class.forName("java.awt.Color").getField(colour); //Checks to ensure the colour entered is valid.
-            colour2 = (Color)field.get(null); //If it is valid, then we're set.
-        } catch (Exception e) { //Otherwise, it isn't defined.
-            colour2 = Color.black; // Not defined/valid, default to black
-            System.out.println("Invalid colour.");
-        }
-
-        return (colour2); //Returns the colour value.
-    }
 
 
 

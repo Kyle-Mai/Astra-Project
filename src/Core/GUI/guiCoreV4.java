@@ -80,7 +80,6 @@ public class guiCoreV4 {
     private JPanel pnlPauseMenu;
     private JPanel pnlOverlay;
     private int screenScaleChoice = 8;
-    private GridLayout contentLayout = new GridLayout(0, 1);
     private JPanel settingsMenu;
     private JButton btnNewGame;
     private animCore menuSpaceport;
@@ -92,9 +91,6 @@ public class guiCoreV4 {
     playerData playerInfo = new playerData();
 
     private int load;
-    private int mapScaleX = 20;
-    private int mapScaleY = 20;
-    private int mapStarDensity = 6;
 
     private backgroundLoader loader;
 
@@ -211,7 +207,7 @@ public class guiCoreV4 {
     public guiCoreV4(int screenScaleOption) {
 
         window = new JFrame("Astra Launcher");
-        screen = new newPanel();
+        screen = new newPanel(clrBlk);
 
         rescaleScreen(screenScaleOption);
 
@@ -382,8 +378,6 @@ public class guiCoreV4 {
         contentController.setBounds(getUIScaleX() - 325, 45, 300, 320);
         contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight()));
         contentController.setOpaque(true);
-        contentLayout.setVgap(5);
-        contentLayout.setHgap(5);
         //contentController.setLayout(contentLayout); //Testing layout...
         contentController.setLayout(null);
         contentController.setBackground(clrDGrey);
@@ -1017,8 +1011,8 @@ public class guiCoreV4 {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currentResources = source.getValue();
-                    refreshUI();
                 }
+                refreshUI();
             }
         });
 
@@ -1056,8 +1050,8 @@ public class guiCoreV4 {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
                     gameSettings.starFrequency = source.getValue();
-                    refreshUI();
                 }
+                refreshUI();
             }
         });
 
@@ -1096,8 +1090,8 @@ public class guiCoreV4 {
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currMapScaleX = source.getValue();
                     gameSettings.currMapScaleY = source.getValue();
-                    refreshUI();
                 }
+                refreshUI();
             }
         });
 
@@ -1134,8 +1128,8 @@ public class guiCoreV4 {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currDifficulty = source.getValue();
-                    refreshUI();
                 }
+                refreshUI();
             }
         });
 
@@ -1217,6 +1211,8 @@ public class guiCoreV4 {
         pnlTopBar.add(btnMenu);
         btnMenu.setBounds(pnlTopBar.getWidth() - 85, 5, 80, pnlTopBar.getHeight() - 10);
         btnMenu.setOpaque(false);
+        btnMenu.setFocusable(false);
+        btnMenu.setFocusPainted(false);
         btnMenu.setForeground(clrText);
         btnMenu.setBackground(clrButtonMain);
         btnMenu.setFont(txtSubheader);
@@ -1272,7 +1268,7 @@ public class guiCoreV4 {
         btnQuit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (btnQuit.getText().equals("Quit Game")) {
+                if (btnQuit.getText().equals("Quit Game")) { //TODO: Sometimes doesn't properly register text and quits without warning the user... Need to fix.
                     audioRepository.buttonSelect();
                     btnQuit.setText("Are you sure?");
                 } else {
@@ -1282,6 +1278,74 @@ public class guiCoreV4 {
             }
         });
 
+        JButton btnReturn = new JButton();
+        pnlPauseMenu.add(btnReturn);
+        btnReturn.setBounds(5, btnQuit.getY() - 55, pnlPauseMenu.getWidth() - 10, 50);
+        btnReturn.setOpaque(true);
+        btnReturn.setBackground(clrButtonBackground);
+        btnReturn.setFocusPainted(false);
+        btnReturn.setFocusable(false);
+        btnReturn.setForeground(clrText);
+        btnReturn.setFont(txtSubheader);
+        btnReturn.setText("Return");
+        btnReturn.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnReturn.setVisible(true);
+
+        btnReturn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                audioRepository.buttonSelect();
+                pnlOverlay.setVisible(false);
+                pnlPauseMenu.removeAll();
+            }
+        });
+
+        //adds the title to the pause menu
+        JLabel lblMenuTitle = new JLabel();
+        pnlPauseMenu.add(lblMenuTitle);
+        lblMenuTitle.setBounds(5, 5, pnlPauseMenu.getWidth() - 10, 40);
+        lblMenuTitle.setForeground(clrText);
+        lblMenuTitle.setFont(txtHeader);
+        lblMenuTitle.setFocusable(false);
+        lblMenuTitle.setText("Pause Menu");
+        lblMenuTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMenuTitle.setVerticalAlignment(SwingConstants.CENTER);
+        lblMenuTitle.setVisible(true);
+
+        //Adds a slider to change music volume
+        JLabel lblMusicVolume = new JLabel();
+        pnlPauseMenu.add(lblMusicVolume);
+        lblMusicVolume.setBounds(5, lblMenuTitle.getHeight() + 10, pnlPauseMenu.getWidth() - 10, 25);
+        lblMusicVolume.setFont(txtSubtitle);
+        lblMusicVolume.setForeground(clrText);
+        lblMusicVolume.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMusicVolume.setVerticalAlignment(SwingConstants.CENTER);
+        lblMusicVolume.setText("Music Volume");
+        lblMusicVolume.setVisible(true);
+
+        JSlider sldMusicVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.musicVolume);
+        pnlPauseMenu.add(sldMusicVolume);
+        sldMusicVolume.setMajorTickSpacing(10);
+        sldMusicVolume.setMinorTickSpacing(2);
+        sldMusicVolume.setPaintTicks(true);
+        sldMusicVolume.setPaintLabels(false);
+        sldMusicVolume.setFocusable(false);
+        sldMusicVolume.setForeground(clrText);
+        sldMusicVolume.setOpaque(false);
+        sldMusicVolume.setBounds(10, lblMusicVolume.getY() + lblMusicVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 20, 40);
+        sldMusicVolume.setVisible(true);
+
+        sldMusicVolume.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider source = (JSlider)changeEvent.getSource();
+                if (source.getValueIsAdjusting()) {
+                    audioRepository.musicVolume = source.getValue();
+                    audioRepository.setMusicVolume();
+                }
+                refreshUI();
+            }
+        });
 
 
 

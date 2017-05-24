@@ -248,3 +248,25 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Moved all audio declaration and creation to the audoRepository to centralize it like I did the GFX content.
 
 - Removed unnecessary code.
+
+**MAY 24 2017** (ver.PTB-B) (U2)
+
+- Added onto the pause menu.
+
+    - Added proper header.
+
+    - Added return button to close the menu and return to the game.
+
+    - Added a slider to change the music volume.
+
+- Fixed issue with sliders incorrectly displaying strange background bug. Should be patched now.
+
+- Adjusted custom panel class slightly, removed unnecessary information.
+
+- Removed more unused code.
+
+- Updated audioCore with support for changing volume while the audio is playing.
+
+    - Added necessary support to the audioRepository to allow for volume changing.
+
+- Fixed minor visual issue with the pause menu button.

@@ -102,6 +102,10 @@ public class audioRepository {
 
     /** Music **/
 
+    public static void setMusicVolume() { //changes the volume of the music
+        music.setVolume(musicVolume);
+    }
+
     public static void musicTitleScreen() { //plays the title screen music
         music.interrupt();
         music = new audioCore("/music/creation_and_beyond.mp3", musicVolume);

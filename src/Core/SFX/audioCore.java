@@ -58,7 +58,7 @@ public class audioCore extends Thread {
             Thread.currentThread().interrupt();
         }
 
-        mediaPlayer.setVolume(0.01 * this.volume);
+        setVolume((int)volume);
 
         if (this.duration == 0) {
             duration = mediaPlayer.getTotalDuration().toMillis();
@@ -84,6 +84,12 @@ public class audioCore extends Thread {
 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+        mediaPlayer.setVolume(0.01 * this.volume);
 
     }
 
