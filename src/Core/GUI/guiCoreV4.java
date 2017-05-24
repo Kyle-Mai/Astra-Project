@@ -77,15 +77,15 @@ public class guiCoreV4 {
     private JProgressBar loadingBar;
     private JLabel bgPanel;
     private JLabel imgLogo;
-    private int screenScaleChoice;
-    private audioCore music;
-    private audioCore ambiance;
-    private animCore testAnimation;
+    private JPanel pnlPauseMenu;
+    private JPanel pnlOverlay;
+    private int screenScaleChoice = 8;
     private GridLayout contentLayout = new GridLayout(0, 1);
     private JPanel settingsMenu;
     private JButton btnNewGame;
     private animCore menuSpaceport;
     private mapGenerator map;
+    private JButton btnQuit;
 
     private int launcherContentLoaded = 0;
 
@@ -102,6 +102,7 @@ public class guiCoreV4 {
 
     final String gameVersion = "PTB-A Build 66b";
 
+    private final Color clrBlkTransparent = new Color(15, 35, 25, 175);
     private final Color clrBlk = new Color(25, 35, 35, 255);
     private final Color clrDGrey = new Color(45, 75, 65, 255);
     private final Color clrDisableBorder = new Color(75, 5, 25, 255);
@@ -238,6 +239,17 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
     }
 
+    private void refreshUI() {
+        //refreshes the UI content
+        window.revalidate();
+        window.repaint();
+    }
+
+    private void closeProgram() {
+        window.dispose(); //ensure the thread dies
+        System.exit(0); //close the program
+    }
+
     public void loadLauncherScreen() {
         System.out.println("Loading launcher data...");
         JLabel imgBackground, imgBorder;
@@ -283,8 +295,7 @@ public class guiCoreV4 {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Killing program.");
                 audioRepository.buttonClick();
-                window.dispose(); //ensure the thread dies
-                System.exit(0); //close the program
+                closeProgram();
             }
         });
         btnExit.setVisible(true);
@@ -444,26 +455,20 @@ public class guiCoreV4 {
         btnLaunch.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Launching game...");
-                window.setTitle("Astra Project");
+                //System.out.println("Launching game...");
+                window.setTitle("Astra Project"); //changes the title from the launcher to the game window
                 clearUI();
                 audioRepository.buttonClick();
-                music.interrupt();
-                music = new audioCore("/music/creation_and_beyond.mp3", audioRepository.musicVolume);
-                music.start();
+                audioRepository.musicTitleScreen(); //plays the title screen music
+                rescaleScreen(screenScaleChoice); //resizes the screen according to the user's choice
                 loadLoadingScreen(1);
 
             }
         });
 
-        music = new audioCore("/music/new_dawn.mp3", audioRepository.musicVolume, true);
-        music.start();
+        audioRepository.musicLauncherScreen();
 
-        loadLauncherExpansions();
-
-        //make sure the content is visible and render it
-        window.revalidate();
-        window.repaint();
+        loadLauncherExpansions(); //load the expansion packs
 
     }
 
@@ -539,7 +544,7 @@ public class guiCoreV4 {
             //adjust the enable/disable button based on the current status of the content
             if (xmlLoader.listOfExpansions.get(i).getEnabledStatus()) {
                 //content is enabled, set the button accordingly
-                System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is enabled.");
+                //System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is enabled.");
                 btnExpanEnable.get(i).setText("-");
                 btnExpanEnable.get(i).setToolTipText("Disable");
                 expansionEnabled = 1;
@@ -547,7 +552,7 @@ public class guiCoreV4 {
                 btnExpanEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
             } else {
                 //content is disabled, set the button accordingly
-                System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is disabled.");
+                //System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is disabled.");
                 btnExpanEnable.get(i).setText("+");
                 btnExpanEnable.get(i).setToolTipText("Enable");
                 expansionEnabled = 0;
@@ -587,7 +592,7 @@ public class guiCoreV4 {
     }
 
     //loads the mods to the launcher
-    public void loadLauncherMods() { //TODO: Fix weird bug changing x-scale of entries and fix the lack of scaling on the contentViewer UI.
+    public void loadLauncherMods() {
 
         String modID;
         int modEnabled;
@@ -642,7 +647,7 @@ public class guiCoreV4 {
             //adjust the enable/disable button based on the current status of the content
             if (xmlLoader.listOfMods.get(i).getModEnabled()) {
                 //content is enabled, set the button accordingly
-                System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is enabled.");
+                //System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is enabled.");
                 btnModEnable.get(i).setText("-");
                 btnModEnable.get(i).setToolTipText("Disable");
                 modEnabled = 1;
@@ -650,7 +655,7 @@ public class guiCoreV4 {
                 btnModEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
             } else {
                 //content is disabled, set the button accordingly
-                System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is disabled.");
+                //System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is disabled.");
                 btnModEnable.get(i).setText("+");
                 btnModEnable.get(i).setToolTipText("Enable");
                 modEnabled = 0;
@@ -676,16 +681,15 @@ public class guiCoreV4 {
 
         System.out.println("Loaded mod data into GUI.");
 
-        window.revalidate();
-        window.repaint();
+        refreshUI();
 
     }
 
+    /** Loading screen UI elements **/
+    //shown when the game is loading new content
 
     //load the loading screen and game content
     private void loadLoadingScreen(int toLoad) {
-
-        screenScaleChoice = 8;
 
         //TODO: Eventually re-sort swing objects so I don't have a bunch of a empty ones lying around. Arraylists are the best bet.
 
@@ -693,9 +697,8 @@ public class guiCoreV4 {
 
         load = toLoad;
 
-        gfxRepository.randomBackground();
+        gfxRepository.randomBackground(); //picks a random background image for the loading screen
 
-        rescaleScreen(screenScaleChoice);
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         layers.setBounds(0, 0, getUIScaleX(), getUIScaleY()); //reset the size
@@ -707,6 +710,7 @@ public class guiCoreV4 {
         bgPanel.setFocusable(false);
         bgPanel.setVisible(true);
 
+        //loads the loading icon gif that plays during the loading screen
         bgLoadIcon = new JLabel(gfxRepository.loadingIcon);
         layers.add(bgLoadIcon, new Integer(1), 0);
         bgLoadIcon.setBounds((getUIScaleX() / 2) - 150, getUIScaleY() - 380, 300, 300);
@@ -714,9 +718,7 @@ public class guiCoreV4 {
         bgLoadIcon.setFocusable(false);
         bgLoadIcon.setVisible(true);
 
-        //TODO: Add a way to rescale images.
-
-
+        //loads the loading bar at the bottom of the screen that shows the progress of the loading
         loadingBar = new JProgressBar(0, 100);
         layers.add(loadingBar, new Integer(2), 0);
         loadingBar.setBounds(40, getUIScaleY() - 60, getUIScaleX() - 80, 30);
@@ -730,6 +732,7 @@ public class guiCoreV4 {
         loadingBar.setBorderPainted(false);
         loadingBar.setVisible(true);
 
+        //loads the text box above the loading bar
         JLabel lblInformation = new JLabel();
         layers.add(lblInformation, new Integer(3), 0);
         lblInformation.setBounds((getUIScaleX() / 2) - 300, getUIScaleY() - 120, 600, 50);
@@ -742,8 +745,7 @@ public class guiCoreV4 {
         lblInformation.setText("Astra Project - Work In Progress");
         lblInformation.setVisible(true);
 
-        window.revalidate();
-        window.repaint();
+        refreshUI();
 
         loadingBar.setIndeterminate(true);
 
@@ -782,22 +784,22 @@ public class guiCoreV4 {
                             gameLoader.cleanContent();
                             break;
                     }
-                } else if (load == 2) { //loading new game //TODO: fix map
+                } else if (load == 2) { //loading new game
 
-                    Thread.sleep(40 + random.nextInt(180)); //unnecessary, but will help to reduce load
+                    Thread.sleep(30 + random.nextInt(150)); //unnecessary, but will help to reduce load
 
                     switch(i) {
-                        case 1:
+                        case 1: //create the new user
                             playerInfo.newPlayer("Test Player");
                             gameSettings.player = playerInfo;
                             break;
-                        case 5:
+                        case 5: //set up the map
                             map = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
                             break;
-                        case 11:
+                        case 11: //load the map string
                             gameLoader.mapLoader(map, playerInfo);
                             break;
-                        case 18:
+                        case 18: //save the data to the user file
                             playerInfo.addMapString(map);
                             break;
                         case 20:
@@ -806,8 +808,13 @@ public class guiCoreV4 {
                         case 24:
                             playerInfo.addPlanetString(map);
                             break;
-                        case 45:
+                        case 45: //load the GFX content
                             gfxRepository.loadMapGFX();
+                            break;
+                        case 80: //set up some of the UI content
+                            pnlOverlay = new JPanel();
+                            pnlPauseMenu = new JPanel();
+                            btnQuit = new JButton();
                             break;
                     }
                 }
@@ -840,6 +847,8 @@ public class guiCoreV4 {
             }
         }
     }
+
+    /** Main menu elements **/
 
     //separates the main menu animation loading
     private void loadMainMenuAnimation() {
@@ -907,8 +916,7 @@ public class guiCoreV4 {
             }
         });
 
-        window.revalidate();
-        window.repaint();
+        refreshUI();
 
     }
 
@@ -1009,8 +1017,7 @@ public class guiCoreV4 {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currentResources = source.getValue();
-                    window.revalidate();
-                    window.repaint();
+                    refreshUI();
                 }
             }
         });
@@ -1049,8 +1056,7 @@ public class guiCoreV4 {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
                     gameSettings.starFrequency = source.getValue();
-                    window.revalidate();
-                    window.repaint();
+                    refreshUI();
                 }
             }
         });
@@ -1090,8 +1096,7 @@ public class guiCoreV4 {
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currMapScaleX = source.getValue();
                     gameSettings.currMapScaleY = source.getValue();
-                    window.revalidate();
-                    window.repaint();
+                    refreshUI();
                 }
             }
         });
@@ -1129,28 +1134,24 @@ public class guiCoreV4 {
                 JSlider source = (JSlider)changeEvent.getSource();
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currDifficulty = source.getValue();
-                    window.revalidate();
-                    window.repaint();
+                    refreshUI();
                 }
             }
         });
 
-
-        window.revalidate();
-        window.repaint();
+        refreshUI();
 
     }
+
+    /** Map screen UI **/
 
     //loads the map view
     private void loadMapView() {
 
         clearUI();
 
-        music.interrupt();
-        music = new audioCore("/music/to_the_ends_of_the_galaxy.mp3", audioRepository.musicVolume);
-        music.start();
-        ambiance = new audioCore("/ambiance/space_ambient01.wav", audioRepository.ambianceVolume, true);
-        ambiance.start();
+        audioRepository.musicMainGame();
+        audioRepository.ambianceMainGame();
 
         bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
         layers.add(bgPanel, new Integer(0), 0);
@@ -1197,12 +1198,12 @@ public class guiCoreV4 {
 
         loadPlayerBar();
 
-        window.revalidate();
-        window.repaint();
-
-
+        refreshUI();
 
     }
+
+    /** General in-game UI elements **/
+    //includes the top bar, the pause menu, etc
 
     private void loadPlayerBar() { //loads the bar at the top of the screen with the relevant player information
 
@@ -1223,12 +1224,70 @@ public class guiCoreV4 {
         btnMenu.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
         btnMenu.setVisible(true);
 
+        layers.add(pnlOverlay, new Integer(15), 0);
+        pnlOverlay.setLayout(null);
+        pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());
+        pnlOverlay.setBackground(clrBlkTransparent);
+        pnlOverlay.setFocusable(false);
+        pnlOverlay.add(pnlPauseMenu);
+        pnlPauseMenu.setLayout(null);
+        pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
+        pnlPauseMenu.setBackground(clrBackground);
+        pnlPauseMenu.setFocusable(false);
+        pnlPauseMenu.setVisible(true);
+        pnlOverlay.setVisible(false);
+
         btnMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                audioRepository.buttonClick();
+                if (!pnlOverlay.isVisible()) {
+                    showPauseMenu();
+                    audioRepository.buttonClick();
+                } else {
+                    pnlOverlay.setVisible(false);
+                    pnlPauseMenu.removeAll();
+                    audioRepository.buttonDisable();
+                }
             }
         });
+
+    }
+
+    private void showPauseMenu() {
+
+        gameSettings.gameIsPaused = true; //pauses the game
+
+        pnlPauseMenu.add(btnQuit);
+        btnQuit.setBounds(5, pnlPauseMenu.getHeight() - 55, pnlPauseMenu.getWidth() - 10, 50);
+        btnQuit.setOpaque(true);
+        btnQuit.setBackground(clrButtonBackground);
+        btnQuit.setFocusPainted(false);
+        btnQuit.setFocusable(false);
+        btnQuit.setForeground(clrText);
+        btnQuit.setFont(txtSubheader);
+        btnQuit.setText("Quit Game");
+        btnQuit.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnQuit.setVisible(true);
+
+        btnQuit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (btnQuit.getText().equals("Quit Game")) {
+                    audioRepository.buttonSelect();
+                    btnQuit.setText("Are you sure?");
+                } else {
+                    audioRepository.buttonConfirm();
+                    closeProgram();
+                }
+            }
+        });
+
+
+
+
+        pnlOverlay.setVisible(true);
+
+        refreshUI();
 
     }
 

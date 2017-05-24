@@ -12,10 +12,12 @@ public class audioRepository {
 
 
     public static int uiVolume = 70;
-    public static int musicVolume = 60;
-    public static int ambianceVolume = 20;
+    public static int musicVolume = 50;
+    public static int ambianceVolume = 15;
     public static int voiceVolume = 70;
+    public static int effectsVolume = 50;
     public static audioCore music;
+    public static audioCore ambiance;
 
     //BROKEN
     /* public static void musicPlay(String toPlay, boolean isShuffle, boolean loop) {
@@ -71,6 +73,8 @@ public class audioRepository {
     }
     */
 
+    /** UI actions **/
+
     public static void buttonClick() {
         audioCore buttonPress = new audioCore("/ui/menu_press.wav", uiVolume, 0, 500);
         buttonPress.start();
@@ -94,6 +98,32 @@ public class audioRepository {
     public static void buttonConfirm() {
         audioCore buttonPress = new audioCore("/ui/menu_confirm.wav", uiVolume, 0, 500);
         buttonPress.start();
+    }
+
+    /** Music **/
+
+    public static void musicTitleScreen() { //plays the title screen music
+        music.interrupt();
+        music = new audioCore("/music/creation_and_beyond.mp3", musicVolume);
+        music.start();
+    }
+
+    public static void musicLauncherScreen() { //plays the launcher screen music
+        music = new audioCore("/music/new_dawn.mp3", musicVolume, true);
+        music.start();
+    }
+
+    public static void musicMainGame() {
+        music.interrupt();
+        music = new audioCore("/music/to_the_ends_of_the_galaxy.mp3", musicVolume);
+        music.start();
+    }
+
+    /** Ambiance **/
+
+    public static void ambianceMainGame() {
+        ambiance = new audioCore("/ambiance/space_ambient01.wav", audioRepository.ambianceVolume, true);
+        ambiance.start();
     }
 
 

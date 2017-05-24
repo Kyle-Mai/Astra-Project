@@ -238,3 +238,13 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Adjusted some of the methods and variables in the planetClass, etc.
 
 - Added onto the GUI core slightly.
+
+**MAY 24 2017** (ver.PTB-B) (U1)
+
+- Added more to the UI core, namely a pause menu.
+
+- Ported some repeated functions into methods to be called through them instead. More efficient.
+
+- Moved all audio declaration and creation to the audoRepository to centralize it like I did the GFX content.
+
+- Removed unnecessary code.
