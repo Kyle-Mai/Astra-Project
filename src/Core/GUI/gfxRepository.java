@@ -1,5 +1,7 @@
 package Core.GUI;
 
+import Core.starCore;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -36,6 +38,8 @@ public class gfxRepository {
     static BufferedImage menuSpaceport;
 
     static BufferedImage planetIcon;
+    static BufferedImage moon1Icon;
+    static BufferedImage moon2Icon;
 
     static Icon loadingIcon;
 
@@ -46,10 +50,10 @@ public class gfxRepository {
 
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/launcherBG.jpg"));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG.jpg")));
-            gameLogo = ImageIO.read(new File(imageFolder + "/Resources/icon.png"));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG.jpg")));
+            gameLogo = ImageIO.read(new File(imageFolder + "/Resources/ui/icon.png"));
             launcherBorder = ImageIO.read(new File(imageFolder + "/Resources/launcherBorder.png"));
-            loadingIcon = new ImageIcon(imageFolder + "/Resources/ok_hand.gif");
+            loadingIcon = new ImageIcon(imageFolder + "/Resources/ui/ok_hand.gif");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,20 +75,22 @@ public class gfxRepository {
         System.out.println("Loading main GFX content...");
 
         try {
-            mainBackground = ImageIO.read(new File(imageFolder + "/Resources/title_background_full.png"));
-            gameLogoLarge = ImageIO.read(new File(imageFolder + "/Resources/icon_large.png"));
+            mainBackground = ImageIO.read(new File(imageFolder + "/Resources/background/title_background_full.png"));
+            gameLogoLarge = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_large.png"));
             menuShip = ImageIO.read(new File(imageFolder + "/Resources/spacecraft_gfx_small.png"));
             menuPlanet = ImageIO.read(new File(imageFolder + "/Resources/title_planet_full.png"));
             menuSpaceport = ImageIO.read(new File(imageFolder + "/Resources/title_spaceport_half.png"));
+            moon1Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon1_half.png"));
+            moon2Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon2_half.png"));
 
             //adds other papers to the loading screen randomize
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_2.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_3.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_4.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_5.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_6.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_7.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/loadingBG_8.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_2.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_4.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_5.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_6.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_7.jpg")));
+            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_8.jpg")));
 
             System.out.println("GFX content loaded successfully.");
 
@@ -92,6 +98,24 @@ public class gfxRepository {
             e.printStackTrace();
         }
 
+    }
+
+    public static void loadContentGFX() { //loads the GFX of stars, planets, etc
+        BufferedImage temporaryImage;
+        File directory;
+
+        for (int i = 0; i < starCore.listOfStars.size(); i++) {
+            try {
+                directory = new File(System.getProperty("user.dir") + "/src" + starCore.listOfStars.get(i).getGfx());
+                temporaryImage = ImageIO.read(directory);
+                starCore.listOfStars.get(i).setGfxImage(temporaryImage);
+                System.out.print(starCore.listOfStars.get(i).getName() + " GFX content loaded successfully. ");
+            } catch (IOException e) {
+                e.printStackTrace(); //TODO: Add a default for if it fails to load.
+            }
+        }
+
+        System.out.println("\nContent GFX loaded.");
     }
 
     public static void loadMapGFX() {

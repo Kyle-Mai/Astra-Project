@@ -5,6 +5,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.net.URL;
+import java.util.Random;
 
 /**
  * KM
@@ -22,6 +23,7 @@ public class audioCore extends Thread {
     double delay;
     double duration;
     boolean loop = false;
+    boolean shuffleType = false;
 
     private Media media;
     private MediaPlayer mediaPlayer;
@@ -31,12 +33,19 @@ public class audioCore extends Thread {
     @Override
     public void run() {
 
-        initializeAudioData(); //sets up the audio file
+        if (shuffleType) { //shuffling music
 
-        if (loop) {
-            loopAudio(); //if loop is enabled, loop the audio
-        } else {
-            playAudio(); //otherwise, just play the audio file
+            shuffleMusic();
+
+        } else { //not shuffling music
+
+            initializeAudioData(); //sets up the audio file
+
+            if (loop) {
+                loopAudio(); //if loop is enabled, loop the audio
+            } else {
+                playAudio(); //otherwise, just play the audio file
+            }
         }
 
         //System.out.println("Audio thread closed.");
@@ -93,6 +102,23 @@ public class audioCore extends Thread {
 
     }
 
+    private void shuffleMusic() {
+        Random newMusic = new Random();
+        String[] musicList = {"music/imperial_fleet.mp3", "music/new_dawn.mp3", "music/in_search_of_life.mp3", "music/mercedes_romero.mp3", "music/spatial_lullaby.mp3", "music/towards_utopia.mp3", "music/to_the_ends_of_the_galaxy.mp3", "music/gravitational_constant.mp3", "music/assembling_the_fleet.mp3"};
+
+        int musicToPlay = newMusic.nextInt(musicList.length - 1);
+
+        this.sound = musicList[musicToPlay];
+
+        initializeAudioData();
+        playAudio();
+
+        shuffleMusic();
+    }
+
+    public void stopAudio() { //stops the audio
+        mediaPlayer.stop();
+    }
 
 
 
@@ -126,6 +152,14 @@ public class audioCore extends Thread {
         this.delay = 1000;
         this.duration = 0;
         this.loop = loop;
+
+    }
+
+    public audioCore(double volumeLevel, boolean shuffling) {
+        this.volume = volumeLevel;
+        this.delay = 1000;
+        this.duration = 0;
+        this.shuffleType = shuffling;
 
     }
 

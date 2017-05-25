@@ -23,19 +23,21 @@ import java.util.Random;
 
 public class animCore extends Thread {
 
-    int animationType;
-    rotatedIcon newImage;
-    ImageIcon image;
-    JLabel displayedImage;
-    JLayeredPane layers;
-    JFrame main;
-    JPanel animationPane = new JPanel();
-    double currrot = 1; //current rotation
-    boolean playing = true;
-    int rotationDir = 1;
+    private int animationType;
+    private rotatedIcon newImage;
+    private ImageIcon image;
+    private JLabel displayedImage;
+    private JLayeredPane layers;
+    private JFrame main;
+    private JPanel animationPane = new JPanel();
+    private double currrot = 1; //current rotation
+    private boolean playing = true;
+    private int rotationDir = 1;
+    private int xVal, yVal;
+    private float radius;
 
-    public double smooth = 1;
-    public long wait = 100;
+    private double smooth = 1;
+    private long wait = 100;
 
     //loads the image to be rendered
     public animCore(ImageIcon image, int animationType, JLayeredPane layers, JFrame main) {
@@ -43,6 +45,17 @@ public class animCore extends Thread {
         this.image = image;
         this.layers = layers;
         this.main = main;
+
+    }
+
+    public animCore(ImageIcon image, int animationType, JLayeredPane layers, JFrame main, int x, int y, float radius) {
+        this.animationType = animationType;
+        this.image = image;
+        this.layers = layers;
+        this.main = main;
+        this.xVal = x;
+        this.yVal = y;
+        this.radius = radius;
 
     }
 
@@ -101,12 +114,12 @@ public class animCore extends Thread {
             case 2: //main menu spaceport
                 System.out.println("Playing menu spaceport animation.");
 
-                int positionY = 0;
-                int positionX = 0;
+                double positionY = 0;
+                double positionX = 0;
                 int moveX = 1;
                 int moveY = 1;
                 //add the animation layer to the UI
-                layers.add(animationPane, new Integer(4), 0);
+                layers.add(animationPane, new Integer(11), 0);
                 animationPane.setLayout(null);
                 animationPane.setBounds(0,0, main.getWidth(), main.getHeight());
                 animationPane.setOpaque(false);
@@ -115,22 +128,22 @@ public class animCore extends Thread {
                 displayedImage = new JLabel(image);
                 animationPane.add(displayedImage);
                 displayedImage.setVisible(true);
-                displayedImage.setBounds(main.getWidth() - 700, 70, 600, 500);
+                displayedImage.setBounds(main.getWidth() - 550, 20, 550, 382);
 
                 while (playing) {
 
-                    displayedImage.setLocation(main.getWidth() - 700, 70 + positionY);
+                    displayedImage.setLocation(stationBob(displayedImage.getX(), displayedImage.getY(), positionY));
 
-                    if (positionY < 20 && moveY == 1) {
-                        positionY = positionY + (int)smooth;
-                    } else if (positionY > (-15) && moveY == 0) {
-                        positionY = positionY - (int)smooth;
-                    } else if (positionY <= (-15)) {
+                    if (positionY < 2 && moveY == 1) {
+                        positionY = positionY + smooth;
+                    } else if (positionY > (-2) && moveY == 0) {
+                        positionY = positionY - smooth;
+                    } else if (positionY <= (-2)) {
                         moveY = 1;
-                        positionY = positionY + (int)smooth;
-                    } else if (positionY >= 20) {
+                        positionY = positionY + smooth;
+                    } else if (positionY >= 2) {
                         moveY = 0;
-                        positionY = positionY - (int)smooth;
+                        positionY = positionY - smooth;
                     }
 
                     main.revalidate();
@@ -139,8 +152,65 @@ public class animCore extends Thread {
                     pauseThread();
                 }
                 break;
+
+                //moon animations
+            case 3: //TODO: Should eventually sort out layer/animationPane declaration and make it shorter...
+
+                System.out.println("Playing menu moon animation.");
+
+                layers.add(animationPane, new Integer(2), 0);
+                animationPane.setLayout(null);
+                animationPane.setBounds(0,0, main.getWidth(), main.getHeight());
+                animationPane.setOpaque(false);
+                animationPane.setVisible(true);
+
+                displayedImage = new JLabel(image);
+                animationPane.add(displayedImage);
+                displayedImage.setVisible(true);
+                displayedImage.setBounds(xVal, yVal, 300, 300);
+
+                while (playing) {
+
+                    if (currrot < 360) {
+                        currrot = currrot + smooth;
+                    } else { //reset the angle if we go over 360
+                        currrot = 0;
+                        currrot = currrot + smooth;
+                    }
+
+                    Point pt = getRotationAngle((float)currrot, radius, xVal, yVal);
+
+                    //System.out.println((pt.x) + " - " + (pt.y));
+
+                    displayedImage.setLocation(pt.x, pt.y);
+
+                    main.revalidate();
+                    main.repaint();
+
+                    pauseThread();
+
+                }
+
+
+
+
         }
 
+    }
+
+    private Point stationBob(int X, int Y, double toMove) {
+        int y = Y + (int)Math.round(toMove / 2);
+        return new Point(X, y);
+    }
+
+    private Point getRotationAngle(float degrees, float radius, int x, int y) { //x and y are the center of the circle, radius is the circle's radius, and degrees are the desired position in degrees
+
+        double radians = Math.toRadians(degrees - 90);
+
+        int xy = Math.round((float) (x + Math.cos(radians) * radius));
+        int yy = Math.round((float) (y + Math.sin(radians) * radius));
+
+        return new Point(xy, yy);
     }
 
     //temporarily pauses the thread
@@ -160,6 +230,14 @@ public class animCore extends Thread {
     public void setAnimationSmoothness(double smoothAmount, long waitTime) {
         smooth = smoothAmount;
         wait = waitTime;
+    }
+
+    public void stopAnimation() {
+        playing = false;
+    }
+
+    public void setAnimationStartTime(int time) { //sets the start time of the moon animations
+        this.currrot = time;
     }
 
 

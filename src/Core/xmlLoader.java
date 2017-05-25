@@ -45,6 +45,7 @@ public class xmlLoader {
     final static File modFolder = new File(System.getProperty("user.dir") + "/src/Mods");
     final static File techTreeFolder = new File(System.getProperty("user.dir") + "/src/Core/techTree");
     final static String xmlTag = ".xml"; //unused, may be necessary in the future
+    private static StringBuffer getFolder = new StringBuffer();
 
     //stores content
     public static ArrayList<expansionContent> listOfExpansions = new ArrayList<>();
@@ -118,6 +119,7 @@ public class xmlLoader {
         } else {
             errorPrint(9);
         }
+        getFolder.delete(0, getFolder.length()); //clear the buffer
     } //close loadXML
 
     //used to write new content to the XML as well as read the data
@@ -450,6 +452,7 @@ public class xmlLoader {
                             if (nodes.item(j).getNodeName().equals("enabled") && Integer.parseInt(nodes.item(j).getTextContent()) == 1) { //checks the status of the enabled parameter
                                     System.out.println("Loading expansion " + expansionID + " from " + newExpansion);
                                     if (newExpansion.exists()) { //check to ensure the directory is valid
+                                        getFolder.append("/Expansions/" + expansionID);
                                         loadXML(newExpansion);
                                     } else {
                                         errorPrint(14);
@@ -491,6 +494,7 @@ public class xmlLoader {
                                 modIsActive = true; //mod is enabled, load the information
                             } else if (nodes.item(j).getNodeName().equals("directoryName")) { //get the mod's directory
                                 modID = nodes.item(j).getTextContent();
+                                getFolder.append("/Mods/" + modID);
                             }
                         }
                     }
@@ -629,6 +633,7 @@ public class xmlLoader {
         int sizeVariation = 0;
         int planetWeight = 0;
         boolean modIsValid = false;
+        StringBuffer gfxBuffer = new StringBuffer();
 
         System.out.println("Loading new star data...");
         //gather all of the nodes
@@ -638,6 +643,8 @@ public class xmlLoader {
                 Node parentNode = nodeList.item(i);
                 if (parentNode.getNodeName().equals("star")) {
                     System.out.println("New star found. Attempting to load data...");
+                    gfxBuffer.delete(0, gfxBuffer.length()); //clear the buffer
+                    gfxBuffer.append(getFolder);
                     starID = Integer.parseInt(parentNode.getAttributes().getNamedItem("id").getNodeValue());
                     if (starID >= 1000 && starID < 2000) {
                         modIsValid = true;
@@ -709,7 +716,11 @@ public class xmlLoader {
                                         errorPrint(23);
                                         planetWeight = 0;
                                     }
-                                } //if it doesn't fit any of the necessary info, ignore it
+                                } else if (nodes.item(k).getNodeName().equals("gfx") && nodes.item(k).getTextContent() != null) {
+                                    gfxBuffer.append("/" + nodes.item(k).getTextContent());
+                                }
+
+                                    //if it doesn't fit any of the necessary info, ignore it
                             }
                         }
                     } else {
@@ -727,7 +738,7 @@ public class xmlLoader {
                         }
                         //adds the new planet to the planet list if one hasn't already been added
                         if (!replacesContent) {
-                            starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight));
+                            starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight, gfxBuffer.toString()));
                             System.out.println("[NEW] Star successfully loaded - " + name + " (ID" + starID + ")");
                         }
                     } else { //something in this mod wasn't properly initialized, do not load it

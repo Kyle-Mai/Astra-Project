@@ -270,3 +270,37 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Added necessary support to the audioRepository to allow for volume changing.
 
 - Fixed minor visual issue with the pause menu button.
+
+**MAY 24 2017** (ver.PTB-B) (U3)
+
+- Added support for shuffling of music.
+
+- Removed more unused code.
+
+- Added the moons to the main menu background.
+
+    - Added the necessary code to the animCore.
+
+    - Adjusted the moon GFX files to fix some minor errors.
+
+    - Slightly adjusted the methods of the animCore, and added the stopAnimation() and setAnimationStartTime() methods.
+
+- Fiddled with the spaceport animation on the main menu. Should feel a lot less rigid now.
+
+- Added some more content to the pause menu UI.
+
+    - Slightly adjusted content ordering.
+
+- Changed main menu music to loop.
+
+- Resorted some GFX content to make things a little neater.
+
+- Added new GFX icons and content.
+
+- Added support for star GFX pictures.
+
+    - Added XML support for star GFX.
+
+- Added new methods to starCore/starClass to support portrait images.
+
+- Added new star data screen on the map to show the star's information.

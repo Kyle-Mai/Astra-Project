@@ -1,13 +1,10 @@
 package Core.GUI;
 
 //import all relevant stuff
+import Core.*;
 import Core.Player.playerData;
 import Core.SFX.audioCore;
 import Core.SFX.audioRepository;
-import Core.gameLoader;
-import Core.gameSettings;
-import Core.mapGenerator;
-import Core.xmlLoader;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -83,8 +80,10 @@ public class guiCoreV4 {
     private JPanel settingsMenu;
     private JButton btnNewGame;
     private animCore menuSpaceport;
-    private mapGenerator map;
+    private animCore menuMoon1;
+    private  animCore menuMoon2;
     private JButton btnQuit;
+    private JPanel pnlStarData;
 
     private int launcherContentLoaded = 0;
 
@@ -105,11 +104,13 @@ public class guiCoreV4 {
     private final Color clrDisable = new Color(135, 15, 55, 255);
     private final Color clrEnable = new Color(0, 225, 165, 255);
     private final Color clrDark = new Color(0, 145, 90, 255);
-    private final Color clrButtonBackground = new Color(0, 125, 90, 220);
+    private final Color clrButtonBackground = new Color(0, 125, 90, 255);
+    private final Color clrBGOpaque = new Color(25, 90, 60, 255);
     private final Color clrButtonMain = new Color(0, 155, 90, 255);
     private final Color clrBackground = new Color(0, 195, 130, 105);
     private final Color clrForeground = new Color(0, 185, 110, 155);
     private final Color clrText = new Color(255, 255, 255, 255);
+    private final Color clrInvisible = new Color(0, 0, 0, 0);
 
     private final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
     private final Font txtSubtitle = new Font("Arial", Font.BOLD, 14);
@@ -257,7 +258,7 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
 
         //attempt to load images
-        imgBackground = new JLabel(new ImageIcon(gfxRepository.mainBackground)); //TODO: Add a way to rescale images.
+        imgBackground = new JLabel(new ImageIcon(gfxRepository.mainBackground));
 
         imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogo));
         layers.add(imgBackground, new Integer(0), 0);
@@ -441,7 +442,7 @@ public class guiCoreV4 {
         btnLaunch.setForeground(clrText);
         btnLaunch.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
         btnLaunch.setFont(txtHeader);
-        btnLaunch.setOpaque(true); //TODO: Find a way to do semi-transparent buttons
+        btnLaunch.setOpaque(true);
         btnLaunch.setFocusPainted(false);
         btnLaunch.setHorizontalAlignment(SwingConstants.CENTER);
         btnLaunch.setVerticalAlignment(SwingConstants.CENTER);
@@ -774,6 +775,9 @@ public class guiCoreV4 {
                         case 42:
                             gameLoader.loadXMLData();
                             break;
+                        case 65:
+                            gfxRepository.loadContentGFX();
+                            break;
                         case 84:
                             gameLoader.cleanContent();
                             break;
@@ -788,19 +792,19 @@ public class guiCoreV4 {
                             gameSettings.player = playerInfo;
                             break;
                         case 5: //set up the map
-                            map = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
+                            gameSettings.map  = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
                             break;
                         case 11: //load the map string
-                            gameLoader.mapLoader(map, playerInfo);
+                            gameLoader.mapLoader(gameSettings.map, playerInfo);
                             break;
                         case 18: //save the data to the user file
-                            playerInfo.addMapString(map);
+                            playerInfo.addMapString(gameSettings.map);
                             break;
                         case 20:
-                            playerInfo.addStarString(map);
+                            playerInfo.addStarString(gameSettings.map);
                             break;
                         case 24:
-                            playerInfo.addPlanetString(map);
+                            playerInfo.addPlanetString(gameSettings.map);
                             break;
                         case 45: //load the GFX content
                             gfxRepository.loadMapGFX();
@@ -836,6 +840,7 @@ public class guiCoreV4 {
 
             } else if (load == 2) { //load map
 
+
                 loadMapView();
 
             }
@@ -847,9 +852,21 @@ public class guiCoreV4 {
     //separates the main menu animation loading
     private void loadMainMenuAnimation() {
 
+        Random randomizePosition = new Random();
+
         menuSpaceport = new animCore(new ImageIcon(gfxRepository.menuSpaceport), 2, layers, window);
-        menuSpaceport.wait = 1000;
+        menuSpaceport.setAnimationSmoothness(0.1, 200);
         menuSpaceport.start();
+
+        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 500);
+        menuMoon1.setAnimationSmoothness(0.1, 150);
+        menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
+        menuMoon1.start();
+
+        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 550, 50, 420);
+        menuMoon2.setAnimationSmoothness(0.1, 150);
+        menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
+        menuMoon2.start();
 
     }
 
@@ -863,11 +880,11 @@ public class guiCoreV4 {
         bgPanel.setVisible(true);
 
         imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogoLarge));
-        layers.add(imgLogo, new Integer(5), 0);
+        layers.add(imgLogo, new Integer(10), 0);
         imgLogo.setBounds(window.getWidth() - 140, 20, 120, 120);
 
         JLabel menuPlanet = new JLabel(new ImageIcon(gfxRepository.menuPlanet));
-        layers.add(menuPlanet, new Integer(3), 0);
+        layers.add(menuPlanet, new Integer(8), 0);
         menuPlanet.setBounds(window.getWidth() - 1100, 0, 1500, 450);
         menuPlanet.setOpaque(false);
         menuPlanet.setFocusable(false);
@@ -880,7 +897,7 @@ public class guiCoreV4 {
 
         JPanel pnlMenuBarH = new JPanel();
 
-        layers.add(pnlMenuBarH, new Integer(2), 0);
+        layers.add(pnlMenuBarH, new Integer(3), 0);
         pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
         pnlMenuBarH.setLayout(null);
         pnlMenuBarH.setBackground(clrBackground);
@@ -889,7 +906,7 @@ public class guiCoreV4 {
         pnlMenuBarH.setVisible(true);
 
         btnNewGame = new JButton();
-        layers.add(btnNewGame, new Integer(7), 0);
+        layers.add(btnNewGame, new Integer(4), 0);
         btnNewGame.setBounds(5, getUIScaleY() - 60, 180, 55);
         btnNewGame.setBackground(clrButtonMain);
         btnNewGame.setForeground(clrText);
@@ -949,8 +966,9 @@ public class guiCoreV4 {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 audioRepository.buttonConfirm();
-                menuSpaceport.playing = false;
-                menuSpaceport.interrupt();
+                menuSpaceport.stopAnimation();
+                menuMoon1.stopAnimation();
+                menuMoon2.stopAnimation();
                 clearUI();
                 loadLoadingScreen(2);
             }
@@ -1144,7 +1162,7 @@ public class guiCoreV4 {
 
         clearUI();
 
-        audioRepository.musicMainGame();
+        audioRepository.musicShuffle();
         audioRepository.ambianceMainGame();
 
         bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
@@ -1162,20 +1180,32 @@ public class guiCoreV4 {
         mapView.setVisible(true);
 
         ArrayList<ArrayList<JLabel>> mapGFX = new ArrayList<>();
+        ArrayList<ArrayList<JButton>> mapButton = new ArrayList<>();
 
         int positionX;
         int positionY = 0;
         int tileSize = 30;
 
-        for (int i = 0; i < map.mapTiles.size(); i++) {
+        for (int i = 0; i < gameSettings.map.mapTiles.size(); i++) {
             mapGFX.add(new ArrayList<JLabel>());
+            mapButton.add(new ArrayList<JButton>());
             positionX = 0;
 
-            for (int j = 0; j < map.mapTiles.get(i).size(); j++) {
-                if (map.mapTiles.get(i).get(j).getStar()) {
+            for (int j = 0; j < gameSettings.map.mapTiles.get(i).size(); j++) {
+                if (gameSettings.map.mapTiles.get(i).get(j).getStar()) {
                     mapGFX.get(i).add(new JLabel(new ImageIcon(gfxRepository.planetIcon)));
+                    mapButton.get(i).add(new JButton());
+                    mapGFX.get(i).get(j).add(mapButton.get(i).get(j));
+                    mapButton.get(i).get(j).setOpaque(false);
+                    mapButton.get(i).get(j).setFocusPainted(false);
+                    mapButton.get(i).get(j).setBorder(null);
+                    mapButton.get(i).get(j).setBackground(clrInvisible);
+                    mapButton.get(i).get(j).setVisible(true);
+                    mapButton.get(i).get(j).setBounds(0, 0, tileSize, tileSize);
+                    mapButton.get(i).get(j).addActionListener(new addMapAL(i, j));
                 } else {
                     mapGFX.get(i).add(new JLabel());
+                    mapButton.get(i).add(null); //lololo cheating
                 }
                 bgPanel.add(mapGFX.get(i).get(j));
                 mapGFX.get(i).get(j).setBounds(tileSize * positionX, tileSize * positionY, tileSize, tileSize);
@@ -1189,6 +1219,13 @@ public class guiCoreV4 {
 
             positionY++;
         }
+
+        pnlStarData = new JPanel();
+        layers.add(pnlStarData, new Integer(10), 0);
+        pnlStarData.setLayout(null);
+        pnlStarData.setBounds((screen.getWidth() / 2) - 400, 100, 800, screen.getHeight() - 200);
+        pnlStarData.setBackground(clrBGOpaque);
+        pnlStarData.setVisible(false);
 
         loadPlayerBar();
 
@@ -1204,7 +1241,7 @@ public class guiCoreV4 {
         JPanel pnlTopBar = new JPanel();
         pnlTopBar.setLayout(null);
         layers.add(pnlTopBar, new Integer(8), 0);
-        pnlTopBar.setBounds(0, 0, screen.getWidth(), 60);
+        pnlTopBar.setBounds(0, 0, screen.getWidth(), 50);
         pnlTopBar.setBackground(clrDGrey);
 
         JButton btnMenu = new JButton();
@@ -1228,7 +1265,7 @@ public class guiCoreV4 {
         pnlOverlay.add(pnlPauseMenu);
         pnlPauseMenu.setLayout(null);
         pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
-        pnlPauseMenu.setBackground(clrBackground);
+        pnlPauseMenu.setBackground(clrBGOpaque);
         pnlPauseMenu.setFocusable(false);
         pnlPauseMenu.setVisible(true);
         pnlOverlay.setVisible(false);
@@ -1239,6 +1276,7 @@ public class guiCoreV4 {
                 if (!pnlOverlay.isVisible()) {
                     showPauseMenu();
                     audioRepository.buttonClick();
+                    refreshUI();
                 } else {
                     pnlOverlay.setVisible(false);
                     pnlPauseMenu.removeAll();
@@ -1249,12 +1287,66 @@ public class guiCoreV4 {
 
     }
 
+    protected void loadStarData(starClass star) { //shows the star information screen
+
+        pnlStarData.setVisible(true);
+
+        JLabel lblStarPortrait = new JLabel(new ImageIcon(star.getPortraitGFX()));
+        pnlStarData.add(lblStarPortrait);
+        lblStarPortrait.setOpaque(true);
+        lblStarPortrait.setBounds(0, 0, 560, 185);
+        lblStarPortrait.setVisible(true);
+
+        JLabel lblStarName = new JLabel();
+        pnlStarData.add(lblStarName);
+        lblStarName.setFont(txtSubtitle);
+        lblStarName.setForeground(clrText);
+        lblStarName.setText(star.getStarClassName());
+        lblStarName.setBounds(580, 10, pnlStarData.getWidth() - 600, 60);
+        lblStarName.setVisible(true);
+
+        JButton btnClose = new JButton();
+        pnlStarData.add(btnClose);
+        btnClose.setBounds(pnlStarData.getWidth() - 40, 10, 30, 30);
+        btnClose.setOpaque(true);
+        btnClose.setFocusPainted(false);
+        btnClose.setFocusable(false);
+        btnClose.setForeground(clrText);
+        btnClose.setBackground(clrButtonBackground);
+        btnClose.setVisible(true);
+
+        btnClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                audioRepository.buttonClick();
+                pnlStarData.removeAll();
+                pnlStarData.setVisible(false);
+                refreshUI();
+            }
+        });
+
+        refreshUI();
+
+    }
+
     private void showPauseMenu() {
 
         gameSettings.gameIsPaused = true; //pauses the game
 
+        //adds the title to the pause menu
+        JLabel lblMenuTitle = new JLabel();
+        pnlPauseMenu.add(lblMenuTitle);
+        lblMenuTitle.setBounds(5, 10, pnlPauseMenu.getWidth() - 10, 40);
+        lblMenuTitle.setForeground(clrText);
+        lblMenuTitle.setFont(txtHeader);
+        lblMenuTitle.setFocusable(false);
+        lblMenuTitle.setText("Pause Menu");
+        lblMenuTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMenuTitle.setVerticalAlignment(SwingConstants.CENTER);
+        lblMenuTitle.setVisible(true);
+
         pnlPauseMenu.add(btnQuit);
-        btnQuit.setBounds(5, pnlPauseMenu.getHeight() - 55, pnlPauseMenu.getWidth() - 10, 50);
+        btnQuit.setBounds(10, pnlPauseMenu.getHeight() - 50, pnlPauseMenu.getWidth() - 20, 40);
         btnQuit.setOpaque(true);
         btnQuit.setBackground(clrButtonBackground);
         btnQuit.setFocusPainted(false);
@@ -1268,8 +1360,8 @@ public class guiCoreV4 {
         btnQuit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (btnQuit.getText().equals("Quit Game")) { //TODO: Sometimes doesn't properly register text and quits without warning the user... Need to fix.
-                    audioRepository.buttonSelect();
+                if (btnQuit.getText().equals("Quit Game")) { //TODO: Add a way to save user data when quitting.
+                    audioRepository.buttonDisable();
                     btnQuit.setText("Are you sure?");
                 } else {
                     audioRepository.buttonConfirm();
@@ -1280,14 +1372,14 @@ public class guiCoreV4 {
 
         JButton btnReturn = new JButton();
         pnlPauseMenu.add(btnReturn);
-        btnReturn.setBounds(5, btnQuit.getY() - 55, pnlPauseMenu.getWidth() - 10, 50);
+        btnReturn.setBounds(10, lblMenuTitle.getY() + lblMenuTitle.getHeight() + 10, pnlPauseMenu.getWidth() - 20, 40);
         btnReturn.setOpaque(true);
         btnReturn.setBackground(clrButtonBackground);
         btnReturn.setFocusPainted(false);
         btnReturn.setFocusable(false);
         btnReturn.setForeground(clrText);
         btnReturn.setFont(txtSubheader);
-        btnReturn.setText("Return");
+        btnReturn.setText("Continue");
         btnReturn.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
         btnReturn.setVisible(true);
 
@@ -1300,22 +1392,10 @@ public class guiCoreV4 {
             }
         });
 
-        //adds the title to the pause menu
-        JLabel lblMenuTitle = new JLabel();
-        pnlPauseMenu.add(lblMenuTitle);
-        lblMenuTitle.setBounds(5, 5, pnlPauseMenu.getWidth() - 10, 40);
-        lblMenuTitle.setForeground(clrText);
-        lblMenuTitle.setFont(txtHeader);
-        lblMenuTitle.setFocusable(false);
-        lblMenuTitle.setText("Pause Menu");
-        lblMenuTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMenuTitle.setVerticalAlignment(SwingConstants.CENTER);
-        lblMenuTitle.setVisible(true);
-
         //Adds a slider to change music volume
         JLabel lblMusicVolume = new JLabel();
         pnlPauseMenu.add(lblMusicVolume);
-        lblMusicVolume.setBounds(5, lblMenuTitle.getHeight() + 10, pnlPauseMenu.getWidth() - 10, 25);
+        lblMusicVolume.setBounds(5, btnReturn.getY() + btnReturn.getHeight() + 5, pnlPauseMenu.getWidth() - 10, 25);
         lblMusicVolume.setFont(txtSubtitle);
         lblMusicVolume.setForeground(clrText);
         lblMusicVolume.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1347,11 +1427,44 @@ public class guiCoreV4 {
             }
         });
 
+        //Adds a slider to change ambiance volume
+        JLabel lblAmbianceVolume = new JLabel();
+        pnlPauseMenu.add(lblAmbianceVolume);
+        lblAmbianceVolume.setBounds(5, sldMusicVolume.getY() + sldMusicVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 10, lblMusicVolume.getHeight());
+        lblAmbianceVolume.setFont(txtSubtitle);
+        lblAmbianceVolume.setForeground(clrText);
+        lblAmbianceVolume.setHorizontalAlignment(SwingConstants.CENTER);
+        lblAmbianceVolume.setVerticalAlignment(SwingConstants.CENTER);
+        lblAmbianceVolume.setText("Ambiance Volume");
+        lblAmbianceVolume.setVisible(true);
+
+        JSlider sldAmbianceVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.ambianceVolume);
+        pnlPauseMenu.add(sldAmbianceVolume);
+        sldAmbianceVolume.setMajorTickSpacing(10);
+        sldAmbianceVolume.setMinorTickSpacing(2);
+        sldAmbianceVolume.setPaintTicks(true);
+        sldAmbianceVolume.setPaintLabels(false);
+        sldAmbianceVolume.setFocusable(false);
+        sldAmbianceVolume.setForeground(clrText);
+        sldAmbianceVolume.setOpaque(false);
+        sldAmbianceVolume.setBounds(10, lblAmbianceVolume.getY() + lblAmbianceVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 20, sldMusicVolume.getHeight());
+        sldAmbianceVolume.setVisible(true);
+
+        sldAmbianceVolume.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider source = (JSlider)changeEvent.getSource();
+                if (source.getValueIsAdjusting()) {
+                    audioRepository.ambianceVolume = source.getValue();
+                    audioRepository.setAmbianceVolume();
+                }
+                refreshUI();
+            }
+        });
+
 
 
         pnlOverlay.setVisible(true);
-
-        refreshUI();
 
     }
 
@@ -1448,6 +1561,22 @@ public class guiCoreV4 {
 
     }
 
+    private class addMapAL implements ActionListener {
+
+        int x, y;
+
+        public addMapAL(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            audioRepository.buttonClick();
+            loadStarData(gameSettings.map.mapTiles.get(x).get(y).getStarData());
+        }
+
+    }
 
 
 

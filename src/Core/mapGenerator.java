@@ -114,6 +114,7 @@ public class mapGenerator implements Serializable {
 
         public boolean getVisibility() { return this.isVisible; }
         public boolean getStar() { return this.hasStar; }
+        public starClass getStarData() { return this.star; }
 
         private String writeVisiblity() { //gets the visibility of the tile as a string for easier writing to file
             if (this.getVisibility()) {

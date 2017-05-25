@@ -1,5 +1,6 @@
 package Core;
 
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -144,6 +145,14 @@ public class starClass extends starCore implements Serializable {
     public String getStarName() { return this.starName; }
     public int getStarIndex() { return this.starIndex; }
     public String getStarSpectral() { return this.starSpectral; }
+
+    public BufferedImage getPortraitGFX() {
+        return listOfStars.get(arrayLoc).getGfxImage();
+    }
+
+    public String getStarClassName() {
+        return listOfStars.get(arrayLoc).getName();
+    }
 
 
 }
