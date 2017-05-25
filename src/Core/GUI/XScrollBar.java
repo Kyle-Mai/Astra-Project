@@ -14,7 +14,7 @@ import java.awt.*;
  * Stack Overflow - Used Stack Overflow to help me understand how to create a custom scrollbar to begin with.
  * Java API - Used Java API to help me understand the methods I needed to replace, along with Stack Overflow.
  */
-public class customScrollbar extends BasicScrollBarUI {
+class XScrollBar extends BasicScrollBarUI {
 
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
@@ -40,7 +40,7 @@ public class customScrollbar extends BasicScrollBarUI {
     protected JButton createDecreaseButton(int orientation) { return createZeroButton(); }
 
     //removes the buttons
-    protected JButton createZeroButton() {
+    private JButton createZeroButton() {
         JButton button = new JButton("What button?");
         Dimension zeroDim = new Dimension(0,0);
         //button.setBackground(new Color(45, 55, 75, 255));

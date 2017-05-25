@@ -19,15 +19,23 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 
-public class newPanel extends JPanel {
+class XPanel extends JPanel {
 
 
     /** Main Constructor **/
 
-    public newPanel(Color backgroundColor) {
+    XPanel(Color backgroundColor) {
         this.setLayout(null);
         this.setBackground(backgroundColor);
         this.setFocusable(false);
+        this.setOpaque(true);
+
+    }
+
+    XPanel() {
+        this.setLayout(null);
+        this.setFocusable(false);
+        this.setOpaque(false);
 
     }
 

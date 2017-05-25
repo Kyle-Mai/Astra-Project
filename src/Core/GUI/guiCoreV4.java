@@ -3,26 +3,16 @@ package Core.GUI;
 //import all relevant stuff
 import Core.*;
 import Core.Player.playerData;
-import Core.SFX.audioCore;
 import Core.SFX.audioRepository;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
@@ -46,29 +36,29 @@ public class guiCoreV4 {
 
     /** Stores resource declarations **/
 
-    private ArrayList<JPanel> pnlExpansions = new ArrayList<>();
-    private ArrayList<JLabel> lblExpansions = new ArrayList<>();
-    private ArrayList<JLabel> lblExpanDesc = new ArrayList<>();
-    private ArrayList<JButton> btnExpanEnable = new ArrayList<>();
-    private ArrayList<JLabel> lblExpanID = new ArrayList<>();
+    private ArrayList<XPanel> pnlExpansions = new ArrayList<>();
+    private ArrayList<XLabel> lblExpansions = new ArrayList<>();
+    private ArrayList<XLabel> lblExpanDesc = new ArrayList<>();
+    private ArrayList<XButton> btnExpanEnable = new ArrayList<>();
+    private ArrayList<XLabel> lblExpanID = new ArrayList<>();
     private ArrayList<addExpAL> actionEnabler = new ArrayList<>();
-    private JPanel pnlExpansionHeader;
-    private JLabel lblExpHeaderText;
+    private XPanel pnlExpansionHeader;
+    private XLabel lblExpHeaderText;
 
-    private ArrayList<JPanel> pnlMods = new ArrayList<>();
-    private ArrayList<JLabel> lblMods = new ArrayList<>();
-    private ArrayList<JLabel> lblModAuthor = new ArrayList<>();
-    private ArrayList<JButton> btnModEnable = new ArrayList<>();
+    private ArrayList<XPanel> pnlMods = new ArrayList<>();
+    private ArrayList<XLabel> lblMods = new ArrayList<>();
+    private ArrayList<XLabel> lblModAuthor = new ArrayList<>();
+    private ArrayList<XButton> btnModEnable = new ArrayList<>();
     private ArrayList<addModAL> modEnabler = new ArrayList<>();
-    private JPanel pnlModHeader;
-    private JLabel lblModHeaderText;
+    private XPanel pnlModHeader;
+    private XLabel lblModHeaderText;
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
     private double screenWidth = screenSize.getWidth();
     private double screenHeight = screenSize.getHeight();
     private JFrame window;
     private JLayeredPane layers; //sorts the layers of the screen
-    private newPanel screen;
+    private XPanel screen;
     private JPanel contentController;
     private JScrollPane contentList;
     private JProgressBar loadingBar;
@@ -92,33 +82,6 @@ public class guiCoreV4 {
     private int load;
 
     private backgroundLoader loader;
-
-    /** Stores UI element design properties **/
-
-    final String gameVersion = "PTB-A Build 66b";
-
-    private final Color clrBlkTransparent = new Color(15, 35, 25, 175);
-    private final Color clrBlk = new Color(25, 35, 35, 255);
-    private final Color clrDGrey = new Color(45, 75, 65, 255);
-    private final Color clrDisableBorder = new Color(75, 5, 25, 255);
-    private final Color clrDisable = new Color(135, 15, 55, 255);
-    private final Color clrEnable = new Color(0, 225, 165, 255);
-    private final Color clrDark = new Color(0, 145, 90, 255);
-    private final Color clrButtonBackground = new Color(0, 125, 90, 255);
-    private final Color clrBGOpaque = new Color(25, 90, 60, 255);
-    private final Color clrButtonMain = new Color(0, 155, 90, 255);
-    private final Color clrBackground = new Color(0, 195, 130, 105);
-    private final Color clrForeground = new Color(0, 185, 110, 155);
-    private final Color clrText = new Color(255, 255, 255, 255);
-    private final Color clrInvisible = new Color(0, 0, 0, 0);
-
-    private final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
-    private final Font txtSubtitle = new Font("Arial", Font.BOLD, 14);
-    private final Font txtItalSubtitle = new Font("Arial", Font.ITALIC, 14);
-    private final Font txtSubheader = new Font("Arial", Font.BOLD, 16);
-    private final Font txtHeader = new Font("Arial", Font.BOLD, 25);
-    private final Font txtTitle = new Font("Arial", Font.BOLD, 40);
-    private final Font txtTiny = new Font("Arial", Font.PLAIN, 12);
 
     /** UI scaling code**/
     //handles the scaling of the UI
@@ -207,23 +170,17 @@ public class guiCoreV4 {
     //builds the core framework
     public guiCoreV4(int screenScaleOption) {
 
-        window = new JFrame("Astra Launcher");
-        screen = new newPanel(clrBlk);
+        window = new XFrame("Astra Launcher", gfxRepository.gameLogo);
+        screen = new XPanel(gfxRepository.clrBlk);
 
         rescaleScreen(screenScaleOption);
 
-        window.setIconImage(gfxRepository.gameLogo);
-        window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        screen.setLayout(null); //CARDINAL SIN, BUT I DON'T REALLY CARE AT THIS POINT
         screen.setVisible(true);
         window.setContentPane(screen);
-        window.setUndecorated(true);
-        window.setResizable(false);
         window.pack();
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         window.setVisible(true);
-
 
     }
 
@@ -249,7 +206,7 @@ public class guiCoreV4 {
 
     public void loadLauncherScreen() {
         System.out.println("Loading launcher data...");
-        JLabel imgBackground, imgBorder;
+        XLabel imgBackground, imgBorder;
 
         //initialize the layers
         layers = new JLayeredPane();
@@ -258,9 +215,9 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
 
         //attempt to load images
-        imgBackground = new JLabel(new ImageIcon(gfxRepository.mainBackground));
+        imgBackground = new XLabel(gfxRepository.mainBackground, gfxRepository.clrTrueBlack);
 
-        imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogo));
+        imgLogo = new XLabel(gfxRepository.gameLogo);
         layers.add(imgBackground, new Integer(0), 0);
         layers.add(imgLogo, new Integer(9), 0);
         imgLogo.setBounds(40, 20, 50, 60);
@@ -268,25 +225,18 @@ public class guiCoreV4 {
         imgBackground.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         imgBackground.setVisible(true);
 
-        imgBorder = new JLabel(new ImageIcon(gfxRepository.launcherBorder));
+        imgBorder = new XLabel(gfxRepository.launcherBorder);
         layers.add(imgBorder, new Integer(1), 0);
         imgBorder.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        imgBorder.setFocusable(false);
         imgBorder.setVisible(true);
 
         //load exit button
-        JButton btnExit = new JButton();
+        XButton btnExit = new XButton("X", gfxRepository.txtStandard, gfxRepository.clrText, gfxRepository.clrButtonBackground);
 
         layers.add(btnExit, new Integer(2), 0);
         btnExit.setBounds(getUIScaleX() - 55, 10, 30, 30);
-        btnExit.setBackground(clrButtonBackground);
-        btnExit.setFocusPainted(false);
-        btnExit.setForeground(clrText);
-        //btnExit.setBorderPainted(false);
-        btnExit.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnExit.setBorder(gfxRepository.bdrButtonEnabled);
         btnExit.setOpaque(false);
-        btnExit.setFont(txtStandard);
-        btnExit.setText("X");
         btnExit.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -302,13 +252,13 @@ public class guiCoreV4 {
 
         layers.add(btnMinimize, new Integer(2), 0);
         btnMinimize.setBounds(getUIScaleX() - 90, 10, 30, 30);
-        btnMinimize.setBackground(clrButtonBackground);
+        btnMinimize.setBackground(gfxRepository.clrButtonBackground);
         btnMinimize.setFocusPainted(false);
-        btnMinimize.setForeground(clrText);
+        btnMinimize.setForeground(gfxRepository.clrText);
         //btnMinimize.setBorderPainted(false);
-        btnMinimize.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnMinimize.setBorder(gfxRepository.bdrButtonEnabled);
         btnMinimize.setOpaque(false);
-        btnMinimize.setFont(txtStandard);
+        btnMinimize.setFont(gfxRepository.txtStandard);
         btnMinimize.setText("-");
         btnMinimize.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
@@ -325,12 +275,12 @@ public class guiCoreV4 {
 
         layers.add(btnSettings, new Integer(2), 0);
         btnSettings.setBounds(getUIScaleX() - 125, 10, 30, 30);
-        btnSettings.setBackground(clrButtonBackground);
+        btnSettings.setBackground(gfxRepository.clrButtonBackground);
         btnSettings.setFocusPainted(false);
-        btnSettings.setForeground(clrText);
-        btnSettings.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnSettings.setForeground(gfxRepository.clrText);
+        btnSettings.setBorder(gfxRepository.bdrButtonEnabled);
         btnSettings.setOpaque(false);
-        btnSettings.setFont(txtStandard);
+        btnSettings.setFont(gfxRepository.txtStandard);
         btnSettings.setText("*");
 
         btnSettings.setVisible(true);
@@ -343,26 +293,21 @@ public class guiCoreV4 {
         lblTitle.setVerticalAlignment(SwingConstants.TOP);
         lblTitle.setOpaque(false);
         lblTitle.setFocusable(false);
-        lblTitle.setFont(txtTitle);
+        lblTitle.setFont(gfxRepository.txtTitle);
         lblTitle.setText("stra Project");
-        lblTitle.setForeground(clrText);
+        lblTitle.setForeground(gfxRepository.clrText);
         lblTitle.setVisible(true);
 
         //load the game version
-        JLabel lblVersion = new JLabel();
+        XLabel lblVersion = new XLabel("Version; " + gfxRepository.gameVersion, gfxRepository.txtTiny, gfxRepository.clrText);
 
         layers.add(lblVersion, new Integer(4), 0);
         lblVersion.setBounds(25, getUIScaleY() - 50, 200, 35);
-        lblVersion.setOpaque(false);
-        lblVersion.setFocusable(false);
-        lblVersion.setFont(txtTiny);
-        lblVersion.setText("Version; " + gameVersion);
-        lblVersion.setForeground(clrText);
-        lblVersion.setVerticalAlignment(SwingConstants.BOTTOM);
+        lblVersion.setAlignments(SwingConstants.LEFT, SwingConstants.BOTTOM);
         lblVersion.setVisible(true);
 
         //load the scroll window
-        contentController = new JPanel();
+        contentController = new XPanel(gfxRepository.clrDGrey);
         layers.add(contentController, new Integer(5), 0);
         contentList = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         layers.add(contentList, new Integer(6), 0);
@@ -371,17 +316,13 @@ public class guiCoreV4 {
 
         contentList.add(contentScroller);
         contentScroller.setBorder(null);
-        contentScroller.setUI(new customScrollbar());
+        contentScroller.setUI(new XScrollBar());
         contentScroller.setBounds(contentController.getX() + contentController.getWidth() - 20, contentController.getY(), 15, contentController.getHeight());
         contentScroller.setOpaque(true);
         contentScroller.setVisible(true);
 
         contentController.setBounds(getUIScaleX() - 325, 45, 300, 320);
         contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight()));
-        contentController.setOpaque(true);
-        //contentController.setLayout(contentLayout); //Testing layout...
-        contentController.setLayout(null);
-        contentController.setBackground(clrDGrey);
         contentController.setVisible(true);
 
         contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 25), 45, contentController.getWidth(), contentController.getHeight());
@@ -395,53 +336,37 @@ public class guiCoreV4 {
         contentList.setBorder(null);
 
         //load the expansion header
-        pnlExpansionHeader = new JPanel();
-        pnlExpansionHeader.setLayout(null);
+        pnlExpansionHeader = new XPanel(gfxRepository.clrDark);
         pnlExpansionHeader.setBounds(5, 5, contentController.getWidth() - 20, 25);
-        pnlExpansionHeader.setOpaque(true);
-        pnlExpansionHeader.setBackground(clrDark);
         pnlExpansionHeader.setVisible(true);
 
         //load expansion header text
-        lblExpHeaderText = new JLabel();
+        lblExpHeaderText = new XLabel("Expansion Packs", gfxRepository.txtSubheader, gfxRepository.clrText);
         pnlExpansionHeader.add(lblExpHeaderText);
         lblExpHeaderText.setBounds(5, 5, pnlExpansionHeader.getWidth() - 10, pnlExpansionHeader.getHeight() - 10);
-        lblExpHeaderText.setOpaque(false);
-        lblExpHeaderText.setFont(txtSubheader);
-        lblExpHeaderText.setForeground(clrText);
-        lblExpHeaderText.setText("Expansion Packs");
-        lblExpHeaderText.setHorizontalAlignment(SwingConstants.CENTER);
-        lblExpHeaderText.setVerticalAlignment(SwingConstants.CENTER);
+        lblExpHeaderText.setAlignments(SwingConstants.CENTER, SwingConstants.CENTER);
         lblExpHeaderText.setVisible(true);
 
         //load the mod header
-        pnlModHeader = new JPanel();
-        pnlModHeader.setLayout(null);
+        pnlModHeader = new XPanel(gfxRepository.clrDark);
         pnlModHeader.setBounds(5, pnlExpansionHeader.getY() + pnlExpansionHeader.getHeight() + 5, contentController.getWidth() - 20, 25);
-        pnlModHeader.setOpaque(true);
-        pnlModHeader.setBackground(clrDark);
         pnlModHeader.setVisible(true);
 
         //adds the mod header text data
-        lblModHeaderText = new JLabel();
+        lblModHeaderText = new XLabel("Mods", gfxRepository.txtSubheader, gfxRepository.clrText);
         pnlModHeader.add(lblModHeaderText);
         lblModHeaderText.setBounds(5, 5, pnlModHeader.getWidth() - 10, pnlModHeader.getHeight() - 10);
-        lblModHeaderText.setOpaque(false);
-        lblModHeaderText.setFont(txtSubheader);
-        lblModHeaderText.setForeground(clrText);
-        lblModHeaderText.setText("Mods");
-        lblModHeaderText.setHorizontalAlignment(SwingConstants.CENTER);
-        lblModHeaderText.setVerticalAlignment(SwingConstants.CENTER);
+        lblModHeaderText.setAlignments(SwingConstants.CENTER, SwingConstants.CENTER);
         lblModHeaderText.setVisible(true);
 
         //load launch button
         JButton btnLaunch = new JButton();
         layers.add(btnLaunch, new Integer(7), 0);
         btnLaunch.setBounds(contentController.getX(), contentController.getY() + contentController.getHeight() + 5, contentController.getWidth(), 55);
-        btnLaunch.setBackground(clrButtonMain);
-        btnLaunch.setForeground(clrText);
-        btnLaunch.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
-        btnLaunch.setFont(txtHeader);
+        btnLaunch.setBackground(gfxRepository.clrButtonMain);
+        btnLaunch.setForeground(gfxRepository.clrText);
+        btnLaunch.setBorder(gfxRepository.bdrButtonEnabled);
+        btnLaunch.setFont(gfxRepository.txtHeader);
         btnLaunch.setOpaque(true);
         btnLaunch.setFocusPainted(false);
         btnLaunch.setHorizontalAlignment(SwingConstants.CENTER);
@@ -492,11 +417,11 @@ public class guiCoreV4 {
 
         for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
 
-            pnlExpansions.add(new JPanel());
-            lblExpansions.add(new JLabel());
-            lblExpanDesc.add(new JLabel());
-            btnExpanEnable.add(new JButton());
-            lblExpanID.add(new JLabel());
+            pnlExpansions.add(new XPanel());
+            lblExpansions.add(new XLabel());
+            lblExpanDesc.add(new XLabel());
+            btnExpanEnable.add(new XButton());
+            lblExpanID.add(new XLabel());
 
             expansionID = xmlLoader.listOfExpansions.get(i).getID();
 
@@ -505,7 +430,7 @@ public class guiCoreV4 {
             pnlExpansions.get(i).setLayout(null);
 
             pnlExpansions.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
-            pnlExpansions.get(i).setBackground(clrForeground);
+            pnlExpansions.get(i).setBackground(gfxRepository.clrForeground);
             pnlExpansions.get(i).add(lblExpansions.get(i));
             pnlExpansions.get(i).add(lblExpanDesc.get(i));
             pnlExpansions.get(i).add(btnExpanEnable.get(i));
@@ -513,23 +438,17 @@ public class guiCoreV4 {
             pnlExpansions.get(i).setOpaque(true);
 
             lblExpansions.get(i).setBounds(5, 5, 195, 25);
-            lblExpansions.get(i).setForeground(clrText);
-            lblExpansions.get(i).setOpaque(false);
-            lblExpansions.get(i).setFont(txtSubheader);
-            lblExpansions.get(i).setText(xmlLoader.listOfExpansions.get(i).getName());
-            lblExpansions.get(i).setVerticalAlignment(SwingConstants.TOP);
+            lblExpansions.get(i).setText(xmlLoader.listOfExpansions.get(i).getName(), gfxRepository.txtSubheader, gfxRepository.clrText);
+            lblExpansions.get(i).setAlignments(SwingConstants.TOP, SwingConstants.LEFT);
 
             lblExpanDesc.get(i).setBounds(5, 35, 170, 20);
-            lblExpanDesc.get(i).setOpaque(false);
-            lblExpanDesc.get(i).setForeground(clrText);
-            lblExpanDesc.get(i).setFont(txtItalSubtitle);
-            lblExpanDesc.get(i).setText(xmlLoader.listOfExpansions.get(i).getSubtitle());
+            lblExpanDesc.get(i).setText(xmlLoader.listOfExpansions.get(i).getSubtitle(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
 
             btnExpanEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
-            btnExpanEnable.get(i).setForeground(clrText);
+            btnExpanEnable.get(i).setForeground(gfxRepository.clrText);
             btnExpanEnable.get(i).setOpaque(true);
             btnExpanEnable.get(i).setFocusable(false);
-            btnExpanEnable.get(i).setFont(txtSubheader);
+            btnExpanEnable.get(i).setFont(gfxRepository.txtSubheader);
 
             actionEnabler.add(new addExpAL());
 
@@ -543,24 +462,24 @@ public class guiCoreV4 {
                 btnExpanEnable.get(i).setText("-");
                 btnExpanEnable.get(i).setToolTipText("Disable");
                 expansionEnabled = 1;
-                btnExpanEnable.get(i).setBackground(clrEnable);
-                btnExpanEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+                btnExpanEnable.get(i).setBackground(gfxRepository.clrEnable);
+                btnExpanEnable.get(i).setBorder(gfxRepository.bdrButtonEnabled);
             } else {
                 //content is disabled, set the button accordingly
                 //System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is disabled.");
                 btnExpanEnable.get(i).setText("+");
                 btnExpanEnable.get(i).setToolTipText("Enable");
                 expansionEnabled = 0;
-                btnExpanEnable.get(i).setBackground(clrDisable);
-                btnExpanEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+                btnExpanEnable.get(i).setBackground(gfxRepository.clrDisable);
+                btnExpanEnable.get(i).setBorder(gfxRepository.bdrButtonDisabled);
             }
 
             actionEnabler.get(i).setEnable(expansionEnabled); //update the action listener tied to the enable button with the current status of the content
 
             lblExpanID.get(i).setBounds(contentController.getWidth() - 80, 35, 55, 20);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
-            lblExpanID.get(i).setForeground(clrText);
-            lblExpanID.get(i).setFont(txtTiny);
+            lblExpanID.get(i).setForeground(gfxRepository.clrText);
+            lblExpanID.get(i).setFont(gfxRepository.txtTiny);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
             lblExpanID.get(i).setText(xmlLoader.listOfExpansions.get(i).getID());
 
@@ -605,10 +524,10 @@ public class guiCoreV4 {
 
         for (int i = 0; i < xmlLoader.listOfMods.size(); i++) {
 
-            pnlMods.add(new JPanel());
-            lblMods.add(new JLabel());
-            btnModEnable.add(new JButton());
-            lblModAuthor.add(new JLabel());
+            pnlMods.add(new XPanel());
+            lblMods.add(new XLabel());
+            btnModEnable.add(new XButton());
+            lblModAuthor.add(new XLabel());
 
             contentController.add(pnlMods.get(i));
 
@@ -617,22 +536,22 @@ public class guiCoreV4 {
             pnlMods.get(i).setLayout(null);
 
             pnlMods.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlModHeader.getHeight() + 5) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
-            pnlMods.get(i).setBackground(clrForeground);
+            pnlMods.get(i).setBackground(gfxRepository.clrForeground);
             pnlMods.get(i).add(lblMods.get(i));
             pnlMods.get(i).add(btnModEnable.get(i));
 
             lblMods.get(i).setBounds(5, 5, 195, 25);
-            lblMods.get(i).setForeground(clrText);
+            lblMods.get(i).setForeground(gfxRepository.clrText);
             lblMods.get(i).setOpaque(false);
-            lblMods.get(i).setFont(txtSubheader);
+            lblMods.get(i).setFont(gfxRepository.txtSubheader);
             lblMods.get(i).setText(xmlLoader.listOfMods.get(i).getModName());
             lblMods.get(i).setVerticalAlignment(SwingConstants.TOP);
 
             btnModEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
-            btnModEnable.get(i).setForeground(clrText);
+            btnModEnable.get(i).setForeground(gfxRepository.clrText);
             btnModEnable.get(i).setOpaque(true);
             btnModEnable.get(i).setFocusable(false);
-            btnModEnable.get(i).setFont(txtSubheader);
+            btnModEnable.get(i).setFont(gfxRepository.txtSubheader);
 
             modEnabler.add(new addModAL());
 
@@ -646,16 +565,16 @@ public class guiCoreV4 {
                 btnModEnable.get(i).setText("-");
                 btnModEnable.get(i).setToolTipText("Disable");
                 modEnabled = 1;
-                btnModEnable.get(i).setBackground(clrEnable);
-                btnModEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+                btnModEnable.get(i).setBackground(gfxRepository.clrEnable);
+                btnModEnable.get(i).setBorder(gfxRepository.bdrButtonEnabled);
             } else {
                 //content is disabled, set the button accordingly
                 //System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is disabled.");
                 btnModEnable.get(i).setText("+");
                 btnModEnable.get(i).setToolTipText("Enable");
                 modEnabled = 0;
-                btnModEnable.get(i).setBackground(clrDisable);
-                btnModEnable.get(i).setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+                btnModEnable.get(i).setBackground(gfxRepository.clrDisable);
+                btnModEnable.get(i).setBorder(gfxRepository.bdrButtonDisabled);
             }
 
             modEnabler.get(i).setEnable(modEnabled);
@@ -720,9 +639,9 @@ public class guiCoreV4 {
         loadingBar.setFocusable(false);
         loadingBar.setOpaque(true);
         loadingBar.setValue(0);
-        loadingBar.setFont(txtSubheader);
-        loadingBar.setForeground(clrEnable);
-        loadingBar.setBackground(clrDGrey);
+        loadingBar.setFont(gfxRepository.txtSubheader);
+        loadingBar.setForeground(gfxRepository.clrEnable);
+        loadingBar.setBackground(gfxRepository.clrDGrey);
         loadingBar.setStringPainted(true);
         loadingBar.setBorderPainted(false);
         loadingBar.setVisible(true);
@@ -733,10 +652,10 @@ public class guiCoreV4 {
         lblInformation.setBounds((getUIScaleX() / 2) - 300, getUIScaleY() - 120, 600, 50);
         lblInformation.setOpaque(false);
         lblInformation.setFocusable(false);
-        lblInformation.setFont(txtHeader);
+        lblInformation.setFont(gfxRepository.txtHeader);
         lblInformation.setHorizontalAlignment(SwingConstants.CENTER);
         lblInformation.setVerticalAlignment(SwingConstants.BOTTOM);
-        lblInformation.setForeground(clrText);
+        lblInformation.setForeground(gfxRepository.clrText);
         lblInformation.setText("Astra Project - Work In Progress");
         lblInformation.setVisible(true);
 
@@ -900,7 +819,7 @@ public class guiCoreV4 {
         layers.add(pnlMenuBarH, new Integer(3), 0);
         pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
         pnlMenuBarH.setLayout(null);
-        pnlMenuBarH.setBackground(clrBackground);
+        pnlMenuBarH.setBackground(gfxRepository.clrBackground);
         pnlMenuBarH.setFocusable(false);
         pnlMenuBarH.setBorder(null);
         pnlMenuBarH.setVisible(true);
@@ -908,14 +827,14 @@ public class guiCoreV4 {
         btnNewGame = new JButton();
         layers.add(btnNewGame, new Integer(4), 0);
         btnNewGame.setBounds(5, getUIScaleY() - 60, 180, 55);
-        btnNewGame.setBackground(clrButtonMain);
-        btnNewGame.setForeground(clrText);
-        btnNewGame.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrForeground, clrButtonBackground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
-        btnNewGame.setFont(txtHeader);
+        btnNewGame.setBackground(gfxRepository.clrButtonMain);
+        btnNewGame.setForeground(gfxRepository.clrText);
+        btnNewGame.setBorder(gfxRepository.bdrButtonEnabled);
+        btnNewGame.setFont(gfxRepository.txtHeader);
         btnNewGame.setOpaque(true); //TODO: Find a way to do semi-transparent buttons
         btnNewGame.setFocusPainted(false);
-        btnNewGame.setHorizontalAlignment(SwingConstants.CENTER);
-        btnNewGame.setVerticalAlignment(SwingConstants.CENTER);
+        //btnNewGame.setHorizontalAlignment(SwingConstants.CENTER);
+        //btnNewGame.setVerticalAlignment(SwingConstants.CENTER);
         btnNewGame.setText("NEW GAME");
 
         btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
@@ -945,7 +864,7 @@ public class guiCoreV4 {
         JPanel pnlSettings = new JPanel();
         pnlSettings.setLayout(null);
         pnlSettings.setBounds(settingsMenu.getX(), settingsMenu.getY(), settingsMenu.getWidth(), settingsMenu.getHeight());
-        pnlSettings.setBackground(clrBackground);
+        pnlSettings.setBackground(gfxRepository.clrBackground);
         pnlSettings.setVisible(true);
         pnlSettings.setOpaque(true);
         settingsMenu.add(pnlSettings);
@@ -953,13 +872,13 @@ public class guiCoreV4 {
         JButton launchNewGame = new JButton();
         pnlSettings.add(launchNewGame);
         launchNewGame.setBounds(5, pnlSettings.getHeight() - 110, pnlSettings.getWidth() - 10, 50);
-        launchNewGame.setBackground(clrButtonMain);
+        launchNewGame.setBackground(gfxRepository.clrButtonMain);
         launchNewGame.setFocusPainted(false);
-        launchNewGame.setForeground(clrText);
-        launchNewGame.setFont(txtSubheader);
+        launchNewGame.setForeground(gfxRepository.clrText);
+        launchNewGame.setFont(gfxRepository.txtSubheader);
         launchNewGame.setText("Start");
         launchNewGame.setOpaque(true);
-        launchNewGame.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        launchNewGame.setBorder(gfxRepository.bdrButtonEnabled);
         launchNewGame.setVisible(true);
 
         launchNewGame.addActionListener(new ActionListener() {
@@ -977,13 +896,13 @@ public class guiCoreV4 {
         JButton btnBack = new JButton();
         pnlSettings.add(btnBack);
         btnBack.setBounds(5, pnlSettings.getHeight() - 55, pnlSettings.getWidth() - 10, 50);
-        btnBack.setBackground(clrButtonMain);
+        btnBack.setBackground(gfxRepository.clrButtonMain);
         btnBack.setFocusPainted(false);
-        btnBack.setForeground(clrText);
-        btnBack.setFont(txtSubheader);
+        btnBack.setForeground(gfxRepository.clrText);
+        btnBack.setFont(gfxRepository.txtSubheader);
         btnBack.setOpaque(true);
         btnBack.setText("Back");
-        btnBack.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnBack.setBorder(gfxRepository.bdrButtonEnabled);
         btnBack.setVisible(true);
 
         btnBack.addActionListener((new ActionListener() {
@@ -1001,8 +920,8 @@ public class guiCoreV4 {
         pnlSettings.add(lblResources);
         pnlSettings.add(sldResources);
         lblResources.setBounds(5, 15, settingsMenu.getWidth() - 5, 25);
-        lblResources.setForeground(clrText);
-        lblResources.setFont(txtSubheader);
+        lblResources.setForeground(gfxRepository.clrText);
+        lblResources.setFont(gfxRepository.txtSubheader);
         lblResources.setHorizontalAlignment(SwingConstants.CENTER);
         lblResources.setVerticalAlignment(SwingConstants.CENTER);
         lblResources.setText("Resource Abundance");
@@ -1011,14 +930,14 @@ public class guiCoreV4 {
         sldResources.setMinorTickSpacing(5);
         sldResources.setPaintTicks(true);
         Hashtable hshResources = new Hashtable();
-        hshResources.put(new Integer(gameSettings.resourceAbundanceMin), new extendedLabel("Sparse", txtTiny, clrText));
-        hshResources.put(new Integer(gameSettings.resourceAbundanceHigh), new extendedLabel("Abundant", txtTiny, clrText));
-        hshResources.put(new Integer(gameSettings.resourceAbundanceAvg), new extendedLabel("Average", txtTiny, clrText));
+        hshResources.put(new Integer(gameSettings.resourceAbundanceMin), new XLabel("Sparse", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshResources.put(new Integer(gameSettings.resourceAbundanceHigh), new XLabel("Abundant", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshResources.put(new Integer(gameSettings.resourceAbundanceAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
         sldResources.setLabelTable(hshResources);
         sldResources.setPaintLabels(true);
-        sldResources.setFont(txtTiny);
+        sldResources.setFont(gfxRepository.txtTiny);
         sldResources.setFocusable(false);
-        sldResources.setForeground(clrText);
+        sldResources.setForeground(gfxRepository.clrText);
         sldResources.setBounds(20, 45, settingsMenu.getWidth() - 20, 50);
         sldResources.setOpaque(false);
         sldResources.setVisible(true);
@@ -1040,8 +959,8 @@ public class guiCoreV4 {
         pnlSettings.add(lblStarFreq);
         pnlSettings.add(sldStarFreq);
         lblStarFreq.setBounds(5, sldResources.getY() + sldResources.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
-        lblStarFreq.setForeground(clrText);
-        lblStarFreq.setFont(txtSubheader);
+        lblStarFreq.setForeground(gfxRepository.clrText);
+        lblStarFreq.setFont(gfxRepository.txtSubheader);
         lblStarFreq.setHorizontalAlignment(SwingConstants.CENTER);
         lblStarFreq.setVerticalAlignment(SwingConstants.CENTER);
         lblStarFreq.setText("Star Frequency");
@@ -1050,14 +969,14 @@ public class guiCoreV4 {
         sldStarFreq.setMinorTickSpacing(5);
         sldStarFreq.setPaintTicks(true);
         Hashtable hshStarFreq = new Hashtable();
-        hshStarFreq.put(new Integer(gameSettings.starFreqMin), new extendedLabel("Many", txtTiny, clrText));
-        hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new extendedLabel("Few", txtTiny, clrText));
-        hshStarFreq.put(new Integer(gameSettings.starFreqAvg), new extendedLabel("Average", txtTiny, clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqMin), new XLabel("Many", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new XLabel("Few", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshStarFreq.put(new Integer(gameSettings.starFreqAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
         sldStarFreq.setLabelTable(hshStarFreq);
         sldStarFreq.setPaintLabels(true);
-        sldStarFreq.setFont(txtTiny);
+        sldStarFreq.setFont(gfxRepository.txtTiny);
         sldStarFreq.setFocusable(false);
-        sldStarFreq.setForeground(clrText);
+        sldStarFreq.setForeground(gfxRepository.clrText);
         sldStarFreq.setBounds(20, lblStarFreq.getY() + lblStarFreq.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
         sldStarFreq.setOpaque(false);
         sldStarFreq.setVisible(true);
@@ -1079,8 +998,8 @@ public class guiCoreV4 {
         pnlSettings.add(lblMapScale);
         pnlSettings.add(sldMapScale);
         lblMapScale.setBounds(5, sldStarFreq.getY() + sldStarFreq.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
-        lblMapScale.setForeground(clrText);
-        lblMapScale.setFont(txtSubheader);
+        lblMapScale.setForeground(gfxRepository.clrText);
+        lblMapScale.setFont(gfxRepository.txtSubheader);
         lblMapScale.setHorizontalAlignment(SwingConstants.CENTER);
         lblMapScale.setVerticalAlignment(SwingConstants.CENTER);
         lblMapScale.setText("Map Scale");
@@ -1089,14 +1008,14 @@ public class guiCoreV4 {
         sldMapScale.setMinorTickSpacing(5);
         sldMapScale.setPaintTicks(true);
         Hashtable hshMapScale = new Hashtable();
-        hshMapScale.put(new Integer(gameSettings.mapScaleMin), new extendedLabel("Small", txtTiny, clrText));
-        hshMapScale.put(new Integer(gameSettings.mapScaleHigh), new extendedLabel("Huge", txtTiny, clrText));
-        hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new extendedLabel("Normal", txtTiny, clrText));
+        hshMapScale.put(new Integer(gameSettings.mapScaleMin), new XLabel("Small", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshMapScale.put(new Integer(gameSettings.mapScaleHigh), new XLabel("Huge", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new XLabel("Normal", gfxRepository.txtTiny, gfxRepository.clrText));
         sldMapScale.setLabelTable(hshMapScale);
         sldMapScale.setPaintLabels(true);
         sldMapScale.setFocusable(false);
-        sldMapScale.setFont(txtTiny);
-        sldMapScale.setForeground(clrText);
+        sldMapScale.setFont(gfxRepository.txtTiny);
+        sldMapScale.setForeground(gfxRepository.clrText);
         sldMapScale.setBounds(20, lblMapScale.getY() + lblMapScale.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
         sldMapScale.setOpaque(false);
         sldMapScale.setVisible(true);
@@ -1118,8 +1037,8 @@ public class guiCoreV4 {
         pnlSettings.add(lblDiffOverall);
         pnlSettings.add(sldDiffOverall);
         lblDiffOverall.setBounds(5, sldMapScale.getY() + sldMapScale.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
-        lblDiffOverall.setForeground(clrText);
-        lblDiffOverall.setFont(txtSubheader);
+        lblDiffOverall.setForeground(gfxRepository.clrText);
+        lblDiffOverall.setFont(gfxRepository.txtSubheader);
         lblDiffOverall.setHorizontalAlignment(SwingConstants.CENTER);
         lblDiffOverall.setVerticalAlignment(SwingConstants.CENTER);
         lblDiffOverall.setText("Overall Difficulty");
@@ -1128,14 +1047,14 @@ public class guiCoreV4 {
         sldDiffOverall.setMinorTickSpacing(5);
         sldDiffOverall.setPaintTicks(true);
         Hashtable hshDiffOverall = new Hashtable();
-        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyMin), new extendedLabel("Easy", txtTiny, clrText));
-        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyHigh), new extendedLabel("Hard", txtTiny, clrText));
-        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyAvg), new extendedLabel("Normal", txtTiny, clrText));
+        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyMin), new XLabel("Easy", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyHigh), new XLabel("Hard", gfxRepository.txtTiny, gfxRepository.clrText));
+        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyAvg), new XLabel("Normal", gfxRepository.txtTiny, gfxRepository.clrText));
         sldDiffOverall.setLabelTable(hshDiffOverall);
         sldDiffOverall.setPaintLabels(true);
         sldDiffOverall.setFocusable(false);
-        sldDiffOverall.setFont(txtTiny);
-        sldDiffOverall.setForeground(clrText);
+        sldDiffOverall.setFont(gfxRepository.txtTiny);
+        sldDiffOverall.setForeground(gfxRepository.clrText);
         sldDiffOverall.setBounds(20, lblDiffOverall.getY() + lblDiffOverall.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
         sldDiffOverall.setOpaque(false);
         sldDiffOverall.setVisible(true);
@@ -1199,7 +1118,7 @@ public class guiCoreV4 {
                     mapButton.get(i).get(j).setOpaque(false);
                     mapButton.get(i).get(j).setFocusPainted(false);
                     mapButton.get(i).get(j).setBorder(null);
-                    mapButton.get(i).get(j).setBackground(clrInvisible);
+                    mapButton.get(i).get(j).setBackground(gfxRepository.clrInvisible);
                     mapButton.get(i).get(j).setVisible(true);
                     mapButton.get(i).get(j).setBounds(0, 0, tileSize, tileSize);
                     mapButton.get(i).get(j).addActionListener(new addMapAL(i, j));
@@ -1209,8 +1128,8 @@ public class guiCoreV4 {
                 }
                 bgPanel.add(mapGFX.get(i).get(j));
                 mapGFX.get(i).get(j).setBounds(tileSize * positionX, tileSize * positionY, tileSize, tileSize);
-                mapGFX.get(i).get(j).setFont(txtTiny);
-                mapGFX.get(i).get(j).setForeground(clrText);
+                mapGFX.get(i).get(j).setFont(gfxRepository.txtTiny);
+                mapGFX.get(i).get(j).setForeground(gfxRepository.clrText);
                 //mapGFX.get(i).get(j).setText("");
                 mapGFX.get(i).get(j).setVisible(true);
 
@@ -1224,7 +1143,7 @@ public class guiCoreV4 {
         layers.add(pnlStarData, new Integer(10), 0);
         pnlStarData.setLayout(null);
         pnlStarData.setBounds((screen.getWidth() / 2) - 400, 100, 800, screen.getHeight() - 200);
-        pnlStarData.setBackground(clrBGOpaque);
+        pnlStarData.setBackground(gfxRepository.clrBGOpaque);
         pnlStarData.setVisible(false);
 
         loadPlayerBar();
@@ -1242,7 +1161,7 @@ public class guiCoreV4 {
         pnlTopBar.setLayout(null);
         layers.add(pnlTopBar, new Integer(8), 0);
         pnlTopBar.setBounds(0, 0, screen.getWidth(), 50);
-        pnlTopBar.setBackground(clrDGrey);
+        pnlTopBar.setBackground(gfxRepository.clrDGrey);
 
         JButton btnMenu = new JButton();
         pnlTopBar.add(btnMenu);
@@ -1250,22 +1169,22 @@ public class guiCoreV4 {
         btnMenu.setOpaque(false);
         btnMenu.setFocusable(false);
         btnMenu.setFocusPainted(false);
-        btnMenu.setForeground(clrText);
-        btnMenu.setBackground(clrButtonMain);
-        btnMenu.setFont(txtSubheader);
+        btnMenu.setForeground(gfxRepository.clrText);
+        btnMenu.setBackground(gfxRepository.clrButtonMain);
+        btnMenu.setFont(gfxRepository.txtSubheader);
         btnMenu.setText("Menu");
-        btnMenu.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnMenu.setBorder(gfxRepository.bdrButtonEnabled);
         btnMenu.setVisible(true);
 
         layers.add(pnlOverlay, new Integer(15), 0);
         pnlOverlay.setLayout(null);
         pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());
-        pnlOverlay.setBackground(clrBlkTransparent);
+        pnlOverlay.setBackground(gfxRepository.clrBlkTransparent);
         pnlOverlay.setFocusable(false);
         pnlOverlay.add(pnlPauseMenu);
         pnlPauseMenu.setLayout(null);
         pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
-        pnlPauseMenu.setBackground(clrBGOpaque);
+        pnlPauseMenu.setBackground(gfxRepository.clrBGOpaque);
         pnlPauseMenu.setFocusable(false);
         pnlPauseMenu.setVisible(true);
         pnlOverlay.setVisible(false);
@@ -1295,14 +1214,15 @@ public class guiCoreV4 {
         JLabel lblStarPortrait = new JLabel(new ImageIcon(star.getPortraitGFX()));
         pnlStarData.add(lblStarPortrait);
         lblStarPortrait.setOpaque(true);
-        lblStarPortrait.setBounds(0, 0, 560, 185);
+        lblStarPortrait.setBounds((pnlStarData.getWidth() / 2) - 280, 0, 560, 185);
+        lblStarPortrait.setBackground(gfxRepository.clrTrueBlack);
         lblStarPortrait.setVisible(true);
 
         //displays the star's name
         JLabel lblStarName = new JLabel();
         pnlStarData.add(lblStarName);
-        lblStarName.setFont(txtHeader);
-        lblStarName.setForeground(clrText);
+        lblStarName.setFont(gfxRepository.txtHeader);
+        lblStarName.setForeground(gfxRepository.clrText);
         lblStarName.setText(star.getStarClassName());
         lblStarName.setBounds(570, 40, pnlStarData.getWidth() - 580, 60);
         lblStarName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1315,9 +1235,9 @@ public class guiCoreV4 {
         btnClose.setOpaque(true);
         btnClose.setFocusPainted(false);
         btnClose.setFocusable(false);
-        btnClose.setForeground(clrText);
-        btnClose.setFont(txtSubheader);
-        btnClose.setBackground(clrButtonBackground);
+        btnClose.setForeground(gfxRepository.clrText);
+        btnClose.setFont(gfxRepository.txtSubheader);
+        btnClose.setBackground(gfxRepository.clrButtonBackground);
         btnClose.setText("X");
         btnClose.setVisible(true);
 
@@ -1336,8 +1256,8 @@ public class guiCoreV4 {
         pnlStarData.add(lblStarDesc);
         lblStarDesc.setBounds(10, 200, pnlStarData.getWidth(), 100);
         lblStarDesc.setVerticalAlignment(SwingConstants.TOP);
-        lblStarDesc.setForeground(clrText);
-        lblStarDesc.setFont(txtSubtitle);
+        lblStarDesc.setForeground(gfxRepository.clrText);
+        lblStarDesc.setFont(gfxRepository.txtSubtitle);
         lblStarDesc.setText("<html>" + star.getStarClassDesc() + "</html>");
 
         lblStarDesc.setVisible(true);
@@ -1354,8 +1274,8 @@ public class guiCoreV4 {
         JLabel lblMenuTitle = new JLabel();
         pnlPauseMenu.add(lblMenuTitle);
         lblMenuTitle.setBounds(5, 10, pnlPauseMenu.getWidth() - 10, 40);
-        lblMenuTitle.setForeground(clrText);
-        lblMenuTitle.setFont(txtHeader);
+        lblMenuTitle.setForeground(gfxRepository.clrText);
+        lblMenuTitle.setFont(gfxRepository.txtHeader);
         lblMenuTitle.setFocusable(false);
         lblMenuTitle.setText("Pause Menu");
         lblMenuTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1365,13 +1285,13 @@ public class guiCoreV4 {
         pnlPauseMenu.add(btnQuit);
         btnQuit.setBounds(10, pnlPauseMenu.getHeight() - 50, pnlPauseMenu.getWidth() - 20, 40);
         btnQuit.setOpaque(true);
-        btnQuit.setBackground(clrButtonBackground);
+        btnQuit.setBackground(gfxRepository.clrButtonBackground);
         btnQuit.setFocusPainted(false);
         btnQuit.setFocusable(false);
-        btnQuit.setForeground(clrText);
-        btnQuit.setFont(txtSubheader);
+        btnQuit.setForeground(gfxRepository.clrText);
+        btnQuit.setFont(gfxRepository.txtSubheader);
         btnQuit.setText("Quit Game");
-        btnQuit.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnQuit.setBorder(gfxRepository.bdrButtonEnabled);
         btnQuit.setVisible(true);
 
         btnQuit.addActionListener(new ActionListener() {
@@ -1391,13 +1311,13 @@ public class guiCoreV4 {
         pnlPauseMenu.add(btnReturn);
         btnReturn.setBounds(10, lblMenuTitle.getY() + lblMenuTitle.getHeight() + 10, pnlPauseMenu.getWidth() - 20, 40);
         btnReturn.setOpaque(true);
-        btnReturn.setBackground(clrButtonBackground);
+        btnReturn.setBackground(gfxRepository.clrButtonBackground);
         btnReturn.setFocusPainted(false);
         btnReturn.setFocusable(false);
-        btnReturn.setForeground(clrText);
-        btnReturn.setFont(txtSubheader);
+        btnReturn.setForeground(gfxRepository.clrText);
+        btnReturn.setFont(gfxRepository.txtSubheader);
         btnReturn.setText("Continue");
-        btnReturn.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+        btnReturn.setBorder(gfxRepository.bdrButtonEnabled);
         btnReturn.setVisible(true);
 
         btnReturn.addActionListener(new ActionListener() {
@@ -1413,8 +1333,8 @@ public class guiCoreV4 {
         JLabel lblMusicVolume = new JLabel();
         pnlPauseMenu.add(lblMusicVolume);
         lblMusicVolume.setBounds(5, btnReturn.getY() + btnReturn.getHeight() + 5, pnlPauseMenu.getWidth() - 10, 25);
-        lblMusicVolume.setFont(txtSubtitle);
-        lblMusicVolume.setForeground(clrText);
+        lblMusicVolume.setFont(gfxRepository.txtSubtitle);
+        lblMusicVolume.setForeground(gfxRepository.clrText);
         lblMusicVolume.setHorizontalAlignment(SwingConstants.CENTER);
         lblMusicVolume.setVerticalAlignment(SwingConstants.CENTER);
         lblMusicVolume.setText("Music Volume");
@@ -1427,7 +1347,7 @@ public class guiCoreV4 {
         sldMusicVolume.setPaintTicks(true);
         sldMusicVolume.setPaintLabels(false);
         sldMusicVolume.setFocusable(false);
-        sldMusicVolume.setForeground(clrText);
+        sldMusicVolume.setForeground(gfxRepository.clrText);
         sldMusicVolume.setOpaque(false);
         sldMusicVolume.setBounds(10, lblMusicVolume.getY() + lblMusicVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 20, 40);
         sldMusicVolume.setVisible(true);
@@ -1448,8 +1368,8 @@ public class guiCoreV4 {
         JLabel lblAmbianceVolume = new JLabel();
         pnlPauseMenu.add(lblAmbianceVolume);
         lblAmbianceVolume.setBounds(5, sldMusicVolume.getY() + sldMusicVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 10, lblMusicVolume.getHeight());
-        lblAmbianceVolume.setFont(txtSubtitle);
-        lblAmbianceVolume.setForeground(clrText);
+        lblAmbianceVolume.setFont(gfxRepository.txtSubtitle);
+        lblAmbianceVolume.setForeground(gfxRepository.clrText);
         lblAmbianceVolume.setHorizontalAlignment(SwingConstants.CENTER);
         lblAmbianceVolume.setVerticalAlignment(SwingConstants.CENTER);
         lblAmbianceVolume.setText("Ambiance Volume");
@@ -1462,7 +1382,7 @@ public class guiCoreV4 {
         sldAmbianceVolume.setPaintTicks(true);
         sldAmbianceVolume.setPaintLabels(false);
         sldAmbianceVolume.setFocusable(false);
-        sldAmbianceVolume.setForeground(clrText);
+        sldAmbianceVolume.setForeground(gfxRepository.clrText);
         sldAmbianceVolume.setOpaque(false);
         sldAmbianceVolume.setBounds(10, lblAmbianceVolume.getY() + lblAmbianceVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 20, sldMusicVolume.getHeight());
         sldAmbianceVolume.setVisible(true);

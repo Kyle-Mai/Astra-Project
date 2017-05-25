@@ -318,3 +318,13 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added in more star descriptions (taken from Stellaris, will likely change once I get a chance)
 
 - Testing out html integration.
+
+**MAY 25 2017** (ver.PTB-B) (U2)
+
+- Reformatted code.
+
+    - Moved all text and color declarations to the gfxRepository.
+
+    - Changed all border declarations to variables and moved them to the gfxRepository.
+
+- Added more constructors to the extendedLabel class.

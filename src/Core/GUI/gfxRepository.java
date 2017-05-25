@@ -4,6 +4,10 @@ import Core.starCore;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +28,40 @@ import java.util.Random;
 
 public class gfxRepository {
 
+    /** UI Design **/
+    //Stores all of the colour and fonts that the game uses.
+
+    static final String gameVersion = "PTB-B Build 72a";
+
+    static final CompoundBorder bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, gfxRepository.clrEnable, gfxRepository.clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    static final CompoundBorder bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, gfxRepository.clrDisableBorder, gfxRepository.clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+
+    static final Color clrText = new Color(255, 255, 255, 255);
+    static final Color clrInvisible = new Color(0, 0, 0, 0);
+    static final Color clrTrueBlack = new Color(0, 0, 0, 255);
+    static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
+    static final Color clrBlk = new Color(25, 35, 35, 255);
+    static final Color clrDGrey = new Color(45, 75, 65, 255);
+    static final Color clrDisableBorder = new Color(75, 5, 25, 255);
+    static final Color clrDisable = new Color(135, 15, 55, 255);
+    static final Color clrEnable = new Color(0, 225, 165, 255);
+    static final Color clrDark = new Color(0, 145, 90, 255);
+    static final Color clrButtonBackground = new Color(0, 125, 90, 255);
+    static final Color clrBGOpaque = new Color(25, 90, 60, 255);
+    static final Color clrButtonMain = new Color(0, 155, 90, 255);
+    static final Color clrBackground = new Color(0, 195, 130, 105);
+    static final Color clrForeground = new Color(0, 185, 110, 155);
+
+    static final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
+    static final Font txtSubtitle = new Font("Arial", Font.BOLD, 14);
+    static final Font txtItalSubtitle = new Font("Arial", Font.ITALIC, 14);
+    static final Font txtSubheader = new Font("Arial", Font.BOLD, 16);
+    static final Font txtHeader = new Font("Arial", Font.BOLD, 25);
+    static final Font txtTitle = new Font("Arial", Font.BOLD, 40);
+    static final Font txtTiny = new Font("Arial", Font.PLAIN, 12);
+
+    /** Element declarations **/
+
     final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
     static BufferedImage mainBackground;
@@ -43,6 +81,11 @@ public class gfxRepository {
 
     static Icon loadingIcon;
 
+    public static BufferedImage getLauncherBorder() {
+        return launcherBorder;
+    }
+
+    /** Methods **/
 
     public static void gfxPreloader() { //preloads the GFX used by the launcher and loader
 
