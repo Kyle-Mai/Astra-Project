@@ -304,3 +304,17 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added new methods to starCore/starClass to support portrait images.
 
 - Added new star data screen on the map to show the star's information.
+
+**MAY 25 2017** (ver.PTB-B) (U1)
+
+- Added more content to the star data UI.
+
+    - Added some missing lines.
+
+    - Added new label for handling the star class's description.
+
+- Changed 'gfx' in the xmlLoader to be 'gfxportrait' to better reflect the content that it is loading.
+
+- Added in more star descriptions (taken from Stellaris, will likely change once I get a chance)
+
+- Testing out html integration.

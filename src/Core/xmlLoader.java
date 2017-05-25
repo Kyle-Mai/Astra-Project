@@ -716,7 +716,7 @@ public class xmlLoader {
                                         errorPrint(23);
                                         planetWeight = 0;
                                     }
-                                } else if (nodes.item(k).getNodeName().equals("gfx") && nodes.item(k).getTextContent() != null) {
+                                } else if (nodes.item(k).getNodeName().equals("gfxportrait") && nodes.item(k).getTextContent() != null) {
                                     gfxBuffer.append("/" + nodes.item(k).getTextContent());
                                 }
 

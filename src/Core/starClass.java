@@ -154,5 +154,7 @@ public class starClass extends starCore implements Serializable {
         return listOfStars.get(arrayLoc).getName();
     }
 
+    public String getStarClassDesc() { return listOfStars.get(arrayLoc).getDesc(); }
+
 
 }

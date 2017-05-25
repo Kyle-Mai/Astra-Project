@@ -1291,20 +1291,24 @@ public class guiCoreV4 {
 
         pnlStarData.setVisible(true);
 
+        //displays the star's portrait
         JLabel lblStarPortrait = new JLabel(new ImageIcon(star.getPortraitGFX()));
         pnlStarData.add(lblStarPortrait);
         lblStarPortrait.setOpaque(true);
         lblStarPortrait.setBounds(0, 0, 560, 185);
         lblStarPortrait.setVisible(true);
 
+        //displays the star's name
         JLabel lblStarName = new JLabel();
         pnlStarData.add(lblStarName);
-        lblStarName.setFont(txtSubtitle);
+        lblStarName.setFont(txtHeader);
         lblStarName.setForeground(clrText);
         lblStarName.setText(star.getStarClassName());
-        lblStarName.setBounds(580, 10, pnlStarData.getWidth() - 600, 60);
+        lblStarName.setBounds(570, 40, pnlStarData.getWidth() - 580, 60);
+        lblStarName.setHorizontalAlignment(SwingConstants.CENTER);
         lblStarName.setVisible(true);
 
+        //displays the close button
         JButton btnClose = new JButton();
         pnlStarData.add(btnClose);
         btnClose.setBounds(pnlStarData.getWidth() - 40, 10, 30, 30);
@@ -1312,7 +1316,9 @@ public class guiCoreV4 {
         btnClose.setFocusPainted(false);
         btnClose.setFocusable(false);
         btnClose.setForeground(clrText);
+        btnClose.setFont(txtSubheader);
         btnClose.setBackground(clrButtonBackground);
+        btnClose.setText("X");
         btnClose.setVisible(true);
 
         btnClose.addActionListener(new ActionListener() {
@@ -1324,6 +1330,17 @@ public class guiCoreV4 {
                 refreshUI();
             }
         });
+
+        //displays the star class's description
+        JLabel lblStarDesc = new JLabel();
+        pnlStarData.add(lblStarDesc);
+        lblStarDesc.setBounds(10, 200, pnlStarData.getWidth(), 100);
+        lblStarDesc.setVerticalAlignment(SwingConstants.TOP);
+        lblStarDesc.setForeground(clrText);
+        lblStarDesc.setFont(txtSubtitle);
+        lblStarDesc.setText("<html>" + star.getStarClassDesc() + "</html>");
+
+        lblStarDesc.setVisible(true);
 
         refreshUI();
 

@@ -10,7 +10,7 @@ public class audioRepository {
 
 
     public static int uiVolume = 70;
-    public static int musicVolume = 50;
+    public static int musicVolume = 35;
     public static int ambianceVolume = 15;
     public static int voiceVolume = 70;
     public static int effectsVolume = 50;

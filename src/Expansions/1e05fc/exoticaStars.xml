@@ -11,7 +11,7 @@
         <sizeWeight>0</sizeWeight>
         <sizeVariation>0</sizeVariation>
         <planetWeight>0</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
     <star id = "1016">
         <name>Thorne-Zytkow Object</name>
@@ -23,7 +23,7 @@
         <sizeWeight>0</sizeWeight>
         <sizeVariation>0</sizeVariation>
         <planetWeight>5</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
     <star id = "1017">
         <name>Exotic Star</name>
@@ -35,7 +35,7 @@
         <sizeWeight>5</sizeWeight>
         <sizeVariation>3</sizeVariation>
         <planetWeight>0</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
     <star id = "1018">
         <name>Blitzar</name>
@@ -47,7 +47,7 @@
         <sizeWeight>12</sizeWeight>
         <sizeVariation>3</sizeVariation>
         <planetWeight>2</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
     <star id = "1019">
         <name>Frozen Star</name>
@@ -59,7 +59,7 @@
         <sizeWeight>20000</sizeWeight>
         <sizeVariation>14000</sizeVariation>
         <planetWeight>6</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
     <star id = "1020">
         <name>Population III Star</name>
@@ -71,7 +71,7 @@
         <sizeWeight>20000</sizeWeight>
         <sizeVariation>14000</sizeVariation>
         <planetWeight>2</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
     <star id = "1021">
         <name>Quasi-Star</name>
@@ -83,6 +83,6 @@
         <sizeWeight>20000</sizeWeight>
         <sizeVariation>14000</sizeVariation>
         <planetWeight>0</planetWeight>
-        <gfx>gravastar.png</gfx>
+        <gfxportrait>gravastar.png</gfxportrait>
     </star>
 </newStars>
