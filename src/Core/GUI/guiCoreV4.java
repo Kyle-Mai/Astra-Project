@@ -239,6 +239,9 @@ public class guiCoreV4 {
             public void mouseClicked(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
+                System.out.println("Killing program.");
+                audioRepository.buttonClick();
+                closeProgram();
             }
 
             @Override
@@ -257,6 +260,7 @@ public class guiCoreV4 {
             public void mouseEntered(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
             }
 
             @Override
@@ -266,39 +270,105 @@ public class guiCoreV4 {
             }
         });
 
-        btnExit.addActionListener(new ActionListener() { //closes the program when clicked
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Killing program.");
-                btnExit.setHorizontalAlignment(SwingConstants.RIGHT);
-                audioRepository.buttonClick();
-                closeProgram();
-            }
-        });
         btnExit.setVisible(true);
 
         //load minimize button
-        XButton btnMinimize = new XButton("-", gfxRepository.txtStandard, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
+        XButton btnLauncherAudio = new XButton(gfxRepository.audioButton, SwingConstants.LEFT);
 
-        layers.add(btnMinimize, new Integer(2), 0);
-        btnMinimize.setBounds(getUIScaleX() - 90, 10, 30, 30);
-        btnMinimize.setOpaque(false);
-        btnMinimize.addActionListener(new ActionListener() { //closes the program when clicked
+        layers.add(btnLauncherAudio, new Integer(2), 0);
+        btnLauncherAudio.setBounds(btnExit.getX() - btnExit.getWidth(), btnExit.getY(), btnExit.getWidth(), btnExit.getHeight());
+        btnLauncherAudio.setOpaque(false);
+
+        btnLauncherAudio.addMouseListener(new MouseListener() {
+            XButton source;
+
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Minimizing program.");
-                window.setState(Frame.ICONIFIED);
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                source.toggleState();
                 audioRepository.buttonClick();
+
+                if (source.isState()) {
+                    source.setIcon(new ImageIcon(gfxRepository.muteButton));
+                    audioRepository.muteMusic();
+                } else {
+                    source.setIcon(new ImageIcon(gfxRepository.audioButton));
+                    audioRepository.setMusicVolume();
+                }
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
             }
         });
-        btnMinimize.setVisible(true);
+
+        btnLauncherAudio.setVisible(true);
 
         //load settings button
-        XButton btnSettings = new XButton("*", gfxRepository.txtStandard, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
+        XButton btnSettings = new XButton(gfxRepository.settingsButton, SwingConstants.LEFT);
 
         layers.add(btnSettings, new Integer(2), 0);
-        btnSettings.setBounds(getUIScaleX() - 125, 10, 30, 30);
+        btnSettings.setBounds(btnLauncherAudio.getX() - btnLauncherAudio.getWidth(), btnExit.getY(), btnExit.getWidth(), btnExit.getHeight());
         btnSettings.setOpaque(false);
+
+        btnSettings.addMouseListener(new MouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                audioRepository.buttonClick();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+            }
+        });
 
         btnSettings.setVisible(true);
 

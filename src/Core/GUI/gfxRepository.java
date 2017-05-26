@@ -66,6 +66,9 @@ public class gfxRepository {
     final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
     static BufferedImage closeButton;
+    static BufferedImage settingsButton;
+    static BufferedImage audioButton;
+    static BufferedImage muteButton;
 
     static BufferedImage mainBackground;
     static BufferedImage launcherBorder;
@@ -101,6 +104,9 @@ public class gfxRepository {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/launcherBG.jpg"));
             loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG.jpg")));
             closeButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_close.png"));
+            settingsButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_settings.png"));
+            audioButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_sound.png"));
+            muteButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_mute.png"));
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
@@ -216,9 +222,5 @@ public class gfxRepository {
         }
 
     }
-
-
-
-
 
 }

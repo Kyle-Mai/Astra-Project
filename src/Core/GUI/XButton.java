@@ -17,6 +17,8 @@ import java.awt.image.BufferedImage;
 
 class XButton extends JButton {
 
+    private boolean state = false;
+
     XButton() {
         this.setFocusPainted(false);
 
@@ -62,6 +64,14 @@ class XButton extends JButton {
 
     @Override
     public void setContentAreaFilled(boolean b) {
+    }
+
+    public void toggleState() {
+        state = !state;
+    }
+
+    public boolean isState() {
+        return this.state;
     }
 
 

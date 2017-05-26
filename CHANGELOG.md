@@ -362,3 +362,15 @@ Version moved to PTB-B with the creation of the colonyCore class.
 **MAY 26 2017** (ver.PTB-B) (U1)
 
 - Added some new UI GFX, slightly changed the naming scheme for buttons.
+
+**MAY 26 2017** (ver.PTB-B) (U2)
+
+- Removed the minimize button on the launcher, replaced it with a button that disables/enables the launcher music.
+
+- Switched the launcher buttons over to the new formatting.
+
+- Added more functionality to the XButton class.
+
+- Added a new minimize method to the XFrame class.
+
+- Preparing to test enums in place of the current screen scale getter method.
