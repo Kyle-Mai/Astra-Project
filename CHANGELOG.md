@@ -358,3 +358,7 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added test .properties file.
 
 & Other minor changes I forgot to document.
+
+**MAY 26 2017** (ver.PTB-B) (U1)
+
+- Added some new UI GFX, slightly changed the naming scheme for buttons.

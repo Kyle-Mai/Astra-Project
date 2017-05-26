@@ -32,7 +32,7 @@ public class gfxRepository {
     /** UI Design **/
     //Stores all of the colour and fonts that the game uses.
 
-    static final String gameVersion = "PTB-B Build 73a";
+    static final String gameVersion = "PTB-B Build 73b";
 
     static final Color clrText = new Color(255, 255, 255, 255);
     static final Color clrInvisible = new Color(0, 0, 0, 0);
@@ -100,7 +100,7 @@ public class gfxRepository {
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/launcherBG.jpg"));
             loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG.jpg")));
-            closeButton = ImageIO.read(new File(imageFolder + "/Resources/ui/close_button.png"));
+            closeButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_close.png"));
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
