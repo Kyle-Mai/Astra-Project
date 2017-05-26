@@ -29,6 +29,7 @@ class XPanel extends JPanel {
         this.setBackground(backgroundColor);
         this.setFocusable(false);
         this.setOpaque(true);
+        this.setBorder(null);
 
     }
 
@@ -36,6 +37,7 @@ class XPanel extends JPanel {
         this.setLayout(null);
         this.setFocusable(false);
         this.setOpaque(false);
+        this.setBorder(null);
 
     }
 

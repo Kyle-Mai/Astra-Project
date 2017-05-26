@@ -37,6 +37,7 @@ public class colonyCore implements Serializable {
     private int entertainmentFocus;
     private int colonyAge;
     private int colonyID;
+    private boolean homePlanet;
 
     public colonyCore(planetClass planet) { //creates a new colony
 
@@ -99,7 +100,7 @@ public class colonyCore implements Serializable {
     }
 
     private void setUnrest() { //sets the current unrest of the colony
-         unrest = (1.2 * gameSettings.player.getTaxMultiplier()) + (0.1 * population) - (0.2 * entertainmentFocus) + (0.3 * industryFocus);
+         unrest = (1.2 * gameSettings.player.getTaxMultiplier()) + (0.1 * population) - (0.2 * entertainmentFocus) + (0.3 * industryFocus); //TODO: Switch multipliers to allow for variable
 
         if (unrest < 0) {
             unrest = 0;
@@ -118,5 +119,11 @@ public class colonyCore implements Serializable {
     public double getResourceProduction() { return this.resourceProduction; }
     public double getTaxProduction() { return this.taxProduction; }
     public double getFoodProduction() { return this.foodProduction; }
+    public boolean isHomePlanet() { return this.homePlanet; }
+
+    public void setHomePlanet(boolean home) {
+        this.homePlanet = home;
+
+    }
 
 }

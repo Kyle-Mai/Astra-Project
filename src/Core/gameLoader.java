@@ -41,8 +41,6 @@ public class gameLoader {
     //loads UI related elements
     public static void UILoader() {
 
-        playerData player = new playerData();
-
         gfxRepository.gfxPreloader(); //preload GFX content
 
         System.out.println("Getting XML data...");
@@ -79,6 +77,11 @@ public class gameLoader {
         colonyCore earthColony = new colonyCore(solSystem.planetList.get(2), 89, 2608, 4, 7, 2.13, 11.15, 18.87, 3.67);
         colonyCore marsColony = new colonyCore(solSystem.planetList.get(3), 55, 255, 11, 3, 26.16, 21.12, 4.55, 4.26);
 
+        solSystem.setHomeSystem(true);
+        earthColony.setHomePlanet(true);
+        solSystem.planetList.get(2).setPlanetColony(earthColony);
+        solSystem.planetList.get(3).setPlanetColony(marsColony);
+
         player.addPlanetColony(earthColony);
         player.addPlanetColony(marsColony);
 
@@ -108,8 +111,8 @@ public class gameLoader {
     public static void preloadCoreContent(){
 
         //preloads default planet and star types
-        techCore.techPreloader();
         starCore.starPreloader();
+        techCore.techPreloader();
         planetCore.planetPreloader();
 
 

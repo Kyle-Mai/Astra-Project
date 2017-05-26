@@ -15,6 +15,16 @@ class XLabel extends JLabel {
     //default constructor
     XLabel() {
         this.setFocusable(false);
+
+    }
+
+    //animation
+    XLabel(Icon animation) {
+        this.setIcon(animation);
+        this.setOpaque(false);
+        this.setFocusable(false);
+        this.setBorder(null);
+
     }
 
     //text
@@ -38,6 +48,7 @@ class XLabel extends JLabel {
         this.setBackground(null); //transparent background
         this.setBorder(null);
         this.setFocusable(false);
+        this.setAlignments(SwingConstants.CENTER); //centers the image, maybe?
         this.setOpaque(false);
 
     }
@@ -70,10 +81,17 @@ class XLabel extends JLabel {
 
     }
 
-    //sets the text alignment
-    void setAlignments(int alignmentHorizontal, int alignmentVertical) {
-        this.setHorizontalAlignment(alignmentHorizontal);
-        this.setVerticalAlignment(alignmentVertical);
+    //sets the horizontal and vertical alignment separately
+    void setAlignments(int alignmentH, int alignmentV) {
+        this.setHorizontalAlignment(alignmentH);
+        this.setVerticalAlignment(alignmentV);
+
+    }
+
+    //sets both the h and v alignment to the same value
+    void setAlignments(int alignment) {
+        this.setHorizontalAlignment(alignment);
+        this.setVerticalAlignment(alignment);
 
     }
 

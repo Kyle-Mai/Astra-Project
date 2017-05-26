@@ -212,6 +212,26 @@ public class mapGenerator implements Serializable {
 
             if (!preDefined) { //if a predefined star wasn't already generated, generate a random tile
                 genStar = willGenerateStar();
+
+                //checks to see if the star being generated is too closer to another star
+                if (indexY > 1 && indexX > 1) {
+                    if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar() || this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
+                        genStar = false;
+                        System.out.println("Map generation refused - too close proximity to another star.");
+                    }
+
+                } else if (indexX > 1 && indexY == 1) {
+                    if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar()) {
+                        genStar = false;
+                        System.out.println("Map generation refused - too close proximity to another star.");
+                    }
+                } else if (indexX == 1 && indexY > 1) {
+                    if (this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
+                        genStar = false;
+                        System.out.println("Map generation refused - too close proximity to another star.");
+                    }
+                }
+
                 this.mapTiles.get(indexY - 1).add(new mapTile(genStar, indexX, indexY));
             }
 

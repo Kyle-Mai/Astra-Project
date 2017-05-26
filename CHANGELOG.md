@@ -328,3 +328,33 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Changed all border declarations to variables and moved them to the gfxRepository.
 
 - Added more constructors to the extendedLabel class.
+
+**MAY 25 2017** (ver.PTB-B) (U3)
+
+- Finished reformatting code.
+
+    - Most UI content changed over to the extended swing classes.
+
+    - Removed unnecessary and redundant code. Think I cleaned up around 200-300 lines by the end of it.
+
+- Added some basic map generation logic.
+
+    - Stars will no longer generate directly next to one another.
+
+- Added some new UI elements.
+
+    - Star data screen now shows the number of planets and the number of colonies in the system.
+
+    - Star data screen was also reworked with a new design and formatting.
+
+    - Added an icon to show the home system.
+
+    - Added new sun glare effect to the main menu.
+
+    - Testing custom button design and sprites, starting with the close button on the launcher.
+
+- Added new methods to star/colony classes to determine home system/planet respectively.
+
+- Added test .properties file.
+
+& Other minor changes I forgot to document.

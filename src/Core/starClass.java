@@ -76,6 +76,7 @@ public class starClass extends starCore implements Serializable {
     private int mapLocationY;
     private int arrayLoc;
     private String starName;
+    private boolean homeSystem = false;
 
     //creates a randomized star
     public starClass(int mapLocationX, int mapLocationY){
@@ -133,6 +134,13 @@ public class starClass extends starCore implements Serializable {
 
     }
 
+    /** Setter Methods **/
+
+    public void setHomeSystem(boolean home) {
+        this.homeSystem = home;
+
+    }
+
     /** Accessor Methods **/
     //For calling the variables of objects made from the starClass.
 
@@ -145,6 +153,7 @@ public class starClass extends starCore implements Serializable {
     public String getStarName() { return this.starName; }
     public int getStarIndex() { return this.starIndex; }
     public String getStarSpectral() { return this.starSpectral; }
+    public boolean isHomeSystem() { return this.homeSystem; }
 
     public BufferedImage getPortraitGFX() {
         return listOfStars.get(arrayLoc).getGfxImage();
@@ -155,6 +164,18 @@ public class starClass extends starCore implements Serializable {
     }
 
     public String getStarClassDesc() { return listOfStars.get(arrayLoc).getDesc(); }
+
+    public int getColonyCount() { //gets the number of colonies in this system
+        int colonyCount = 0;
+
+        for (int i = 0; i < this.planetList.size(); i++) {
+            if (this.planetList.get(i).getPlanetColony() != null ) {
+                colonyCount++;
+            }
+        }
+
+        return colonyCount;
+    }
 
 
 }

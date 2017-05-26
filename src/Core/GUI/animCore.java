@@ -158,7 +158,7 @@ public class animCore extends Thread {
 
                 System.out.println("Playing menu moon animation.");
 
-                layers.add(animationPane, new Integer(2), 0);
+                layers.add(animationPane, new Integer(3), 0);
                 animationPane.setLayout(null);
                 animationPane.setBounds(0,0, main.getWidth(), main.getHeight());
                 animationPane.setOpaque(false);

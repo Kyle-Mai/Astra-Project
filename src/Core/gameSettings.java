@@ -13,9 +13,11 @@ public class gameSettings {
 
     //variables to store the core classes of each type to allow them to be passed around to whatever requests them
 
-    public static mapGenerator map;
+    public volatile static mapGenerator map;
 
-    public static playerData player;
+    public volatile static playerData player;
+
+    //TODO: Experiment with volatile...
 
     //variables for the resource abundance
 

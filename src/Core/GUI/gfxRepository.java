@@ -5,6 +5,7 @@ import Core.starCore;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
@@ -31,10 +32,7 @@ public class gfxRepository {
     /** UI Design **/
     //Stores all of the colour and fonts that the game uses.
 
-    static final String gameVersion = "PTB-B Build 72a";
-
-    static final CompoundBorder bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, gfxRepository.clrEnable, gfxRepository.clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    static final CompoundBorder bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, gfxRepository.clrDisableBorder, gfxRepository.clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    static final String gameVersion = "PTB-B Build 73a";
 
     static final Color clrText = new Color(255, 255, 255, 255);
     static final Color clrInvisible = new Color(0, 0, 0, 0);
@@ -60,13 +58,19 @@ public class gfxRepository {
     static final Font txtTitle = new Font("Arial", Font.BOLD, 40);
     static final Font txtTiny = new Font("Arial", Font.PLAIN, 12);
 
+    static final Border bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    static final Border bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+
     /** Element declarations **/
 
     final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
+    static BufferedImage closeButton;
+
     static BufferedImage mainBackground;
     static BufferedImage launcherBorder;
     static BufferedImage menuPlanet;
+    static BufferedImage menuGlare;
 
     static ArrayList<BufferedImage> loadingScreenBGList = new ArrayList<>();
 
@@ -79,11 +83,13 @@ public class gfxRepository {
     static BufferedImage moon1Icon;
     static BufferedImage moon2Icon;
 
-    static Icon loadingIcon;
+    static BufferedImage portraitBorder;
+    static BufferedImage menuBackground;
+    static BufferedImage starPlanetCount;
+    static BufferedImage colonyCount;
+    static BufferedImage homeSystem;
 
-    public static BufferedImage getLauncherBorder() {
-        return launcherBorder;
-    }
+    static Icon loadingIcon;
 
     /** Methods **/
 
@@ -94,6 +100,31 @@ public class gfxRepository {
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/launcherBG.jpg"));
             loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG.jpg")));
+            closeButton = ImageIO.read(new File(imageFolder + "/Resources/ui/close_button.png"));
+
+            Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
+                public void run() {
+                    try {
+                        //adds other papers to the loading screen randomize
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_2.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_4.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_5.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_6.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_7.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_8.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_9.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_10.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_11.jpg")));
+                        System.out.println("GFX background images finished loading successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    interrupt();
+                }
+            };
+            temp.start();
+
             gameLogo = ImageIO.read(new File(imageFolder + "/Resources/ui/icon.png"));
             launcherBorder = ImageIO.read(new File(imageFolder + "/Resources/launcherBorder.png"));
             loadingIcon = new ImageIcon(imageFolder + "/Resources/ui/ok_hand.gif");
@@ -115,6 +146,10 @@ public class gfxRepository {
 
     public static void loadMainGFX() { //loads the main chunk of the GFX content
 
+        //unloads content to dump from memory
+        launcherBorder = null;
+
+        //loads main GFX content
         System.out.println("Loading main GFX content...");
 
         try {
@@ -125,15 +160,7 @@ public class gfxRepository {
             menuSpaceport = ImageIO.read(new File(imageFolder + "/Resources/title_spaceport_half.png"));
             moon1Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon1_half.png"));
             moon2Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon2_half.png"));
-
-            //adds other papers to the loading screen randomize
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_2.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_4.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_5.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_6.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_7.jpg")));
-            loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_8.jpg")));
+            menuGlare = ImageIO.read(new File(imageFolder + "/Resources/effects/glare.png"));
 
             System.out.println("GFX content loaded successfully.");
 
@@ -163,11 +190,26 @@ public class gfxRepository {
 
     public static void loadMapGFX() {
 
+        //removes all of the main menu GFX from the active memory
+        gameLogoLarge = null;
+        menuGlare = null;
+        menuShip = null;
+        menuSpaceport = null;
+        moon1Icon = null;
+        moon2Icon = null;
+        menuPlanet = null;
+
+        //loads map GFX
         System.out.println("Loading map screen GFX content...");
 
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/mapBG.png"));
             planetIcon = ImageIO.read(new File(imageFolder + "/Resources/no_moon.png"));
+            portraitBorder = ImageIO.read(new File(imageFolder + "/Resources/portraits/overlay.png"));
+            menuBackground = ImageIO.read(new File(imageFolder + "/Resources/background/menutexture.png"));
+            starPlanetCount = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_number.png"));
+            colonyCount = ImageIO.read(new File(imageFolder + "/Resources/ui/embassy.png"));
+            homeSystem = ImageIO.read(new File(imageFolder + "/Resources/ui/home_system.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

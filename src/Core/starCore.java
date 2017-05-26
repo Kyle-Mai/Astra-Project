@@ -9,6 +9,10 @@ import java.util.ArrayList;
  Handles the core work of the star class.
  Most of the stuff here is run once through the stars at the start of their generation and then never again in the star afterwards.
  Essentially, non-specific methods and variables related to ALL of the stars, rather than specific stars.
+
+ SOURCES:
+ Stack Overflow - Found some interesting Java stuff from SO, namely http://wiki.c2.com/?DoubleBraceInitialization
+ Self - Everything else.
  **/
 
 

@@ -56,24 +56,25 @@ public class guiCoreV4 {
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
     private double screenWidth = screenSize.getWidth();
     private double screenHeight = screenSize.getHeight();
-    private JFrame window;
+    private XFrame window;
     private JLayeredPane layers; //sorts the layers of the screen
     private XPanel screen;
-    private JPanel contentController;
-    private JScrollPane contentList;
+    private XPanel contentController;
+    private XScrollPane contentList;
     private JProgressBar loadingBar;
-    private JLabel bgPanel;
-    private JLabel imgLogo;
-    private JPanel pnlPauseMenu;
-    private JPanel pnlOverlay;
+    private XLabel bgPanel;
+    private XLabel imgLogo;
+    private XPanel pnlPauseMenu;
+    private XPanel pnlOverlay;
     private int screenScaleChoice = 8;
-    private JPanel settingsMenu;
-    private JButton btnNewGame;
+    private XPanel settingsMenu;
+    private XButton btnNewGame;
     private animCore menuSpaceport;
     private animCore menuMoon1;
-    private  animCore menuMoon2;
-    private JButton btnQuit;
-    private JPanel pnlStarData;
+    private animCore menuMoon2;
+    private XButton btnQuit;
+    private XPanel pnlStarData;
+    private XButton btnExit;
 
     private int launcherContentLoaded = 0;
 
@@ -101,7 +102,7 @@ public class guiCoreV4 {
         oldX = this.getUIScaleX();
         oldY = this.getUIScaleY();
 
-        switch(option) {
+        switch(option) { //TODO: Convert to enum
             //Widescreen monitors
             case 1: //4K
                 this.currentUIScale[0] = 3840; //X scale
@@ -193,12 +194,6 @@ public class guiCoreV4 {
         window.getContentPane().add(layers);
     }
 
-    private void refreshUI() {
-        //refreshes the UI content
-        window.revalidate();
-        window.repaint();
-    }
-
     private void closeProgram() {
         window.dispose(); //ensure the thread dies
         System.exit(0); //close the program
@@ -231,16 +226,51 @@ public class guiCoreV4 {
         imgBorder.setVisible(true);
 
         //load exit button
-        XButton btnExit = new XButton("X", gfxRepository.txtStandard, gfxRepository.clrText, gfxRepository.clrButtonBackground);
+        btnExit = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
 
         layers.add(btnExit, new Integer(2), 0);
-        btnExit.setBounds(getUIScaleX() - 55, 10, 30, 30);
-        btnExit.setBorder(gfxRepository.bdrButtonEnabled);
+        btnExit.setBounds(getUIScaleX() - 51, 6, 38, 38);
         btnExit.setOpaque(false);
+
+        btnExit.addMouseListener(new MouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+            }
+        });
+
         btnExit.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Killing program.");
+                btnExit.setHorizontalAlignment(SwingConstants.RIGHT);
                 audioRepository.buttonClick();
                 closeProgram();
             }
@@ -248,18 +278,11 @@ public class guiCoreV4 {
         btnExit.setVisible(true);
 
         //load minimize button
-        JButton btnMinimize = new JButton();
+        XButton btnMinimize = new XButton("-", gfxRepository.txtStandard, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
 
         layers.add(btnMinimize, new Integer(2), 0);
         btnMinimize.setBounds(getUIScaleX() - 90, 10, 30, 30);
-        btnMinimize.setBackground(gfxRepository.clrButtonBackground);
-        btnMinimize.setFocusPainted(false);
-        btnMinimize.setForeground(gfxRepository.clrText);
-        //btnMinimize.setBorderPainted(false);
-        btnMinimize.setBorder(gfxRepository.bdrButtonEnabled);
         btnMinimize.setOpaque(false);
-        btnMinimize.setFont(gfxRepository.txtStandard);
-        btnMinimize.setText("-");
         btnMinimize.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -271,31 +294,20 @@ public class guiCoreV4 {
         btnMinimize.setVisible(true);
 
         //load settings button
-        JButton btnSettings = new JButton();
+        XButton btnSettings = new XButton("*", gfxRepository.txtStandard, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
 
         layers.add(btnSettings, new Integer(2), 0);
         btnSettings.setBounds(getUIScaleX() - 125, 10, 30, 30);
-        btnSettings.setBackground(gfxRepository.clrButtonBackground);
-        btnSettings.setFocusPainted(false);
-        btnSettings.setForeground(gfxRepository.clrText);
-        btnSettings.setBorder(gfxRepository.bdrButtonEnabled);
         btnSettings.setOpaque(false);
-        btnSettings.setFont(gfxRepository.txtStandard);
-        btnSettings.setText("*");
 
         btnSettings.setVisible(true);
 
         //load the game title
-        JLabel lblTitle = new JLabel();
+        XLabel lblTitle = new XLabel("stra Project", gfxRepository.txtTitle, gfxRepository.clrText);
 
         layers.add(lblTitle, new Integer(3), 0);
         lblTitle.setBounds(imgLogo.getX() + 45, 30, 300, 75);
         lblTitle.setVerticalAlignment(SwingConstants.TOP);
-        lblTitle.setOpaque(false);
-        lblTitle.setFocusable(false);
-        lblTitle.setFont(gfxRepository.txtTitle);
-        lblTitle.setText("stra Project");
-        lblTitle.setForeground(gfxRepository.clrText);
         lblTitle.setVisible(true);
 
         //load the game version
@@ -309,16 +321,13 @@ public class guiCoreV4 {
         //load the scroll window
         contentController = new XPanel(gfxRepository.clrDGrey);
         layers.add(contentController, new Integer(5), 0);
-        contentList = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        contentList = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         layers.add(contentList, new Integer(6), 0);
 
-        JScrollBar contentScroller = new JScrollBar();
+        XScrollBar contentScroller = new XScrollBar();
 
         contentList.add(contentScroller);
-        contentScroller.setBorder(null);
-        contentScroller.setUI(new XScrollBar());
         contentScroller.setBounds(contentController.getX() + contentController.getWidth() - 20, contentController.getY(), 15, contentController.getHeight());
-        contentScroller.setOpaque(true);
         contentScroller.setVisible(true);
 
         contentController.setBounds(getUIScaleX() - 325, 45, 300, 320);
@@ -331,9 +340,7 @@ public class guiCoreV4 {
         contentList.getViewport().setPreferredSize(new Dimension(contentList.getWidth(), contentList.getHeight()));
         contentList.setVerticalScrollBar(contentScroller); //custom scroll bar design
         contentList.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0)); //dirty way of changing scroll bar width
-        contentList.setOpaque(false);
         contentList.setVisible(true);
-        contentList.setBorder(null);
 
         //load the expansion header
         pnlExpansionHeader = new XPanel(gfxRepository.clrDark);
@@ -360,18 +367,12 @@ public class guiCoreV4 {
         lblModHeaderText.setVisible(true);
 
         //load launch button
-        JButton btnLaunch = new JButton();
+        XButton btnLaunch = new XButton("PLAY", gfxRepository.txtHeader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
         layers.add(btnLaunch, new Integer(7), 0);
         btnLaunch.setBounds(contentController.getX(), contentController.getY() + contentController.getHeight() + 5, contentController.getWidth(), 55);
-        btnLaunch.setBackground(gfxRepository.clrButtonMain);
-        btnLaunch.setForeground(gfxRepository.clrText);
-        btnLaunch.setBorder(gfxRepository.bdrButtonEnabled);
-        btnLaunch.setFont(gfxRepository.txtHeader);
         btnLaunch.setOpaque(true);
-        btnLaunch.setFocusPainted(false);
-        btnLaunch.setHorizontalAlignment(SwingConstants.CENTER);
-        btnLaunch.setVerticalAlignment(SwingConstants.CENTER);
-        btnLaunch.setText("PLAY");
+        //btnLaunch.setHorizontalAlignment(SwingConstants.CENTER);
+        //btnLaunch.setVerticalAlignment(SwingConstants.CENTER);
         btnLaunch.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -417,32 +418,26 @@ public class guiCoreV4 {
 
         for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
 
-            pnlExpansions.add(new XPanel());
-            lblExpansions.add(new XLabel());
-            lblExpanDesc.add(new XLabel());
+            pnlExpansions.add(new XPanel(gfxRepository.clrForeground));
+            lblExpansions.add(new XLabel(xmlLoader.listOfExpansions.get(i).getName(), gfxRepository.txtSubheader, gfxRepository.clrText));
+            lblExpanDesc.add(new XLabel(xmlLoader.listOfExpansions.get(i).getSubtitle(), gfxRepository.txtItalSubtitle, gfxRepository.clrText));
             btnExpanEnable.add(new XButton());
-            lblExpanID.add(new XLabel());
+            lblExpanID.add(new XLabel(xmlLoader.listOfExpansions.get(i).getID(), gfxRepository.txtTiny, gfxRepository.clrText));
 
             expansionID = xmlLoader.listOfExpansions.get(i).getID();
 
             contentController.add(pnlExpansions.get(i)); //moves all of the content to the content controller
 
-            pnlExpansions.get(i).setLayout(null);
-
             pnlExpansions.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
-            pnlExpansions.get(i).setBackground(gfxRepository.clrForeground);
             pnlExpansions.get(i).add(lblExpansions.get(i));
             pnlExpansions.get(i).add(lblExpanDesc.get(i));
             pnlExpansions.get(i).add(btnExpanEnable.get(i));
             pnlExpansions.get(i).add(lblExpanID.get(i));
-            pnlExpansions.get(i).setOpaque(true);
 
             lblExpansions.get(i).setBounds(5, 5, 195, 25);
-            lblExpansions.get(i).setText(xmlLoader.listOfExpansions.get(i).getName(), gfxRepository.txtSubheader, gfxRepository.clrText);
-            lblExpansions.get(i).setAlignments(SwingConstants.TOP, SwingConstants.LEFT);
+            lblExpansions.get(i).setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
 
             lblExpanDesc.get(i).setBounds(5, 35, 170, 20);
-            lblExpanDesc.get(i).setText(xmlLoader.listOfExpansions.get(i).getSubtitle(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
 
             btnExpanEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
             btnExpanEnable.get(i).setForeground(gfxRepository.clrText);
@@ -478,10 +473,6 @@ public class guiCoreV4 {
 
             lblExpanID.get(i).setBounds(contentController.getWidth() - 80, 35, 55, 20);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
-            lblExpanID.get(i).setForeground(gfxRepository.clrText);
-            lblExpanID.get(i).setFont(gfxRepository.txtTiny);
-            lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
-            lblExpanID.get(i).setText(xmlLoader.listOfExpansions.get(i).getID());
 
             //enable everything lel
             lblExpanID.get(i).setVisible(true);
@@ -524,33 +515,25 @@ public class guiCoreV4 {
 
         for (int i = 0; i < xmlLoader.listOfMods.size(); i++) {
 
-            pnlMods.add(new XPanel());
-            lblMods.add(new XLabel());
+            pnlMods.add(new XPanel(gfxRepository.clrForeground));
+            lblMods.add(new XLabel(xmlLoader.listOfMods.get(i).getModName(), gfxRepository.txtSubheader, gfxRepository.clrText));
             btnModEnable.add(new XButton());
-            lblModAuthor.add(new XLabel());
+            lblModAuthor.add(new XLabel()); //TODO: Add mod author.
 
             contentController.add(pnlMods.get(i));
 
             modID = xmlLoader.listOfMods.get(i).getModName();
 
-            pnlMods.get(i).setLayout(null);
-
             pnlMods.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlModHeader.getHeight() + 5) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
-            pnlMods.get(i).setBackground(gfxRepository.clrForeground);
             pnlMods.get(i).add(lblMods.get(i));
             pnlMods.get(i).add(btnModEnable.get(i));
 
             lblMods.get(i).setBounds(5, 5, 195, 25);
-            lblMods.get(i).setForeground(gfxRepository.clrText);
-            lblMods.get(i).setOpaque(false);
-            lblMods.get(i).setFont(gfxRepository.txtSubheader);
-            lblMods.get(i).setText(xmlLoader.listOfMods.get(i).getModName());
             lblMods.get(i).setVerticalAlignment(SwingConstants.TOP);
 
             btnModEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
             btnModEnable.get(i).setForeground(gfxRepository.clrText);
             btnModEnable.get(i).setOpaque(true);
-            btnModEnable.get(i).setFocusable(false);
             btnModEnable.get(i).setFont(gfxRepository.txtSubheader);
 
             modEnabler.add(new addModAL());
@@ -595,7 +578,7 @@ public class guiCoreV4 {
 
         System.out.println("Loaded mod data into GUI.");
 
-        refreshUI();
+        window.refresh();
 
     }
 
@@ -605,10 +588,6 @@ public class guiCoreV4 {
     //load the loading screen and game content
     private void loadLoadingScreen(int toLoad) {
 
-        //TODO: Eventually re-sort swing objects so I don't have a bunch of a empty ones lying around. Arraylists are the best bet.
-
-        JLabel bgLoadIcon;
-
         load = toLoad;
 
         gfxRepository.randomBackground(); //picks a random background image for the loading screen
@@ -617,19 +596,15 @@ public class guiCoreV4 {
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         layers.setBounds(0, 0, getUIScaleX(), getUIScaleY()); //reset the size
 
-        bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
+        bgPanel = new XLabel(gfxRepository.mainBackground, gfxRepository.clrTrueBlack);
         layers.add(bgPanel, new Integer(0), 0);
         bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        bgPanel.setOpaque(true);
-        bgPanel.setFocusable(false);
         bgPanel.setVisible(true);
 
         //loads the loading icon gif that plays during the loading screen
-        bgLoadIcon = new JLabel(gfxRepository.loadingIcon);
+        XLabel bgLoadIcon = new XLabel(gfxRepository.loadingIcon);
         layers.add(bgLoadIcon, new Integer(1), 0);
         bgLoadIcon.setBounds((getUIScaleX() / 2) - 150, getUIScaleY() - 380, 300, 300);
-        bgLoadIcon.setOpaque(false);
-        bgLoadIcon.setFocusable(false);
         bgLoadIcon.setVisible(true);
 
         //loads the loading bar at the bottom of the screen that shows the progress of the loading
@@ -647,19 +622,13 @@ public class guiCoreV4 {
         loadingBar.setVisible(true);
 
         //loads the text box above the loading bar
-        JLabel lblInformation = new JLabel();
+        XLabel lblInformation = new XLabel("Astra Project - Work In Progress", gfxRepository.txtHeader, gfxRepository.clrText);
         layers.add(lblInformation, new Integer(3), 0);
         lblInformation.setBounds((getUIScaleX() / 2) - 300, getUIScaleY() - 120, 600, 50);
-        lblInformation.setOpaque(false);
-        lblInformation.setFocusable(false);
-        lblInformation.setFont(gfxRepository.txtHeader);
-        lblInformation.setHorizontalAlignment(SwingConstants.CENTER);
-        lblInformation.setVerticalAlignment(SwingConstants.BOTTOM);
-        lblInformation.setForeground(gfxRepository.clrText);
-        lblInformation.setText("Astra Project - Work In Progress");
+        lblInformation.setAlignments(SwingConstants.CENTER, SwingConstants.BOTTOM);
         lblInformation.setVisible(true);
 
-        refreshUI();
+        window.refresh();
 
         loadingBar.setIndeterminate(true);
 
@@ -729,9 +698,9 @@ public class guiCoreV4 {
                             gfxRepository.loadMapGFX();
                             break;
                         case 80: //set up some of the UI content
-                            pnlOverlay = new JPanel();
-                            pnlPauseMenu = new JPanel();
-                            btnQuit = new JButton();
+                            pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
+                            pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
+                            btnQuit = new XButton();
                             break;
                     }
                 }
@@ -791,51 +760,36 @@ public class guiCoreV4 {
 
     private void loadMainMenu() {
 
-        bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
+        bgPanel = new XLabel(gfxRepository.mainBackground);
         layers.add(bgPanel, new Integer(0), 0);
         bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         bgPanel.setOpaque(true);
-        bgPanel.setFocusable(false);
         bgPanel.setVisible(true);
 
-        imgLogo = new JLabel(new ImageIcon(gfxRepository.gameLogoLarge));
+        imgLogo = new XLabel(gfxRepository.gameLogoLarge);
         layers.add(imgLogo, new Integer(10), 0);
-        imgLogo.setBounds(window.getWidth() - 140, 20, 120, 120);
-
-        JLabel menuPlanet = new JLabel(new ImageIcon(gfxRepository.menuPlanet));
-        layers.add(menuPlanet, new Integer(8), 0);
-        menuPlanet.setBounds(window.getWidth() - 1100, 0, 1500, 450);
-        menuPlanet.setOpaque(false);
-        menuPlanet.setFocusable(false);
-        menuPlanet.setVisible(true);
-
+        imgLogo.setBounds(window.getWidth() - 115, 5, 120, 120);
         imgLogo.setVisible(true);
 
-        //testAnimation = new animCore(new ImageIcon(gfxRepository.menuShip), 1, layers, window);
-        //testAnimation.start();
+        XLabel menuPlanet = new XLabel(gfxRepository.menuPlanet);
+        layers.add(menuPlanet, new Integer(8), 0);
+        menuPlanet.setBounds(window.getWidth() - 1100, 0, 1500, 450);
+        menuPlanet.setVisible(true);
 
-        JPanel pnlMenuBarH = new JPanel();
+        XLabel lblLensGlare = new XLabel(gfxRepository.menuGlare);
+        layers.add(lblLensGlare, new Integer(9), 0);
+        lblLensGlare.setBounds(0, 0, screen.getWidth(), screen.getHeight());
+        lblLensGlare.setVisible(true);
 
-        layers.add(pnlMenuBarH, new Integer(3), 0);
+        XPanel pnlMenuBarH = new XPanel(gfxRepository.clrBackground);
+        layers.add(pnlMenuBarH, new Integer(14), 0);
         pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
-        pnlMenuBarH.setLayout(null);
-        pnlMenuBarH.setBackground(gfxRepository.clrBackground);
-        pnlMenuBarH.setFocusable(false);
-        pnlMenuBarH.setBorder(null);
         pnlMenuBarH.setVisible(true);
 
-        btnNewGame = new JButton();
-        layers.add(btnNewGame, new Integer(4), 0);
+        btnNewGame = new XButton("NEW GAME", gfxRepository.txtHeader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
+        layers.add(btnNewGame, new Integer(15), 0);
         btnNewGame.setBounds(5, getUIScaleY() - 60, 180, 55);
-        btnNewGame.setBackground(gfxRepository.clrButtonMain);
-        btnNewGame.setForeground(gfxRepository.clrText);
-        btnNewGame.setBorder(gfxRepository.bdrButtonEnabled);
-        btnNewGame.setFont(gfxRepository.txtHeader);
-        btnNewGame.setOpaque(true); //TODO: Find a way to do semi-transparent buttons
-        btnNewGame.setFocusPainted(false);
-        //btnNewGame.setHorizontalAlignment(SwingConstants.CENTER);
-        //btnNewGame.setVerticalAlignment(SwingConstants.CENTER);
-        btnNewGame.setText("NEW GAME");
+        btnNewGame.setOpaque(true);
 
         btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
             @Override
@@ -846,39 +800,27 @@ public class guiCoreV4 {
             }
         });
 
-        refreshUI();
+        window.refresh();
 
     }
 
     //loads the menu to set up a new game
     private void loadNewSettingsMenu() {
 
-        settingsMenu = new JPanel();
-        settingsMenu.setLayout(null);
-        layers.add(settingsMenu, new Integer(4), 0);
+        settingsMenu = new XPanel();
+        layers.add(settingsMenu, new Integer(14), 0);
         settingsMenu.setVisible(true);
-        settingsMenu.setOpaque(false);
-        settingsMenu.setBorder(null);
         settingsMenu.setBounds(0, 0, 400, window.getHeight() - 250);
 
-        JPanel pnlSettings = new JPanel();
-        pnlSettings.setLayout(null);
+        XPanel pnlSettings = new XPanel(gfxRepository.clrBackground);
         pnlSettings.setBounds(settingsMenu.getX(), settingsMenu.getY(), settingsMenu.getWidth(), settingsMenu.getHeight());
-        pnlSettings.setBackground(gfxRepository.clrBackground);
         pnlSettings.setVisible(true);
-        pnlSettings.setOpaque(true);
         settingsMenu.add(pnlSettings);
 
-        JButton launchNewGame = new JButton();
+        XButton launchNewGame = new XButton("Start", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
         pnlSettings.add(launchNewGame);
         launchNewGame.setBounds(5, pnlSettings.getHeight() - 110, pnlSettings.getWidth() - 10, 50);
-        launchNewGame.setBackground(gfxRepository.clrButtonMain);
-        launchNewGame.setFocusPainted(false);
-        launchNewGame.setForeground(gfxRepository.clrText);
-        launchNewGame.setFont(gfxRepository.txtSubheader);
-        launchNewGame.setText("Start");
         launchNewGame.setOpaque(true);
-        launchNewGame.setBorder(gfxRepository.bdrButtonEnabled);
         launchNewGame.setVisible(true);
 
         launchNewGame.addActionListener(new ActionListener() {
@@ -893,16 +835,10 @@ public class guiCoreV4 {
             }
         });
 
-        JButton btnBack = new JButton();
+        XButton btnBack = new XButton("Back", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
         pnlSettings.add(btnBack);
         btnBack.setBounds(5, pnlSettings.getHeight() - 55, pnlSettings.getWidth() - 10, 50);
-        btnBack.setBackground(gfxRepository.clrButtonMain);
-        btnBack.setFocusPainted(false);
-        btnBack.setForeground(gfxRepository.clrText);
-        btnBack.setFont(gfxRepository.txtSubheader);
         btnBack.setOpaque(true);
-        btnBack.setText("Back");
-        btnBack.setBorder(gfxRepository.bdrButtonEnabled);
         btnBack.setVisible(true);
 
         btnBack.addActionListener((new ActionListener() {
@@ -915,16 +851,12 @@ public class guiCoreV4 {
         }));
 
         //sets up settings option for resource abundance
-        JLabel lblResources = new JLabel();
+        XLabel lblResources = new XLabel("Resource Abundance", gfxRepository.txtSubheader, gfxRepository.clrText);
+        lblResources.setAlignments(SwingConstants.CENTER);
         JSlider sldResources = new JSlider(JSlider.HORIZONTAL, gameSettings.resourceAbundanceMin, gameSettings.resourceAbundanceHigh, gameSettings.resourceAbundanceAvg);
         pnlSettings.add(lblResources);
         pnlSettings.add(sldResources);
         lblResources.setBounds(5, 15, settingsMenu.getWidth() - 5, 25);
-        lblResources.setForeground(gfxRepository.clrText);
-        lblResources.setFont(gfxRepository.txtSubheader);
-        lblResources.setHorizontalAlignment(SwingConstants.CENTER);
-        lblResources.setVerticalAlignment(SwingConstants.CENTER);
-        lblResources.setText("Resource Abundance");
         lblResources.setVisible(true);
         sldResources.setMajorTickSpacing(25);
         sldResources.setMinorTickSpacing(5);
@@ -949,21 +881,17 @@ public class guiCoreV4 {
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currentResources = source.getValue();
                 }
-                refreshUI();
+                window.refresh();
             }
         });
 
         //sets up settings option for star abundance
-        JLabel lblStarFreq = new JLabel();
+        XLabel lblStarFreq = new XLabel("Star Frequency", gfxRepository.txtSubheader, gfxRepository.clrText);
+        lblStarFreq.setAlignments(SwingConstants.CENTER);
         JSlider sldStarFreq = new JSlider(JSlider.HORIZONTAL, gameSettings.starFreqMin, gameSettings.starFreqHigh, gameSettings.starFreqAvg);
         pnlSettings.add(lblStarFreq);
         pnlSettings.add(sldStarFreq);
         lblStarFreq.setBounds(5, sldResources.getY() + sldResources.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
-        lblStarFreq.setForeground(gfxRepository.clrText);
-        lblStarFreq.setFont(gfxRepository.txtSubheader);
-        lblStarFreq.setHorizontalAlignment(SwingConstants.CENTER);
-        lblStarFreq.setVerticalAlignment(SwingConstants.CENTER);
-        lblStarFreq.setText("Star Frequency");
         lblStarFreq.setVisible(true);
         sldStarFreq.setMajorTickSpacing(15);
         sldStarFreq.setMinorTickSpacing(5);
@@ -988,21 +916,17 @@ public class guiCoreV4 {
                 if (source.getValueIsAdjusting()) {
                     gameSettings.starFrequency = source.getValue();
                 }
-                refreshUI();
+                window.refresh();
             }
         });
 
         //sets up settings option for map scaling
-        JLabel lblMapScale = new JLabel();
+        XLabel lblMapScale = new XLabel("Map Scale", gfxRepository.txtSubheader, gfxRepository.clrText);
+        lblMapScale.setAlignments(SwingConstants.CENTER);
         JSlider sldMapScale = new JSlider(JSlider.HORIZONTAL, gameSettings.mapScaleMin, gameSettings.mapScaleHigh, gameSettings.mapScaleAvg);
         pnlSettings.add(lblMapScale);
         pnlSettings.add(sldMapScale);
         lblMapScale.setBounds(5, sldStarFreq.getY() + sldStarFreq.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
-        lblMapScale.setForeground(gfxRepository.clrText);
-        lblMapScale.setFont(gfxRepository.txtSubheader);
-        lblMapScale.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMapScale.setVerticalAlignment(SwingConstants.CENTER);
-        lblMapScale.setText("Map Scale");
         lblMapScale.setVisible(true);
         sldMapScale.setMajorTickSpacing(20);
         sldMapScale.setMinorTickSpacing(5);
@@ -1028,20 +952,16 @@ public class guiCoreV4 {
                     gameSettings.currMapScaleX = source.getValue();
                     gameSettings.currMapScaleY = source.getValue();
                 }
-                refreshUI();
+                window.refresh();
             }
         });
 
-        JLabel lblDiffOverall = new JLabel();
+        XLabel lblDiffOverall = new XLabel("Overall Difficulty", gfxRepository.txtSubheader, gfxRepository.clrText);
+        lblDiffOverall.setAlignments(SwingConstants.CENTER);
         JSlider sldDiffOverall = new JSlider(JSlider.HORIZONTAL, gameSettings.overallDifficultyMin, gameSettings.overallDifficultyHigh, gameSettings.overallDifficultyAvg);
         pnlSettings.add(lblDiffOverall);
         pnlSettings.add(sldDiffOverall);
         lblDiffOverall.setBounds(5, sldMapScale.getY() + sldMapScale.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
-        lblDiffOverall.setForeground(gfxRepository.clrText);
-        lblDiffOverall.setFont(gfxRepository.txtSubheader);
-        lblDiffOverall.setHorizontalAlignment(SwingConstants.CENTER);
-        lblDiffOverall.setVerticalAlignment(SwingConstants.CENTER);
-        lblDiffOverall.setText("Overall Difficulty");
         lblDiffOverall.setVisible(true);
         sldDiffOverall.setMajorTickSpacing(25);
         sldDiffOverall.setMinorTickSpacing(5);
@@ -1066,11 +986,11 @@ public class guiCoreV4 {
                 if (source.getValueIsAdjusting()) {
                     gameSettings.currDifficulty = source.getValue();
                 }
-                refreshUI();
+                window.refresh();
             }
         });
 
-        refreshUI();
+        window.refresh();
 
     }
 
@@ -1084,53 +1004,54 @@ public class guiCoreV4 {
         audioRepository.musicShuffle();
         audioRepository.ambianceMainGame();
 
-        bgPanel = new JLabel(new ImageIcon(gfxRepository.mainBackground));
+        bgPanel = new XLabel(gfxRepository.mainBackground, gfxRepository.clrTrueBlack);
         layers.add(bgPanel, new Integer(0), 0);
         bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        bgPanel.setOpaque(true);
-        bgPanel.setFocusable(false);
         bgPanel.setVisible(true);
 
-        JScrollPane mapView = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        XScrollPane mapView = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         layers.add(mapView, new Integer(3), 0);
         mapView.setViewportView(bgPanel);
-        mapView.setOpaque(false);
         mapView.setBounds(0, 0, window.getWidth(), window.getHeight());
         mapView.setVisible(true);
 
-        ArrayList<ArrayList<JLabel>> mapGFX = new ArrayList<>();
-        ArrayList<ArrayList<JButton>> mapButton = new ArrayList<>();
+        ArrayList<ArrayList<XLabel>> mapGFX = new ArrayList<>();
+        ArrayList<ArrayList<XButton>> mapButton = new ArrayList<>();
 
         int positionX;
         int positionY = 0;
-        int tileSize = 30;
+        int tileSize = 45;
 
         for (int i = 0; i < gameSettings.map.mapTiles.size(); i++) {
-            mapGFX.add(new ArrayList<JLabel>());
-            mapButton.add(new ArrayList<JButton>());
+            mapGFX.add(new ArrayList<XLabel>());
+            mapButton.add(new ArrayList<XButton>());
             positionX = 0;
 
             for (int j = 0; j < gameSettings.map.mapTiles.get(i).size(); j++) {
                 if (gameSettings.map.mapTiles.get(i).get(j).getStar()) {
-                    mapGFX.get(i).add(new JLabel(new ImageIcon(gfxRepository.planetIcon)));
-                    mapButton.get(i).add(new JButton());
+                    mapGFX.get(i).add(new XLabel(gfxRepository.planetIcon));
+
+                    if (gameSettings.map.mapTiles.get(i).get(j).getStarData().isHomeSystem()) {
+                        XLabel homeSystem = new XLabel(gfxRepository.homeSystem);
+                        bgPanel.add(homeSystem);
+                        homeSystem.setBounds(tileSize * positionX - 15, tileSize * positionY - 15, tileSize - 15, tileSize - 15);
+                        homeSystem.setVisible(true);
+                    }
+
+                    mapButton.get(i).add(new XButton());
                     mapGFX.get(i).get(j).add(mapButton.get(i).get(j));
                     mapButton.get(i).get(j).setOpaque(false);
-                    mapButton.get(i).get(j).setFocusPainted(false);
                     mapButton.get(i).get(j).setBorder(null);
                     mapButton.get(i).get(j).setBackground(gfxRepository.clrInvisible);
                     mapButton.get(i).get(j).setVisible(true);
                     mapButton.get(i).get(j).setBounds(0, 0, tileSize, tileSize);
                     mapButton.get(i).get(j).addActionListener(new addMapAL(i, j));
                 } else {
-                    mapGFX.get(i).add(new JLabel());
+                    mapGFX.get(i).add(new XLabel());
                     mapButton.get(i).add(null); //lololo cheating
                 }
                 bgPanel.add(mapGFX.get(i).get(j));
                 mapGFX.get(i).get(j).setBounds(tileSize * positionX, tileSize * positionY, tileSize, tileSize);
-                mapGFX.get(i).get(j).setFont(gfxRepository.txtTiny);
-                mapGFX.get(i).get(j).setForeground(gfxRepository.clrText);
-                //mapGFX.get(i).get(j).setText("");
                 mapGFX.get(i).get(j).setVisible(true);
 
                 positionX++;
@@ -1139,16 +1060,14 @@ public class guiCoreV4 {
             positionY++;
         }
 
-        pnlStarData = new JPanel();
+        pnlStarData = new XPanel();
         layers.add(pnlStarData, new Integer(10), 0);
-        pnlStarData.setLayout(null);
         pnlStarData.setBounds((screen.getWidth() / 2) - 400, 100, 800, screen.getHeight() - 200);
-        pnlStarData.setBackground(gfxRepository.clrBGOpaque);
         pnlStarData.setVisible(false);
 
         loadPlayerBar();
 
-        refreshUI();
+        window.refresh();
 
     }
 
@@ -1157,35 +1076,22 @@ public class guiCoreV4 {
 
     private void loadPlayerBar() { //loads the bar at the top of the screen with the relevant player information
 
-        JPanel pnlTopBar = new JPanel();
-        pnlTopBar.setLayout(null);
+        XPanel pnlTopBar = new XPanel(gfxRepository.clrDGrey);
         layers.add(pnlTopBar, new Integer(8), 0);
         pnlTopBar.setBounds(0, 0, screen.getWidth(), 50);
-        pnlTopBar.setBackground(gfxRepository.clrDGrey);
 
-        JButton btnMenu = new JButton();
+        XButton btnMenu = new XButton("Menu", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
         pnlTopBar.add(btnMenu);
         btnMenu.setBounds(pnlTopBar.getWidth() - 85, 5, 80, pnlTopBar.getHeight() - 10);
         btnMenu.setOpaque(false);
-        btnMenu.setFocusable(false);
-        btnMenu.setFocusPainted(false);
-        btnMenu.setForeground(gfxRepository.clrText);
-        btnMenu.setBackground(gfxRepository.clrButtonMain);
-        btnMenu.setFont(gfxRepository.txtSubheader);
-        btnMenu.setText("Menu");
-        btnMenu.setBorder(gfxRepository.bdrButtonEnabled);
         btnMenu.setVisible(true);
 
-        layers.add(pnlOverlay, new Integer(15), 0);
-        pnlOverlay.setLayout(null);
+
+
+        layers.add(pnlOverlay, new Integer(14), 0);
         pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());
-        pnlOverlay.setBackground(gfxRepository.clrBlkTransparent);
-        pnlOverlay.setFocusable(false);
         pnlOverlay.add(pnlPauseMenu);
-        pnlPauseMenu.setLayout(null);
         pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
-        pnlPauseMenu.setBackground(gfxRepository.clrBGOpaque);
-        pnlPauseMenu.setFocusable(false);
         pnlPauseMenu.setVisible(true);
         pnlOverlay.setVisible(false);
 
@@ -1195,7 +1101,7 @@ public class guiCoreV4 {
                 if (!pnlOverlay.isVisible()) {
                     showPauseMenu();
                     audioRepository.buttonClick();
-                    refreshUI();
+                    window.refresh();
                 } else {
                     pnlOverlay.setVisible(false);
                     pnlPauseMenu.removeAll();
@@ -1206,39 +1112,74 @@ public class guiCoreV4 {
 
     }
 
-    protected void loadStarData(starClass star) { //shows the star information screen
+    private void loadStarData(starClass star) { //shows the star information screen
+
+        pnlStarData.removeAll(); //clears the UI to avoid overlap
 
         pnlStarData.setVisible(true);
 
         //displays the star's portrait
-        JLabel lblStarPortrait = new JLabel(new ImageIcon(star.getPortraitGFX()));
+        XLabel lblStarPortrait = new XLabel(star.getPortraitGFX(), gfxRepository.clrTrueBlack);
         pnlStarData.add(lblStarPortrait);
-        lblStarPortrait.setOpaque(true);
         lblStarPortrait.setBounds((pnlStarData.getWidth() / 2) - 280, 0, 560, 185);
-        lblStarPortrait.setBackground(gfxRepository.clrTrueBlack);
         lblStarPortrait.setVisible(true);
 
+        XLabel lblPortraitBorder = new XLabel(gfxRepository.portraitBorder);
+        lblStarPortrait.add(lblPortraitBorder);
+        lblPortraitBorder.setBounds(0, 0, lblStarPortrait.getWidth(), lblStarPortrait.getHeight());
+        lblPortraitBorder.setVisible(true);
+
+        //displays the background
+
+        XLabel lblBackground = new XLabel(gfxRepository.menuBackground, gfxRepository.clrBGOpaque);
+        pnlStarData.add(lblBackground);
+        lblBackground.setBounds(0, lblStarPortrait.getHeight(), pnlStarData.getWidth(), pnlStarData.getHeight() - lblStarPortrait.getHeight());
+        lblBackground.setVisible(true);
+
+        //adds an icon/text with the number of planets in the system
+        XLabel lblPlanetCountImg = new XLabel(gfxRepository.starPlanetCount);
+        pnlStarData.add(lblPlanetCountImg);
+        lblPlanetCountImg.setBounds(5, 15, 30, 30);
+        lblPlanetCountImg.setVisible(true);
+
+        XLabel lblPlanetCountText = new XLabel(" : " + star.getNumOfPlanets(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+        pnlStarData.add(lblPlanetCountText);
+        lblPlanetCountText.setBounds(lblPlanetCountImg.getX() + lblPlanetCountImg.getWidth() + 5, lblPlanetCountImg.getY() - 5, 70, 40);
+        lblPlanetCountText.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+        lblPlanetCountText.setVisible(true);
+
+        //adds an icon/text with the number of colonies in the system
+        XLabel lblColonyCountImg = new XLabel(gfxRepository.colonyCount);
+        pnlStarData.add(lblColonyCountImg);
+        lblColonyCountImg.setBounds(5, lblPlanetCountImg.getY() + lblPlanetCountImg.getHeight() + 10, 30, 30);
+        lblColonyCountImg.setVisible(true);
+
+        XLabel lblColonyCountText = new XLabel(" : " + star.getColonyCount(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+        pnlStarData.add(lblColonyCountText);
+        lblColonyCountText.setBounds(lblColonyCountImg.getX() + lblColonyCountImg.getWidth() + 5, lblColonyCountImg.getY() - 10, 70, 40);
+        lblColonyCountText.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+        lblColonyCountText.setVisible(true);
+
         //displays the star's name
-        JLabel lblStarName = new JLabel();
-        pnlStarData.add(lblStarName);
-        lblStarName.setFont(gfxRepository.txtHeader);
-        lblStarName.setForeground(gfxRepository.clrText);
-        lblStarName.setText(star.getStarClassName());
-        lblStarName.setBounds(570, 40, pnlStarData.getWidth() - 580, 60);
-        lblStarName.setHorizontalAlignment(SwingConstants.CENTER);
+        XLabel lblStarName = new XLabel(star.getStarClassName(), gfxRepository.txtHeader, gfxRepository.clrText);
+        lblBackground.add(lblStarName);
+        lblStarName.setBounds((pnlStarData.getWidth() / 2) - 100, 5, 200, 40);
+        lblStarName.setAlignments(SwingConstants.CENTER);
         lblStarName.setVisible(true);
 
+        //displays the star class's description
+        XLabel lblStarDesc = new XLabel("<html>" + star.getStarClassDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+        lblBackground.add(lblStarDesc);
+        lblStarDesc.setBounds(40, lblStarName.getY() + lblStarName.getHeight() + 15, pnlStarData.getWidth() - 80, 100);
+        lblStarDesc.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
+
+        lblStarDesc.setVisible(true);
+
         //displays the close button
-        JButton btnClose = new JButton();
+        XButton btnClose = new XButton("X", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
         pnlStarData.add(btnClose);
         btnClose.setBounds(pnlStarData.getWidth() - 40, 10, 30, 30);
         btnClose.setOpaque(true);
-        btnClose.setFocusPainted(false);
-        btnClose.setFocusable(false);
-        btnClose.setForeground(gfxRepository.clrText);
-        btnClose.setFont(gfxRepository.txtSubheader);
-        btnClose.setBackground(gfxRepository.clrButtonBackground);
-        btnClose.setText("X");
         btnClose.setVisible(true);
 
         btnClose.addActionListener(new ActionListener() {
@@ -1247,22 +1188,11 @@ public class guiCoreV4 {
                 audioRepository.buttonClick();
                 pnlStarData.removeAll();
                 pnlStarData.setVisible(false);
-                refreshUI();
+                window.refresh();
             }
         });
 
-        //displays the star class's description
-        JLabel lblStarDesc = new JLabel();
-        pnlStarData.add(lblStarDesc);
-        lblStarDesc.setBounds(10, 200, pnlStarData.getWidth(), 100);
-        lblStarDesc.setVerticalAlignment(SwingConstants.TOP);
-        lblStarDesc.setForeground(gfxRepository.clrText);
-        lblStarDesc.setFont(gfxRepository.txtSubtitle);
-        lblStarDesc.setText("<html>" + star.getStarClassDesc() + "</html>");
-
-        lblStarDesc.setVisible(true);
-
-        refreshUI();
+        window.refresh();
 
     }
 
@@ -1271,23 +1201,16 @@ public class guiCoreV4 {
         gameSettings.gameIsPaused = true; //pauses the game
 
         //adds the title to the pause menu
-        JLabel lblMenuTitle = new JLabel();
+        XLabel lblMenuTitle = new XLabel("Pause Menu", gfxRepository.txtHeader, gfxRepository.clrText);
         pnlPauseMenu.add(lblMenuTitle);
         lblMenuTitle.setBounds(5, 10, pnlPauseMenu.getWidth() - 10, 40);
-        lblMenuTitle.setForeground(gfxRepository.clrText);
-        lblMenuTitle.setFont(gfxRepository.txtHeader);
-        lblMenuTitle.setFocusable(false);
-        lblMenuTitle.setText("Pause Menu");
-        lblMenuTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMenuTitle.setVerticalAlignment(SwingConstants.CENTER);
+        lblMenuTitle.setAlignments(SwingConstants.CENTER);
         lblMenuTitle.setVisible(true);
 
         pnlPauseMenu.add(btnQuit);
         btnQuit.setBounds(10, pnlPauseMenu.getHeight() - 50, pnlPauseMenu.getWidth() - 20, 40);
         btnQuit.setOpaque(true);
         btnQuit.setBackground(gfxRepository.clrButtonBackground);
-        btnQuit.setFocusPainted(false);
-        btnQuit.setFocusable(false);
         btnQuit.setForeground(gfxRepository.clrText);
         btnQuit.setFont(gfxRepository.txtSubheader);
         btnQuit.setText("Quit Game");
@@ -1307,17 +1230,10 @@ public class guiCoreV4 {
             }
         });
 
-        JButton btnReturn = new JButton();
+        XButton btnReturn = new XButton("Continue", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
         pnlPauseMenu.add(btnReturn);
         btnReturn.setBounds(10, lblMenuTitle.getY() + lblMenuTitle.getHeight() + 10, pnlPauseMenu.getWidth() - 20, 40);
         btnReturn.setOpaque(true);
-        btnReturn.setBackground(gfxRepository.clrButtonBackground);
-        btnReturn.setFocusPainted(false);
-        btnReturn.setFocusable(false);
-        btnReturn.setForeground(gfxRepository.clrText);
-        btnReturn.setFont(gfxRepository.txtSubheader);
-        btnReturn.setText("Continue");
-        btnReturn.setBorder(gfxRepository.bdrButtonEnabled);
         btnReturn.setVisible(true);
 
         btnReturn.addActionListener(new ActionListener() {
@@ -1330,14 +1246,10 @@ public class guiCoreV4 {
         });
 
         //Adds a slider to change music volume
-        JLabel lblMusicVolume = new JLabel();
+        XLabel lblMusicVolume = new XLabel("Music Volume", gfxRepository.txtSubtitle, gfxRepository.clrText);
         pnlPauseMenu.add(lblMusicVolume);
         lblMusicVolume.setBounds(5, btnReturn.getY() + btnReturn.getHeight() + 5, pnlPauseMenu.getWidth() - 10, 25);
-        lblMusicVolume.setFont(gfxRepository.txtSubtitle);
-        lblMusicVolume.setForeground(gfxRepository.clrText);
-        lblMusicVolume.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMusicVolume.setVerticalAlignment(SwingConstants.CENTER);
-        lblMusicVolume.setText("Music Volume");
+        lblMusicVolume.setAlignments(SwingConstants.CENTER);
         lblMusicVolume.setVisible(true);
 
         JSlider sldMusicVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.musicVolume);
@@ -1360,19 +1272,15 @@ public class guiCoreV4 {
                     audioRepository.musicVolume = source.getValue();
                     audioRepository.setMusicVolume();
                 }
-                refreshUI();
+                window.refresh();
             }
         });
 
         //Adds a slider to change ambiance volume
-        JLabel lblAmbianceVolume = new JLabel();
+        XLabel lblAmbianceVolume = new XLabel("Ambiance Volume", gfxRepository.txtSubtitle, gfxRepository.clrText);
         pnlPauseMenu.add(lblAmbianceVolume);
         lblAmbianceVolume.setBounds(5, sldMusicVolume.getY() + sldMusicVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 10, lblMusicVolume.getHeight());
-        lblAmbianceVolume.setFont(gfxRepository.txtSubtitle);
-        lblAmbianceVolume.setForeground(gfxRepository.clrText);
-        lblAmbianceVolume.setHorizontalAlignment(SwingConstants.CENTER);
-        lblAmbianceVolume.setVerticalAlignment(SwingConstants.CENTER);
-        lblAmbianceVolume.setText("Ambiance Volume");
+        lblAmbianceVolume.setAlignments(SwingConstants.CENTER);
         lblAmbianceVolume.setVisible(true);
 
         JSlider sldAmbianceVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.ambianceVolume);
@@ -1395,7 +1303,7 @@ public class guiCoreV4 {
                     audioRepository.ambianceVolume = source.getValue();
                     audioRepository.setAmbianceVolume();
                 }
-                refreshUI();
+                window.refresh();
             }
         });
 
@@ -1406,7 +1314,7 @@ public class guiCoreV4 {
     }
 
 
-    private class propertyListener implements PropertyChangeListener {
+    private class propertyListener implements PropertyChangeListener { //monitors the loading bar and changes it
 
         public void propertyChange(PropertyChangeEvent e) {
             if ("progress".equals(e.getPropertyName())) {
@@ -1418,10 +1326,12 @@ public class guiCoreV4 {
         }
     }
 
+    /** Special ActionListeners **/
+
     //action listened for enabling/disabling expansions
     private class addExpAL implements ActionListener {
 
-        public addExpAL() {
+        addExpAL() {
         }
 
         int enable;
@@ -1448,11 +1358,11 @@ public class guiCoreV4 {
 
         }
 
-        public void setEnable(int enabled) {
+        void setEnable(int enabled) {
             this.enable = enabled;
         }
 
-        public void setExpID(String ID) {
+        void setExpID(String ID) {
             this.expID = ID;
         }
 
@@ -1461,7 +1371,7 @@ public class guiCoreV4 {
     //action listened for enabling/disabling mods
     private class addModAL implements ActionListener {
 
-        public addModAL() {
+        addModAL() {
         }
 
         int enable;
@@ -1488,11 +1398,11 @@ public class guiCoreV4 {
 
         }
 
-        public void setEnable(int enabled) {
+        void setEnable(int enabled) {
             this.enable = enabled;
         }
 
-        public void setModID(String ID) {
+        void setModID(String ID) {
             this.modID = ID;
         }
 
@@ -1502,7 +1412,7 @@ public class guiCoreV4 {
 
         int x, y;
 
-        public addMapAL(int x, int y) {
+        addMapAL(int x, int y) {
             this.x = x;
             this.y = y;
         }
@@ -1514,7 +1424,6 @@ public class guiCoreV4 {
         }
 
     }
-
 
 
 }

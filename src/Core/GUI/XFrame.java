@@ -1,7 +1,6 @@
 package Core.GUI;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -12,12 +11,21 @@ import java.awt.image.BufferedImage;
 
 class XFrame extends JFrame {
 
+
+
     XFrame(String text, BufferedImage icon) {
         this.setUndecorated(true);
         this.setResizable(false);
         this.setTitle(text);
         this.setIconImage(icon);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+    }
+
+    //refreshes the GFX
+    void refresh() {
+        this.revalidate();
+        this.repaint();
 
     }
 
