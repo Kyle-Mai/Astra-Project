@@ -41,15 +41,12 @@ public class guiCoreV4 {
     private ArrayList<XButton> btnExpanEnable = new ArrayList<>();
     private ArrayList<XLabel> lblExpanID = new ArrayList<>();
     private XPanel pnlExpansionHeader;
-    private XLabel lblExpHeaderText;
 
     private ArrayList<XPanel> pnlMods = new ArrayList<>();
     private ArrayList<XLabel> lblMods = new ArrayList<>();
     private ArrayList<XLabel> lblModAuthor = new ArrayList<>();
     private ArrayList<XButton> btnModEnable = new ArrayList<>();
-    private ArrayList<addModAL> modEnabler = new ArrayList<>();
     private XPanel pnlModHeader;
-    private XLabel lblModHeaderText;
 
     private Dimension monitorSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
     private double screenWidth = monitorSize.getWidth();
@@ -64,15 +61,15 @@ public class guiCoreV4 {
     private XLabel imgLogo;
     private XPanel pnlPauseMenu;
     private XPanel pnlOverlay;
-    private int screenScaleChoice = 8;
+    private int screenScaleChoice = 5;
     private XPanel settingsMenu;
-    private XButton btnNewGame;
     private animCore menuSpaceport;
     private animCore menuMoon1;
     private animCore menuMoon2;
     private XButton btnQuit;
     private XPanel pnlStarData;
-    private XButton btnExit;
+    private XLabel lblLogo;
+    private XPanel pnlMenuBarH;
 
     //TODO: Work on converting as many as possible to local variables.
 
@@ -175,6 +172,7 @@ public class guiCoreV4 {
         //clears the content off of the UI
         screen.removeAll();
         layers.removeAll(); //clean the layer slate
+        window.refresh();
         window.getContentPane().add(layers);
     }
 
@@ -210,7 +208,7 @@ public class guiCoreV4 {
         imgBorder.setVisible(true);
 
         //load exit button
-        btnExit = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
+        XButton btnExit = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
 
         layers.add(btnExit, new Integer(2), 0);
         btnExit.setBounds(getUIScaleX() - 51, 6, 38, 38);
@@ -223,7 +221,6 @@ public class guiCoreV4 {
             public void mouseClicked(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
-                System.out.println("Killing program.");
                 audioRepository.buttonClick();
                 closeProgram();
             }
@@ -377,6 +374,8 @@ public class guiCoreV4 {
         layers.add(contentController, new Integer(5), 0);
         contentList = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         layers.add(contentList, new Integer(6), 0);
+        contentController.setBounds(getUIScaleX() - 325, 45, 300, 310);
+        contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight()));
 
         XScrollBar contentScroller = new XScrollBar();
 
@@ -384,8 +383,6 @@ public class guiCoreV4 {
         contentScroller.setBounds(contentController.getX() + contentController.getWidth() - 20, contentController.getY(), 15, contentController.getHeight());
         contentScroller.setVisible(true);
 
-        contentController.setBounds(getUIScaleX() - 325, 45, 300, 320);
-        contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight()));
         contentController.setVisible(true);
 
         contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 25), 45, contentController.getWidth(), contentController.getHeight());
@@ -402,7 +399,7 @@ public class guiCoreV4 {
         pnlExpansionHeader.setVisible(true);
 
         //load expansion header text
-        lblExpHeaderText = new XLabel("Expansion Packs", gfxRepository.txtSubheader, gfxRepository.clrText);
+        XLabel lblExpHeaderText = new XLabel("Expansion Packs", gfxRepository.txtSubheader, gfxRepository.clrText);
         pnlExpansionHeader.add(lblExpHeaderText);
         lblExpHeaderText.setBounds(5, 5, pnlExpansionHeader.getWidth() - 10, pnlExpansionHeader.getHeight() - 10);
         lblExpHeaderText.setAlignments(SwingConstants.CENTER, SwingConstants.CENTER);
@@ -414,29 +411,66 @@ public class guiCoreV4 {
         pnlModHeader.setVisible(true);
 
         //adds the mod header text data
-        lblModHeaderText = new XLabel("Mods", gfxRepository.txtSubheader, gfxRepository.clrText);
+        XLabel lblModHeaderText = new XLabel("Mods", gfxRepository.txtSubheader, gfxRepository.clrText);
         pnlModHeader.add(lblModHeaderText);
         lblModHeaderText.setBounds(5, 5, pnlModHeader.getWidth() - 10, pnlModHeader.getHeight() - 10);
         lblModHeaderText.setAlignments(SwingConstants.CENTER, SwingConstants.CENTER);
         lblModHeaderText.setVisible(true);
 
         //load launch button
-        XButton btnLaunch = new XButton("PLAY", gfxRepository.txtHeader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
+        XButton btnLaunch = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
         layers.add(btnLaunch, new Integer(7), 0);
-        btnLaunch.setBounds(contentController.getX(), contentController.getY() + contentController.getHeight() + 5, contentController.getWidth(), 55);
+        btnLaunch.setBounds(contentController.getX() - 10, contentController.getY() + contentController.getHeight(), 319, 80);
         btnLaunch.setOpaque(true);
-        //btnLaunch.setHorizontalAlignment(SwingConstants.CENTER);
-        //btnLaunch.setVerticalAlignment(SwingConstants.CENTER);
-        btnLaunch.addActionListener(new ActionListener() { //closes the program when clicked
+        XLabel lblLaunch = new XLabel("PLAY", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        layers.add(lblLaunch, new Integer(7), 0);
+        lblLaunch.setBounds(btnLaunch.getX(), btnLaunch.getY(), btnLaunch.getWidth(), btnLaunch.getHeight());
+        lblLaunch.setAlignments(SwingConstants.CENTER);
+        lblLaunch.setVisible(true);
+
+        btnLaunch.addMouseListener(new XMouseListener() {
+            XButton source;
+
             @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("Launching game...");
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                audioRepository.buttonSelect();
                 window.setTitle("Astra Project"); //changes the title from the launcher to the game window
-                clearUI();
-                audioRepository.buttonClick();
+                window.refresh();
                 audioRepository.musicTitleScreen(); //plays the title screen music
+                clearUI();
                 rescaleScreen(screenScaleChoice); //resizes the screen according to the user's choice
                 loadLoadingScreen(1);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
 
             }
         });
@@ -502,6 +536,8 @@ public class guiCoreV4 {
             } else {
                 btnExpanEnable.get(i).setIcon(new ImageIcon(gfxRepository.rejectButton));
             }
+
+            //TODO: Custom tooltip design.
 
             btnExpanEnable.get(i).addMouseListener(new XMouseListener(expansionID) { //adds the mouse listener to the enable/disable button
                 XButton source;
@@ -587,14 +623,12 @@ public class guiCoreV4 {
     public void loadLauncherMods() {
 
         String modID;
-        int modEnabled;
 
         if (pnlMods.size() > 0) {
             pnlMods.clear();
             lblMods.clear();
             lblModAuthor.clear();
             btnModEnable.clear();
-            modEnabler.clear();
         }
 
         contentController.add(pnlModHeader);
@@ -604,7 +638,7 @@ public class guiCoreV4 {
 
             pnlMods.add(new XPanel(gfxRepository.clrForeground));
             lblMods.add(new XLabel(xmlLoader.listOfMods.get(i).getModName(), gfxRepository.txtSubheader, gfxRepository.clrText));
-            btnModEnable.add(new XButton());
+            btnModEnable.add(new XButton(gfxRepository.rejectButton, SwingConstants.RIGHT));
             lblModAuthor.add(new XLabel()); //TODO: Add mod author.
 
             contentController.add(pnlMods.get(i));
@@ -618,36 +652,74 @@ public class guiCoreV4 {
             lblMods.get(i).setBounds(5, 5, 195, 25);
             lblMods.get(i).setVerticalAlignment(SwingConstants.TOP);
 
-            btnModEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
+            btnModEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 30, 30);
             btnModEnable.get(i).setForeground(gfxRepository.clrText);
             btnModEnable.get(i).setOpaque(true);
             btnModEnable.get(i).setFont(gfxRepository.txtSubheader);
 
-            modEnabler.add(new addModAL());
-
-            btnModEnable.get(i).addActionListener(modEnabler.get(i));
-            modEnabler.get(i).setModID(modID);
-
             //adjust the enable/disable button based on the current status of the content
             if (xmlLoader.listOfMods.get(i).getModEnabled()) {
                 //content is enabled, set the button accordingly
-                //System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is enabled.");
-                btnModEnable.get(i).setText("-");
-                btnModEnable.get(i).setToolTipText("Disable");
-                modEnabled = 1;
-                btnModEnable.get(i).setBackground(gfxRepository.clrEnable);
-                btnModEnable.get(i).setBorder(gfxRepository.bdrButtonEnabled);
+                btnModEnable.get(i).setIcon(new ImageIcon(gfxRepository.acceptButton));
+                btnModEnable.get(i).toggleState();
             } else {
                 //content is disabled, set the button accordingly
-                //System.out.println("Mod " + xmlLoader.listOfMods.get(i).getModName() + " is disabled.");
-                btnModEnable.get(i).setText("+");
-                btnModEnable.get(i).setToolTipText("Enable");
-                modEnabled = 0;
-                btnModEnable.get(i).setBackground(gfxRepository.clrDisable);
-                btnModEnable.get(i).setBorder(gfxRepository.bdrButtonDisabled);
+                btnModEnable.get(i).setIcon(new ImageIcon(gfxRepository.rejectButton));
             }
 
-            modEnabler.get(i).setEnable(modEnabled);
+            btnModEnable.get(i).addMouseListener(new XMouseListener(modID) {
+                XButton source;
+
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    source.toggleState();
+
+                    if (source.isState()) {
+                        source.setIcon(new ImageIcon(gfxRepository.acceptButton));
+                        audioRepository.buttonConfirm();
+                        source.setToolTipText("Disable");
+                    } else {
+                        source.setIcon(new ImageIcon(gfxRepository.rejectButton));
+                        audioRepository.buttonDisable();
+                        source.setToolTipText("Enable");
+                    }
+
+                    xmlLoader.changeModInfo(getIDValue(), source.isState());
+
+                    window.refresh();
+                }
+
+                @Override
+                public void mousePressed(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.CENTER);
+                    audioRepository.menuTab2();
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseExited(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    window.refresh();
+                }
+            });
 
             //enable all
             pnlMods.get(i).setVisible(true);
@@ -827,21 +899,23 @@ public class guiCoreV4 {
     //separates the main menu animation loading
     private void loadMainMenuAnimation() {
 
+        //TODO: Should eventually position buttons as a metric of 1/4th the screen width rather than side by side, will not port well to higher resolutions right now
+
         Random randomizePosition = new Random();
 
         menuSpaceport = new animCore(new ImageIcon(gfxRepository.menuSpaceport), 2, layers, window);
         menuSpaceport.setAnimationSmoothness(0.1, 200);
         menuSpaceport.start();
 
-        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 500);
-        menuMoon1.setAnimationSmoothness(0.1, 150);
-        menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
-        menuMoon1.start();
-
         menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 550, 50, 420);
         menuMoon2.setAnimationSmoothness(0.1, 150);
         menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
         menuMoon2.start();
+
+        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 500);
+        menuMoon1.setAnimationSmoothness(0.1, 150);
+        menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
+        menuMoon1.start();
 
     }
 
@@ -858,6 +932,12 @@ public class guiCoreV4 {
         imgLogo.setBounds(window.getWidth() - 115, 5, 120, 120);
         imgLogo.setVisible(true);
 
+        lblLogo = new XLabel("Astra Project", gfxRepository.txtTitle, gfxRepository.clrText);
+        layers.add(lblLogo, new Integer(11), 0);
+        lblLogo.setBounds(10, 10, 600, 60);
+        lblLogo.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+        lblLogo.setVisible(true);
+
         XLabel menuPlanet = new XLabel(gfxRepository.menuPlanet);
         layers.add(menuPlanet, new Integer(8), 0);
         menuPlanet.setBounds(window.getWidth() - 1100, 0, 1500, 450);
@@ -868,68 +948,221 @@ public class guiCoreV4 {
         lblLensGlare.setBounds(0, 0, screen.getWidth(), screen.getHeight());
         lblLensGlare.setVisible(true);
 
-        XPanel pnlMenuBarH = new XPanel(gfxRepository.clrBackground);
+        pnlMenuBarH = new XPanel(gfxRepository.clrDGrey);
         layers.add(pnlMenuBarH, new Integer(14), 0);
-        pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
+        pnlMenuBarH.setBounds(0, getUIScaleY() - 90, getUIScaleX(), 90);
         pnlMenuBarH.setVisible(true);
 
-        btnNewGame = new XButton(gfxRepository.wideButton, SwingConstants.LEFT, "NEW GAME", gfxRepository.txtSubtitle, gfxRepository.clrText);
-        layers.add(btnNewGame, new Integer(15), 0);
-        btnNewGame.setBounds(5, getUIScaleY() - 60, 170, 64);
+        XLabel lblNewGame = new XLabel("New Game", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        pnlMenuBarH.add(lblNewGame);
+        lblNewGame.setBounds(0, 0, 319, 80);
+        lblNewGame.setAlignments(SwingConstants.CENTER);
+        lblNewGame.setVisible(true);
+
+        XButton btnNewGame = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
+        pnlMenuBarH.add(btnNewGame);
+        btnNewGame.setBounds(lblNewGame.getX(), lblNewGame.getY(), lblNewGame.getWidth(), lblNewGame.getHeight());
         btnNewGame.setOpaque(true);
 
-        btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnNewGame.setVisible(false);
-                loadNewSettingsMenu();
-                audioRepository.buttonClick();
-            }
-        });
-
-        XButton btnLoadGame = new XButton(gfxRepository.wideButton, SwingConstants.LEFT, "LOAD GAME", gfxRepository.txtSubtitle, gfxRepository.clrText);
-        layers.add(btnLoadGame, new Integer(15), 0);
-        btnLoadGame.setBounds(btnNewGame.getX() + btnNewGame.getWidth() + 20, btnNewGame.getY(), btnNewGame.getWidth(), btnNewGame.getHeight());
-        btnLoadGame.setOpaque(true);
-
-        btnLoadGame.addMouseListener(new XMouseListener() {
+        btnNewGame.addMouseListener(new MouseListener() {
+            XButton source;
 
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                XButton source = (XButton)mouseEvent.getSource();
+                source = (XButton)mouseEvent.getSource();
                 audioRepository.buttonClick();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
-
+                pnlMenuBarH.setVisible(false);
+                loadNewSettingsMenu();
+                audioRepository.buttonClick();
+                window.refresh();
             }
 
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                XButton source = (XButton)mouseEvent.getSource();
+                source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
-
+                window.refresh();
             }
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
-                XButton source = (XButton)mouseEvent.getSource();
+                source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.LEFT);
-
+                window.refresh();
             }
 
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
-                XButton source = (XButton)mouseEvent.getSource();
+                source = (XButton)mouseEvent.getSource();
                 audioRepository.menuTab();
                 source.setHorizontalAlignment(SwingConstants.CENTER);
-
+                window.refresh();
             }
 
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
-                XButton source = (XButton)mouseEvent.getSource();
+                source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
 
+        XLabel lblLoadGame = new XLabel("Load Game", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        pnlMenuBarH.add(lblLoadGame);
+        lblLoadGame.setBounds(btnNewGame.getX() + btnNewGame.getWidth(), btnNewGame.getY(), btnNewGame.getWidth(), btnNewGame.getHeight());
+        lblLoadGame.setAlignments(SwingConstants.CENTER);
+        lblLoadGame.setVisible(true);
 
+        XButton btnLoadGame = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
+        pnlMenuBarH.add(btnLoadGame);
+        btnLoadGame.setBounds(lblLoadGame.getX(), lblLoadGame.getY(), lblLoadGame.getWidth(), lblLoadGame.getHeight());
+        btnLoadGame.setVisible(true);
+
+        btnLoadGame.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                pnlMenuBarH.setVisible(false);
+                window.refresh();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        XLabel lblSettings = new XLabel("Options", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        pnlMenuBarH.add(lblSettings);
+        lblSettings.setBounds(btnLoadGame.getX() + btnLoadGame.getWidth(), btnNewGame.getY(), btnNewGame.getWidth(), btnNewGame.getHeight());
+        lblSettings.setAlignments(SwingConstants.CENTER);
+        lblSettings.setVisible(true);
+
+        XButton btnSettings = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
+        pnlMenuBarH.add(btnSettings);
+        btnSettings.setBounds(lblSettings.getX(), lblSettings.getY(), lblSettings.getWidth(), lblSettings.getHeight());
+        btnSettings.setVisible(true);
+
+        btnSettings.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        XLabel lblQuit = new XLabel("Quit", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        pnlMenuBarH.add(lblQuit);
+        lblQuit.setBounds(btnSettings.getX() + btnSettings.getWidth(), btnNewGame.getY(), btnNewGame.getWidth(), btnNewGame.getHeight());
+        lblQuit.setAlignments(SwingConstants.CENTER);
+        lblQuit.setVisible(true);
+
+        XButton btnQuit = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
+        pnlMenuBarH.add(btnQuit);
+        btnQuit.setBounds(lblQuit.getX(), lblQuit.getY(), lblQuit.getWidth(), lblQuit.getHeight());
+        btnQuit.setVisible(true);
+
+        btnQuit.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+                closeProgram();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
             }
         });
 
@@ -956,7 +1189,7 @@ public class guiCoreV4 {
         settingsMenu = new XPanel();
         layers.add(settingsMenu, new Integer(14), 0);
         settingsMenu.setVisible(true);
-        settingsMenu.setBounds(0, 0, 400, window.getHeight() - 250);
+        settingsMenu.setBounds(0, 75, 500, window.getHeight() - 75);
 
         XPanel pnlSettings = new XPanel(gfxRepository.clrBackground);
         pnlSettings.setBounds(settingsMenu.getX(), settingsMenu.getY(), settingsMenu.getWidth(), settingsMenu.getHeight());
@@ -990,7 +1223,8 @@ public class guiCoreV4 {
         btnBack.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                btnNewGame.setVisible(true);
+                pnlMenuBarH.setVisible(true);
+                lblLogo.setVisible(true);
                 audioRepository.buttonDisable();
                 settingsMenu.removeAll();
             }
@@ -1473,46 +1707,6 @@ public class guiCoreV4 {
     }
 
     /** Special ActionListeners **/
-
-    //action listened for enabling/disabling mods
-    private class addModAL implements ActionListener {
-
-        addModAL() {
-        }
-
-        int enable;
-        String modID;
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            if (enable == 1) {
-                audioRepository.buttonDisable();
-                enable = 0;
-                System.out.println("Disabling content for " + modID);
-            } else {
-                audioRepository.buttonClick();
-                enable = 1;
-                System.out.println("Enabling content for " + modID);
-            }
-
-            xmlLoader.changeModInfo(this.modID, this.enable);
-
-            System.out.println("Refreshing UI...");
-
-            loadLauncherExpansions();
-
-        }
-
-        void setEnable(int enabled) {
-            this.enable = enabled;
-        }
-
-        void setModID(String ID) {
-            this.modID = ID;
-        }
-
-    }
 
     private class addMapAL implements ActionListener {
 

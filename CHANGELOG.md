@@ -400,3 +400,19 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Slightly adjusted xmlLoader to compensate.
 
 - Added a new SFX sound, implemented another one into the audioRepository.
+
+**MAY 27 2017** (ver.PTB-B) (U1)
+
+- Continuing to port over all GFX buttons to new format.
+
+    - Added a new GFX button graphic.
+
+    - All launcher buttons now successfully ported, adjusted xmlLoader to fit the new format for mods.
+
+    - Began porting over main menu buttons.
+
+- Adjusted main menu design somewhat.
+
+- Slightly adjusted colours.
+
+- Switched over all fonts to new custom fonts.

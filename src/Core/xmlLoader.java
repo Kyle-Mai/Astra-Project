@@ -69,9 +69,10 @@ public class xmlLoader {
 
     public static void getModInfo() { writeXML(modFolder, "", 3); }
 
-    public static void changeModInfo(String name, int action) {
+    public static void changeModInfo(String name, boolean action) {
+        int actionToPerform = (action) ? 1 : 0;
         System.out.println("Attempting to change XML data...");
-        writeXML(modFolder, name, action);
+        writeXML(modFolder, name, actionToPerform);
     }
 
     //rewrites the data in the expansion packs

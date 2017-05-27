@@ -22,6 +22,7 @@ import java.util.Random;
  * SOURCES:
  * Internet Searches - All GFX content is NOT MY OWN CREATION. I take NO CREDIT for all of the GFX used in this program.
  * I have edited some of them to better fit the game, but none of the GFX images/gifs are originals.
+ * Java API - Custom font initialization.
  *
  * Self - All of the coding here is done through my own ideas and initiatives, sans the File path, which is listed under the xmlLoader references.
  */
@@ -33,19 +34,21 @@ public class gfxRepository {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final String gameVersion = "PTB-B Build 74a";
+    static final String gameVersion = "PTB-B Build 75a";
 
-    public static Font stylePDark;
+    private static Font stylePDark;
+    private static Font styleSquare;
+    private static Font styleRexlia;
 
     public static final  Color clrText = new Color(255, 255, 255, 255);
     public static final Color clrInvisible = new Color(0, 0, 0, 0);
     public static final Color clrTrueBlack = new Color(0, 0, 0, 255);
     public static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
     public static final Color clrBlk = new Color(25, 35, 35, 255);
-    public static final Color clrDGrey = new Color(45, 75, 65, 255);
+    public static final Color clrDGrey = new Color(47, 80, 68, 255);
     public static final Color clrDisableBorder = new Color(75, 5, 25, 255);
     public static final Color clrDisable = new Color(135, 15, 55, 255);
-    public static final Color clrEnable = new Color(0, 225, 165, 255);
+    public static final Color clrEnable = new Color(108, 255, 224, 255);
     public static final Color clrDark = new Color(0, 145, 90, 255);
     public static final Color clrButtonBackground = new Color(0, 125, 90, 255);
     public static final Color clrBGOpaque = new Color(25, 90, 60, 255);
@@ -54,22 +57,36 @@ public class gfxRepository {
     public static final Color clrForeground = new Color(0, 185, 110, 155);
 
     public static final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
-    public static final Font txtSubtitle = new Font("Arial", Font.BOLD, 14);
-    public static final Font txtItalSubtitle = new Font("Arial", Font.ITALIC, 14);
-    public static final Font txtSubheader = new Font("Arial", Font.BOLD, 16);
-    public static final Font txtHeader = new Font("Arial", Font.BOLD, 25);
+    public static Font txtSubtitle;
+    public static Font txtItalSubtitle;
+    public static Font txtSubheader;
+    public static Font txtHeader;
+    public static Font txtButtonLarge;
     public static Font txtTitle;
-    public static final Font txtTiny = new Font("Arial", Font.PLAIN, 12);
-    public static final Font txtTooltip = new Font("Arial", Font.PLAIN, 10);
+    public static Font txtLargeTitle;
+    public static Font txtTiny;
 
     public static final Border bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     public static final Border bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
-    public static void initializeFonts() { //custom font designs
+    private static void initializeFonts() { //custom font designs
         try {
+            //set up custom fonts
             stylePDark = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/pdark.ttf"));
+            styleSquare = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/uasquare.ttf"));
+            styleRexlia = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/rexlia.ttf"));
 
+            //add the new font to some presets
             txtTitle = stylePDark.deriveFont(Font.PLAIN, 32f);
+            txtLargeTitle = stylePDark.deriveFont(Font.PLAIN, 60f);
+            txtButtonLarge = styleRexlia.deriveFont(Font.PLAIN, 30f);
+
+            txtSubtitle = styleSquare.deriveFont(Font.PLAIN, 14f);
+            txtItalSubtitle = styleSquare.deriveFont(Font.ITALIC, 14f);
+            txtHeader = styleSquare.deriveFont(Font.BOLD, 22f);
+            txtSubheader = styleSquare.deriveFont(Font.BOLD, 20f);
+            txtTiny = styleSquare.deriveFont(Font.PLAIN, 11f);
+
         } catch (Exception e) {
             e.getMessage();
         }
@@ -85,17 +102,17 @@ public class gfxRepository {
     static BufferedImage acceptButton;
     static BufferedImage rejectButton;
     static BufferedImage wideButton;
+    static BufferedImage wideButton2;
 
     static BufferedImage mainBackground;
     static BufferedImage launcherBorder;
     static BufferedImage menuPlanet;
     static BufferedImage menuGlare;
 
-    static ArrayList<BufferedImage> loadingScreenBGList = new ArrayList<>();
+    private static ArrayList<BufferedImage> loadingScreenBGList = new ArrayList<>();
 
     static BufferedImage gameLogo;
     static BufferedImage gameLogoLarge;
-    static BufferedImage menuShip;
     static BufferedImage menuSpaceport;
 
     static BufferedImage planetIcon;
@@ -128,6 +145,7 @@ public class gfxRepository {
             acceptButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_accept.png"));
             rejectButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_reject.png"));
             wideButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large.png"));
+            wideButton2 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large2.png"));
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
@@ -182,7 +200,6 @@ public class gfxRepository {
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/background/title_background_full.png"));
             gameLogoLarge = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_large.png"));
-            menuShip = ImageIO.read(new File(imageFolder + "/Resources/spacecraft_gfx_small.png"));
             menuPlanet = ImageIO.read(new File(imageFolder + "/Resources/title_planet_full.png"));
             menuSpaceport = ImageIO.read(new File(imageFolder + "/Resources/title_spaceport_half.png"));
             moon1Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon1_half.png"));
@@ -220,7 +237,6 @@ public class gfxRepository {
         //removes all of the main menu GFX from the active memory
         gameLogoLarge = null;
         menuGlare = null;
-        menuShip = null;
         menuSpaceport = null;
         moon1Icon = null;
         moon2Icon = null;
