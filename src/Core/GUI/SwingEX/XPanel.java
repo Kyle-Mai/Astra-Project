@@ -1,4 +1,4 @@
-package Core.GUI;
+package Core.GUI.SwingEX;
 
 /**
  * KM
@@ -8,23 +8,16 @@ package Core.GUI;
 
 
 //import all relevant stuff
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 
-class XPanel extends JPanel {
+public class XPanel extends JPanel {
 
 
     /** Main Constructor **/
 
-    XPanel(Color backgroundColor) {
+    public XPanel(Color backgroundColor) {
         this.setLayout(null);
         this.setBackground(backgroundColor);
         this.setFocusable(false);
@@ -33,7 +26,7 @@ class XPanel extends JPanel {
 
     }
 
-    XPanel() {
+    public XPanel() {
         this.setLayout(null);
         this.setFocusable(false);
         this.setOpaque(false);

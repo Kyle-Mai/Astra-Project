@@ -4,6 +4,14 @@ import Core.colonyCore;
 import Core.gameSettings;
 import Core.mapGenerator;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.DateFormat;
@@ -18,11 +26,14 @@ import java.util.Date;
  *
  * SOURCES:
  * Stack Overflow - Random string/encryption via http://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
+ * Serializable handling via https://stackoverflow.com/questions/447898/what-is-object-serialization
  * Mkyong - Getting the current date and time via https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
  * Self - All other work.
  */
 
 public class playerData {
+
+    private saveData save;
 
     private String userID;
     private String userName;
@@ -56,7 +67,7 @@ public class playerData {
     public void newPlayer(String username) {
         System.out.println("Creating new player data...");
 
-        this.userID = returnUserID(); //gets the unique ID used to identify this player
+        this.userID = newUserID(); //gets the unique ID used to identify this player
         this.date = currentDate(); //gets the current time, used to order the save files
         this.userName = username; //user's username
 
@@ -67,10 +78,37 @@ public class playerData {
 
         this.difficulty = gameSettings.currDifficulty; //saves the selected user difficulty
 
+        save = new saveData(userID);
+        save.create();
+        save.add(save.get(), DataConstants.FOLDER, SaveDirectoryConstants.DATA);
+        save.add(save.get(SaveDirectoryConstants.DATA), DataConstants.FOLDER, "map");
+        save.add(save.get(SaveDirectoryConstants.DATA), DataConstants.FOLDER, "stars");
+        save.add(save.get(SaveDirectoryConstants.DATA), DataConstants.FOLDER, "planets");
 
+        try { //creates a base XML file to store simple player info
 
+            DocumentBuilderFactory dfac = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dfac.newDocumentBuilder();
 
-        System.out.println("Player data successfully created.");
+            Document player = db.newDocument();
+
+            Element root = player.createElement("player");
+            player.appendChild(root);
+            Attr name = player.createAttribute("name");
+            name.setValue(userName);
+            root.setAttributeNode(name);
+
+            Element date = player.createElement("datecreated");
+            date.appendChild(player.createTextNode(this.date));
+            root.appendChild(date);
+
+            save.write(new File(save.get() + "/playerinfo.xml"), player);
+
+        } catch (Exception e) { //just grab all of the exceptions
+            e.printStackTrace();
+        }
+
+        System.out.println("Player data created.");
 
     }
 
@@ -79,9 +117,8 @@ public class playerData {
     }
 
     //creates a unique encrypted string to store the user data under as an identifier
-    private String returnUserID() {
+    private String newUserID() {
         SecureRandom random = new SecureRandom();
-
         return new BigInteger(130, random).toString(32);
     }
 
@@ -94,9 +131,15 @@ public class playerData {
 
     public void addMapString(mapGenerator map) { //saves the map data to the user data
 
-        this.mapData = map.toString();
+        //this.mapData = map.toString();
 
-        System.out.println("Map data saved " + this.mapData);
+        try {
+            save.write(new File(save.get(SaveDirectoryConstants.DATA) + "/map/map"), map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+       // System.out.println("Map data saved " + this.mapData);
 
     }
 
@@ -110,7 +153,7 @@ public class playerData {
 
         starData = starBuffer.toString();
 
-        System.out.println("Star data saved " + this.starData);
+        //System.out.println("Star data saved " + this.starData);
 
     }
 
@@ -127,7 +170,7 @@ public class playerData {
 
         planetData = planetBuffer.toString();
 
-        System.out.println("Planet data saved " + this.planetData);
+        //System.out.println("Planet data saved " + this.planetData);
 
     }
 

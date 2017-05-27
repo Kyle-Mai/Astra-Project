@@ -1,4 +1,4 @@
-package Core.GUI;
+package Core.GUI.SwingEX;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +10,9 @@ import java.awt.image.BufferedImage;
  Extends the JFrame class with new constructors, methods.
 */
 
-class XFrame extends JFrame {
+public class XFrame extends JFrame {
 
-    XFrame(String text, BufferedImage icon) {
+    public XFrame(String text, BufferedImage icon) {
         this.setUndecorated(true);
         this.setResizable(false);
         this.setTitle(text);
@@ -21,12 +21,12 @@ class XFrame extends JFrame {
     }
 
     //refreshes the GFX
-    void refresh() {
+    public void refresh() {
         this.revalidate();
         this.repaint();
     }
 
-    void minimize() { //minimizes the frame
+    public void minimize() { //minimizes the frame
         this.setState(Frame.ICONIFIED);
     }
 

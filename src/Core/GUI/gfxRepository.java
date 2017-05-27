@@ -6,7 +6,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,43 +31,60 @@ public class gfxRepository {
     /** UI Design **/
     //Stores all of the colour and fonts that the game uses.
 
-    static final String gameVersion = "PTB-B Build 73b";
+    private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final Color clrText = new Color(255, 255, 255, 255);
-    static final Color clrInvisible = new Color(0, 0, 0, 0);
-    static final Color clrTrueBlack = new Color(0, 0, 0, 255);
-    static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
-    static final Color clrBlk = new Color(25, 35, 35, 255);
-    static final Color clrDGrey = new Color(45, 75, 65, 255);
-    static final Color clrDisableBorder = new Color(75, 5, 25, 255);
-    static final Color clrDisable = new Color(135, 15, 55, 255);
-    static final Color clrEnable = new Color(0, 225, 165, 255);
-    static final Color clrDark = new Color(0, 145, 90, 255);
-    static final Color clrButtonBackground = new Color(0, 125, 90, 255);
-    static final Color clrBGOpaque = new Color(25, 90, 60, 255);
-    static final Color clrButtonMain = new Color(0, 155, 90, 255);
-    static final Color clrBackground = new Color(0, 195, 130, 105);
-    static final Color clrForeground = new Color(0, 185, 110, 155);
+    static final String gameVersion = "PTB-B Build 74a";
 
-    static final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
-    static final Font txtSubtitle = new Font("Arial", Font.BOLD, 14);
-    static final Font txtItalSubtitle = new Font("Arial", Font.ITALIC, 14);
-    static final Font txtSubheader = new Font("Arial", Font.BOLD, 16);
-    static final Font txtHeader = new Font("Arial", Font.BOLD, 25);
-    static final Font txtTitle = new Font("Arial", Font.BOLD, 40);
-    static final Font txtTiny = new Font("Arial", Font.PLAIN, 12);
+    public static Font stylePDark;
 
-    static final Border bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    static final Border bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    public static final  Color clrText = new Color(255, 255, 255, 255);
+    public static final Color clrInvisible = new Color(0, 0, 0, 0);
+    public static final Color clrTrueBlack = new Color(0, 0, 0, 255);
+    public static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
+    public static final Color clrBlk = new Color(25, 35, 35, 255);
+    public static final Color clrDGrey = new Color(45, 75, 65, 255);
+    public static final Color clrDisableBorder = new Color(75, 5, 25, 255);
+    public static final Color clrDisable = new Color(135, 15, 55, 255);
+    public static final Color clrEnable = new Color(0, 225, 165, 255);
+    public static final Color clrDark = new Color(0, 145, 90, 255);
+    public static final Color clrButtonBackground = new Color(0, 125, 90, 255);
+    public static final Color clrBGOpaque = new Color(25, 90, 60, 255);
+    public static final Color clrButtonMain = new Color(0, 155, 90, 255);
+    public static final Color clrBackground = new Color(0, 195, 130, 105);
+    public static final Color clrForeground = new Color(0, 185, 110, 155);
+
+    public static final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
+    public static final Font txtSubtitle = new Font("Arial", Font.BOLD, 14);
+    public static final Font txtItalSubtitle = new Font("Arial", Font.ITALIC, 14);
+    public static final Font txtSubheader = new Font("Arial", Font.BOLD, 16);
+    public static final Font txtHeader = new Font("Arial", Font.BOLD, 25);
+    public static Font txtTitle;
+    public static final Font txtTiny = new Font("Arial", Font.PLAIN, 12);
+    public static final Font txtTooltip = new Font("Arial", Font.PLAIN, 10);
+
+    public static final Border bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    public static final Border bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+
+    public static void initializeFonts() { //custom font designs
+        try {
+            stylePDark = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/pdark.ttf"));
+
+            txtTitle = stylePDark.deriveFont(Font.PLAIN, 32f);
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+    }
 
     /** Element declarations **/
-
-    final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
     static BufferedImage closeButton;
     static BufferedImage settingsButton;
     static BufferedImage audioButton;
     static BufferedImage muteButton;
+    static BufferedImage acceptButton;
+    static BufferedImage rejectButton;
+    static BufferedImage wideButton;
 
     static BufferedImage mainBackground;
     static BufferedImage launcherBorder;
@@ -98,6 +114,8 @@ public class gfxRepository {
 
     public static void gfxPreloader() { //preloads the GFX used by the launcher and loader
 
+        initializeFonts();
+
         System.out.println("Attempting to preload GFX content...");
 
         try {
@@ -107,6 +125,9 @@ public class gfxRepository {
             settingsButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_settings.png"));
             audioButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_sound.png"));
             muteButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_mute.png"));
+            acceptButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_accept.png"));
+            rejectButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_reject.png"));
+            wideButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large.png"));
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {

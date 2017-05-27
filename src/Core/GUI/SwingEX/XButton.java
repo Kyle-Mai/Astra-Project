@@ -1,4 +1,6 @@
-package Core.GUI;
+package Core.GUI.SwingEX;
+
+import Core.GUI.gfxRepository;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,16 +17,16 @@ import java.awt.image.BufferedImage;
  Self - All else.
 */
 
-class XButton extends JButton {
+public class XButton extends JButton {
 
     private boolean state = false;
 
-    XButton() {
+    public XButton() {
         this.setFocusPainted(false);
 
     }
 
-    XButton(String text, Font font, Color textColor, Color bgColor) {
+    public XButton(String text, Font font, Color textColor, Color bgColor) {
         this.setText(text);
         this.setFont(font);
         this.setBackground(bgColor);
@@ -33,7 +35,7 @@ class XButton extends JButton {
 
     }
 
-    XButton(String text, Font font, Color txtColor, Color bgColor, Border border) {
+    public XButton(String text, Font font, Color txtColor, Color bgColor, Border border) {
         this.setText(text);
         this.setFont(font);
         this.setBackground(bgColor);
@@ -43,10 +45,25 @@ class XButton extends JButton {
 
     }
 
-    XButton(BufferedImage image, int position) {
+    public XButton(BufferedImage image, int position) {
         this.setBorder(null);
         this.setFocusPainted(false);
         this.setBackground(gfxRepository.clrInvisible);
+        this.setOpaque(false);
+        this.setIcon(new ImageIcon(image));
+        this.setVerticalAlignment(SwingConstants.CENTER);
+        this.setHorizontalAlignment(position);
+        super.setContentAreaFilled(false);
+
+    }
+
+    public XButton(BufferedImage image, int position, String text, Font font, Color txtclr) {
+        this.setBorder(null);
+        this.setFocusPainted(false);
+        this.setBackground(gfxRepository.clrInvisible);
+        this.setFont(font);
+        this.setForeground(txtclr);
+        this.setText(text);
         this.setOpaque(false);
         this.setIcon(new ImageIcon(image));
         this.setVerticalAlignment(SwingConstants.CENTER);

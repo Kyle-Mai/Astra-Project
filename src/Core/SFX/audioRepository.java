@@ -9,7 +9,7 @@ package Core.SFX;
 public class audioRepository {
 
 
-    public static int uiVolume = 80;
+    public static int uiVolume = 60;
     public static int musicVolume = 50;
     public static int mute = 0;
     public static int ambianceVolume = 20;
@@ -37,7 +37,12 @@ public class audioRepository {
     }
 
     public static void menuTab() {
-        audioCore buttonPress = new audioCore("/ui/menu_tab.wav", uiVolume, 0, 200);
+        audioCore buttonPress = new audioCore("/ui/menu_tab.wav", uiVolume, 0, 100);
+        buttonPress.start();
+    }
+
+    public static void menuTab2() {
+        audioCore buttonPress = new audioCore("/ui/menu_tab2.wav", uiVolume, 0, 100);
         buttonPress.start();
     }
 

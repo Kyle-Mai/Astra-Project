@@ -74,7 +74,7 @@ public class starClass extends starCore implements Serializable {
     private int habitableZoneMin;
     private int mapLocationX;
     private int mapLocationY;
-    private int arrayLoc;
+    private transient int arrayLoc;
     private String starName;
     private boolean homeSystem = false;
 

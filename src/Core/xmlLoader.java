@@ -75,9 +75,10 @@ public class xmlLoader {
     }
 
     //rewrites the data in the expansion packs
-    public static void changeExpansionInfo(String name, int action) {
+    public static void changeExpansionInfo(String name, boolean action) {
+        int actionToPerform = (action) ? 1 : 0;
         System.out.println("Attempting to change XML data...");
-        writeXML(expansionFolder, name, action);
+        writeXML(expansionFolder, name, actionToPerform);
     }
 
     private static void loadXML(final File folder) {

@@ -1,4 +1,4 @@
-package Core.GUI;
+package Core.GUI.SwingEX;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -14,7 +14,7 @@ import java.awt.*;
  * Stack Overflow - Used Stack Overflow to help me understand how to create a custom scrollbar to begin with.
  * Java API - Used Java API to help me understand the methods I needed to replace, along with Stack Overflow.
  */
-class XScrollBarUI extends BasicScrollBarUI {
+public class XScrollBarUI extends BasicScrollBarUI {
 
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {

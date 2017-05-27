@@ -18,42 +18,7 @@ import java.util.List;
 
 public class mapGenerator implements Serializable {
 
-    public ArrayList<starClass> generatedStars = new ArrayList<>();
-
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public String toString() {
-        System.out.println("Writing map data to string...");
-
-        StringBuffer data = new StringBuffer();
-
-        //refresh the index
-        int indexX = 1, indexY = 1;
-
-        for (int i = 0; i < this.mapArea; i++) {
-            data.append("/");
-            data.append(indexX);
-            data.append("-");
-            data.append(indexY);
-            data.append("-");
-            data.append(mapTiles.get(indexY - 1).get(indexX - 1).writeVisiblity());
-            data.append("-");
-            data.append(mapTiles.get(indexY - 1).get(indexX - 1).writeStar());
-
-            if (indexX < this.xScale) { //moves the index as it generates tiles
-                indexX++;
-            } else {
-                indexX = 1;
-                indexY++;
-            }
-        }
-
-        System.out.println("Map data successfully written.");
-
-        return data.toString();
-
-    }
+    private static final long serialVersionUID = 3L;
 
     //decides whether or not the tile will have a star generated on it as a ratio of star density to the map area.
     private boolean willGenerateStar() {
@@ -68,7 +33,8 @@ public class mapGenerator implements Serializable {
     /** ArrayLists **/
 
     public ArrayList<ArrayList<mapTile>> mapTiles = new ArrayList<>();
-    public static ArrayList<starClass> predefinedStars = new ArrayList<>();
+    public static transient ArrayList<starClass> predefinedStars = new ArrayList<>();
+    public transient ArrayList<starClass> generatedStars = new ArrayList<>();
 
     /** Constants **/
 
@@ -78,7 +44,10 @@ public class mapGenerator implements Serializable {
     //Necessary in order to store all of the map data together.
 
     // sets up map tile object, which is assigned to every tile on the map
-    public class mapTile {
+    public class mapTile implements Serializable {
+
+        private static final long serialVersionUID = 4L;
+
         //variables assigned to each tile of the map
         private boolean isVisible;
         private boolean hasStar;
@@ -147,10 +116,10 @@ public class mapGenerator implements Serializable {
     }
 
     //variables for the map as a whole
-    int xScale;
-    int yScale;
-    int starDensity;
-    int mapArea;
+    private int xScale;
+    private int yScale;
+    private int starDensity;
+    private int mapArea;
 
     public mapGenerator(int xScale, int yScale, int starDensity) {
         System.out.println("Creating new map...");

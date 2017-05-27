@@ -1,4 +1,4 @@
-package Core.GUI;
+package Core.GUI.SwingEX;
 
 import javax.swing.*;
 
@@ -8,10 +8,10 @@ import javax.swing.*;
  Extends the JScrollBar and adds new constructors, methods.
  */
 
-class XScrollBar extends JScrollBar {
+public class XScrollBar extends JScrollBar {
 
     //default constructor
-    XScrollBar() {
+    public XScrollBar() {
         this.setBorder(null);
         this.setOpaque(true);
         this.setUI(new XScrollBarUI());

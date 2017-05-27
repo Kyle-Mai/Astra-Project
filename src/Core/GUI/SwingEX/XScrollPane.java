@@ -1,4 +1,4 @@
-package Core.GUI;
+package Core.GUI.SwingEX;
 
 import javax.swing.*;
 
@@ -8,17 +8,17 @@ import javax.swing.*;
  Extends the JScrollPane class and adds new constructors/methods.
  */
 
-class XScrollPane extends JScrollPane {
+public class XScrollPane extends JScrollPane {
 
     //default constructor
-    XScrollPane() {
+    public XScrollPane() {
         this.setOpaque(false);
         this.setBorder(null);
 
     }
 
     //constructor with scrollbars
-    XScrollPane(int vBar, int hBar) {
+    public XScrollPane(int vBar, int hBar) {
         this.setHorizontalScrollBarPolicy(hBar);
         this.setVerticalScrollBarPolicy(vBar);
         this.setOpaque(false);

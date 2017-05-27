@@ -2,6 +2,7 @@ package Core.GUI;
 
 //import all relevant stuff
 import Core.*;
+import Core.GUI.SwingEX.*;
 import Core.Player.playerData;
 import Core.SFX.audioRepository;
 
@@ -32,8 +33,6 @@ import java.util.Random;
 
 public class guiCoreV4 {
 
-    private File resourcesFolder = new File(("user.dir") + "/src/Core/GUI/Resources"); //stores the resources folder
-
     /** Stores resource declarations **/
 
     private ArrayList<XPanel> pnlExpansions = new ArrayList<>();
@@ -41,7 +40,6 @@ public class guiCoreV4 {
     private ArrayList<XLabel> lblExpanDesc = new ArrayList<>();
     private ArrayList<XButton> btnExpanEnable = new ArrayList<>();
     private ArrayList<XLabel> lblExpanID = new ArrayList<>();
-    private ArrayList<addExpAL> actionEnabler = new ArrayList<>();
     private XPanel pnlExpansionHeader;
     private XLabel lblExpHeaderText;
 
@@ -53,9 +51,9 @@ public class guiCoreV4 {
     private XPanel pnlModHeader;
     private XLabel lblModHeaderText;
 
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
-    private double screenWidth = screenSize.getWidth();
-    private double screenHeight = screenSize.getHeight();
+    private Dimension monitorSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
+    private double screenWidth = monitorSize.getWidth();
+    private double screenHeight = monitorSize.getHeight();
     private XFrame window;
     private JLayeredPane layers; //sorts the layers of the screen
     private XPanel screen;
@@ -76,6 +74,8 @@ public class guiCoreV4 {
     private XPanel pnlStarData;
     private XButton btnExit;
 
+    //TODO: Work on converting as many as possible to local variables.
+
     private int launcherContentLoaded = 0;
 
     playerData playerInfo = new playerData();
@@ -87,81 +87,65 @@ public class guiCoreV4 {
     /** UI scaling code**/
     //handles the scaling of the UI
 
-    private int[] currentUIScale = {0, 0}; //default screen scale
+    private Dimension screenSize;
 
     //methods to return the UI elements
-    public int getUIScaleX() { return this.currentUIScale[0]; }
+    public int getUIScaleX() { return (int)screenSize.getWidth(); }
 
-    public int getUIScaleY() { return this.currentUIScale[1]; }
+    public int getUIScaleY() { return (int)screenSize.getHeight(); }
 
     //sets the window size to the chosen monitor scale
     public void rescaleScreen(int option) {
 
-        int oldX, oldY; //stores the previous values in case something goes wrong
+        Dimension old = screenSize;
 
-        oldX = this.getUIScaleX();
-        oldY = this.getUIScaleY();
-
-        switch(option) { //TODO: Convert to enum
+        switch(option) { //TODO: Finish enum conversion, possible change to make more efficient
             //Widescreen monitors
             case 1: //4K
-                this.currentUIScale[0] = 3840; //X scale
-                this.currentUIScale[1] = 2160; //Y scale
+                screenSize = screenScale.W_4KHD.size();
                 break;
             case 2: //2K
-                this.currentUIScale[0] = 2560;
-                this.currentUIScale[1] = 1440;
+                screenSize = screenScale.W_2KHD.size();
                 break;
-            case 3: //standard monitor
-                this.currentUIScale[0] = 1920;
-                this.currentUIScale[1] = 1080;
+            case 3: //1K
+                screenSize = screenScale.W_1KHD.size();
                 break;
             case 4:
-                this.currentUIScale[0] = 1600;
-                this.currentUIScale[1] = 900;
+                screenSize = screenScale.W_HD.size();
                 break;
             case 5:
-                this.currentUIScale[0] = 1366;
-                this.currentUIScale[1] = 768;
+                screenSize = screenScale.U_SXGA.size();
                 break;
             case 6:
-                this.currentUIScale[0] = 1280;
-                this.currentUIScale[1] = 720;
+                screenSize = screenScale.U_WSXGAP.size();
                 break;
             //4:3 and similar monitor scales
             case 7:
-                this.currentUIScale[0] = 1600;
-                this.currentUIScale[1] = 1200;
+                screenSize = screenScale.U_WUXGA.size();
                 break;
             case 8:
-                this.currentUIScale[0] = 1280;
-                this.currentUIScale[1] = 1024;
+                screenSize = screenScale.U_WXGAP.size();
                 break;
             case 9:
-                this.currentUIScale[0] = 1024;
-                this.currentUIScale[1] = 768;
+
                 break;
             case 10:
-                this.currentUIScale[0] = 800;
-                this.currentUIScale[1] = 600;
+
                 break;
             case 11: //Launcher UI scale
-                this.currentUIScale[0] = 700;
-                this.currentUIScale[1] = 450;
+                screenSize = screenScale.LAUNCHER.size();
                 break;
             default: //safety net
-                this.currentUIScale[0] = 500;
-                this.currentUIScale[1] = 500;
+
                 break;
         }
 
         if (this.getUIScaleX() > screenWidth || this.getUIScaleY() > screenHeight) {
             System.out.println("Monitor is not large enough to support this resolution.");
-            this.currentUIScale[0] = oldX; //resets the screen scale to the previous values
-            this.currentUIScale[1] = oldY;
+            screenSize = old;
         } else {
             //no incompatibilities, proceed
-            System.out.println("UI successfully rescaled to " + currentUIScale[0] + "x" + currentUIScale[1] + ".");
+            System.out.println("UI successfully rescaled to " + getUIScaleX() + "x" + getUIScaleY() + ".");
         }
 
     }
@@ -466,7 +450,6 @@ public class guiCoreV4 {
     public void loadLauncherExpansions() { //Loads the expansion content for the launcher
 
         String expansionID;
-        int expansionEnabled;
         launcherContentLoaded = 0;
 
         //empties and refactors content
@@ -477,21 +460,19 @@ public class guiCoreV4 {
             lblExpanDesc.clear();
             btnExpanEnable.clear();
             lblExpanID.clear();
-            actionEnabler.clear();
         }
 
         contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentList.getHeight()));
 
         //add the expansion pack header to the content window
         contentController.add(pnlExpansionHeader);
-        //contentLayout.layoutContainer(pnlExpansionHeader);
 
         for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
 
             pnlExpansions.add(new XPanel(gfxRepository.clrForeground));
             lblExpansions.add(new XLabel(xmlLoader.listOfExpansions.get(i).getName(), gfxRepository.txtSubheader, gfxRepository.clrText));
             lblExpanDesc.add(new XLabel(xmlLoader.listOfExpansions.get(i).getSubtitle(), gfxRepository.txtItalSubtitle, gfxRepository.clrText));
-            btnExpanEnable.add(new XButton());
+            btnExpanEnable.add(new XButton(gfxRepository.rejectButton, SwingConstants.RIGHT));
             lblExpanID.add(new XLabel(xmlLoader.listOfExpansions.get(i).getID(), gfxRepository.txtTiny, gfxRepository.clrText));
 
             expansionID = xmlLoader.listOfExpansions.get(i).getID();
@@ -509,37 +490,73 @@ public class guiCoreV4 {
 
             lblExpanDesc.get(i).setBounds(5, 35, 170, 20);
 
-            btnExpanEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 25, 25);
+            btnExpanEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 30, 30);
             btnExpanEnable.get(i).setForeground(gfxRepository.clrText);
             btnExpanEnable.get(i).setOpaque(true);
             btnExpanEnable.get(i).setFocusable(false);
             btnExpanEnable.get(i).setFont(gfxRepository.txtSubheader);
 
-            actionEnabler.add(new addExpAL());
-
-            btnExpanEnable.get(i).addActionListener(actionEnabler.get(i));
-            actionEnabler.get(i).setExpID(expansionID);
-
-            //adjust the enable/disable button based on the current status of the content
-            if (xmlLoader.listOfExpansions.get(i).getEnabledStatus()) {
-                //content is enabled, set the button accordingly
-                //System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is enabled.");
-                btnExpanEnable.get(i).setText("-");
-                btnExpanEnable.get(i).setToolTipText("Disable");
-                expansionEnabled = 1;
-                btnExpanEnable.get(i).setBackground(gfxRepository.clrEnable);
-                btnExpanEnable.get(i).setBorder(gfxRepository.bdrButtonEnabled);
+            if (xmlLoader.listOfExpansions.get(i).getEnabledStatus()) { //checks the current status and adjusts the button accordingly
+                btnExpanEnable.get(i).setIcon(new ImageIcon(gfxRepository.acceptButton));
+                btnExpanEnable.get(i).toggleState();
             } else {
-                //content is disabled, set the button accordingly
-                //System.out.println("Expansion " + xmlLoader.listOfExpansions.get(i).getID() + " is disabled.");
-                btnExpanEnable.get(i).setText("+");
-                btnExpanEnable.get(i).setToolTipText("Enable");
-                expansionEnabled = 0;
-                btnExpanEnable.get(i).setBackground(gfxRepository.clrDisable);
-                btnExpanEnable.get(i).setBorder(gfxRepository.bdrButtonDisabled);
+                btnExpanEnable.get(i).setIcon(new ImageIcon(gfxRepository.rejectButton));
             }
 
-            actionEnabler.get(i).setEnable(expansionEnabled); //update the action listener tied to the enable button with the current status of the content
+            btnExpanEnable.get(i).addMouseListener(new XMouseListener(expansionID) { //adds the mouse listener to the enable/disable button
+                XButton source;
+
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    source.toggleState();
+
+                    if (source.isState()) {
+                        source.setIcon(new ImageIcon(gfxRepository.acceptButton));
+                        audioRepository.buttonConfirm();
+                        source.setToolTipText("Disable");
+                    } else {
+                        source.setIcon(new ImageIcon(gfxRepository.rejectButton));
+                        audioRepository.buttonDisable();
+                        source.setToolTipText("Enable");
+                    }
+
+                    xmlLoader.changeExpansionInfo(getIDValue(), source.isState());
+
+                    window.refresh();
+
+                }
+
+                @Override
+                public void mousePressed(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.CENTER);
+                    audioRepository.menuTab2();
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseExited(MouseEvent mouseEvent) {
+                    source = (XButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    window.refresh();
+                }
+            });
 
             lblExpanID.get(i).setBounds(contentController.getWidth() - 80, 35, 55, 20);
             lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
@@ -856,9 +873,9 @@ public class guiCoreV4 {
         pnlMenuBarH.setBounds(0, getUIScaleY() - 150, getUIScaleX(), 250);
         pnlMenuBarH.setVisible(true);
 
-        btnNewGame = new XButton("NEW GAME", gfxRepository.txtHeader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
+        btnNewGame = new XButton(gfxRepository.wideButton, SwingConstants.LEFT, "NEW GAME", gfxRepository.txtSubtitle, gfxRepository.clrText);
         layers.add(btnNewGame, new Integer(15), 0);
-        btnNewGame.setBounds(5, getUIScaleY() - 60, 180, 55);
+        btnNewGame.setBounds(5, getUIScaleY() - 60, 170, 64);
         btnNewGame.setOpaque(true);
 
         btnNewGame.addActionListener(new ActionListener() { //closes the program when clicked
@@ -870,9 +887,68 @@ public class guiCoreV4 {
             }
         });
 
+        XButton btnLoadGame = new XButton(gfxRepository.wideButton, SwingConstants.LEFT, "LOAD GAME", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        layers.add(btnLoadGame, new Integer(15), 0);
+        btnLoadGame.setBounds(btnNewGame.getX() + btnNewGame.getWidth() + 20, btnNewGame.getY(), btnNewGame.getWidth(), btnNewGame.getHeight());
+        btnLoadGame.setOpaque(true);
+
+        btnLoadGame.addMouseListener(new XMouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                XButton source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                XButton source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                XButton source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                XButton source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                XButton source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+
+
+            }
+        });
+
         window.refresh();
 
     }
+
+    //loads a menu with all of the save files in it
+    private void loadSavesMenu() { //TODO: Fill out
+
+
+
+
+
+
+
+    }
+
+
 
     //loads the menu to set up a new game
     private void loadNewSettingsMenu() {
@@ -1397,46 +1473,6 @@ public class guiCoreV4 {
     }
 
     /** Special ActionListeners **/
-
-    //action listened for enabling/disabling expansions
-    private class addExpAL implements ActionListener {
-
-        addExpAL() {
-        }
-
-        int enable;
-        String expID;
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            if (enable == 1) {
-                audioRepository.buttonDisable();
-                enable = 0;
-                System.out.println("Disabling content for " + expID);
-            } else {
-                audioRepository.buttonClick();
-                enable = 1;
-                System.out.println("Enabling content for " + expID);
-            }
-
-            xmlLoader.changeExpansionInfo(this.expID, this.enable);
-
-            System.out.println("Refreshing UI...");
-
-            loadLauncherExpansions();
-
-        }
-
-        void setEnable(int enabled) {
-            this.enable = enabled;
-        }
-
-        void setExpID(String ID) {
-            this.expID = ID;
-        }
-
-    }
 
     //action listened for enabling/disabling mods
     private class addModAL implements ActionListener {

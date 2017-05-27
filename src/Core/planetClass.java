@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 public class planetClass extends planetCore implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Override
     public String toString() { //used when writing to a save file

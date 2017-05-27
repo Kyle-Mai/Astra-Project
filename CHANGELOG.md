@@ -374,3 +374,29 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added a new minimize method to the XFrame class.
 
 - Preparing to test enums in place of the current screen scale getter method.
+
+**MAY 26 2017** (ver.PTB-B) (U3)
+
+- Moved all custom Swing classes (X- prefix) to a dedicated folder named "SwingEX"
+
+- Testing custom font styles.
+
+- Major work on data saving.
+
+    - Added saveData class to handle the writing of player data.
+
+    - Added DataConstants interface to mimic Java's design.
+
+    - Adjusted map/star/planet classes to better handle serialization.
+
+    - Testing of the "transient" declaration.
+
+- Started switching over buttons to new design.
+
+    - Removed a LOT of redundant code as a result.
+
+    - UI buttons now support custom designs (yay!)
+
+    - Slightly adjusted xmlLoader to compensate.
+
+- Added a new SFX sound, implemented another one into the audioRepository.
