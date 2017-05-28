@@ -416,3 +416,19 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Slightly adjusted colours.
 
 - Switched over all fonts to new custom fonts.
+
+**May 27 2017** (ver.PTB-B) (U2)
+
+- Converted more UI content over to SwingEX format.
+
+    - Converted sliders over to new SwingEX models (XSlider), reduced the amount of required code per slider as a result.
+
+    - Converted most button ActionListeners over to XMouseListeners.
+
+- Slightly reworked UI design to fit a better style.
+
+- Added a new button design.
+
+- Removed some gfxRepository dependencies from SwingEX.
+
+- Added a storage for constants to the SwingEX database.

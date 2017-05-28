@@ -77,7 +77,7 @@ public class XLabel extends JLabel {
 
     public void setImage(BufferedImage image) {
         this.setIcon(new ImageIcon(image));
-        this.setBackground(gfxRepository.clrTrueBlack);
+        this.setBackground(EXColorDefaults.BLACK);
         this.setBorder(null);
         this.setOpaque(true);
 

@@ -40,7 +40,7 @@ public class gfxRepository {
     private static Font styleSquare;
     private static Font styleRexlia;
 
-    public static final  Color clrText = new Color(255, 255, 255, 255);
+    public static final Color clrText = new Color(255, 255, 255, 255);
     public static final Color clrInvisible = new Color(0, 0, 0, 0);
     public static final Color clrTrueBlack = new Color(0, 0, 0, 255);
     public static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
@@ -53,7 +53,7 @@ public class gfxRepository {
     public static final Color clrButtonBackground = new Color(0, 125, 90, 255);
     public static final Color clrBGOpaque = new Color(25, 90, 60, 255);
     public static final Color clrButtonMain = new Color(0, 155, 90, 255);
-    public static final Color clrBackground = new Color(0, 195, 130, 105);
+    public static final Color clrBackground = new Color(54, 95, 77, 105);
     public static final Color clrForeground = new Color(0, 185, 110, 155);
 
     public static final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
@@ -103,6 +103,7 @@ public class gfxRepository {
     static BufferedImage rejectButton;
     static BufferedImage wideButton;
     static BufferedImage wideButton2;
+    static BufferedImage button435_80;
 
     static BufferedImage mainBackground;
     static BufferedImage launcherBorder;
@@ -205,6 +206,7 @@ public class gfxRepository {
             moon1Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon1_half.png"));
             moon2Icon = ImageIO.read(new File(imageFolder + "/Resources/title_moon2_half.png"));
             menuGlare = ImageIO.read(new File(imageFolder + "/Resources/effects/glare.png"));
+            button435_80 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_435_80.png"));
 
             System.out.println("GFX content loaded successfully.");
 

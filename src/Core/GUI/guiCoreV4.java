@@ -211,7 +211,7 @@ public class guiCoreV4 {
         XButton btnExit = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
 
         layers.add(btnExit, new Integer(2), 0);
-        btnExit.setBounds(getUIScaleX() - 51, 6, 38, 38);
+        btnExit.setBounds(getUIScaleX() - 58, 6, 38, 38);
         btnExit.setOpaque(false);
 
         btnExit.addMouseListener(new MouseListener() {
@@ -781,7 +781,7 @@ public class guiCoreV4 {
         loadingBar.setVisible(true);
 
         //loads the text box above the loading bar
-        XLabel lblInformation = new XLabel("Astra Project - Work In Progress", gfxRepository.txtHeader, gfxRepository.clrText);
+        XLabel lblInformation = new XLabel("Astra Project - Work In Progress", gfxRepository.txtSubtitle, gfxRepository.clrText);
         layers.add(lblInformation, new Integer(3), 0);
         lblInformation.setBounds((getUIScaleX() / 2) - 300, getUIScaleY() - 120, 600, 50);
         lblInformation.setAlignments(SwingConstants.CENTER, SwingConstants.BOTTOM);
@@ -948,7 +948,7 @@ public class guiCoreV4 {
         lblLensGlare.setBounds(0, 0, screen.getWidth(), screen.getHeight());
         lblLensGlare.setVisible(true);
 
-        pnlMenuBarH = new XPanel(gfxRepository.clrDGrey);
+        pnlMenuBarH = new XPanel(gfxRepository.clrBackground);
         layers.add(pnlMenuBarH, new Integer(14), 0);
         pnlMenuBarH.setBounds(0, getUIScaleY() - 90, getUIScaleX(), 90);
         pnlMenuBarH.setVisible(true);
@@ -974,7 +974,6 @@ public class guiCoreV4 {
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 pnlMenuBarH.setVisible(false);
                 loadNewSettingsMenu();
-                audioRepository.buttonClick();
                 window.refresh();
             }
 
@@ -1166,6 +1165,10 @@ public class guiCoreV4 {
             }
         });
 
+        settingsMenu = new XPanel(gfxRepository.clrBackground);
+        layers.add(settingsMenu, new Integer(13), 0);
+        settingsMenu.setBounds(5, 50, 495, window.getHeight() - 100);
+        settingsMenu.setVisible(false);
         window.refresh();
 
     }
@@ -1186,72 +1189,149 @@ public class guiCoreV4 {
     //loads the menu to set up a new game
     private void loadNewSettingsMenu() {
 
-        settingsMenu = new XPanel();
-        layers.add(settingsMenu, new Integer(14), 0);
+        settingsMenu.removeAll();
         settingsMenu.setVisible(true);
-        settingsMenu.setBounds(0, 75, 500, window.getHeight() - 75);
 
-        XPanel pnlSettings = new XPanel(gfxRepository.clrBackground);
-        pnlSettings.setBounds(settingsMenu.getX(), settingsMenu.getY(), settingsMenu.getWidth(), settingsMenu.getHeight());
-        pnlSettings.setVisible(true);
-        settingsMenu.add(pnlSettings);
+        XLabel lblSettingsHeader = new XLabel("Game Settings", gfxRepository.txtHeader, gfxRepository.clrText);
+        settingsMenu.add(lblSettingsHeader);
+        lblSettingsHeader.setBounds(5, 5, settingsMenu.getWidth() - 5, 40);
+        lblSettingsHeader.setAlignments(SwingConstants.CENTER);
+        lblSettingsHeader.setVisible(true);
 
-        XButton launchNewGame = new XButton("Start", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
-        pnlSettings.add(launchNewGame);
-        launchNewGame.setBounds(5, pnlSettings.getHeight() - 110, pnlSettings.getWidth() - 10, 50);
+        XLabel lblBack = new XLabel("Back", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        settingsMenu.add(lblBack);
+        lblBack.setBounds(30, settingsMenu.getHeight() - 80, 435, 80);
+        lblBack.setAlignments(SwingConstants.CENTER);
+        lblBack.setVisible(true);
+
+        XButton btnBack = new XButton(gfxRepository.button435_80, SwingConstants.LEFT);
+        settingsMenu.add(btnBack);
+        btnBack.setBounds(lblBack.getBounds());
+        btnBack.setVisible(true);
+
+        btnBack.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                pnlMenuBarH.setVisible(true);
+                lblLogo.setVisible(true);
+                audioRepository.buttonDisable();
+                settingsMenu.removeAll();
+                settingsMenu.setVisible(false);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        XLabel lblLaunchNew = new XLabel("Start", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        settingsMenu.add(lblLaunchNew);
+        lblLaunchNew.setBounds(btnBack.getX(), btnBack.getY() - 85, btnBack.getWidth(), btnBack.getHeight());
+        lblLaunchNew.setAlignments(SwingConstants.CENTER);
+        lblLaunchNew.setVisible(true);
+
+        XButton launchNewGame = new XButton(gfxRepository.button435_80, SwingConstants.LEFT);
+        settingsMenu.add(launchNewGame);
+        launchNewGame.setBounds(lblLaunchNew.getBounds());
         launchNewGame.setOpaque(true);
         launchNewGame.setVisible(true);
 
-        launchNewGame.addActionListener(new ActionListener() {
+        launchNewGame.addMouseListener(new XMouseListener() {
+            XButton source;
+
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
                 audioRepository.buttonConfirm();
+                window.refresh();
+
                 menuSpaceport.stopAnimation();
                 menuMoon1.stopAnimation();
                 menuMoon2.stopAnimation();
                 clearUI();
                 loadLoadingScreen(2);
             }
-        });
 
-        XButton btnBack = new XButton("Back", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
-        pnlSettings.add(btnBack);
-        btnBack.setBounds(5, pnlSettings.getHeight() - 55, pnlSettings.getWidth() - 10, 50);
-        btnBack.setOpaque(true);
-        btnBack.setVisible(true);
-
-        btnBack.addActionListener((new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                pnlMenuBarH.setVisible(true);
-                lblLogo.setVisible(true);
-                audioRepository.buttonDisable();
-                settingsMenu.removeAll();
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
             }
-        }));
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
 
         //sets up settings option for resource abundance
         XLabel lblResources = new XLabel("Resource Abundance", gfxRepository.txtSubheader, gfxRepository.clrText);
         lblResources.setAlignments(SwingConstants.CENTER);
-        JSlider sldResources = new JSlider(JSlider.HORIZONTAL, gameSettings.resourceAbundanceMin, gameSettings.resourceAbundanceHigh, gameSettings.resourceAbundanceAvg);
-        pnlSettings.add(lblResources);
-        pnlSettings.add(sldResources);
-        lblResources.setBounds(5, 15, settingsMenu.getWidth() - 5, 25);
+        XSlider sldResources = new XSlider(JSlider.HORIZONTAL, gameSettings.resourceAbundanceMin, gameSettings.resourceAbundanceHigh, gameSettings.resourceAbundanceAvg);
+        settingsMenu.add(lblResources);
+        settingsMenu.add(sldResources);
+        lblResources.setBounds(5, 50, settingsMenu.getWidth() - 5, 25);
         lblResources.setVisible(true);
-        sldResources.setMajorTickSpacing(25);
-        sldResources.setMinorTickSpacing(5);
-        sldResources.setPaintTicks(true);
+        sldResources.setTicks(25, 2);
         Hashtable hshResources = new Hashtable();
         hshResources.put(new Integer(gameSettings.resourceAbundanceMin), new XLabel("Sparse", gfxRepository.txtTiny, gfxRepository.clrText));
         hshResources.put(new Integer(gameSettings.resourceAbundanceHigh), new XLabel("Abundant", gfxRepository.txtTiny, gfxRepository.clrText));
         hshResources.put(new Integer(gameSettings.resourceAbundanceAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
         sldResources.setLabelTable(hshResources);
-        sldResources.setPaintLabels(true);
         sldResources.setFont(gfxRepository.txtTiny);
-        sldResources.setFocusable(false);
         sldResources.setForeground(gfxRepository.clrText);
-        sldResources.setBounds(20, 45, settingsMenu.getWidth() - 20, 50);
-        sldResources.setOpaque(false);
+        sldResources.setBounds(20, lblResources.getY() + lblResources.getHeight() + 5, settingsMenu.getWidth() - 20, 50);
         sldResources.setVisible(true);
 
         sldResources.addChangeListener(new ChangeListener() { //adds a listener to keep track of the slider's value and translate it to the gameSettings class
@@ -1268,25 +1348,20 @@ public class guiCoreV4 {
         //sets up settings option for star abundance
         XLabel lblStarFreq = new XLabel("Star Frequency", gfxRepository.txtSubheader, gfxRepository.clrText);
         lblStarFreq.setAlignments(SwingConstants.CENTER);
-        JSlider sldStarFreq = new JSlider(JSlider.HORIZONTAL, gameSettings.starFreqMin, gameSettings.starFreqHigh, gameSettings.starFreqAvg);
-        pnlSettings.add(lblStarFreq);
-        pnlSettings.add(sldStarFreq);
+        XSlider sldStarFreq = new XSlider(JSlider.HORIZONTAL, gameSettings.starFreqMin, gameSettings.starFreqHigh, gameSettings.starFreqAvg);
+        settingsMenu.add(lblStarFreq);
+        settingsMenu.add(sldStarFreq);
         lblStarFreq.setBounds(5, sldResources.getY() + sldResources.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
         lblStarFreq.setVisible(true);
-        sldStarFreq.setMajorTickSpacing(15);
-        sldStarFreq.setMinorTickSpacing(5);
-        sldStarFreq.setPaintTicks(true);
+        sldStarFreq.setTicks(15, 5);
         Hashtable hshStarFreq = new Hashtable();
         hshStarFreq.put(new Integer(gameSettings.starFreqMin), new XLabel("Many", gfxRepository.txtTiny, gfxRepository.clrText));
         hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new XLabel("Few", gfxRepository.txtTiny, gfxRepository.clrText));
         hshStarFreq.put(new Integer(gameSettings.starFreqAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
         sldStarFreq.setLabelTable(hshStarFreq);
-        sldStarFreq.setPaintLabels(true);
         sldStarFreq.setFont(gfxRepository.txtTiny);
-        sldStarFreq.setFocusable(false);
         sldStarFreq.setForeground(gfxRepository.clrText);
         sldStarFreq.setBounds(20, lblStarFreq.getY() + lblStarFreq.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
-        sldStarFreq.setOpaque(false);
         sldStarFreq.setVisible(true);
 
         sldStarFreq.addChangeListener(new ChangeListener() {
@@ -1303,25 +1378,20 @@ public class guiCoreV4 {
         //sets up settings option for map scaling
         XLabel lblMapScale = new XLabel("Map Scale", gfxRepository.txtSubheader, gfxRepository.clrText);
         lblMapScale.setAlignments(SwingConstants.CENTER);
-        JSlider sldMapScale = new JSlider(JSlider.HORIZONTAL, gameSettings.mapScaleMin, gameSettings.mapScaleHigh, gameSettings.mapScaleAvg);
-        pnlSettings.add(lblMapScale);
-        pnlSettings.add(sldMapScale);
+        XSlider sldMapScale = new XSlider(JSlider.HORIZONTAL, gameSettings.mapScaleMin, gameSettings.mapScaleHigh, gameSettings.mapScaleAvg);
+        settingsMenu.add(lblMapScale);
+        settingsMenu.add(sldMapScale);
         lblMapScale.setBounds(5, sldStarFreq.getY() + sldStarFreq.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
         lblMapScale.setVisible(true);
-        sldMapScale.setMajorTickSpacing(20);
-        sldMapScale.setMinorTickSpacing(5);
-        sldMapScale.setPaintTicks(true);
+        sldMapScale.setTicks(20, 5);
         Hashtable hshMapScale = new Hashtable();
         hshMapScale.put(new Integer(gameSettings.mapScaleMin), new XLabel("Small", gfxRepository.txtTiny, gfxRepository.clrText));
         hshMapScale.put(new Integer(gameSettings.mapScaleHigh), new XLabel("Huge", gfxRepository.txtTiny, gfxRepository.clrText));
         hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new XLabel("Normal", gfxRepository.txtTiny, gfxRepository.clrText));
         sldMapScale.setLabelTable(hshMapScale);
-        sldMapScale.setPaintLabels(true);
-        sldMapScale.setFocusable(false);
         sldMapScale.setFont(gfxRepository.txtTiny);
         sldMapScale.setForeground(gfxRepository.clrText);
         sldMapScale.setBounds(20, lblMapScale.getY() + lblMapScale.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
-        sldMapScale.setOpaque(false);
         sldMapScale.setVisible(true);
 
         sldMapScale.addChangeListener(new ChangeListener() {
@@ -1338,25 +1408,20 @@ public class guiCoreV4 {
 
         XLabel lblDiffOverall = new XLabel("Overall Difficulty", gfxRepository.txtSubheader, gfxRepository.clrText);
         lblDiffOverall.setAlignments(SwingConstants.CENTER);
-        JSlider sldDiffOverall = new JSlider(JSlider.HORIZONTAL, gameSettings.overallDifficultyMin, gameSettings.overallDifficultyHigh, gameSettings.overallDifficultyAvg);
-        pnlSettings.add(lblDiffOverall);
-        pnlSettings.add(sldDiffOverall);
+        XSlider sldDiffOverall = new XSlider(JSlider.HORIZONTAL, gameSettings.overallDifficultyMin, gameSettings.overallDifficultyHigh, gameSettings.overallDifficultyAvg);
+        settingsMenu.add(lblDiffOverall);
+        settingsMenu.add(sldDiffOverall);
         lblDiffOverall.setBounds(5, sldMapScale.getY() + sldMapScale.getHeight() + 5, lblResources.getWidth(), lblResources.getHeight());
         lblDiffOverall.setVisible(true);
-        sldDiffOverall.setMajorTickSpacing(25);
-        sldDiffOverall.setMinorTickSpacing(5);
-        sldDiffOverall.setPaintTicks(true);
+        sldDiffOverall.setTicks(25, 5);
         Hashtable hshDiffOverall = new Hashtable();
         hshDiffOverall.put(new Integer(gameSettings.overallDifficultyMin), new XLabel("Easy", gfxRepository.txtTiny, gfxRepository.clrText));
         hshDiffOverall.put(new Integer(gameSettings.overallDifficultyHigh), new XLabel("Hard", gfxRepository.txtTiny, gfxRepository.clrText));
         hshDiffOverall.put(new Integer(gameSettings.overallDifficultyAvg), new XLabel("Normal", gfxRepository.txtTiny, gfxRepository.clrText));
         sldDiffOverall.setLabelTable(hshDiffOverall);
-        sldDiffOverall.setPaintLabels(true);
-        sldDiffOverall.setFocusable(false);
         sldDiffOverall.setFont(gfxRepository.txtTiny);
         sldDiffOverall.setForeground(gfxRepository.clrText);
         sldDiffOverall.setBounds(20, lblDiffOverall.getY() + lblDiffOverall.getHeight() + 5, settingsMenu.getWidth() - 20, sldResources.getHeight());
-        sldDiffOverall.setOpaque(false);
         sldDiffOverall.setVisible(true);
 
         sldDiffOverall.addChangeListener(new ChangeListener() {
@@ -1458,13 +1523,70 @@ public class guiCoreV4 {
 
         XPanel pnlTopBar = new XPanel(gfxRepository.clrDGrey);
         layers.add(pnlTopBar, new Integer(8), 0);
-        pnlTopBar.setBounds(0, 0, screen.getWidth(), 50);
+        pnlTopBar.setBounds(0, 0, screen.getWidth(), 70);
 
-        XButton btnMenu = new XButton("Menu", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonMain, gfxRepository.bdrButtonEnabled);
+        XLabel lblMenu = new XLabel("Menu", gfxRepository.txtButtonLarge, gfxRepository.clrText);
+        pnlTopBar.add(lblMenu);
+        lblMenu.setBounds(pnlTopBar.getWidth() - 170, 3, 170, 64);
+        lblMenu.setAlignments(SwingConstants.CENTER);
+        lblMenu.setVisible(true);
+
+        XButton btnMenu = new XButton(gfxRepository.wideButton, SwingConstants.LEFT);
         pnlTopBar.add(btnMenu);
-        btnMenu.setBounds(pnlTopBar.getWidth() - 85, 5, 80, pnlTopBar.getHeight() - 10);
-        btnMenu.setOpaque(false);
+        btnMenu.setBounds(lblMenu.getBounds());
         btnMenu.setVisible(true);
+
+        btnMenu.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                if (!source.isState()) {
+                    audioRepository.buttonClick();
+                    showPauseMenu();
+                } else {
+                    audioRepository.buttonDisable();
+                    pnlOverlay.setVisible(false);
+                    pnlPauseMenu.removeAll();
+                }
+
+                source.toggleState();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
 
 
 
@@ -1474,21 +1596,6 @@ public class guiCoreV4 {
         pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
         pnlPauseMenu.setVisible(true);
         pnlOverlay.setVisible(false);
-
-        btnMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (!pnlOverlay.isVisible()) {
-                    showPauseMenu();
-                    audioRepository.buttonClick();
-                    window.refresh();
-                } else {
-                    pnlOverlay.setVisible(false);
-                    pnlPauseMenu.removeAll();
-                    audioRepository.buttonDisable();
-                }
-            }
-        });
 
     }
 
@@ -1597,6 +1704,56 @@ public class guiCoreV4 {
         btnQuit.setBorder(gfxRepository.bdrButtonEnabled);
         btnQuit.setVisible(true);
 
+        btnQuit.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                if (source.isState()) {
+                    audioRepository.buttonConfirm();
+                    closeProgram();
+                } else {
+                    audioRepository.buttonDisable();
+                }
+
+                source.toggleState();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                //source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
         btnQuit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -1632,15 +1789,11 @@ public class guiCoreV4 {
         lblMusicVolume.setAlignments(SwingConstants.CENTER);
         lblMusicVolume.setVisible(true);
 
-        JSlider sldMusicVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.musicVolume);
+        XSlider sldMusicVolume = new XSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.musicVolume);
         pnlPauseMenu.add(sldMusicVolume);
-        sldMusicVolume.setMajorTickSpacing(10);
-        sldMusicVolume.setMinorTickSpacing(2);
-        sldMusicVolume.setPaintTicks(true);
+        sldMusicVolume.setTicks(10, 2);
         sldMusicVolume.setPaintLabels(false);
-        sldMusicVolume.setFocusable(false);
         sldMusicVolume.setForeground(gfxRepository.clrText);
-        sldMusicVolume.setOpaque(false);
         sldMusicVolume.setBounds(10, lblMusicVolume.getY() + lblMusicVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 20, 40);
         sldMusicVolume.setVisible(true);
 
@@ -1663,15 +1816,11 @@ public class guiCoreV4 {
         lblAmbianceVolume.setAlignments(SwingConstants.CENTER);
         lblAmbianceVolume.setVisible(true);
 
-        JSlider sldAmbianceVolume = new JSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.ambianceVolume);
+        XSlider sldAmbianceVolume = new XSlider(JSlider.HORIZONTAL, 0, 100, audioRepository.ambianceVolume);
         pnlPauseMenu.add(sldAmbianceVolume);
-        sldAmbianceVolume.setMajorTickSpacing(10);
-        sldAmbianceVolume.setMinorTickSpacing(2);
-        sldAmbianceVolume.setPaintTicks(true);
+        sldAmbianceVolume.setTicks(10, 2);
         sldAmbianceVolume.setPaintLabels(false);
-        sldAmbianceVolume.setFocusable(false);
         sldAmbianceVolume.setForeground(gfxRepository.clrText);
-        sldAmbianceVolume.setOpaque(false);
         sldAmbianceVolume.setBounds(10, lblAmbianceVolume.getY() + lblAmbianceVolume.getHeight() + 5, pnlPauseMenu.getWidth() - 20, sldMusicVolume.getHeight());
         sldAmbianceVolume.setVisible(true);
 

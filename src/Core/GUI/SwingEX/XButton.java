@@ -48,7 +48,7 @@ public class XButton extends JButton {
     public XButton(BufferedImage image, int position) {
         this.setBorder(null);
         this.setFocusPainted(false);
-        this.setBackground(gfxRepository.clrInvisible);
+        this.setBackground(EXColorDefaults.NONE);
         this.setOpaque(false);
         this.setIcon(new ImageIcon(image));
         this.setVerticalAlignment(SwingConstants.CENTER);
@@ -60,7 +60,7 @@ public class XButton extends JButton {
     public XButton(BufferedImage image, int position, String text, Font font, Color txtclr) {
         this.setBorder(null);
         this.setFocusPainted(false);
-        this.setBackground(gfxRepository.clrInvisible);
+        this.setBackground(EXColorDefaults.NONE);
         this.setFont(font);
         this.setForeground(txtclr);
         this.setText(text);
@@ -74,7 +74,7 @@ public class XButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(gfxRepository.clrInvisible); //GOODBYE STUPID WHITE BOX
+        g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX
         super.paintComponent(g);
 
     }

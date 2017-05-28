@@ -43,13 +43,9 @@ public class XScrollBarUI extends BasicScrollBarUI {
     private JButton createZeroButton() {
         JButton button = new JButton("What button?");
         Dimension zeroDim = new Dimension(0,0);
-        //button.setBackground(new Color(45, 55, 75, 255));
-        //button.setForeground(new Color(255, 255, 255, 255));
-        //button.setText("K");
         button.setPreferredSize(zeroDim);
         button.setMinimumSize(zeroDim);
         button.setMaximumSize(zeroDim);
-        
         return button;
 
     }
