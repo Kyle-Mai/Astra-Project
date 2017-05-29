@@ -2146,6 +2146,7 @@ public class guiCoreV4 {
                     closeProgram();
                 } else {
                     audioRepository.buttonDisable();
+                    btnQuit.setText("Are you sure?");
                 }
 
                 source.toggleState();
@@ -2181,31 +2182,54 @@ public class guiCoreV4 {
             }
         });
 
-        btnQuit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (btnQuit.getText().equals("Quit Game")) { //TODO: Add a way to save user data when quitting.
-                    audioRepository.buttonDisable();
-                    btnQuit.setText("Are you sure?");
-                } else {
-                    audioRepository.buttonConfirm();
-                    closeProgram();
-                }
-            }
-        });
-
         XButton btnReturn = new XButton("Continue", gfxRepository.txtSubheader, gfxRepository.clrText, gfxRepository.clrButtonBackground, gfxRepository.bdrButtonEnabled);
         pnlPauseMenu.add(btnReturn);
         btnReturn.setBounds(10, lblMenuTitle.getY() + lblMenuTitle.getHeight() + 10, pnlPauseMenu.getWidth() - 20, 40);
         btnReturn.setOpaque(true);
         btnReturn.setVisible(true);
 
-        btnReturn.addActionListener(new ActionListener() {
+        btnReturn.addMouseListener(new XMouseListener() {
+            XButton source;
+
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonClick();
+                //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
                 audioRepository.buttonSelect();
                 pnlOverlay.setVisible(false);
                 pnlPauseMenu.removeAll();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                //source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
             }
         });
 
