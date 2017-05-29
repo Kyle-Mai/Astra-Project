@@ -158,11 +158,10 @@ public class starClass extends starCore implements Serializable {
     public BufferedImage getPortraitGFX() {
         return listOfStars.get(arrayLoc).getGfxImage();
     }
-
+    public BufferedImage getIconGFX() { return listOfStars.get(arrayLoc).getStarIcon(); }
     public String getStarClassName() {
         return listOfStars.get(arrayLoc).getName();
     }
-
     public String getStarClassDesc() { return listOfStars.get(arrayLoc).getDesc(); }
 
     public int getColonyCount() { //gets the number of colonies in this system

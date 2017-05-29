@@ -1,6 +1,7 @@
 package Core.GUI;
 
 import Core.starCore;
+import com.sun.javafx.tk.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -8,6 +9,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class gfxRepository {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final String gameVersion = "PTB-B Build 75a";
+    static final String gameVersion = "PTB-B Build 76a";
 
     private static Font stylePDark;
     private static Font styleSquare;
@@ -56,15 +58,16 @@ public class gfxRepository {
     public static final Color clrBackground = new Color(54, 95, 77, 105);
     public static final Color clrForeground = new Color(0, 185, 110, 155);
 
-    public static final Font txtStandard = new Font("Comic Sans", Font.PLAIN, 15);
     public static Font txtSubtitle;
     public static Font txtItalSubtitle;
     public static Font txtSubheader;
     public static Font txtHeader;
     public static Font txtButtonLarge;
+    public static Font txtButtonSmall;
     public static Font txtTitle;
     public static Font txtLargeTitle;
     public static Font txtTiny;
+    public static Font txtLargeText;
 
     public static final Border bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     public static final Border bdrButtonDisabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrDisableBorder, clrBlk), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -80,7 +83,9 @@ public class gfxRepository {
             txtTitle = stylePDark.deriveFont(Font.PLAIN, 32f);
             txtLargeTitle = stylePDark.deriveFont(Font.PLAIN, 60f);
             txtButtonLarge = styleRexlia.deriveFont(Font.PLAIN, 30f);
+            txtButtonSmall = styleRexlia.deriveFont(Font.PLAIN, 14f);
 
+            txtLargeText = styleSquare.deriveFont(Font.PLAIN, 40f);
             txtSubtitle = styleSquare.deriveFont(Font.PLAIN, 14f);
             txtItalSubtitle = styleSquare.deriveFont(Font.ITALIC, 14f);
             txtHeader = styleSquare.deriveFont(Font.BOLD, 22f);
@@ -104,6 +109,8 @@ public class gfxRepository {
     static BufferedImage wideButton;
     static BufferedImage wideButton2;
     static BufferedImage button435_80;
+    static BufferedImage button99_48;
+    static BufferedImage menuButton;
 
     static BufferedImage mainBackground;
     static BufferedImage launcherBorder;
@@ -125,8 +132,23 @@ public class gfxRepository {
     static BufferedImage starPlanetCount;
     static BufferedImage colonyCount;
     static BufferedImage homeSystem;
+    static BufferedImage techMenu;
+    static BufferedImage empireMenu;
+    static BufferedImage fleetMenu;
+    static BufferedImage governmentMenu;
+    static BufferedImage mapHighlight;
+
+    static BufferedImage researchIcon;
+    static BufferedImage mineralsIcon;
+    static BufferedImage energyIcon;
+
+    static BufferedImage cursorIcon;
+
+    static Cursor defaultCursor;
 
     static Icon loadingIcon;
+
+    private static Toolkit kit = Toolkit.getDefaultToolkit();
 
     /** Methods **/
 
@@ -147,6 +169,9 @@ public class gfxRepository {
             rejectButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_reject.png"));
             wideButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large.png"));
             wideButton2 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large2.png"));
+            cursorIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/ono.gif"));
+
+            defaultCursor = kit.createCustomCursor(cursorIcon, new Point(0,0), "Default");
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
@@ -222,9 +247,12 @@ public class gfxRepository {
 
         for (int i = 0; i < starCore.listOfStars.size(); i++) {
             try {
-                directory = new File(System.getProperty("user.dir") + "/src" + starCore.listOfStars.get(i).getGfx());
+                directory = new File(System.getProperty("user.dir") + "/src" + starCore.listOfStars.get(i).getGfx()); //sets the star's portrait
                 temporaryImage = ImageIO.read(directory);
                 starCore.listOfStars.get(i).setGfxImage(temporaryImage);
+                directory = new File(System.getProperty("user.dir") + "/src" + starCore.listOfStars.get(i).getIcon()); //sets the star's icon
+                temporaryImage = ImageIO.read(directory);
+                starCore.listOfStars.get(i).setStarIcon(temporaryImage);
                 System.out.print(starCore.listOfStars.get(i).getName() + " GFX content loaded successfully. ");
             } catch (IOException e) {
                 e.printStackTrace(); //TODO: Add a default for if it fails to load.
@@ -255,6 +283,16 @@ public class gfxRepository {
             starPlanetCount = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_number.png"));
             colonyCount = ImageIO.read(new File(imageFolder + "/Resources/ui/embassy.png"));
             homeSystem = ImageIO.read(new File(imageFolder + "/Resources/ui/home_system.png"));
+            techMenu = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_tech_button.png"));
+            researchIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/research2.png"));
+            fleetMenu = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_fleet_button.png"));
+            governmentMenu = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_government_button.png"));
+            empireMenu = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_empire_button.png"));
+            button99_48 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_99_48.png"));
+            menuButton = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_menu_button.png"));
+            mapHighlight = ImageIO.read(new File(imageFolder + "/Resources/ui/hover_indicator.png"));
+            energyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/minerals2.png"));
+            mineralsIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/energy2.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

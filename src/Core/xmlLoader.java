@@ -50,6 +50,7 @@ public class xmlLoader {
     //stores content
     public static ArrayList<expansionContent> listOfExpansions = new ArrayList<>();
     public static ArrayList<modContent> listOfMods = new ArrayList<>();
+    public static ArrayList<playerInformation> listOfPlayers = new ArrayList<>();
 
     //loads the XML content
     public static void loadContent() {
@@ -161,6 +162,44 @@ public class xmlLoader {
             errorPrint(9);
         }
     } //close loadXML
+
+    public static void loadPlayerInfo(File playerinfo) {
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(playerinfo);
+            NodeList elements = doc.getDocumentElement().getChildNodes();
+
+            String playerName = "";
+            String dateCreated = "";
+
+            if (doc.getDocumentElement().getNodeName().equals("player")) {
+
+                for (int i = 0; i < elements.getLength(); i++) {
+                    if (elements.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+
+                        if (elements.item(i).getNodeName().equals("player")) {
+                            NodeList info = elements.item(i).getChildNodes();
+                            playerName = elements.item(i).getAttributes().getNamedItem("name").getTextContent();
+
+                            for (int j = 0; j < info.getLength(); j++) {
+
+                                if (info.item(j).getNodeName().equals("datecreated")) { //get the date
+                                    dateCreated = info.item(j).getTextContent();
+                                }
+                            }
+
+                            listOfPlayers.add(new playerInformation(playerName, dateCreated));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     //reads tech tree XML data
     private static void loadTechTree(NodeList nodeList) {
@@ -636,6 +675,7 @@ public class xmlLoader {
         int planetWeight = 0;
         boolean modIsValid = false;
         StringBuffer gfxBuffer = new StringBuffer();
+        StringBuffer gfxBuffer2 = new StringBuffer();
 
         System.out.println("Loading new star data...");
         //gather all of the nodes
@@ -646,7 +686,9 @@ public class xmlLoader {
                 if (parentNode.getNodeName().equals("star")) {
                     System.out.println("New star found. Attempting to load data...");
                     gfxBuffer.delete(0, gfxBuffer.length()); //clear the buffer
+                    gfxBuffer2.delete(0, gfxBuffer.length()); //clear the buffer
                     gfxBuffer.append(getFolder);
+                    gfxBuffer2.append(getFolder);
                     starID = Integer.parseInt(parentNode.getAttributes().getNamedItem("id").getNodeValue());
                     if (starID >= 1000 && starID < 2000) {
                         modIsValid = true;
@@ -720,6 +762,10 @@ public class xmlLoader {
                                     }
                                 } else if (nodes.item(k).getNodeName().equals("gfxportrait") && nodes.item(k).getTextContent() != null) {
                                     gfxBuffer.append("/" + nodes.item(k).getTextContent());
+
+                                } else if (nodes.item(k).getNodeName().equals("gfxicon") && nodes.item(k).getTextContent() != null) {
+                                    gfxBuffer2.append("/" + nodes.item(k).getTextContent());
+
                                 }
 
                                     //if it doesn't fit any of the necessary info, ignore it
@@ -740,7 +786,7 @@ public class xmlLoader {
                         }
                         //adds the new planet to the planet list if one hasn't already been added
                         if (!replacesContent) {
-                            starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight, gfxBuffer.toString()));
+                            starClass.listOfStars.add(new starCore.starType(name, starID, spawn, desc, tempLow, tempHigh, habitable, sizeWeight, sizeVariation, planetWeight, gfxBuffer.toString(), gfxBuffer2.toString()));
                             System.out.println("[NEW] Star successfully loaded - " + name + " (ID" + starID + ")");
                         }
                     } else { //something in this mod wasn't properly initialized, do not load it
@@ -903,6 +949,22 @@ public class xmlLoader {
         public void setEnabledStatus(boolean isEnabled) {
             this.enabledStatus = isEnabled;
         }
+
+    }
+
+    public static class playerInformation {
+
+        String playerName;
+        String creationDate;
+
+        private playerInformation(String name, String date) {
+            this.playerName = name;
+            this.creationDate = date;
+        }
+
+        public String getPlayerName() { return this.playerName; }
+        public String getCreationDate() { return this.creationDate; }
+
 
     }
 

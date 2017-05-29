@@ -62,7 +62,7 @@ public class audioRepository {
     public static void musicTitleScreen() { //plays the title screen music
         music.stopAudio();
         music.interrupt();
-        music = new audioCore("/music/creation_and_beyond.mp3", musicVolume, true);
+        music = new audioCore("/music/towards_utopia.mp3", musicVolume, true);
         music.start();
     }
 

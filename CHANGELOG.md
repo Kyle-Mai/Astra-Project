@@ -432,3 +432,23 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Removed some gfxRepository dependencies from SwingEX.
 
 - Added a storage for constants to the SwingEX database.
+
+**MAY 28 2017** (ver.PTB-B) (U1)
+
+- Added new star icon GFX.
+
+    - Adjusted both the starCore/Class, UI, and XML to support it.
+
+- Changed the main theme to a different song to see if it fits better.
+
+- Major UI work.
+
+    - Added a bunch of new UI content (most without purpose at the moment) to prepare.
+
+    - Fixed up some old GFX content.
+
+    - Added onto the XMouseListener and XFrame.
+
+    - Added some new UI elements.
+
+- Worked on data saving/loading somewhat.

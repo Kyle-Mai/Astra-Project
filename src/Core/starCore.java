@@ -1,6 +1,7 @@
 package Core;
 
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 /**
@@ -44,21 +45,21 @@ public class starCore {
 
     //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
     private static void createStarTypes() {
-        listOfStars.add(new starType("Red Giant", 1000, 196, "", 2800, 4600, true, 0, 0, 5, "/Core/GUI/Resources/portraits/m_star.png"));
-        listOfStars.add(new starType("Blue Giant", 1001, 109, "These relatively young white or bluish-white main-sequence stars are typically among the most visible to the naked eye. They are large and rotate very quickly, but will eventually evolve into slower and cooler red giants.", 20000, 50000, true, 0, 0, 5, "/Core/GUI/Resources/portraits/a_star.png"));
-        listOfStars.add(new starType("Yellow Dwarf", 1002, 358, "Main-sequence stars fuse hydrogen for roughly 10 billion years before they expand and become red giants. Although their lifespans are shorter than orange dwarves, worlds inside the habitable zone of a yellow dwarf often enjoy optimal conditions for the development of life.", 5300, 6000, true, 0, 0, 6, "/Core/GUI/Resources/portraits/g_star.png"));
-        listOfStars.add(new starType("Red Dwarf", 1003, 290, "The most common stars in the universe, often referred to as red dwarves. Their low luminosity means they are difficult to observe with the naked eye from afar. Although they typically have an extremely long lifespan, red dwarves emit almost no UV light resulting in unfavorable conditions for most forms of life.", 2500, 4000, true, 0, 0, 4, "/Core/GUI/Resources/portraits/m_star.png"));
-        listOfStars.add(new starType("White Dwarf", 1004, 135, "Although they often emit significant amounts of UV radiation, their wide habitable zones have a good chance of supporting life-bearing worlds.", 100000, 180000, true, 15, 5, 2, "/Core/GUI/Resources/portraits/f_star.png"));
-        listOfStars.add(new starType("Brown Dwarf", 1005, 87, "", 700, 1300, false, 0, 0, 0, "/Core/GUI/Resources/portraits/gas_giant.png"));
-        listOfStars.add(new starType("Wolf-Rayet Star", 1006, 32, "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 30000, 200000, false, 0, 0, 3, "/Core/GUI/Resources/portraits/pulsar.png"));
-        listOfStars.add(new starType("Neutron Star", 1007, 62, "These incredibly dense stellar remnants are sometimes created when a massive star suffers a rapid collapse and explodes in a supernova. Although their diameter is typically as little as ten kilometers, their mass is many times greater than an average Main-sequence star.", 500000, 720000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/neutron_star.png"));
-        listOfStars.add(new starType("Pulsar", 1008, 45, "A highly magnetized, rotating neutron star with a powerful focused beam of electromagnetic radiation ejected from both poles of the star. The fast, regular rotation of the star allows for incredible accuracy in keeping time - like a stellar clock.", 520000, 750000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/pulsar.png"));
-        listOfStars.add(new starType("Black Hole", 1009, 31, "Typically formed as a result of the collapse of a very massive star at the end of its life cycle, black holes have extremely strong gravity fields that prevent anything - including light - from escaping once the event horizon has been crossed.", 0, 0, false, 0, 0, 0, "/Core/GUI/Resources/portraits/black_hole.png"));
-        listOfStars.add(new starType("Protostar", 1010, 98, "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.",2000, 3000, true, 0, 0, 3, "/Core/GUI/Resources/portraits/b_star.png"));
-        listOfStars.add(new starType("Supergiant", 1011, 22, "", 3500, 4500, true, 0, 0, 6, "/Core/GUI/Resources/portraits/k_star.png"));
-        listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0, "/Core/GUI/Resources/portraits/neutron_star.png"));
-        listOfStars.add(new starType("Magnetar", 1013, 26, "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 500000, 720000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/neutron_star.png"));
-        listOfStars.add(new starType("Hypergiant", 1014, 17, "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 4000, 35000, false, 0, 0, 7, "/Core/GUI/Resources/portraits/a_star.png"));
+        listOfStars.add(new starType("Red Giant", 1000, 196, "", 2800, 4600, true, 0, 0, 5, "/Core/GUI/Resources/portraits/m_star.png", "/Core/GUI/Resources/stars/orange_star.png"));
+        listOfStars.add(new starType("Blue Giant", 1001, 109, "These relatively young white or bluish-white main-sequence stars are typically among the most visible to the naked eye. They are large and rotate very quickly, but will eventually evolve into slower and cooler red giants.", 20000, 50000, true, 0, 0, 5, "/Core/GUI/Resources/portraits/a_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
+        listOfStars.add(new starType("Yellow Dwarf", 1002, 358, "Main-sequence stars fuse hydrogen for roughly 10 billion years before they expand and become red giants. Although their lifespans are shorter than orange dwarves, worlds inside the habitable zone of a yellow dwarf often enjoy optimal conditions for the development of life.", 5300, 6000, true, 0, 0, 6, "/Core/GUI/Resources/portraits/g_star.png", "/Core/GUI/Resources/stars/yellow_star.png"));
+        listOfStars.add(new starType("Red Dwarf", 1003, 290, "The most common stars in the universe, often referred to as red dwarves. Their low luminosity means they are difficult to observe with the naked eye from afar. Although they typically have an extremely long lifespan, red dwarves emit almost no UV light resulting in unfavorable conditions for most forms of life.", 2500, 4000, true, 0, 0, 4, "/Core/GUI/Resources/portraits/m_star.png", "/Core/GUI/Resources/stars/red_star.png"));
+        listOfStars.add(new starType("White Dwarf", 1004, 135, "Although they often emit significant amounts of UV radiation, their wide habitable zones have a good chance of supporting life-bearing worlds.", 100000, 180000, true, 15, 5, 2, "/Core/GUI/Resources/portraits/f_star.png", "/Core/GUI/Resources/stars/white_star.png"));
+        listOfStars.add(new starType("Brown Dwarf", 1005, 87, "", 700, 1300, false, 0, 0, 0, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/stars/red_star.png"));
+        listOfStars.add(new starType("Wolf-Rayet Star", 1006, 32, "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 30000, 200000, false, 0, 0, 3, "/Core/GUI/Resources/portraits/pulsar.png", "/Core/GUI/Resources/stars/neutron_star.png"));
+        listOfStars.add(new starType("Neutron Star", 1007, 62, "These incredibly dense stellar remnants are sometimes created when a massive star suffers a rapid collapse and explodes in a supernova. Although their diameter is typically as little as ten kilometers, their mass is many times greater than an average Main-sequence star.", 500000, 720000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/neutron_star.png"));
+        listOfStars.add(new starType("Pulsar", 1008, 45, "A highly magnetized, rotating neutron star with a powerful focused beam of electromagnetic radiation ejected from both poles of the star. The fast, regular rotation of the star allows for incredible accuracy in keeping time - like a stellar clock.", 520000, 750000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/pulsar.png", "/Core/GUI/Resources/stars/pulsar.png"));
+        listOfStars.add(new starType("Black Hole", 1009, 31, "Typically formed as a result of the collapse of a very massive star at the end of its life cycle, black holes have extremely strong gravity fields that prevent anything - including light - from escaping once the event horizon has been crossed.", 0, 0, false, 0, 0, 0, "/Core/GUI/Resources/portraits/black_hole.png", "/Core/GUI/Resources/stars/black_hole.png"));
+        listOfStars.add(new starType("Protostar", 1010, 98, "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.",2000, 3000, true, 0, 0, 3, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/stars/purple_star.png"));
+        listOfStars.add(new starType("Supergiant", 1011, 22, "", 3500, 4500, true, 0, 0, 6, "/Core/GUI/Resources/portraits/k_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
+        listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
+        listOfStars.add(new starType("Magnetar", 1013, 26, "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 500000, 720000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/neutron_star.png"));
+        listOfStars.add(new starType("Hypergiant", 1014, 17, "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 4000, 35000, false, 0, 0, 7, "/Core/GUI/Resources/portraits/a_star.png", "/Core/GUI/Resources/stars/white_star.png"));
 
     }
 
@@ -92,10 +93,12 @@ public class starCore {
         int sizeVariation;
         int planetWeight;
         String gfx;
+        String icon;
         BufferedImage gfxImage;
+        BufferedImage starIcon;
 
         //Constructor for building different star blueprints in the createStarTypes method listed above.
-        public starType(String starName, int objectID, int spawnWeight, String starDesc, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable, int sizeWeight, int sizeVariation, int planetWeight, String gfx){
+        public starType(String starName, int objectID, int spawnWeight, String starDesc, int surfaceTempLow, int surfaceTempHigh, boolean isHabitable, int sizeWeight, int sizeVariation, int planetWeight, String gfx, String icon){
             this.name = starName; //the type of star
             this.desc = starDesc; //the description for the star type
             this.starID = objectID; //the ID used to identify the star.
@@ -107,6 +110,7 @@ public class starCore {
             this.sizeVariation = sizeVariation; //Adding and subtracted from the median to get the max/min radius of the star.
             this.planetWeight = planetWeight; //the optimal number of planets this star will attempt to generate around it, a zero will give the spawn chance complete randomness
             this.gfx = gfx; //stores the name of the GFX content
+            this.icon = icon;
 
         }
 
@@ -119,13 +123,16 @@ public class starCore {
         private int getSizeVariation() { return this.sizeVariation; }
         private int getPlanetWeight() { return this.planetWeight; }
         public String getGfx() { return this.gfx; }
+        public String getIcon() { return this.icon; }
         public String getName() { return this.name; }
         public String getDesc() { return this.desc; }
         public BufferedImage getGfxImage() { return this.gfxImage; }
+        public BufferedImage getStarIcon() { return this.starIcon; }
 
         public void setGfxImage(BufferedImage gfxImage) { //sets the gfx image for this star
             this.gfxImage = gfxImage;
         }
+        public void setStarIcon(BufferedImage starIcon) { this.starIcon = starIcon; }
 
     }
 

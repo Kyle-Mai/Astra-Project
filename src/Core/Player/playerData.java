@@ -39,9 +39,12 @@ public class playerData {
     private String userName;
     private String date;
 
-    private double currency;
     private double research;
     private int techLevel;
+
+    private double researchTurn = 0;
+    private double currencyTurn = 0;
+    private double resourcesTurn = 0;
 
     private String tech1;
     private String tech2;
@@ -72,8 +75,9 @@ public class playerData {
         this.userName = username; //user's username
 
         //sets the default player values
-        this.currency = 0;
+        this.funds = 0;
         this.research = 0;
+        this.resources = 0;
         this.techLevel = 0;
 
         this.difficulty = gameSettings.currDifficulty; //saves the selected user difficulty
@@ -115,6 +119,10 @@ public class playerData {
     public void existingPlayer(String playerID) {
 
     }
+
+    public double getResearchTurn() { return this.researchTurn; }
+    public double getResourcesTurn() { return this.resourcesTurn; }
+    public double getCurrencyTurn() { return this.currencyTurn; }
 
     //creates a unique encrypted string to store the user data under as an identifier
     private String newUserID() {

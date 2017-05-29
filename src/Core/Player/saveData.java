@@ -27,11 +27,10 @@ public class saveData {
 
     private String userID;
     private File saveDirectory;
-    private final File directoryLoc = new File(System.getProperty("user.dir") + "/src/Saves/"); //directory location
 
     saveData(String userID) {
         this.userID = userID;
-        saveDirectory = new File(directoryLoc + "/" + userID);
+        saveDirectory = new File(SaveDirectoryConstants.SAVEDIRECTORY + "/" + userID);
 
     }
 
@@ -124,10 +123,4 @@ public class saveData {
     }
 
 
-}
-
-
-interface SaveDirectoryConstants {
-    String BASE = "";
-    String DATA = "data";
 }
