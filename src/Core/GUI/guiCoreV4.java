@@ -931,12 +931,12 @@ public class guiCoreV4 {
         menuSpaceport.setAnimationSmoothness(0.1, 200);
         menuSpaceport.start();
 
-        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 600, -250, 900);
+        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -300, 700);
         menuMoon2.setAnimationSmoothness(0.1, 150);
         menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
         menuMoon2.start();
 
-        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 500);
+        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 550);
         menuMoon1.setAnimationSmoothness(0.1, 150);
         menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
         menuMoon1.start();
