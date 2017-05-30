@@ -1,6 +1,7 @@
 package Core.GUI.SwingEX;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  KM
@@ -11,10 +12,10 @@ import javax.swing.*;
 public class XScrollBar extends JScrollBar {
 
     //default constructor
-    public XScrollBar() {
+    public XScrollBar(Color fore, Color back) {
         this.setBorder(null);
         this.setOpaque(true);
-        this.setUI(new XScrollBarUI());
+        this.setUI(new XScrollBarUI(fore, back));
 
     }
 

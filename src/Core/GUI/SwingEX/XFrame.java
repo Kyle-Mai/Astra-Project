@@ -16,8 +16,8 @@ public class XFrame extends JFrame {
     public XFrame(String text, BufferedImage icon) {
         this.setUndecorated(true);
         this.setResizable(false);
-        this.setTitle(text);
-        this.setIconImage(icon);
+        this.setTitle(text); //sets the name of the program
+        this.setIconImage(icon); //sets the program's icon image
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -31,5 +31,9 @@ public class XFrame extends JFrame {
         this.setState(Frame.ICONIFIED);
     }
 
+    public void closeProgram() { //closes the program
+        this.dispose(); //ensure the thread dies
+        System.exit(0); //close the program
+    }
 
 }

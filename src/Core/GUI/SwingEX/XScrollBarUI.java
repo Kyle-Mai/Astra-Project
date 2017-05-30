@@ -16,10 +16,18 @@ import java.awt.*;
  */
 public class XScrollBarUI extends BasicScrollBarUI {
 
+    Color foreground, background;
+
+    public XScrollBarUI(Color fore, Color back) { //sets up the UI colors
+        this.foreground = fore;
+        this.background = back;
+
+    }
+
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(new Color(55, 95, 65, 255));
+        g.setColor(background);
         g2d.fill(trackBounds);
         g2d.draw(trackBounds);
 
@@ -28,7 +36,7 @@ public class XScrollBarUI extends BasicScrollBarUI {
     @Override
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(new Color(85, 140, 105, 255));
+        g.setColor(foreground);
         g2d.fill(thumbBounds);
 
     }

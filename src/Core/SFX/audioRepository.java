@@ -18,16 +18,17 @@ public class audioRepository {
 
     private static audioCore music;
     private static audioCore ambiance;
+    private static audioCore ambiance_other = null;
 
     /** UI actions **/
 
     public static void buttonClick() {
-        audioCore buttonPress = new audioCore("/ui/menu_press.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_press.wav", uiVolume, 0, 400);
         buttonPress.start();
     }
 
     public static void buttonSelect() {
-        audioCore buttonPress = new audioCore("/ui/menu_select.wav", uiVolume, 0, 500);
+        audioCore buttonPress = new audioCore("/ui/menu_select.wav", uiVolume, 0, 400);
         buttonPress.start();
     }
 
@@ -37,7 +38,7 @@ public class audioRepository {
     }
 
     public static void menuTab() {
-        audioCore buttonPress = new audioCore("/ui/menu_tab.wav", uiVolume, 0, 100);
+        audioCore buttonPress = new audioCore("/ui/menu_tab.wav", uiVolume, 0, 120);
         buttonPress.start();
     }
 
@@ -48,6 +49,11 @@ public class audioRepository {
 
     public static void buttonConfirm() {
         audioCore buttonPress = new audioCore("/ui/menu_confirm.wav", uiVolume, 0, 500);
+        buttonPress.start();
+    }
+
+    public static void buttonHighlight() {
+        audioCore buttonPress = new audioCore("/ui/menu_highlight.wav", uiVolume, 0, 200);
         buttonPress.start();
     }
 
@@ -87,6 +93,16 @@ public class audioRepository {
     public static void ambianceMainGame() {
         ambiance = new audioCore("/ambiance/space_ambient01.wav", audioRepository.ambianceVolume, true);
         ambiance.start();
+    }
+
+    public static void starSound() {
+        if (ambiance_other != null) {
+            ambiance_other.stopAudio();
+            ambiance_other.interrupt();
+        }
+        ambiance_other = new audioCore("/ambiance/solar_fusion_01.wav", audioRepository.ambianceVolume, 0, 5500);
+        ambiance_other.start();
+
     }
 
 

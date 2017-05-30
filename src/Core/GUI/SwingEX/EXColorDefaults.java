@@ -12,5 +12,6 @@ public interface EXColorDefaults {
 
     Color NONE = new Color(0,0,0,0);
     Color BLACK = new Color(0,0,0,255);
+    Color NULL = new Color(200, 80, 255, 255);
 
 }

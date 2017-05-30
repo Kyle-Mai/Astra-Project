@@ -13,19 +13,17 @@ import java.util.Random;
  * Handles the loading and playing of audio files.
  *
  * SOURCES:
- *
+ *  Stack Overflow - Handling of playing/initializing audio.
  */
 
 public class audioCore extends Thread {
 
-    String sound;
-    double volume;
-    double delay;
-    double duration;
-    boolean loop = false;
-    boolean shuffleType = false;
-
-    private Media media;
+    private String sound;
+    private double volume;
+    private double delay;
+    private double duration;
+    private boolean loop = false;
+    private boolean shuffleType = false;
     private MediaPlayer mediaPlayer;
 
     static { JFXPanel fxPanel = new JFXPanel(); } //needed to play audio, apparently
@@ -34,11 +32,9 @@ public class audioCore extends Thread {
     public void run() {
 
         if (shuffleType) { //shuffling music
-
             shuffleMusic();
 
         } else { //not shuffling music
-
             initializeAudioData(); //sets up the audio file
 
             if (loop) {
@@ -48,18 +44,16 @@ public class audioCore extends Thread {
             }
         }
 
-        //System.out.println("Audio thread closed.");
-
         Thread.currentThread().interrupt(); //closes the thread down
     }
 
-    private void initializeAudioData() {
+    private void initializeAudioData() { //initializes the audio file's data
 
         URL file = this.getClass().getResource("Resources/" + this.sound);
         //System.out.println("Playing audio file : " + file);
 
-        media = new Media(file.toString());
-        mediaPlayer = new MediaPlayer(media);
+        Media media = new Media(file.toString()); //gets the media from file
+        mediaPlayer = new MediaPlayer(media); //loads the media into the media player
 
         try { //pause and wait for the mediaplayer to initialize
             Thread.sleep((long)delay);                 //1000 milliseconds is one second.
@@ -75,7 +69,7 @@ public class audioCore extends Thread {
 
     }
 
-    private void playAudio() {
+    private void playAudio() { //plays the audio
 
         mediaPlayer.play(); //plays the audio
 
@@ -89,20 +83,20 @@ public class audioCore extends Thread {
 
     }
 
-    private void loopAudio() {
+    private void loopAudio() { //loops the audio
 
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
 
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(int volume) { //sets the volume of the audio
         this.volume = volume;
         mediaPlayer.setVolume(0.01 * this.volume);
 
     }
 
-    private void shuffleMusic() {
+    private void shuffleMusic() { //shuffles the music from an array of audio
         Random newMusic = new Random();
         String[] musicList = {"music/imperial_fleet.mp3", "music/new_dawn.mp3", "music/in_search_of_life.mp3", "music/mercedes_romero.mp3", "music/spatial_lullaby.mp3", "music/towards_utopia.mp3", "music/to_the_ends_of_the_galaxy.mp3", "music/gravitational_constant.mp3", "music/assembling_the_fleet.mp3"};
 
@@ -120,7 +114,7 @@ public class audioCore extends Thread {
         mediaPlayer.stop();
     }
 
-
+    //constructors
 
     public audioCore(String toPlay, double volumeLevel) {
         this.sound = toPlay;
@@ -162,7 +156,6 @@ public class audioCore extends Thread {
         this.shuffleType = shuffling;
 
     }
-
 
 
 }

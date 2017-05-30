@@ -77,6 +77,8 @@ public class mapGenerator implements Serializable {
             this.hasStar = true;
             this.isVisible = false;
             this.star = star;
+            this.star.setMapLocationX(xPos);
+            this.star.setMapLocationY(yPos);
             generatedStars.add(this.star);
 
         }
@@ -85,26 +87,15 @@ public class mapGenerator implements Serializable {
         public boolean getStar() { return this.hasStar; }
         public starClass getStarData() { return this.star; }
 
-        private String writeVisiblity() { //gets the visibility of the tile as a string for easier writing to file
-            if (this.getVisibility()) {
-                return "t";
-            } else {
-                return "f";
-            }
-        }
-        private String writeStar() {
-            if (this.getStar()) {
-                return "t";
-            } else {
-                return "f";
-            }
-        }
-
         //Base methods
 
         private void newStar() { //creates a new star at this tile
             this.star = new starClass(this.xPos, this.yPos);
 
+        }
+
+        public void setStarData(starClass set) {
+            this.star = set;
         }
 
         //Accessor methods
@@ -153,68 +144,67 @@ public class mapGenerator implements Serializable {
     //generates tiles on the map
     public void generateTiles() { //TODO: Weighted spawns to avoid clusters.
 
-        //refresh the index
-        int indexX = 1, indexY = 1;
+            //refresh the index
+            int indexX = 1, indexY = 1;
 
-        boolean genStar;
-        boolean preDefined = false;
+            boolean genStar;
+            boolean preDefined = false;
 
-        this.mapTiles.clear(); //safety net, clears all existing content
+            this.mapTiles.clear(); //safety net, clears all existing content
 
-        System.out.println("Generating map tiles...");
+            System.out.println("Generating map tiles...");
 
-        //fills out the 2D array so that it supports a list of lists
-        for (int i = 0; i < this.yScale; i++) {
-            mapTiles.add(new ArrayList<mapTile>());
-        }
-
-        //goes through and adds tiles to the 2D arraylist
-        for (int i = 0; i < this.mapArea; i++) {
-
-            for (int j = 0; j < predefinedStars.size(); j++) {
-                if (indexX == predefinedStars.get(j).getMapLocationX() && indexY == predefinedStars.get(j).getMapLocationY()) {
-                    this.mapTiles.get(indexY - 1).add(new mapTile(predefinedStars.get(j), indexX, indexY));
-                    System.out.println("Loading predefined system " + predefinedStars.get(j).getStarName() + " (ID" + predefinedStars.get(j).getStarIndex() + ") at the location " + indexX + "|" + indexY);
-                    preDefined = true;
-                }
+            //fills out the 2D array so that it supports a list of lists
+            for (int i = 0; i < this.yScale; i++) {
+                mapTiles.add(new ArrayList<mapTile>());
             }
 
-            if (!preDefined) { //if a predefined star wasn't already generated, generate a random tile
-                genStar = willGenerateStar();
+            //goes through and adds tiles to the 2D arraylist
+            for (int i = 0; i < this.mapArea; i++) {
 
-                //checks to see if the star being generated is too closer to another star
-                if (indexY > 1 && indexX > 1) {
-                    if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar() || this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
-                        genStar = false;
-                        System.out.println("Map generation refused - too close proximity to another star.");
-                    }
-
-                } else if (indexX > 1 && indexY == 1) {
-                    if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar()) {
-                        genStar = false;
-                        System.out.println("Map generation refused - too close proximity to another star.");
-                    }
-                } else if (indexX == 1 && indexY > 1) {
-                    if (this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
-                        genStar = false;
-                        System.out.println("Map generation refused - too close proximity to another star.");
+                for (int j = 0; j < predefinedStars.size(); j++) {
+                    if (indexX == predefinedStars.get(j).getMapLocationX() && indexY == predefinedStars.get(j).getMapLocationY()) {
+                        this.mapTiles.get(indexY - 1).add(new mapTile(predefinedStars.get(j), indexX - 1, indexY - 1));
+                        System.out.println("Loading predefined system " + predefinedStars.get(j).getStarName() + " (ID" + predefinedStars.get(j).getStarIndex() + ") at the location " + indexX + "|" + indexY);
+                        preDefined = true;
                     }
                 }
 
-                this.mapTiles.get(indexY - 1).add(new mapTile(genStar, indexX, indexY));
+                if (!preDefined) { //if a predefined star wasn't already generated, generate a random tile
+                    genStar = willGenerateStar();
+
+                    //checks to see if the star being generated is too closer to another star
+                    if (indexY > 1 && indexX > 1) {
+                        if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar() || this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
+                            genStar = false;
+                            System.out.println("Map generation refused - too close proximity to another star.");
+                        }
+                    } else if (indexX > 1 && indexY == 1) {
+                        if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar()) {
+                            genStar = false;
+                            System.out.println("Map generation refused - too close proximity to another star.");
+                        }
+                    } else if (indexX == 1 && indexY > 1) {
+                        if (this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
+                            genStar = false;
+                            System.out.println("Map generation refused - too close proximity to another star.");
+                        }
+                    }
+
+                    this.mapTiles.get(indexY - 1).add(new mapTile(genStar, indexX - 1, indexY - 1));
+                }
+
+                if (indexX < this.xScale) { //moves the index as it generates tiles
+                    indexX++;
+                } else {
+                    indexX = 1;
+                    indexY++;
+                }
+
+                preDefined = false;
+
             }
-
-            if (indexX < this.xScale) { //moves the index as it generates tiles
-                indexX++;
-            } else {
-                indexX = 1;
-                indexY++;
-            }
-
-            preDefined = false;
-
-        }
-        System.out.println("Map generation complete.");
+            System.out.println("Map generation complete.");
     }
 
 }

@@ -10,6 +10,12 @@ import java.awt.event.MouseListener;
 
 public abstract class XMouseListener implements MouseListener {
 
+    //variables
+    private String IDValue;
+    private int Xv;
+    private int Yv;
+
+    //constructors
     public  XMouseListener() { //blank constructor
     }
 
@@ -17,28 +23,26 @@ public abstract class XMouseListener implements MouseListener {
         this.setIDValue(designatedID);
     }
 
-    public XMouseListener(int x, int y) {
+    public XMouseListener(int x, int y) { //constructor that takes in an x and y coordinate (for say, referencing a 2D array)
         this.Xv = x;
         this.Yv = y;
     }
 
-    private String IDValue;
-    private int Xv;
-    private int Yv;
-
+    //setters
     public void setIDValue(String ID) { this.IDValue = ID; }
-    public String getIDValue() { return this.IDValue; }
 
     public void setXY(int x, int y) {
         this.Xv = x;
         this.Xv = y;
     }
+
+    //getters
+    public String getIDValue() { return this.IDValue; }
     public int getValueX() {
         return this.Xv;
     }
     public int getValueY() {
         return this.Yv;
     }
-
 
 }

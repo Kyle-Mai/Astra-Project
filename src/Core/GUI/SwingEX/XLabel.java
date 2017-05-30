@@ -57,7 +57,11 @@ public class XLabel extends JLabel {
 
     //images with background
     public XLabel(BufferedImage image, Color colour) {
-        this.setIcon(new ImageIcon(image));
+        try {
+            this.setIcon(new ImageIcon(image));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         this.setBackground(colour); //if the image doesn't work, just render a black background
         this.setBorder(null);
         this.setFocusable(false);
@@ -82,6 +86,14 @@ public class XLabel extends JLabel {
         this.setOpaque(true);
 
     }
+
+    //resizes the image to fit the label
+    public void scaleImage(BufferedImage image) {
+        Image scaledImage = image.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+        this.setIcon(new ImageIcon(scaledImage));
+
+    }
+
 
     //sets the horizontal and vertical alignment separately
     public void setAlignments(int alignmentH, int alignmentV) {

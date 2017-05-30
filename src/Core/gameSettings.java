@@ -56,7 +56,7 @@ public class gameSettings {
 
     public static final int[] timeScale = {500, 1000, 1500, 2000, 2500}; //essentially how fast each turn ticks
 
-    public static boolean gameIsPaused = true;
+    public static boolean gameIsPaused = true; //whether or not the game is paused
 
     //variables for star/planet IDing
 

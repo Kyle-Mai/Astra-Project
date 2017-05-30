@@ -36,11 +36,7 @@ public class gfxRepository {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final String gameVersion = "PTB-B Build 76a";
-
-    private static Font stylePDark;
-    private static Font styleSquare;
-    private static Font styleRexlia;
+    static final String gameVersion = "PTB-B Build 78a";
 
     public static final Color clrText = new Color(255, 255, 255, 255);
     public static final Color clrInvisible = new Color(0, 0, 0, 0);
@@ -51,7 +47,7 @@ public class gfxRepository {
     public static final Color clrDisableBorder = new Color(75, 5, 25, 255);
     public static final Color clrDisable = new Color(135, 15, 55, 255);
     public static final Color clrEnable = new Color(108, 255, 224, 255);
-    public static final Color clrDark = new Color(0, 145, 90, 255);
+    public static final Color clrDark = new Color(70, 170, 160, 255);
     public static final Color clrButtonBackground = new Color(0, 125, 90, 255);
     public static final Color clrBGOpaque = new Color(25, 90, 60, 255);
     public static final Color clrButtonMain = new Color(0, 155, 90, 255);
@@ -75,9 +71,9 @@ public class gfxRepository {
     private static void initializeFonts() { //custom font designs
         try {
             //set up custom fonts
-            stylePDark = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/pdark.ttf"));
-            styleSquare = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/uasquare.ttf"));
-            styleRexlia = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/rexlia.ttf"));
+            Font stylePDark = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/pdark.ttf"));
+            Font styleSquare = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/uasquare.ttf"));
+            Font styleRexlia = Font.createFont(Font.TRUETYPE_FONT, new File(imageFolder + "/Resources/fonts/rexlia.ttf"));
 
             //add the new font to some presets
             txtTitle = stylePDark.deriveFont(Font.PLAIN, 32f);
@@ -85,12 +81,12 @@ public class gfxRepository {
             txtButtonLarge = styleRexlia.deriveFont(Font.PLAIN, 30f);
             txtButtonSmall = styleRexlia.deriveFont(Font.PLAIN, 14f);
 
-            txtLargeText = styleSquare.deriveFont(Font.PLAIN, 40f);
+            txtLargeText = styleSquare.deriveFont(Font.BOLD, 40f);
             txtSubtitle = styleSquare.deriveFont(Font.PLAIN, 14f);
             txtItalSubtitle = styleSquare.deriveFont(Font.ITALIC, 14f);
             txtHeader = styleSquare.deriveFont(Font.BOLD, 22f);
             txtSubheader = styleSquare.deriveFont(Font.BOLD, 20f);
-            txtTiny = styleSquare.deriveFont(Font.PLAIN, 11f);
+            txtTiny = styleSquare.deriveFont(Font.PLAIN, 12f);
 
         } catch (Exception e) {
             e.getMessage();
@@ -137,6 +133,9 @@ public class gfxRepository {
     static BufferedImage fleetMenu;
     static BufferedImage governmentMenu;
     static BufferedImage mapHighlight;
+    static BufferedImage tallBox;
+    static BufferedImage galaxyReturn;
+    static BufferedImage systemTitle;
 
     static BufferedImage researchIcon;
     static BufferedImage mineralsIcon;
@@ -159,7 +158,7 @@ public class gfxRepository {
         System.out.println("Attempting to preload GFX content...");
 
         try {
-            mainBackground = ImageIO.read(new File(imageFolder + "/Resources/launcherBG.jpg"));
+            mainBackground = ImageIO.read(new File(imageFolder + "/Resources/background/launcher.png"));
             loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG.jpg")));
             closeButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_close.png"));
             settingsButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_settings.png"));
@@ -169,9 +168,9 @@ public class gfxRepository {
             rejectButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_reject.png"));
             wideButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large.png"));
             wideButton2 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large2.png"));
-            cursorIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/ono.gif"));
+            //cursorIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/ono.gif"));
 
-            defaultCursor = kit.createCustomCursor(cursorIcon, new Point(0,0), "Default");
+            //defaultCursor = kit.createCustomCursor(cursorIcon, new Point(0,0), "Default");
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
@@ -279,7 +278,7 @@ public class gfxRepository {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/mapBG.png"));
             planetIcon = ImageIO.read(new File(imageFolder + "/Resources/no_moon.png"));
             portraitBorder = ImageIO.read(new File(imageFolder + "/Resources/portraits/overlay.png"));
-            menuBackground = ImageIO.read(new File(imageFolder + "/Resources/background/menutexture.png"));
+            menuBackground = ImageIO.read(new File(imageFolder + "/Resources/background/general_bg.png"));
             starPlanetCount = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_number.png"));
             colonyCount = ImageIO.read(new File(imageFolder + "/Resources/ui/embassy.png"));
             homeSystem = ImageIO.read(new File(imageFolder + "/Resources/ui/home_system.png"));
@@ -293,6 +292,9 @@ public class gfxRepository {
             mapHighlight = ImageIO.read(new File(imageFolder + "/Resources/ui/hover_indicator.png"));
             energyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/minerals2.png"));
             mineralsIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/energy2.png"));
+            tallBox = ImageIO.read(new File(imageFolder + "/Resources/ui/tall_box_1.png"));
+            galaxyReturn = ImageIO.read(new File(imageFolder + "/Resources/ui/button_galaxy_map.png"));
+            systemTitle = ImageIO.read(new File(imageFolder + "/Resources/ui/starsystem_panel.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -452,3 +452,31 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Added some new UI elements.
 
 - Worked on data saving/loading somewhat.
+
+**MAY 29 2017** (ver.PTB-B) (U1)
+
+- Lots of UI adjustments.
+
+    - Added code for the basis of the system view screen.
+
+    - Adjusted the UI and GFX design somewhat.
+
+    - Redid the UI design of the star data screen.
+
+    - Removed the last of the ActionListeners (hopefully) and replaced them with MouseListeners.
+
+    - Slightly altered the animation of the smaller moon on the main menu.
+
+- Slight additions to the eventCore.
+
+- Fixed some fundamental issues with the map generation that I hadn't previously noticed.
+
+- Adjusted the SwingEX database, removing some dependencies and adding a default for when an image fails to load.
+
+    - Added support for resizing images to the XLabel.
+
+- Adjusted the game audio slightly to fix an overlap.
+
+- Added in new GFX and SFX content.
+
+- Added more comments where necessary.

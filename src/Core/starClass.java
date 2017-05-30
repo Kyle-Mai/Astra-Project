@@ -93,6 +93,7 @@ public class starClass extends starCore implements Serializable {
         this.habitableZoneMin = habitableZoneMin(this.absLum); //the lower end of the star's habitable zone
         this.mapLocationX = mapLocationX; //the X position of the star on the map grid
         this.mapLocationY = mapLocationY; //the Y position of the star on the map grid
+        this.starName = chooseStarName(); //gets the name of the star
         System.out.println("Star (ID" + starIndex + ") successfully generated at the coordinates " + mapLocationX + "|" + mapLocationY);
         if (this.numOfPlanets > 0) {
             constructPlanets(this.numOfPlanets);
@@ -139,6 +140,14 @@ public class starClass extends starCore implements Serializable {
     public void setHomeSystem(boolean home) {
         this.homeSystem = home;
 
+    }
+
+    public void setMapLocationX(int x) {
+        this.mapLocationX = x;
+    }
+
+    public void setMapLocationY(int y) {
+        this.mapLocationY = y;
     }
 
     /** Accessor Methods **/

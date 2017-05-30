@@ -88,6 +88,8 @@ public class gameLoader {
         //generates the map
         map.generateTiles();
 
+        //gameSettings.map.mapTiles.get(solSystem.getMapLocationX()).get(solSystem.getMapLocationY()).setVisiblity(true);
+
     }
 
     //loads the XML data into the memory

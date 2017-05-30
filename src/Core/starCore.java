@@ -3,6 +3,7 @@ package Core;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  KM
@@ -24,6 +25,7 @@ public class starCore {
 
     public static ArrayList<starType> listOfStars = new ArrayList<>(); //Stores a list of the different starType blueprints.
     private static ArrayList<Integer> spawnWeights = new ArrayList<>(); //Stores a list of the sums of the spawn weights of the star blueprints.
+    public static ArrayList<Integer> starNames = new ArrayList<>();
 
 
     /** Constants **/
@@ -33,6 +35,15 @@ public class starCore {
     private final double bolometricEarthConst = 4.72; //bolometric constant for Earth
     private final int binaryChance = 56; //Chance for a star to be a part of a binary system (2 stars) Measured as 1 = 0.1%.
 
+    private final String[] STARS = {"Aleph", "Angels", "Ayin", "Abaddon's Demesne", "Alpha Hydri", "Beldrish", "Antak Rham", "Boltaran", "Debari", "Fia Nita", "Hell's Maw", "Jeldari", "Vielinger", "Light's End", "Makrabi", "Miiran", "Orkam Fung",
+            "Oskian", "Pralaxs", "Ryl Somot", "Sigma Draconis", "Omicron Persei", "War", "Achernar", "Ascella", "Athyr", "Ether", "Azaleh", "Avalon", "Baltris", "Bastion", "Belgium", "Bivham", "Bythia", "Braum",
+            "Capella", "Cador", "Cursa", "Crescim", "Caesar", "Dalphene", "Dere", "Tsun", "Doria", "Duhr", "Durascadon", "Edellimar", "Eieospone", "Eiol", "Elnath", "Evarym", "Estreon", "Faenov", "Falmir",
+            "Fafnir", "Sandalphon", "Zadkiel", "Zafkiel", "Camael", "Ezak", "Fedoa", "Feonus", "Fuou", "Gathrica", "Gemma", "Geulea", "Gilmon", "Guram", "Hadar", "Haedus", "Hades", "Hark", "Hazra", "Heka", "Haribas",
+            "Heze", "Hoedus", "Hykkan", "Hythara", "Iblyria", "Ijax", "Ionides", "Iola", "Izval", "Isius", "Izta", "Japris", "Jabeth", "Kastra", "Jardlaphon", "Kazon", "Keid", "Kauri", "Karos", "Neros", "Kornephoros",
+            "Kuma", "Musashi", "Lazarus", "Lastus", "Mang", "Marath", "Magam", "Medgar", "Matsonia", "Mareid", "Mihil", "Mestros", "Mecura", "Mordor", "Naos", "Nashira", "Nembus", "Navi", "Nuranka", "Nodro", "Nox",
+            "Oberon", "Obrium", "Osellus", "Parsax", "Peith", "Pentarym", "Pulcor", "Pyla", "Beowulf", "Runa", "Rixim", "Ridathi", "Regganus", "Roma", "Saia", "Sarack", "Selnoc", "Sosta", "Sterope", "Subra", "Sym",
+            "Targon", "Teae", "Taramda", "Tir", "Torovil", "Tyl", "Tyastedore", "Umbra", "Ublion", "Ulysses", "Uldor", "Ulym", "Unatra", "Vega", "Vhallas", "Vokkon", "Vermillion", "Wezen", "Wir", "Wolfen", "Wolgun",
+            "Xema", "Xudra", "Xolton", "Yggdrasil", "Yotla", "Yval", "Zaffa", "Zeldrah", "Zuben", "Zirq", "Zonn", "Nidus", "Halholme"};
 
     /** General variables **/
     //General variables used by the starCore class.
@@ -45,16 +56,16 @@ public class starCore {
 
     //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
     private static void createStarTypes() {
-        listOfStars.add(new starType("Red Giant", 1000, 196, "", 2800, 4600, true, 0, 0, 5, "/Core/GUI/Resources/portraits/m_star.png", "/Core/GUI/Resources/stars/orange_star.png"));
+        listOfStars.add(new starType("Red Giant", 1000, 196, "A large star near the end of its life. Running low on hydrogen, it has begun fusing heavier elements and expanding. Within a few million years, it will blows off it's outer layers and become a white dwarf.", 2800, 4600, true, 0, 0, 5, "/Core/GUI/Resources/portraits/m_star.png", "/Core/GUI/Resources/stars/orange_star.png"));
         listOfStars.add(new starType("Blue Giant", 1001, 109, "These relatively young white or bluish-white main-sequence stars are typically among the most visible to the naked eye. They are large and rotate very quickly, but will eventually evolve into slower and cooler red giants.", 20000, 50000, true, 0, 0, 5, "/Core/GUI/Resources/portraits/a_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
         listOfStars.add(new starType("Yellow Dwarf", 1002, 358, "Main-sequence stars fuse hydrogen for roughly 10 billion years before they expand and become red giants. Although their lifespans are shorter than orange dwarves, worlds inside the habitable zone of a yellow dwarf often enjoy optimal conditions for the development of life.", 5300, 6000, true, 0, 0, 6, "/Core/GUI/Resources/portraits/g_star.png", "/Core/GUI/Resources/stars/yellow_star.png"));
         listOfStars.add(new starType("Red Dwarf", 1003, 290, "The most common stars in the universe, often referred to as red dwarves. Their low luminosity means they are difficult to observe with the naked eye from afar. Although they typically have an extremely long lifespan, red dwarves emit almost no UV light resulting in unfavorable conditions for most forms of life.", 2500, 4000, true, 0, 0, 4, "/Core/GUI/Resources/portraits/m_star.png", "/Core/GUI/Resources/stars/red_star.png"));
         listOfStars.add(new starType("White Dwarf", 1004, 135, "Although they often emit significant amounts of UV radiation, their wide habitable zones have a good chance of supporting life-bearing worlds.", 100000, 180000, true, 15, 5, 2, "/Core/GUI/Resources/portraits/f_star.png", "/Core/GUI/Resources/stars/white_star.png"));
         listOfStars.add(new starType("Brown Dwarf", 1005, 87, "", 700, 1300, false, 0, 0, 0, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/stars/red_star.png"));
-        listOfStars.add(new starType("Wolf-Rayet Star", 1006, 32, "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 30000, 200000, false, 0, 0, 3, "/Core/GUI/Resources/portraits/pulsar.png", "/Core/GUI/Resources/stars/neutron_star.png"));
+        listOfStars.add(new starType("Wolf-Rayet Star", 1006, 30, "The spectra of Wolf-Rayet stars is highly unusual, dominated by highly ionized helium, nitrogen, and carbon. The star possesses a depleted supply of hydrogen, strong solar winds, and a temperature exceeding that of most other non-superdense stars.", 30000, 200000, false, 0, 0, 3, "/Core/GUI/Resources/portraits/pulsar.png", "/Core/GUI/Resources/stars/neutron_star.png"));
         listOfStars.add(new starType("Neutron Star", 1007, 62, "These incredibly dense stellar remnants are sometimes created when a massive star suffers a rapid collapse and explodes in a supernova. Although their diameter is typically as little as ten kilometers, their mass is many times greater than an average Main-sequence star.", 500000, 720000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/neutron_star.png"));
         listOfStars.add(new starType("Pulsar", 1008, 45, "A highly magnetized, rotating neutron star with a powerful focused beam of electromagnetic radiation ejected from both poles of the star. The fast, regular rotation of the star allows for incredible accuracy in keeping time - like a stellar clock.", 520000, 750000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/pulsar.png", "/Core/GUI/Resources/stars/pulsar.png"));
-        listOfStars.add(new starType("Black Hole", 1009, 31, "Typically formed as a result of the collapse of a very massive star at the end of its life cycle, black holes have extremely strong gravity fields that prevent anything - including light - from escaping once the event horizon has been crossed.", 0, 0, false, 0, 0, 0, "/Core/GUI/Resources/portraits/black_hole.png", "/Core/GUI/Resources/stars/black_hole.png"));
+        listOfStars.add(new starType("Black Hole", 1009, 38, "Typically formed as a result of the collapse of a very massive star at the end of its life cycle, black holes have extremely strong gravity fields that prevent anything - including light - from escaping once the event horizon has been crossed.", 0, 0, false, 0, 0, 0, "/Core/GUI/Resources/portraits/black_hole.png", "/Core/GUI/Resources/stars/black_hole.png"));
         listOfStars.add(new starType("Protostar", 1010, 98, "A young star, still collecting mass from the molecular cloud it is forming within. Around a million years after forming, the Protostar will contract and form a main-sequence star.",2000, 3000, true, 0, 0, 3, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/stars/purple_star.png"));
         listOfStars.add(new starType("Supergiant", 1011, 22, "", 3500, 4500, true, 0, 0, 6, "/Core/GUI/Resources/portraits/k_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
         listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
@@ -129,6 +140,7 @@ public class starCore {
         public BufferedImage getGfxImage() { return this.gfxImage; }
         public BufferedImage getStarIcon() { return this.starIcon; }
 
+        //gets the GFX imagery for the star
         public void setGfxImage(BufferedImage gfxImage) { //sets the gfx image for this star
             this.gfxImage = gfxImage;
         }
@@ -165,6 +177,32 @@ public class starCore {
 
     /** General methods **/
     //General starCore methods, generally used for constructing the specific star (starClass) from the blueprint (starType).
+
+    protected String chooseStarName() {
+        int chooseName;
+
+        while (true) { //TODO: Maybe eventually convert to a for to prevent accidental infinite loops?
+            Random dice = new Random();
+            chooseName = dice.nextInt(STARS.length);
+
+            System.out.println("Deciding star name...");
+
+            valid:
+            {
+                if (starNames.size() > 0) {
+                    for (int i = 0; i < starNames.size(); i++) {
+                        if (starNames.size() > 0) {
+                            if (chooseName == starNames.get(i)) { //reroll, we don't want duplicates
+                                break valid;
+                            }
+                        }
+                    }
+                }
+                starNames.add(chooseName);
+                return STARS[chooseName];
+            }
+        }
+    }
 
     //determines the star's type / class
     protected int chooseStarType(){
