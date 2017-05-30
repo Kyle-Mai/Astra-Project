@@ -119,7 +119,6 @@ public class gfxRepository {
     static BufferedImage gameLogoLarge;
     static BufferedImage menuSpaceport;
 
-    static BufferedImage planetIcon;
     static BufferedImage moon1Icon;
     static BufferedImage moon2Icon;
 
@@ -136,6 +135,8 @@ public class gfxRepository {
     static BufferedImage tallBox;
     static BufferedImage galaxyReturn;
     static BufferedImage systemTitle;
+    static BufferedImage leftButton;
+    static BufferedImage rightButton;
 
     static BufferedImage researchIcon;
     static BufferedImage mineralsIcon;
@@ -177,15 +178,16 @@ public class gfxRepository {
                     try {
                         //adds other papers to the loading screen randomize
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_2.jpg")));
-                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
+                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_4.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_5.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_6.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_7.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_8.jpg")));
-                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_9.jpg")));
+                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_9.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_10.jpg")));
-                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_11.jpg")));
+                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_11.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_13.jpg")));
                         System.out.println("GFX background images finished loading successfully.");
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -197,7 +199,7 @@ public class gfxRepository {
 
             gameLogo = ImageIO.read(new File(imageFolder + "/Resources/ui/icon.png"));
             launcherBorder = ImageIO.read(new File(imageFolder + "/Resources/launcherBorder.png"));
-            loadingIcon = new ImageIcon(imageFolder + "/Resources/ui/ok_hand.gif");
+            loadingIcon = new ImageIcon(imageFolder + "/Resources/ui/loadingicon2.gif");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -270,13 +272,14 @@ public class gfxRepository {
         moon1Icon = null;
         moon2Icon = null;
         menuPlanet = null;
+        muteButton = null;
 
         //loads map GFX
         System.out.println("Loading map screen GFX content...");
 
         try {
+            mapHighlight = ImageIO.read(new File(imageFolder + "/Resources/ui/hover_indicator.png"));
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/mapBG.png"));
-            planetIcon = ImageIO.read(new File(imageFolder + "/Resources/no_moon.png"));
             portraitBorder = ImageIO.read(new File(imageFolder + "/Resources/portraits/overlay.png"));
             menuBackground = ImageIO.read(new File(imageFolder + "/Resources/background/general_bg.png"));
             starPlanetCount = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_number.png"));
@@ -289,12 +292,13 @@ public class gfxRepository {
             empireMenu = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_empire_button.png"));
             button99_48 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_99_48.png"));
             menuButton = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_menu_button.png"));
-            mapHighlight = ImageIO.read(new File(imageFolder + "/Resources/ui/hover_indicator.png"));
             energyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/minerals2.png"));
             mineralsIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/energy2.png"));
             tallBox = ImageIO.read(new File(imageFolder + "/Resources/ui/tall_box_1.png"));
             galaxyReturn = ImageIO.read(new File(imageFolder + "/Resources/ui/button_galaxy_map.png"));
             systemTitle = ImageIO.read(new File(imageFolder + "/Resources/ui/starsystem_panel.png"));
+            leftButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_left.png"));
+            rightButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_right.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

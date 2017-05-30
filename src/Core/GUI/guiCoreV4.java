@@ -771,7 +771,7 @@ public class guiCoreV4 {
         //loads the loading icon gif that plays during the loading screen
         XLabel bgLoadIcon = new XLabel(gfxRepository.loadingIcon);
         layers.add(bgLoadIcon, new Integer(1), 0);
-        bgLoadIcon.setBounds((getUIScaleX() / 2) - 150, getUIScaleY() - 380, 300, 300);
+        bgLoadIcon.setBounds((getUIScaleX() / 2) - 240, getUIScaleY() - 400, 480, 320);
         bgLoadIcon.setVisible(true);
 
         //loads the loading bar at the bottom of the screen that shows the progress of the loading
@@ -2032,6 +2032,116 @@ public class guiCoreV4 {
         lblMinerals.setBounds(icnMinerals.getX() + icnMinerals.getWidth() + 2, icnMinerals.getY(), lblTech.getWidth(), icnMinerals.getHeight());
         lblMinerals.setVerticalAlignment(SwingConstants.CENTER);
         lblMinerals.setVisible(true);
+
+        //displays the time scale
+        XPanel pnlTimer = new XPanel();
+        pnlTopBar.add(pnlTimer);
+        pnlTimer.setBounds(btnMenu.getX() - 155, 0, 150, pnlTopBar.getHeight());
+        pnlTimer.setVisible(true);
+
+        XButton btnSlowTime = new XButton(gfxRepository.leftButton, SwingConstants.LEFT);
+        pnlTimer.add(btnSlowTime);
+        btnSlowTime.setBounds(0, (pnlTimer.getHeight() / 2) - 19, 38, 38);
+        btnSlowTime.setVisible(true);
+
+        btnSlowTime.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                if (gameSettings.currentTime > 0) {
+                    gameSettings.currentTime--;
+                    audioRepository.buttonSelect();
+                } else {
+                    audioRepository.buttonDisable();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        XButton btnSpeedTime = new XButton(gfxRepository.rightButton, SwingConstants.LEFT);
+        pnlTimer.add(btnSpeedTime);
+        btnSpeedTime.setBounds(pnlTimer.getWidth() - 38, (pnlTimer.getHeight() / 2) - 19, 38, 38);
+        btnSpeedTime.setVisible(true);
+
+        btnSpeedTime.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                if (gameSettings.currentTime < 4) {
+                    gameSettings.currentTime++;
+                    audioRepository.buttonSelect();
+                } else {
+                    audioRepository.buttonDisable();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
 
         layers.add(pnlOverlay, new Integer(14), 0);
         pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());

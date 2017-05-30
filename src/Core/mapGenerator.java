@@ -177,17 +177,17 @@ public class mapGenerator implements Serializable {
                     if (indexY > 1 && indexX > 1) {
                         if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar() || this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
                             genStar = false;
-                            System.out.println("Map generation refused - too close proximity to another star.");
+                            //System.out.println("Map generation refused - too close proximity to another star.");
                         }
                     } else if (indexX > 1 && indexY == 1) {
                         if (this.mapTiles.get(indexY - 1).get(indexX - 2).getStar()) {
                             genStar = false;
-                            System.out.println("Map generation refused - too close proximity to another star.");
+                            //System.out.println("Map generation refused - too close proximity to another star.");
                         }
                     } else if (indexX == 1 && indexY > 1) {
                         if (this.mapTiles.get(indexY - 2).get(indexX - 1).getStar()) {
                             genStar = false;
-                            System.out.println("Map generation refused - too close proximity to another star.");
+                            //System.out.println("Map generation refused - too close proximity to another star.");
                         }
                     }
 

@@ -480,3 +480,9 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added in new GFX and SFX content.
 
 - Added more comments where necessary.
+
+**MAY 30 2017** (ver.PTB-B) (U1)
+
+- Added onto the UI somewhat.
+
+- Removed some unneeded GFX content.
