@@ -98,7 +98,7 @@ public class audioCore extends Thread {
 
     private void shuffleMusic() { //shuffles the music from an array of audio
         Random newMusic = new Random();
-        String[] musicList = {"music/imperial_fleet.mp3", "music/new_dawn.mp3", "music/in_search_of_life.mp3", "music/mercedes_romero.mp3", "music/spatial_lullaby.mp3", "music/towards_utopia.mp3", "music/to_the_ends_of_the_galaxy.mp3", "music/gravitational_constant.mp3", "music/assembling_the_fleet.mp3"};
+        String[] musicList = {"music/imperial_fleet.mp3", "music/new_dawn.mp3", "music/in_search_of_life.mp3", "music/mercedes_romero.mp3", "music/spatial_lullaby.mp3", "music/towards_utopia.mp3", "music/to_the_ends_of_the_galaxy.mp3", "music/gravitational_constant.mp3", "music/assembling_the_fleet.mp3", "music/cradle_of_the_galaxy.mp3"};
 
         int musicToPlay = newMusic.nextInt(musicList.length - 1);
 
@@ -106,6 +106,8 @@ public class audioCore extends Thread {
 
         initializeAudioData();
         playAudio();
+
+        mediaPlayer = null; //attempt to reset media player
 
         shuffleMusic();
     }

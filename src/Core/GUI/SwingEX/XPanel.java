@@ -10,6 +10,7 @@ package Core.GUI.SwingEX;
 //import all relevant stuff
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 
 public class XPanel extends JPanel {

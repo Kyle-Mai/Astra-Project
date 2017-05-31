@@ -137,6 +137,10 @@ public class gfxRepository {
     static BufferedImage systemTitle;
     static BufferedImage leftButton;
     static BufferedImage rightButton;
+    static BufferedImage pauseBar;
+
+    static BufferedImage topbar_bg;
+    static BufferedImage topbar_shield;
 
     static BufferedImage researchIcon;
     static BufferedImage mineralsIcon;
@@ -299,6 +303,9 @@ public class gfxRepository {
             systemTitle = ImageIO.read(new File(imageFolder + "/Resources/ui/starsystem_panel.png"));
             leftButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_left.png"));
             rightButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_right.png"));
+            pauseBar = ImageIO.read(new File(imageFolder + "/Resources/ui/paused_bar.png"));
+            topbar_bg = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_background.png"));
+            topbar_shield = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_shield_decoration.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -32,6 +32,8 @@ import java.util.Random;
  Self - All non-cited work.
  */
 
+//TODO: Garbage coding... really need to clean it up.
+
 
 public class guiCoreV4 {
 
@@ -39,7 +41,7 @@ public class guiCoreV4 {
 
     DecimalFormat uiFormat = new DecimalFormat("###,##0.00");
 
-    private int tileSize = 45;
+    private int tileSize = 50;
     private int screenScaleChoice = 5;
 
     private ArrayList<XPanel> pnlExpansions = new ArrayList<>();
@@ -78,8 +80,7 @@ public class guiCoreV4 {
     private XPanel pnlMenuBarH;
     private XPanel pnlBG;
     private XPanel pnlLoadSaves;
-
-    //TODO: Work on converting as many as possible to local variables.
+    private XPanel pnlTimer;
 
     private int launcherContentLoaded = 0; //tracks the content on the launcher
 
@@ -1746,9 +1747,20 @@ public class guiCoreV4 {
 
     private void loadPlayerBar() { //loads the bar at the top of the screen with the relevant player information
 
-        XPanel pnlTopBar = new XPanel(gfxRepository.clrBackground);
+        XPanel pnlTopBar = new XPanel();
         layers.add(pnlTopBar, new Integer(8), 0);
         pnlTopBar.setBounds(0, 0, screen.getWidth(), 53);
+
+        XLabel lblTopBarBackground = new XLabel(gfxRepository.topbar_bg);
+        layers.add(lblTopBarBackground, new Integer(7), 0);
+        lblTopBarBackground.setBounds(0, 0, screen.getWidth(), 53);
+        lblTopBarBackground.scaleImage(gfxRepository.topbar_bg);
+        lblTopBarBackground.setVisible(true);
+
+        XLabel lblTopBarShield = new XLabel(gfxRepository.topbar_shield);
+        layers.add(lblTopBarShield, new Integer(8), 0);
+        lblTopBarShield.setBounds(0, pnlTopBar.getHeight(), 66, 76);
+        lblTopBarShield.setVisible(true);
 
         XLabel lblMenu = new XLabel(gfxRepository.menuButton);
         pnlTopBar.add(lblMenu);
@@ -1998,16 +2010,14 @@ public class guiCoreV4 {
             }
         });
 
-        //TODO: Display current resources.
-
         XLabel icnTech = new XLabel(gfxRepository.researchIcon);
         pnlTopBar.add(icnTech);
         icnTech.setBounds(btnFleet.getX() + btnFleet.getWidth() + 10, 9, 34, 34);
         icnTech.setVisible(true);
 
-        XLabel lblTech = new XLabel(": " + uiFormat.format(gameSettings.player.getResearchTurn()), gfxRepository.txtSubtitle, gfxRepository.clrText);
+        XLabel lblTech = new XLabel(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo", gfxRepository.txtSubtitle, gfxRepository.clrText);
         pnlTopBar.add(lblTech);
-        lblTech.setBounds(icnTech.getX() + icnTech.getWidth() + 2, icnTech.getY(), 100, icnTech.getHeight());
+        lblTech.setBounds(icnTech.getX() + icnTech.getWidth() + 2, icnTech.getY(), 50, icnTech.getHeight());
         lblTech.setVerticalAlignment(SwingConstants.CENTER);
         lblTech.setVisible(true);
 
@@ -2016,9 +2026,12 @@ public class guiCoreV4 {
         icnEnergy.setBounds(lblTech.getX() + lblTech.getWidth() + 10, icnTech.getY(), 34, 34);
         icnEnergy.setVisible(true);
 
-        XLabel lblEnergy = new XLabel(": " + uiFormat.format(gameSettings.player.getCurrencyTurn()), gfxRepository.txtSubtitle, gfxRepository.clrText);
+        XLabel lblEnergy = new XLabel(": " + uiFormat.format(gameSettings.player.getFunds()) + " (" + uiFormat.format(gameSettings.player.getCurrencyTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        if (gameSettings.player.getCurrencyTurn() < 0) { //if the value is negative, display accordingly
+            lblEnergy.setForeground(gfxRepository.clrDisable);
+        }
         pnlTopBar.add(lblEnergy);
-        lblEnergy.setBounds(icnEnergy.getX() + icnEnergy.getWidth() + 2, icnEnergy.getY(), lblTech.getWidth(), icnEnergy.getHeight());
+        lblEnergy.setBounds(icnEnergy.getX() + icnEnergy.getWidth() + 2, icnEnergy.getY(), lblTech.getWidth() + 120, icnEnergy.getHeight());
         lblEnergy.setVerticalAlignment(SwingConstants.CENTER);
         lblEnergy.setVisible(true);
 
@@ -2027,17 +2040,47 @@ public class guiCoreV4 {
         icnMinerals.setBounds(lblEnergy.getX() + lblEnergy.getWidth() + 10, icnTech.getY(), 34, 34);
         icnMinerals.setVisible(true);
 
-        XLabel lblMinerals = new XLabel(": " + uiFormat.format(gameSettings.player.getResourcesTurn()), gfxRepository.txtSubtitle, gfxRepository.clrText);
+        XLabel lblMinerals = new XLabel(": " + uiFormat.format(gameSettings.player.getResources()) + " (" + uiFormat.format(gameSettings.player.getResourcesTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        if (gameSettings.player.getResourcesTurn() < 0) { //if the value is negative, display accordingly
+            lblMinerals.setForeground(gfxRepository.clrDisable);
+        }
         pnlTopBar.add(lblMinerals);
-        lblMinerals.setBounds(icnMinerals.getX() + icnMinerals.getWidth() + 2, icnMinerals.getY(), lblTech.getWidth(), icnMinerals.getHeight());
+        lblMinerals.setBounds(icnMinerals.getX() + icnMinerals.getWidth() + 2, icnMinerals.getY(), lblEnergy.getWidth(), icnMinerals.getHeight());
         lblMinerals.setVerticalAlignment(SwingConstants.CENTER);
         lblMinerals.setVisible(true);
 
         //displays the time scale
-        XPanel pnlTimer = new XPanel();
+        pnlTimer = new XPanel();
         pnlTopBar.add(pnlTimer);
         pnlTimer.setBounds(btnMenu.getX() - 155, 0, 150, pnlTopBar.getHeight());
         pnlTimer.setVisible(true);
+
+        if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
+            XLabel imgPauseBar = new XLabel(gfxRepository.pauseBar);
+            layers.add(imgPauseBar, new Integer(11), 0);
+            imgPauseBar.setBounds((screen.getWidth() / 2) - 170, pnlTopBar.getHeight(), 340, 37);
+            imgPauseBar.setVisible(true);
+
+            XLabel lblPauseBar = new XLabel("---- Game Paused ----", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            imgPauseBar.add(lblPauseBar);
+            lblPauseBar.setBounds(0, 0, imgPauseBar.getWidth(), imgPauseBar.getHeight());
+            lblPauseBar.setAlignments(SwingConstants.CENTER);
+            lblPauseBar.setVisible(true);
+
+        }
+
+        layers.add(pnlOverlay, new Integer(14), 0);
+        pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());
+        pnlOverlay.add(pnlPauseMenu);
+        pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
+        pnlPauseMenu.setVisible(true);
+        pnlOverlay.setVisible(false);
+
+    }
+
+    private void loadDate() { //tracks the current date and displays it
+
+        pnlTimer.removeAll(); //clear panel content
 
         XButton btnSlowTime = new XButton(gfxRepository.leftButton, SwingConstants.LEFT);
         pnlTimer.add(btnSlowTime);
@@ -2143,12 +2186,10 @@ public class guiCoreV4 {
             }
         });
 
-        layers.add(pnlOverlay, new Integer(14), 0);
-        pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());
-        pnlOverlay.add(pnlPauseMenu);
-        pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
-        pnlPauseMenu.setVisible(true);
-        pnlOverlay.setVisible(false);
+        XLabel lblCurrentDate = new XLabel();
+        pnlTimer.add(lblCurrentDate);
+        lblCurrentDate.setBounds(btnSlowTime.getX() + btnSlowTime.getWidth(), 0, btnSpeedTime.getX() - (btnSlowTime.getX() + btnSlowTime.getWidth()), pnlTimer.getHeight());
+        lblCurrentDate.setVisible(true);
 
     }
 

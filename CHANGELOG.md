@@ -486,3 +486,19 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added onto the UI somewhat.
 
 - Removed some unneeded GFX content.
+
+**MAY 30 2017** (ver.PTB-B) (U2)
+
+- Adjusted star GFX, added new images to diversify the icons somewhat. Still not final.
+
+- Added new UI GFX content.
+
+- Worked on the main UI somewhat.
+
+    - Added a pause bar to show when the game is paused.
+
+    - Changed the top bar design somewhat.
+
+    - Added some missing information.
+
+- Attempted to fix a minor issue with the audioCore.
