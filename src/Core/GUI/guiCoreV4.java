@@ -1592,11 +1592,11 @@ public class guiCoreV4 {
         pnlBG = new XPanel(gfxRepository.clrInvisible) {
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(Math.max(window.getWidth(), (tileSize * gameSettings.map.mapTiles.size() + 2)), Math.max(window.getHeight(), (tileSize * gameSettings.map.mapTiles.get(0).size() + 2)));
+                return new Dimension(Math.max(window.getWidth(), (tileSize * (gameSettings.map.mapTiles.size() + 4))), Math.max(window.getHeight(), (tileSize * (gameSettings.map.mapTiles.get(0).size() + 4))));
             };
         } ;
         layers.add(pnlBG, new Integer(2), 0);
-        pnlBG.setBounds(0, 0, Math.max(window.getWidth(), (tileSize * gameSettings.map.mapTiles.size() + 2)), Math.max(window.getHeight(), (tileSize * gameSettings.map.mapTiles.get(0).size() + 2)));
+        pnlBG.setBounds(0, 0, Math.max(window.getWidth(), (tileSize * (gameSettings.map.mapTiles.size() + 4))), Math.max(window.getHeight(), (tileSize * (gameSettings.map.mapTiles.get(0).size() + 4))));
         pnlBG.setAutoscrolls(true);
         pnlBG.setVisible(true);
 
@@ -1643,7 +1643,6 @@ public class guiCoreV4 {
 
         ArrayList<ArrayList<XLabel>> mapGFX = new ArrayList<>();
         ArrayList<ArrayList<XButton>> mapButton = new ArrayList<>();
-        ArrayList<ArrayList<XLabel>> starName = new ArrayList<>();
 
         int positionX;
         int positionY = 0;
@@ -1652,7 +1651,6 @@ public class guiCoreV4 {
         for (int i = 0; i < gameSettings.map.mapTiles.size(); i++) {
             mapGFX.add(new ArrayList<XLabel>());
             mapButton.add(new ArrayList<XButton>());
-            //starName.add(new ArrayList<XLabel>());
             positionX = 0;
 
             for (int j = 0; j < gameSettings.map.mapTiles.get(i).size(); j++) {
@@ -1667,11 +1665,11 @@ public class guiCoreV4 {
                         homeSystem.setVisible(true);
                     }
 
-                    //starName.get(i).add(new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getStarName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText));
-                    //pnlBG.add(starName.get(i).get(j));
-                    //starName.get(i).get(j).setBounds(tileSize * (positionX + 1), tileSize * (positionY + 1) + 30, tileSize, tileSize);
-                    //starName.get(i).get(j).setAlignments(SwingConstants.CENTER);
-                    //starName.get(i).get(j).setVisible(true);
+                    XLabel starName = new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getStarName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+                    pnlBG.add(starName);
+                    starName.setBounds(tileSize * (positionX + 1) - 25, tileSize * (positionY + 1) + 25, tileSize + 50, tileSize);
+                    starName.setAlignments(SwingConstants.CENTER);
+                    starName.setVisible(true);
 
                     mapButton.get(i).add(new XButton(gfxRepository.mapHighlight, SwingConstants.LEFT));
                     mapGFX.get(i).get(j).add(mapButton.get(i).get(j));
@@ -1767,7 +1765,7 @@ public class guiCoreV4 {
 
         XLabel lblTopBarShield = new XLabel(gfxRepository.topbar_shield);
         layers.add(lblTopBarShield, new Integer(8), 0);
-        lblTopBarShield.setBounds(0, pnlTopBar.getHeight(), 66, 76);
+        lblTopBarShield.setBounds(0, 0, 66, 76);
         lblTopBarShield.setVisible(true);
 
         XLabel lblMenu = new XLabel(gfxRepository.menuButton);
@@ -1835,7 +1833,7 @@ public class guiCoreV4 {
 
         XButton btnTech = new XButton(gfxRepository.techMenu, SwingConstants.LEFT);
         pnlTopBar.add(btnTech);
-        btnTech.setBounds(0, 0, 73, 53);
+        btnTech.setBounds(70, 0, 73, 53);
         btnTech.setVisible(true);
 
         btnTech.addMouseListener(new XMouseListener() {
@@ -2025,7 +2023,7 @@ public class guiCoreV4 {
 
         XLabel lblTech = new XLabel(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo", gfxRepository.txtSubtitle, gfxRepository.clrText);
         pnlTopBar.add(lblTech);
-        lblTech.setBounds(icnTech.getX() + icnTech.getWidth() + 2, icnTech.getY(), 50, icnTech.getHeight());
+        lblTech.setBounds(icnTech.getX() + icnTech.getWidth() + 2, icnTech.getY(), 90, icnTech.getHeight());
         lblTech.setVerticalAlignment(SwingConstants.CENTER);
         lblTech.setVisible(true);
 
@@ -2039,7 +2037,7 @@ public class guiCoreV4 {
             lblEnergy.setForeground(gfxRepository.clrDisable);
         }
         pnlTopBar.add(lblEnergy);
-        lblEnergy.setBounds(icnEnergy.getX() + icnEnergy.getWidth() + 2, icnEnergy.getY(), lblTech.getWidth() + 120, icnEnergy.getHeight());
+        lblEnergy.setBounds(icnEnergy.getX() + icnEnergy.getWidth() + 2, icnEnergy.getY(), lblTech.getWidth() + 80, icnEnergy.getHeight());
         lblEnergy.setVerticalAlignment(SwingConstants.CENTER);
         lblEnergy.setVisible(true);
 
@@ -2083,6 +2081,8 @@ public class guiCoreV4 {
         pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
         pnlPauseMenu.setVisible(true);
         pnlOverlay.setVisible(false);
+
+        loadDate();
 
     }
 
@@ -2313,9 +2313,14 @@ public class guiCoreV4 {
         });
 
         //displays the star's name
-        XLabel lblStarName = new XLabel(star.getStarName() + " - " +star.getStarClassName(), gfxRepository.txtHeader, gfxRepository.clrText);
+        XLabel lblStarName = new XLabel();
+        if (star.isBinarySystem()) {
+            lblStarName.setText(star.getStarName() + " - Binary " +star.getStarClassName(), gfxRepository.txtHeader, gfxRepository.clrText);
+        } else {
+            lblStarName.setText(star.getStarName() + " - " +star.getStarClassName(), gfxRepository.txtHeader, gfxRepository.clrText);
+        }
         lblBackground.add(lblStarName);
-        lblStarName.setBounds((pnlStarData.getWidth() / 2) - 300, 5, 600, 40);
+        lblStarName.setBounds((pnlStarData.getWidth() / 2) - 350, 5, 700, 40);
         lblStarName.setAlignments(SwingConstants.CENTER);
         lblStarName.setVisible(true);
 
@@ -2664,8 +2669,93 @@ public class guiCoreV4 {
             }
         });
 
-        //TODO: Set up system view.
+        //lol reusing code from galaxy map
 
+        pnlBG = new XPanel(gfxRepository.clrInvisible) {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(3000, 3000);
+            }
+        } ;
+        layers.add(pnlBG, new Integer(2), 0);
+        pnlBG.setBounds(0, 0, 3000, 3000);
+        pnlBG.setAutoscrolls(true);
+        pnlBG.setVisible(true);
+
+        XScrollPane mapView = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        layers.add(mapView, new Integer(3), 0);
+        mapView.setViewportView(pnlBG);
+        mapView.setBounds(0, 0, window.getWidth(), window.getHeight());
+        mapView.setVisible(true);
+
+        MouseAdapter mapScroller = new MouseAdapter() { //Taken from - https://stackoverflow.com/questions/31171502/scroll-jscrollpane-by-dragging-mouse-java-swing
+
+            private Point origin;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                origin = new Point(e.getPoint());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (origin != null) {
+                    JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, pnlBG);
+                    if (viewPort != null) {
+                        int deltaX = origin.x - e.getX();
+                        int deltaY = origin.y - e.getY();
+
+                        Rectangle view = viewPort.getViewRect();
+                        view.x += deltaX;
+                        view.y += deltaY;
+
+                        pnlBG.scrollRectToVisible(view);
+                    }
+                }
+            }
+
+        };
+
+        pnlBG.addMouseListener(mapScroller);
+        pnlBG.addMouseMotionListener(mapScroller);
+
+        if (gameSettings.map.mapTiles.get(y).get(x).getStarData().isBinarySystem()) { //system has binary stars, show accordingly
+            XLabel imgStar = new XLabel();
+            pnlBG.add(imgStar);
+            imgStar.setBounds((pnlBG.getWidth() / 2) - 300, (pnlBG.getHeight() / 2) - 150, 300, 300);
+            imgStar.scaleImage(gameSettings.map.mapTiles.get(y).get(x).getStarData().getIconGFX());
+            imgStar.setVisible(true);
+
+            XLabel imgStar2 = new XLabel();
+            pnlBG.add(imgStar2);
+            imgStar2.setBounds((pnlBG.getWidth() / 2), (pnlBG.getHeight() / 2) - 150, 300, 300);
+            imgStar2.scaleImage(gameSettings.map.mapTiles.get(y).get(x).getStarData().getIconGFX());
+            imgStar2.setVisible(true);
+
+            //visual for the orbit of the binary stars
+            XLabel binaryOrbit = new XLabel();
+            pnlBG.add(binaryOrbit);
+            binaryOrbit.setBounds((pnlBG.getWidth() / 2) - 150, (pnlBG.getHeight() / 2) - 150, 300, 300);
+            binaryOrbit.scaleImage(gfxRepository.orbitIndicator);
+            binaryOrbit.setVisible(true);
+
+        } else { //not binary - just one star
+            XLabel imgStar = new XLabel();
+            pnlBG.add(imgStar);
+            imgStar.setBounds((pnlBG.getWidth() / 2) - 150, (pnlBG.getHeight() / 2) - 150, 300, 300);
+            imgStar.scaleImage(gameSettings.map.mapTiles.get(y).get(x).getStarData().getIconGFX());
+            imgStar.setVisible(true);
+
+        }
+
+        //sets the viewport on the center of the map
+        Rectangle mapViewSize = mapView.getViewport().getViewRect();
+        Dimension mapSize = mapView.getViewport().getViewSize();
+        mapView.getViewport().setViewPosition(new Point(((mapSize.width - mapViewSize.width) / 2) - (screen.getWidth() / 2), ((mapSize.height - mapViewSize.height) / 2) - (screen.getHeight() / 2)));
 
         loadPlayerBar();
 

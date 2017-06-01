@@ -141,6 +141,7 @@ public class gfxRepository {
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
+    static BufferedImage orbitIndicator;
 
     static BufferedImage researchIcon;
     static BufferedImage mineralsIcon;
@@ -306,6 +307,7 @@ public class gfxRepository {
             pauseBar = ImageIO.read(new File(imageFolder + "/Resources/ui/paused_bar.png"));
             topbar_bg = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_background.png"));
             topbar_shield = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_shield_decoration.png"));
+            orbitIndicator = ImageIO.read(new File(imageFolder + "/Resources/background/orbit_indicate.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

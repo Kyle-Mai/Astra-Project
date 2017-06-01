@@ -508,3 +508,15 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Slightly adjusted main menu moon animations.
 
 - Attempted to add star names to map - no success.
+
+**JUNE 1 2017** (ver.PTB-B) (U2)
+
+- Added star GFX to system view.
+
+- Added UI support for binary stars, will not properly display in name and system view.
+
+- Added proper movement support for the system view.
+
+- Adjusted UI top bar positioning of elements.
+
+- Slightly adjusted planet and star classes.

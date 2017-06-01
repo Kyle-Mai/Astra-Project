@@ -18,41 +18,6 @@ public class planetClass extends planetCore implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-    @Override
-    public String toString() { //used when writing to a save file
-
-        StringBuffer data = new StringBuffer();
-
-        data.append("/");
-        data.append(this.getParentStar().getMapLocationX());
-        data.append("-");
-        data.append(this.getParentStar().getMapLocationY());
-        data.append("-");
-        data.append(this.getPlanetNumber());
-        data.append("-");
-        data.append(this.getPlanetType());
-        data.append("-");
-        data.append(this.getPlanetRadius());
-        data.append("-");
-        data.append(this.getDistanceFromStar());
-        data.append("-");
-        data.append(this.getResources());
-        data.append("-");
-        data.append(this.writeTidalLock());
-        data.append("-");
-        data.append(this.getNumOfMoons());
-
-        return data.toString();
-    }
-
-    private String writeTidalLock() {
-        if (this.getHabitability()) {
-            return "t";
-        } else {
-            return "f";
-        }
-    }
-
     /** planet construction methods **/
 
     //planet variables
@@ -85,6 +50,7 @@ public class planetClass extends planetCore implements Serializable {
         this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.
         this.isPlanetHabitable = determineHabitability(arrayLoc); //whether or not the planet can be colonized
         this.isHabited = false; //by default, the planet is not currently colonized
+        this.planetName = this.parentStar.getStarName() + " " + this.planetNumber;
         System.out.println("Planet '" + listOfPlanets.get(arrayLoc).getClassName() + "' (ID" + planetType + ") successfully generated.");
 
     }

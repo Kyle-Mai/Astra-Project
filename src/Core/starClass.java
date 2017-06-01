@@ -18,52 +18,11 @@ public class starClass extends starCore implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public String toString() { //used when writing to a save file
-
-        StringBuffer data = new StringBuffer();
-
-        data.append("/");
-        data.append(this.getMapLocationX());
-        data.append("-");
-        data.append(this.getMapLocationY());
-        data.append("-");
-        data.append(this.getStarIndex());
-        data.append("-");
-        data.append(this.getStarRadius());
-        data.append("-");
-        data.append(writeHabitability());
-        data.append("-");
-        data.append(writeBinary());
-        data.append("-");
-        data.append(this.getStarSpectral());
-        data.append("-");
-        data.append(this.getNumOfPlanets());
-
-        return data.toString();
-    }
-
-    private String writeHabitability() { //writes the star's habitability boolean as a single character string
-        if (this.starIsHabitable) {
-            return "t";
-        } else {
-            return "f";
-        }
-    }
-
-    private String writeBinary() { //gets the isBinarySystem variable's boolean as a single character string to write to file.
-        if (this.isBinarySystem) {
-            return "t";
-        } else {
-            return "f";
-        }
-    }
-
     public ArrayList<planetClass> planetList = new ArrayList<>(); //Stores a list of the different starType blueprints.
 
     private int starRadius;
     private Double starMagnitude = 0.0;
-    private String starSpectral;
+    private transient String starSpectral;
     private boolean starIsHabitable;
     private boolean isBinarySystem;
     private int numOfPlanets;
@@ -163,6 +122,7 @@ public class starClass extends starCore implements Serializable {
     public int getStarIndex() { return this.starIndex; }
     public String getStarSpectral() { return this.starSpectral; }
     public boolean isHomeSystem() { return this.homeSystem; }
+    public boolean isBinarySystem() { return this.isBinarySystem; }
 
     public BufferedImage getPortraitGFX() {
         return listOfStars.get(arrayLoc).getGfxImage();
