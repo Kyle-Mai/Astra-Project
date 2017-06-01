@@ -502,3 +502,9 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Added some missing information.
 
 - Attempted to fix a minor issue with the audioCore.
+
+**JUNE 1 2017** (ver.PTB-B) (U1)
+
+- Slightly adjusted main menu moon animations.
+
+- Attempted to add star names to map - no success.

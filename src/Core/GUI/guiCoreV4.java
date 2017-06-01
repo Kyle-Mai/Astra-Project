@@ -932,12 +932,12 @@ public class guiCoreV4 {
         menuSpaceport.setAnimationSmoothness(0.1, 200);
         menuSpaceport.start();
 
-        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -300, 700);
-        menuMoon2.setAnimationSmoothness(0.1, 150);
+        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -200, 720);
+        menuMoon2.setAnimationSmoothness(0.1, 180);
         menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
         menuMoon2.start();
 
-        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 550);
+        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 600);
         menuMoon1.setAnimationSmoothness(0.1, 150);
         menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
         menuMoon1.start();
@@ -1643,6 +1643,7 @@ public class guiCoreV4 {
 
         ArrayList<ArrayList<XLabel>> mapGFX = new ArrayList<>();
         ArrayList<ArrayList<XButton>> mapButton = new ArrayList<>();
+        ArrayList<ArrayList<XLabel>> starName = new ArrayList<>();
 
         int positionX;
         int positionY = 0;
@@ -1651,6 +1652,7 @@ public class guiCoreV4 {
         for (int i = 0; i < gameSettings.map.mapTiles.size(); i++) {
             mapGFX.add(new ArrayList<XLabel>());
             mapButton.add(new ArrayList<XButton>());
+            //starName.add(new ArrayList<XLabel>());
             positionX = 0;
 
             for (int j = 0; j < gameSettings.map.mapTiles.get(i).size(); j++) {
@@ -1664,6 +1666,12 @@ public class guiCoreV4 {
                         homeSystem.setAlignments(SwingConstants.CENTER);
                         homeSystem.setVisible(true);
                     }
+
+                    //starName.get(i).add(new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getStarName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText));
+                    //pnlBG.add(starName.get(i).get(j));
+                    //starName.get(i).get(j).setBounds(tileSize * (positionX + 1), tileSize * (positionY + 1) + 30, tileSize, tileSize);
+                    //starName.get(i).get(j).setAlignments(SwingConstants.CENTER);
+                    //starName.get(i).get(j).setVisible(true);
 
                     mapButton.get(i).add(new XButton(gfxRepository.mapHighlight, SwingConstants.LEFT));
                     mapGFX.get(i).get(j).add(mapButton.get(i).get(j));
