@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.AffineTransformOp;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -25,6 +26,8 @@ import java.util.Random;
  May 16 2017
  Fourth iteration of my UI core.
  Handles the creation and display of all UI elements, as well as the general event calls.
+
+ NOTE: Code is incredibly poorly optimized for space and efficiency... I eventually stopped giving half a damn about efficiency and favoured speed instead.
 
  SOURCES:
  Stack Overflow - Gif handling syntax, idea/syntax for creating layered panes, syntax for declaring new fonts.
@@ -76,11 +79,13 @@ public class guiCoreV4 {
     private animCore menuMoon2;
     private XButton btnQuit;
     private XPanel pnlStarData;
+    private XPanel pnlPlanetData;
     private XLabel lblLogo;
     private XPanel pnlMenuBarH;
     private XPanel pnlBG;
     private XPanel pnlLoadSaves;
     private XPanel pnlTimer;
+    private XLabel planetName;
 
     private int launcherContentLoaded = 0; //tracks the content on the launcher
 
@@ -2602,6 +2607,12 @@ public class guiCoreV4 {
 
         clearUI();
 
+        int planetPosition = 0;
+
+        ArrayList<planetButton> planet = new ArrayList<>();
+
+        starClass star = gameSettings.map.mapTiles.get(y).get(x).getStarData();
+
         bgPanel = new XLabel(gfxRepository.mainBackground);
         layers.add(bgPanel, new Integer(0), 0);
         bgPanel.setBounds(0, 0, screen.getWidth(), screen.getHeight());
@@ -2614,7 +2625,7 @@ public class guiCoreV4 {
 
         //System.out.println(x + "|" + y + " - " + gameSettings.map.mapTiles.get(y).get(x).getStarData().getStarName());
 
-        XLabel lblSystemName = new XLabel(gameSettings.map.mapTiles.get(y).get(x).getStarData().getStarName() + " System", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+        XLabel lblSystemName = new XLabel(star.getStarName() + " System", gfxRepository.txtButtonSmall, gfxRepository.clrText);
         layers.add(lblSystemName, new Integer(14), 0);
         lblSystemName.setBounds(imgSystemName.getBounds());
         lblSystemName.setAlignments(SwingConstants.CENTER);
@@ -2674,11 +2685,11 @@ public class guiCoreV4 {
         pnlBG = new XPanel(gfxRepository.clrInvisible) {
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(3000, 3000);
-            }
+                return new Dimension(5000, 5000);
+            } // Y U G E
         } ;
         layers.add(pnlBG, new Integer(2), 0);
-        pnlBG.setBounds(0, 0, 3000, 3000);
+        pnlBG.setBounds(0, 0, 5000, 5000);
         pnlBG.setAutoscrolls(true);
         pnlBG.setVisible(true);
 
@@ -2723,17 +2734,17 @@ public class guiCoreV4 {
         pnlBG.addMouseListener(mapScroller);
         pnlBG.addMouseMotionListener(mapScroller);
 
-        if (gameSettings.map.mapTiles.get(y).get(x).getStarData().isBinarySystem()) { //system has binary stars, show accordingly
+        if (star.isBinarySystem()) { //system has binary stars, show accordingly
             XLabel imgStar = new XLabel();
             pnlBG.add(imgStar);
             imgStar.setBounds((pnlBG.getWidth() / 2) - 300, (pnlBG.getHeight() / 2) - 150, 300, 300);
-            imgStar.scaleImage(gameSettings.map.mapTiles.get(y).get(x).getStarData().getIconGFX());
+            imgStar.scaleImage(star.getIconGFX());
             imgStar.setVisible(true);
 
             XLabel imgStar2 = new XLabel();
             pnlBG.add(imgStar2);
             imgStar2.setBounds((pnlBG.getWidth() / 2), (pnlBG.getHeight() / 2) - 150, 300, 300);
-            imgStar2.scaleImage(gameSettings.map.mapTiles.get(y).get(x).getStarData().getIconGFX());
+            imgStar2.scaleImage(star.getIconGFX());
             imgStar2.setVisible(true);
 
             //visual for the orbit of the binary stars
@@ -2747,8 +2758,84 @@ public class guiCoreV4 {
             XLabel imgStar = new XLabel();
             pnlBG.add(imgStar);
             imgStar.setBounds((pnlBG.getWidth() / 2) - 150, (pnlBG.getHeight() / 2) - 150, 300, 300);
-            imgStar.scaleImage(gameSettings.map.mapTiles.get(y).get(x).getStarData().getIconGFX());
+            imgStar.scaleImage(star.getIconGFX());
             imgStar.setVisible(true);
+
+        }
+
+        for (int i = 0; i < star.planetList.size(); i++) {
+
+            Random r = new Random();
+
+            XLabel imgPlanet = new XLabel();
+            pnlBG.add(imgPlanet);
+            imgPlanet.setBounds(((pnlBG.getWidth() / 2) + 250) + planetPosition, (pnlBG.getHeight() / 2) - 25, 50, 50);
+            imgPlanet.scaleImage(planetCore.listOfPlanets.get(star.planetList.get(i).getArrayLoc()).getPlanetIcon());
+            imgPlanet.setVisible(true);
+
+            planet.add(new planetButton(star, i));
+            //pnlBG.add(planet.get(i));
+            //planet.get(i).setBounds(((pnlBG.getWidth() / 2) + 250) + (90 * i), (pnlBG.getHeight() / 2) - 25, 50, 50);
+            imgPlanet.add(planet.get(i));
+            planet.get(i).setBounds(0, 0, imgPlanet.getWidth(), imgPlanet.getHeight());
+            planet.get(i).setBackground(gfxRepository.clrInvisible);
+            planet.get(i).setPlanet(star.planetList.get(i));
+            planet.get(i).setBorder(null);
+            planet.get(i).setOpaque(false);
+            planet.get(i).setVisible(true);
+
+            planet.get(i).addMouseListener(new XMouseListener() {
+                planetButton source;
+
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    source = (planetButton)mouseEvent.getSource();
+                    audioRepository.buttonClick();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    window.refresh();
+
+                    loadPlanetData(source.getPlanet());
+                }
+
+                @Override
+                public void mousePressed(MouseEvent mouseEvent) {
+                    source = (planetButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent mouseEvent) {
+                    source = (planetButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent mouseEvent) {
+                    source = (planetButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.CENTER);
+                    planetName = new XLabel();
+                    source.add(planetName);
+                    planetName.setBounds(source.getBounds());
+                    //planetName.setText(source.getPlanet().getPlanetName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+                    planetName.setText("View", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+                    planetName.setAlignments(SwingConstants.CENTER, SwingConstants.BOTTOM);
+                    planetName.setVisible(true);
+
+                    window.refresh();
+                }
+
+                @Override
+                public void mouseExited(MouseEvent mouseEvent) {
+                    source = (planetButton)mouseEvent.getSource();
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    source.removeAll();
+                    window.refresh();
+                }
+            });
+
+            planetPosition = planetPosition + (75 + r.nextInt(160)); //TODO: Should eventually weight a little better....
 
         }
 
@@ -2757,7 +2844,111 @@ public class guiCoreV4 {
         Dimension mapSize = mapView.getViewport().getViewSize();
         mapView.getViewport().setViewPosition(new Point(((mapSize.width - mapViewSize.width) / 2) - (screen.getWidth() / 2), ((mapSize.height - mapViewSize.height) / 2) - (screen.getHeight() / 2)));
 
+        pnlPlanetData = new XPanel();
+        layers.add(pnlPlanetData, new Integer(10), 0);
+        pnlPlanetData.setBounds((screen.getWidth() / 2) - 400, 100, 800, screen.getHeight() - 200);
+        pnlPlanetData.setVisible(false);
+
         loadPlayerBar();
+
+        window.refresh();
+
+    }
+
+    private void loadPlanetData(planetClass planet) {
+
+        //TODO: Can probably reuse star panel...?
+
+        pnlPlanetData.removeAll();
+
+        pnlPlanetData.setVisible(true);
+
+        XLabel lblPlanetPortrait = new XLabel(planetCore.listOfPlanets.get(planet.getArrayLoc()).getGfxImage(), gfxRepository.clrTrueBlack);
+        pnlPlanetData.add(lblPlanetPortrait);
+        lblPlanetPortrait.setBounds((pnlPlanetData.getWidth() / 2) - 280, 0, 560, 185);
+        lblPlanetPortrait.setVisible(true);
+
+        XLabel lblPortraitBorder = new XLabel(gfxRepository.portraitBorder);
+        lblPlanetPortrait.add(lblPortraitBorder);
+        lblPortraitBorder.setBounds(0, 0, lblPlanetPortrait.getWidth(), lblPlanetPortrait.getHeight());
+        lblPortraitBorder.setVisible(true);
+
+        //displays the background
+        XLabel lblBackground = new XLabel(gfxRepository.menuBackground, gfxRepository.clrBGOpaque);
+        pnlPlanetData.add(lblBackground);
+        lblBackground.setBounds(0, lblPlanetPortrait.getHeight(), pnlPlanetData.getWidth(), pnlPlanetData.getHeight() - lblPlanetPortrait.getHeight());
+        lblBackground.scaleImage(gfxRepository.menuBackground);
+        lblBackground.setVisible(true);
+
+        XLabel lblStatsBox = new XLabel(gfxRepository.tallBox);
+        lblBackground.add(lblStatsBox);
+        lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
+        lblStatsBox.setVisible(true);
+
+        XLabel lblPlanetName = new XLabel();
+        lblPlanetName.setText(planet.getPlanetName() + " - " + planet.getPlanetClassName() , gfxRepository.txtHeader, gfxRepository.clrText);
+        lblBackground.add(lblPlanetName);
+        lblPlanetName.setBounds((pnlPlanetData.getWidth() / 2) - 350, 5, 700, 40);
+        lblPlanetName.setAlignments(SwingConstants.CENTER);
+        lblPlanetName.setVisible(true);
+
+        XLabel lblPlanetDesc = new XLabel("<html>" + planet.getPlanetClassDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+        lblBackground.add(lblPlanetDesc);
+        lblPlanetDesc.setBounds(40, lblPlanetName.getY() + lblPlanetName.getHeight() + 15, lblStatsBox.getX() - 40, 200);
+        lblPlanetDesc.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
+        lblPlanetDesc.setVisible(true);
+
+        //displays the close button
+        XButton btnClose = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
+        lblBackground.add(btnClose);
+        btnClose.setBounds(lblBackground.getWidth() - 48, 10, 38, 38);
+        btnClose.setOpaque(true);
+        btnClose.setVisible(true);
+
+        btnClose.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.buttonDisable();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                pnlPlanetData.removeAll();
+                pnlPlanetData.setVisible(false);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
 
         window.refresh();
 

@@ -1,5 +1,6 @@
 package Core;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -10,8 +11,6 @@ import java.util.ArrayList;
 Essentially works the same as the starCore, but for planets.
 
  **/
-
-//TODO: Finish converting the planetClass to the Core/Class format.
 
 public class planetCore {
 
@@ -75,28 +74,28 @@ public class planetCore {
 
     //Sets all of the predefined blueprints into a variable ArrayList (listOfPlanets) to allow for dynamic addition/removal of planet types.
     private static void createPlanetTypes(){
-        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 82, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300));
-        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 58, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100));
-        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 55, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300));
-        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 76, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300));
-        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 58, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800));
-        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 49,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400));
-        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 70, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000));
-        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 60, "", true, 2400, 600));
-        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 52, "", true, 2500, 900));
-        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2109, 28, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900));
-        listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 35,  "", false, 2300, 1700));
-        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 42, "", false, 3200, 2000));
-        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 11, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400));
-        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 17, "", false, 80000, 32000));
-        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 84, "", false, 3000, 2400));
-        listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 14, "", false, 2600, 1200));
-        listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 10, "", false, 1800, 900));
-        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 12, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000));
-        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 18, "", false, 2700, 1300));
-        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 10, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100));
-        listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400));
-        listOfPlanets.add(new planetType("Ice Giant", 2021, 2108, 10, "An ice giant, while similar to gas giants, contains more 'icey' elements such as water, ammonia, and methane.", false, 320000, 10000));
+        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 82, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/continental_planet.png"));
+        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 58, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 55, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 76, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 58, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Ice World", 2005, 2101, 49,  "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 2800, 1400, "/Core/GUI/Resources/portraits/ice_planet.png", "/Core/GUI/Resources/planets/ice_planet.png"));
+        listOfPlanets.add(new planetType("Desert World", 2006, 2102, 70, "This planet is covered in a surface almost completely composed of frozen water. In some places, the ice extends for kilometers under the surface before thawing.", true, 3100, 2000, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Swamp World", 2007, 2102, 60, "", true, 2400, 600, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/swamp_planet.png"));
+        listOfPlanets.add(new planetType("Tropical World", 2008, 2102, 52, "", true, 2500, 900, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Greenhouse World", 2009, 2109, 28, "The atmosphere of this planet is thick with greenhouse gases, perpetually feeding an endless heating cycle in the atmosphere.", false, 4100, 2900, "/Core/GUI/Resources/portraits/toxic_planet.png", "/Core/GUI/Resources/planets/toxic_planet_01.png"));
+        listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 35,  "", false, 2300, 1700, "/Core/GUI/Resources/portraits/frozen_planet.png", "/Core/GUI/Resources/planets/frozen_planet.png"));
+        listOfPlanets.add(new planetType("Molten World", 2011, 2109, 42, "", false, 3200, 2000, "/Core/GUI/Resources/portraits/molten_planet.png", "/Core/GUI/Resources/planets/molten_planet.png"));
+        listOfPlanets.add(new planetType("Storm World", 2012, 2103, 11, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/storm_planet.png"));
+        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 17, "", false, 80000, 32000, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/planets/gas_giant_01.png"));
+        listOfPlanets.add(new planetType("Barren World", 2014, 2105, 84, "", false, 3000, 2400, "/Core/GUI/Resources/portraits/barren_planet.png", "/Core/GUI/Resources/planets/barren_planet_01.png"));
+        listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 14, "", false, 2600, 1200, "/Core/GUI/Resources/portraits/asteroid_sky.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 10, "", false, 1800, 900, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
+        listOfPlanets.add(new planetType("Radioactive World", 2017, 2103, 12, "The surface of this planet is littered with radioactive ore deposits. Rapidly degrading, they spew out massive swaths of radiation across the planet's surface.", false, 3200, 2000, "/Core/GUI/Resources/portraits/toxic_planet.png", "/Core/GUI/Resources/planets/nuclear_planet.png"));
+        listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 18, "", false, 2700, 1300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/carbon_planet.png"));
+        listOfPlanets.add(new planetType("Iron World", 2019, 2105, 10, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/iron_planet.png"));
+        listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/lush_planet.png"));
+        listOfPlanets.add(new planetType("Ice Giant", 2021, 2108, 10, "An ice giant, while similar to gas giants, contains more 'icey' elements such as water, ammonia, and methane.", false, 320000, 10000, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/planets/ice_giant.png"));
 
     }
 
@@ -107,9 +106,13 @@ public class planetCore {
         int planetID, climateID, sizeWeight, sizeVariation, spawnWeight;
         String classDesc;
         boolean habitable;
+        String icon;
+        String gfx;
+        BufferedImage gfxImage;
+        BufferedImage planetIcon;
 
         //Constructor method.
-        public planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation){
+        public planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation, String gfx, String icon){
             this.className = Name; //Name of the world's biome.
             this.planetID = objectID; //The ID used to reference the planet.
             this.spawnWeight = spawnWeight; //The weight assigned to this planet type. Determines how often it spawns relative to other planets in the same climate class.
@@ -118,6 +121,8 @@ public class planetCore {
             this.habitable = isHabitable; //Whether or not the player can build a settlement here.
             this.sizeWeight = sizeWeight; //Weighted median size, determines the average size of this type of planet.
             this.sizeVariation = sizeVariation; //Determines how much the size of the planet varies from the median.
+            this.icon = icon;
+            this.gfx = gfx;
         }
 
         //Accessor methods for calling the planet blueprint variables.
@@ -127,6 +132,13 @@ public class planetCore {
         protected String getClassDesc() { return this.classDesc; }
         protected boolean getHabitable() { return this.habitable; }
         protected int getSpawnWeight() { return this.spawnWeight; }
+        public BufferedImage getGfxImage() { return this.gfxImage; }
+        public BufferedImage getPlanetIcon() { return this.planetIcon; }
+        public String getIcon() { return this.icon; }
+        public String getGfx() { return this.gfx; }
+
+        public void setGfxImage(BufferedImage gfxa) { this.gfxImage = gfxa; }
+        public void setPlanetIcon(BufferedImage icona) { this.planetIcon = icona; }
 
     }
 
@@ -210,7 +222,7 @@ public class planetCore {
 
         distanceFromStar = randomNumber(distanceMin, distanceMax);
 
-        //If this isn't the first planet, we need to make sure the planet orbits don't overlap //TODO: Code is broken and freezes here. Need to fix.
+        //If this isn't the first planet, we need to make sure the planet orbits don't overlap
         /*if (planetNumber > 0) {
             //until the conditions are met
             while (incompatible) {

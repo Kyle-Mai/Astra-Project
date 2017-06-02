@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
  */
 
-//TODO: Add methods, begin filling out.
-
 public class starClass extends starCore implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +21,7 @@ public class starClass extends starCore implements Serializable {
     private int starRadius;
     private Double starMagnitude = 0.0;
     private transient String starSpectral;
-    private boolean starIsHabitable;
+    private transient boolean starIsHabitable;
     private boolean isBinarySystem;
     private int numOfPlanets;
     private int surfaceTemp;
@@ -53,7 +51,7 @@ public class starClass extends starCore implements Serializable {
         this.mapLocationX = mapLocationX; //the X position of the star on the map grid
         this.mapLocationY = mapLocationY; //the Y position of the star on the map grid
         this.starName = chooseStarName(); //gets the name of the star
-        System.out.println("Star (ID" + starIndex + ") successfully generated at the coordinates " + mapLocationX + "|" + mapLocationY);
+        //System.out.println("Star (ID" + starIndex + ") successfully generated at the coordinates " + mapLocationX + "|" + mapLocationY);
         if (this.numOfPlanets > 0) {
             constructPlanets(this.numOfPlanets);
         }
@@ -63,7 +61,7 @@ public class starClass extends starCore implements Serializable {
 
     //creates a pre-defined star
     public starClass(int mapLocationX, int mapLocationY, String starName, int starIndex, boolean isHabitable, String spectralClass, Double magnitude, int radius, boolean isBinary, int numOfPlanets, boolean randomPlanets) {
-        System.out.println("Added new pre-defined star system - " + starName + " System (ID" + starIndex + ")");
+        //System.out.println("Added new pre-defined star system - " + starName + " System (ID" + starIndex + ")");
 
         this.mapLocationX = mapLocationX;
         this.mapLocationY = mapLocationY;
@@ -87,7 +85,7 @@ public class starClass extends starCore implements Serializable {
 
     //generates the planets surrounding this star
     private void constructPlanets(int planetsToConstruct) {
-        System.out.println("Constructing " + planetsToConstruct + " planets.");
+        //System.out.println("Constructing " + planetsToConstruct + " planets.");
         for (int i = 1; i <= planetsToConstruct; i++) {
             planetList.add(new planetClass(this, i));
         }
@@ -123,6 +121,7 @@ public class starClass extends starCore implements Serializable {
     public String getStarSpectral() { return this.starSpectral; }
     public boolean isHomeSystem() { return this.homeSystem; }
     public boolean isBinarySystem() { return this.isBinarySystem; }
+    public boolean isStarHabitable() { return this.starIsHabitable; }
 
     public BufferedImage getPortraitGFX() {
         return listOfStars.get(arrayLoc).getGfxImage();

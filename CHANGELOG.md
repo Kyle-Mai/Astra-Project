@@ -520,3 +520,15 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Adjusted UI top bar positioning of elements.
 
 - Slightly adjusted planet and star classes.
+
+**JUNE 1 2017** (ver.PTB-B) (U3)
+
+- Added new GFX for planets and ships.
+
+    - Updated planetCore/Class to work with the new GFX.
+
+    - Temporary disabled star modding during this process.
+
+- Added new planet view to the UI.
+
+    - Planets are also now displayed in system view.

@@ -25,7 +25,7 @@ public class planetClass extends planetCore implements Serializable {
     private int planetRadius;
     private boolean isTidallyLocked;
     private int planetType;
-    private boolean isInHabitableZone;
+    //private boolean isInHabitableZone;
     private starClass parentStar;
     private boolean isPlanetHabitable;
     private boolean isHabited;
@@ -45,13 +45,13 @@ public class planetClass extends planetCore implements Serializable {
         this.distanceFromStar = determineDistanceFromStar(this.parentStar, this.planetNumber);
         this.planetRadius = calculateSize(parentStar.getStarRadius(), this.distanceFromStar); //determines the radius of the planet in km
         this.isTidallyLocked = checkTidalLock(this.planetRadius, parentStar.getStarRadius()); //runs a check to determine tidal lock
-        this.isInHabitableZone = isInHabitableZone(this.distanceFromStar, parentStar.getHabitableZoneMax(), parentStar.getHabitableZoneMin());
-        this.planetType = determinePlanetClass(this.distanceFromStar, this.planetRadius, this.isTidallyLocked, this.isInHabitableZone, this.parentStar); //determines the planet's class
-        this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.
+        //this.isInHabitableZone = isInHabitableZone(this.distanceFromStar, parentStar.getHabitableZoneMax(), parentStar.getHabitableZoneMin());
         this.isPlanetHabitable = determineHabitability(arrayLoc); //whether or not the planet can be colonized
+        this.planetType = determinePlanetClass(this.distanceFromStar, this.planetRadius, this.isTidallyLocked, this.isPlanetHabitable, this.parentStar); //determines the planet's class
+        this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.
         this.isHabited = false; //by default, the planet is not currently colonized
         this.planetName = this.parentStar.getStarName() + " " + this.planetNumber;
-        System.out.println("Planet '" + listOfPlanets.get(arrayLoc).getClassName() + "' (ID" + planetType + ") successfully generated.");
+        //System.out.println("Planet '" + listOfPlanets.get(arrayLoc).getClassName() + "' (ID" + planetType + ") successfully generated.");
 
     }
 
@@ -63,13 +63,13 @@ public class planetClass extends planetCore implements Serializable {
         this.planetNumber = planetNumber;
         this.distanceFromStar = distanceFromStar;
         this.planetRadius = planetRadius;
-        this.isInHabitableZone = isInHabitableZone;
+        //this.isInHabitableZone = isInHabitableZone;
         this.arrayLoc = getPlanetFromID(this.planetType);
         this.isHabited = isHabited;
         this.isPlanetHabitable = isPlanetHabitable;
         this.isTidallyLocked = isTidallyLocked;
         this.numOfMoons = numOfMoons;
-        System.out.println("Predefined planet '" + listOfPlanets.get(arrayLoc).getClassName() + " [" + this.planetName + "] (ID" + planetType + ") successfully generated in the " + parentStar.getStarName() + " system.");
+        //System.out.println("Predefined planet '" + listOfPlanets.get(arrayLoc).getClassName() + " [" + this.planetName + "] (ID" + planetType + ") successfully generated in the " + parentStar.getStarName() + " system.");
 
     }
 
@@ -87,6 +87,9 @@ public class planetClass extends planetCore implements Serializable {
     public int getNumOfMoons() { return this.numOfMoons; }
     public colonyCore getPlanetColony() { return this.planetColony; }
     public double getResources() { return this.resources; }
+    public int getArrayLoc() { return this.arrayLoc; }
+    public String getPlanetClassName() { return planetClass.listOfPlanets.get(arrayLoc).getClassName(); }
+    public String getPlanetClassDesc() { return planetClass.listOfPlanets.get(arrayLoc).getClassDesc(); }
 
     /** Setter methods **/
 

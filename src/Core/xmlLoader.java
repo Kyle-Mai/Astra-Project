@@ -638,7 +638,7 @@ public class xmlLoader {
                         boolean replacesContent = false;
                         for (int j = 0; j < planetClass.listOfPlanets.size(); j++) {
                             if (planetClass.listOfPlanets.get(j).getPlanetID() == planetID) {
-                                planetClass.listOfPlanets.add(j, new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
+                                //planetClass.listOfPlanets.add(j, new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
                                 System.out.println("[OVERWRITE] Planet successfully loaded - " + className + " (ID" + planetID + ")");
                                 replacesContent = true;
                                 break; //duplicate already found and replaced, no point in continuing the index
@@ -646,7 +646,7 @@ public class xmlLoader {
                         }
                         //adds the new planet to the planet list if it wasn't already added
                         if (!replacesContent) {
-                            planetClass.listOfPlanets.add(new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
+                            //planetClass.listOfPlanets.add(new planetCore.planetType(className, planetID, climateID, spawnWeight, classDesc, habitable, sizeWeight, sizeVariation));
                             System.out.println("[NEW] Planet successfully loaded - " + className + " (ID" + planetID + ")");
                         }
                     } else { //something in this mod wasn't properly initialized, do not load it

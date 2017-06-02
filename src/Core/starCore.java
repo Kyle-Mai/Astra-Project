@@ -43,7 +43,7 @@ public class starCore {
             "Kuma", "Musashi", "Lazarus", "Lastus", "Mang", "Marath", "Magam", "Medgar", "Matsonia", "Mareid", "Mihil", "Mestros", "Mecura", "Mordor", "Naos", "Nashira", "Nembus", "Navi", "Nuranka", "Nodro", "Nox",
             "Oberon", "Obrium", "Osellus", "Parsax", "Peith", "Pentarym", "Pulcor", "Pyla", "Beowulf", "Runa", "Rixim", "Ridathi", "Regganus", "Roma", "Saia", "Sarack", "Selnoc", "Sosta", "Sterope", "Subra", "Sym",
             "Targon", "Teae", "Taramda", "Tir", "Torovil", "Tyl", "Tyastedore", "Umbra", "Ublion", "Ulysses", "Uldor", "Ulym", "Unatra", "Vega", "Vhallas", "Vokkon", "Vermillion", "Wezen", "Wir", "Wolfen", "Wolgun",
-            "Xema", "Xudra", "Xolton", "Yggdrasil", "Yotla", "Yval", "Zaffa", "Zeldrah", "Zuben", "Zirq", "Zonn", "Nidus", "Halholme"};
+            "Xema", "Xudra", "Xolton", "Yggdrasil", "Yotla", "Yval", "Zaffa", "Zeldrah", "Zuben", "Zirq", "Zonn", "Nidus", "Halholme", "Pol", "Freyja"};
 
     /** General variables **/
     //General variables used by the starCore class.
@@ -181,11 +181,11 @@ public class starCore {
     protected String chooseStarName() {
         int chooseName;
 
-        while (true) { //TODO: Maybe eventually convert to a for to prevent accidental infinite loops?
+        while (true) { //TODO: Maybe eventually convert to a for to prevent accidental infinite loops (rare but possible)?
             Random dice = new Random();
             chooseName = dice.nextInt(STARS.length);
 
-            System.out.println("Deciding star name...");
+            //System.out.println("Deciding star name...");
 
             valid:
             {

@@ -1,5 +1,6 @@
 package Core.GUI;
 
+import Core.planetCore;
 import Core.starCore;
 import com.sun.javafx.tk.*;
 
@@ -260,9 +261,30 @@ public class gfxRepository {
                 temporaryImage = ImageIO.read(directory);
                 starCore.listOfStars.get(i).setStarIcon(temporaryImage);
                 System.out.print(starCore.listOfStars.get(i).getName() + " GFX content loaded successfully. ");
+                //clear variables for garbage collector
+                temporaryImage = null;
+                directory = null;
             } catch (IOException e) {
                 e.printStackTrace(); //TODO: Add a default for if it fails to load.
             }
+        }
+
+        for (int i = 0; i < planetCore.listOfPlanets.size(); i++) {
+
+            try {
+                directory = new File(System.getProperty("user.dir") + "/src" + planetCore.listOfPlanets.get(i).getGfx()); //sets the star's icon
+                temporaryImage = ImageIO.read(directory);
+                planetCore.listOfPlanets.get(i).setGfxImage(temporaryImage);
+                directory = new File(System.getProperty("user.dir") + "/src" + planetCore.listOfPlanets.get(i).getIcon());
+                temporaryImage = ImageIO.read(directory);
+                planetCore.listOfPlanets.get(i).setPlanetIcon(temporaryImage);
+                //clear variables for garbage collector
+                temporaryImage = null;
+                directory = null;
+            } catch (IOException e) {
+                e.printStackTrace(); //TODO: Add a default for if it fails to load.
+            }
+
         }
 
         System.out.println("\nContent GFX loaded.");

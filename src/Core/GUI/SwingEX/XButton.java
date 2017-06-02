@@ -20,9 +20,16 @@ import java.awt.image.BufferedImage;
 public class XButton extends JButton {
 
     private boolean state = false;
+    private int identifier = 0;
 
     public XButton() {
         this.setFocusPainted(false);
+
+    }
+
+    public XButton(int identifier) {
+        this.setFocusPainted(false);
+        this.identifier = identifier;
 
     }
 
