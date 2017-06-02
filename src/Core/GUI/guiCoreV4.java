@@ -86,6 +86,7 @@ public class guiCoreV4 {
     private XPanel pnlLoadSaves;
     private XPanel pnlTimer;
     private XLabel planetName;
+    private XLabel lblCurrentDate;
 
     private int launcherContentLoaded = 0; //tracks the content on the launcher
 
@@ -863,13 +864,10 @@ public class guiCoreV4 {
                             gameLoader.mapLoader(gameSettings.map, gameSettings.player);
                             break;
                         case 43: //save the data to the user file
-                            gameSettings.player.addMapString(gameSettings.map);
                             break;
                         case 44:
-                            gameSettings.player.addStarString(gameSettings.map);
                             break;
                         case 45:
-                            gameSettings.player.addPlanetString(gameSettings.map);
                             break;
                         case 80: //set up some of the UI content
                             pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
@@ -892,7 +890,7 @@ public class guiCoreV4 {
 
         protected void done() {
 
-            loadingBar.setString("Complete");
+            loadingBar.setString("Loading Complete.");
 
             if (load == 1) { //load main menu
 
@@ -905,6 +903,8 @@ public class guiCoreV4 {
                 audioRepository.musicShuffle();
                 audioRepository.ambianceMainGame();
                 loadMapView();
+                gameSettings.turn = new turnTicker();
+                gameSettings.turn.start();
 
             }
         }
@@ -2199,10 +2199,65 @@ public class guiCoreV4 {
             }
         });
 
-        XLabel lblCurrentDate = new XLabel();
+        lblCurrentDate = new XLabel();
         pnlTimer.add(lblCurrentDate);
         lblCurrentDate.setBounds(btnSlowTime.getX() + btnSlowTime.getWidth(), 0, btnSpeedTime.getX() - (btnSlowTime.getX() + btnSlowTime.getWidth()), pnlTimer.getHeight());
+        lblCurrentDate.setText("Turn: " + gameSettings.currentDate, gfxRepository.txtSubtitle, gfxRepository.clrText);
+        lblCurrentDate.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
         lblCurrentDate.setVisible(true);
+
+        XButton btnPause = new XButton("test", gfxRepository.txtSubtitle, gfxRepository.clrText, gfxRepository.clrDisable);
+        layers.add(btnPause, new Integer(15), 0);
+        btnPause.setBounds(0, 500, 100, 60);
+        btnPause.setVisible(true);
+
+        btnPause.addMouseListener(new XMouseListener() {
+            XButton source;
+
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+
+                if (gameSettings.gameIsPaused) {
+                    gameSettings.gameIsPaused = false;
+                    audioRepository.buttonSelect();
+                } else {
+                    audioRepository.buttonDisable();
+                    gameSettings.gameIsPaused = true;
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                audioRepository.menuTab();
+                //source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                //source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
 
     }
 
@@ -2952,6 +3007,13 @@ public class guiCoreV4 {
 
         window.refresh();
 
+    }
+
+    public void turnTick() { //refreshes the UI elements that need it when the turn ticks up
+        lblCurrentDate.setText("Turn: " + gameSettings.currentDate, gfxRepository.txtSubtitle, gfxRepository.clrText);
+
+
+        window.refresh();
     }
 
 

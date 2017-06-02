@@ -1,5 +1,6 @@
 package Core;
 
+import Core.GUI.guiCoreV4;
 import Core.Player.playerData;
 
 /**
@@ -11,11 +12,15 @@ import Core.Player.playerData;
 
 public class gameSettings {
 
-    //variables to store the core classes of each type to allow them to be passed around to whatever requests them
+    //variables to store the core classes of each type to allow them to be passed around to whatever thread requests them
 
     public volatile static mapGenerator map;
 
     public volatile static playerData player;
+
+    public volatile static guiCoreV4 ui;
+
+    public volatile static turnTicker turn;
 
     //TODO: Experiment with volatile...
 
@@ -56,6 +61,7 @@ public class gameSettings {
 
     public static final int[] timeScale = {500, 1000, 1500, 2000, 2500}; //essentially how fast each turn ticks
     public static int currentTime = 2; //current time scale
+    public static volatile int currentDate = 0;
 
     public static boolean gameIsPaused = true; //whether or not the game is paused
 

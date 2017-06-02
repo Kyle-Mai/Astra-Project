@@ -50,8 +50,8 @@ public class gameLoader {
         System.out.println("Loading UI core...");
         javax.swing.SwingUtilities.invokeLater(new Runnable() { //open up a new thread for the UI
             public void run() {
-                guiCoreV4 UI = new guiCoreV4(11);
-                UI.loadLauncherScreen();
+                gameSettings.ui = new guiCoreV4(11);
+                gameSettings.ui.loadLauncherScreen();
             }
         } );
 

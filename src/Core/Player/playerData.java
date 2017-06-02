@@ -41,6 +41,7 @@ public class playerData {
 
     private double research;
     private int techLevel;
+    private int currentTurn;
 
     private double researchTurn = 0;
     private double currencyTurn = 0;
@@ -49,10 +50,6 @@ public class playerData {
     private String tech1;
     private String tech2;
     private String tech3;
-
-    private String mapData;
-    private String starData;
-    private String planetData;
 
     private int difficulty;
 
@@ -63,6 +60,14 @@ public class playerData {
     private double productionMultiplier = 1;
 
     private ArrayList<colonyCore> playerColonies = new ArrayList<>();
+
+    public void turnTick() { //ticks the turn
+        this.research = this.research + this.researchTurn;
+        this.funds = this.funds + this.currencyTurn;
+        this.resources = this.resources + this.resourcesTurn;
+        this.currentTurn = gameSettings.currentDate;
+
+    }
 
     public playerData() {
     }
@@ -79,6 +84,8 @@ public class playerData {
         this.research = 0;
         this.resources = 0;
         this.techLevel = 0;
+        this.currentTurn = 0;
+        gameSettings.currentDate = currentTurn;
 
         this.difficulty = gameSettings.currDifficulty; //saves the selected user difficulty
 
@@ -135,51 +142,6 @@ public class playerData {
         Date current = new Date();
 
         return dateFormat.format(current);
-    }
-
-    public void addMapString(mapGenerator map) { //saves the map data to the user data
-
-        //this.mapData = map.toString();
-
-        try {
-            save.write(new File(save.get(SaveDirectoryConstants.DATA) + "/map/map"), map);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-       // System.out.println("Map data saved " + this.mapData);
-
-    }
-
-    public void addStarString(mapGenerator map) { //saves the star data to the user data
-
-        StringBuffer starBuffer = new StringBuffer();
-
-        for (int i = 0; i < map.generatedStars.size(); i++) {
-            starBuffer.append(map.generatedStars.get(i).toString());
-        }
-
-        starData = starBuffer.toString();
-
-        //System.out.println("Star data saved " + this.starData);
-
-    }
-
-    public void addPlanetString(mapGenerator map) { //saves the planet data to the user data
-
-        StringBuffer planetBuffer = new StringBuffer();
-
-        for (int i = 0; i < map.generatedStars.size(); i++) {
-
-            for (int j = 0; j < map.generatedStars.get(i).planetList.size(); j++) {
-                planetBuffer.append(map.generatedStars.get(i).planetList.get(j).toString());
-            }
-        }
-
-        planetData = planetBuffer.toString();
-
-        //System.out.println("Planet data saved " + this.planetData);
-
     }
 
     public void addPlanetColony(colonyCore colony) { //adds colonies to the player's data

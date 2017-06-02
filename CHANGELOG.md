@@ -532,3 +532,9 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added new planet view to the UI.
 
     - Planets are also now displayed in system view.
+
+**JUNE 2 2017** (ver.PTB-B) (U1)
+
+- Added class to handle turns (turnTicker)
+
+- Added support for turns to the player data and certain UI elements.
