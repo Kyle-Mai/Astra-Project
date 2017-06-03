@@ -41,7 +41,9 @@ public class turnTicker extends Thread {
         }
 
         gameSettings.currentDate++;
-        gameSettings.player.turnTick(); //ticks the player data
+        if (gameSettings.currentDate % 10 == 0) { //once every 10 turns increase the player's funds/resources/etc
+            gameSettings.player.turnTick(); //ticks the player data
+        }
         gameSettings.ui.turnTick(); //refresh the UI
 
         runTurn();

@@ -538,3 +538,23 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Added class to handle turns (turnTicker)
 
 - Added support for turns to the player data and certain UI elements.
+
+**JUNE 2 2017** (ver.PTB-B) (U2)
+
+- Added new GFX and SFX!
+
+    - Planets now have SFX when they're viewed, including a couple of custom-made SFX/GFX for the Storm & Radiation worlds.
+
+- Fixed some planet generation logic issues. Shouldn't screw up the spawns anymore.
+
+- Added some more to the system view screen, including an icon for a colonized planet and a home planet.
+
+- Slightly adjusted turn ticker logic to only increase player stats once every 10 (placeholder) turns.
+
+- Fixed some minor UI bugs related to the pause menu.
+
+- Added keybindings!
+
+    - Current keybinds include space bar to pause/unpuase the game, + and - to speed up/slow down the turn ticker, and esc to open the pause menu.
+
+- Adjusted main menu moon animation slightly.

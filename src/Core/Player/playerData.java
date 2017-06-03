@@ -80,11 +80,11 @@ public class playerData {
         this.userName = username; //user's username
 
         //sets the default player values
-        this.funds = 0;
+        this.funds = 1000;
         this.research = 0;
-        this.resources = 0;
+        this.resources = 500;
         this.techLevel = 0;
-        this.currentTurn = 0;
+        this.currentTurn = 1;
         gameSettings.currentDate = currentTurn;
 
         this.difficulty = gameSettings.currDifficulty; //saves the selected user difficulty

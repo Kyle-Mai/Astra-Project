@@ -6,6 +6,7 @@ import Core.GUI.SwingEX.*;
 import Core.Player.SaveDirectoryConstants;
 import Core.Player.playerData;
 import Core.SFX.audioRepository;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -87,6 +88,12 @@ public class guiCoreV4 {
     private XPanel pnlTimer;
     private XLabel planetName;
     private XLabel lblCurrentDate;
+    private XPanel pnlTopBar;
+    private XLabel lblTimeScale;
+    private XLabel imgPauseBar;
+    private XLabel lblPauseBar;
+
+    private boolean pauseMenuOpen = false;
 
     private int launcherContentLoaded = 0; //tracks the content on the launcher
 
@@ -170,6 +177,7 @@ public class guiCoreV4 {
 
         rescaleScreen(screenScaleOption);
 
+        screen.setFocusable(true);
         screen.setVisible(true);
         window.setContentPane(screen);
         //window.getRootPane().setCursor(gfxRepository.defaultCursor);
@@ -902,6 +910,7 @@ public class guiCoreV4 {
 
                 audioRepository.musicShuffle();
                 audioRepository.ambianceMainGame();
+                setMainKeybindings();
                 loadMapView();
                 gameSettings.turn = new turnTicker();
                 gameSettings.turn.start();
@@ -923,6 +932,57 @@ public class guiCoreV4 {
         }
     }
 
+    private void setMainKeybindings() { //adds keybindings to the game
+
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "pause");
+        screen.getActionMap().put("pause", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                System.out.println("Space bar pressed - pausing game.");
+                gameSettings.gameIsPaused = !gameSettings.gameIsPaused;
+                audioRepository.gamePaused();
+            }
+        });
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "menu");
+        screen.getActionMap().put("menu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                showPauseMenu();
+            }
+        });
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 0), "speed");
+        screen.getActionMap().put("speed", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (gameSettings.currentTime > 0) {
+                    gameSettings.currentTime--;
+                    audioRepository.gameFaster();
+                } else {
+                    audioRepository.gameInvalid();
+                }
+
+                lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+            }
+        });
+        screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "slow");
+        screen.getActionMap().put("slow", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (gameSettings.currentTime < 4) {
+                    gameSettings.currentTime++;
+                    audioRepository.gameSlower();
+                } else {
+                    audioRepository.gameInvalid();
+                }
+
+                lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+            }
+        });
+
+        System.out.println("Main game keybindings added.");
+
+    }
+
 
     /** Main menu elements **/
 
@@ -937,7 +997,7 @@ public class guiCoreV4 {
         menuSpaceport.setAnimationSmoothness(0.1, 200);
         menuSpaceport.start();
 
-        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -200, 720);
+        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -200, 640);
         menuMoon2.setAnimationSmoothness(0.1, 180);
         menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
         menuMoon2.start();
@@ -1758,7 +1818,7 @@ public class guiCoreV4 {
 
     private void loadPlayerBar() { //loads the bar at the top of the screen with the relevant player information
 
-        XPanel pnlTopBar = new XPanel();
+        pnlTopBar = new XPanel();
         layers.add(pnlTopBar, new Integer(8), 0);
         pnlTopBar.setBounds(0, 0, screen.getWidth(), 53);
 
@@ -1794,16 +1854,15 @@ public class guiCoreV4 {
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
 
-                if (!source.isState()) {
+                if (!pauseMenuOpen) {
                     audioRepository.buttonClick();
                     showPauseMenu();
                 } else {
                     audioRepository.buttonDisable();
                     pnlOverlay.setVisible(false);
                     pnlPauseMenu.removeAll();
+                    pauseMenuOpen = false;
                 }
-
-                source.toggleState();
             }
 
             @Override
@@ -2066,26 +2125,23 @@ public class guiCoreV4 {
         pnlTimer.setBounds(btnMenu.getX() - 155, 0, 150, pnlTopBar.getHeight());
         pnlTimer.setVisible(true);
 
-        if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
-            XLabel imgPauseBar = new XLabel(gfxRepository.pauseBar);
-            layers.add(imgPauseBar, new Integer(11), 0);
-            imgPauseBar.setBounds((screen.getWidth() / 2) - 170, pnlTopBar.getHeight(), 340, 37);
-            imgPauseBar.setVisible(true);
-
-            XLabel lblPauseBar = new XLabel("---- Game Paused ----", gfxRepository.txtButtonSmall, gfxRepository.clrText);
-            imgPauseBar.add(lblPauseBar);
-            lblPauseBar.setBounds(0, 0, imgPauseBar.getWidth(), imgPauseBar.getHeight());
-            lblPauseBar.setAlignments(SwingConstants.CENTER);
-            lblPauseBar.setVisible(true);
-
-        }
-
         layers.add(pnlOverlay, new Integer(14), 0);
         pnlOverlay.setBounds(0, pnlTopBar.getHeight(), window.getWidth(), window.getHeight() - pnlTopBar.getHeight());
         pnlOverlay.add(pnlPauseMenu);
         pnlPauseMenu.setBounds((screen.getWidth() / 2) - 450, (screen.getHeight() / 2) - 400, 900, 800);
         pnlPauseMenu.setVisible(true);
         pnlOverlay.setVisible(false);
+
+        imgPauseBar = new XLabel(gfxRepository.pauseBar);
+        layers.add(imgPauseBar, new Integer(11), 0);
+        imgPauseBar.setBounds((screen.getWidth() / 2) - 170, pnlTopBar.getHeight(), 340, 37);
+        imgPauseBar.setVisible(true);
+
+        lblPauseBar = new XLabel("---- Game Paused ----", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+        imgPauseBar.add(lblPauseBar);
+        lblPauseBar.setBounds(0, 0, imgPauseBar.getWidth(), imgPauseBar.getHeight());
+        lblPauseBar.setAlignments(SwingConstants.CENTER);
+        lblPauseBar.setVisible(true);
 
         loadDate();
 
@@ -2109,12 +2165,14 @@ public class guiCoreV4 {
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
 
-                if (gameSettings.currentTime > 0) {
-                    gameSettings.currentTime--;
-                    audioRepository.buttonSelect();
+                if (gameSettings.currentTime < 4) {
+                    gameSettings.currentTime++;
+                    audioRepository.gameSlower();
                 } else {
-                    audioRepository.buttonDisable();
+                    audioRepository.gameInvalid();
                 }
+
+                lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
             }
 
             @Override
@@ -2161,12 +2219,14 @@ public class guiCoreV4 {
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
 
-                if (gameSettings.currentTime < 4) {
-                    gameSettings.currentTime++;
-                    audioRepository.buttonSelect();
+                if (gameSettings.currentTime > 0) {
+                    gameSettings.currentTime--;
+                    audioRepository.gameFaster();
                 } else {
-                    audioRepository.buttonDisable();
+                    audioRepository.gameInvalid();
                 }
+
+                lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
             }
 
             @Override
@@ -2201,11 +2261,19 @@ public class guiCoreV4 {
 
         lblCurrentDate = new XLabel();
         pnlTimer.add(lblCurrentDate);
-        lblCurrentDate.setBounds(btnSlowTime.getX() + btnSlowTime.getWidth(), 0, btnSpeedTime.getX() - (btnSlowTime.getX() + btnSlowTime.getWidth()), pnlTimer.getHeight());
+        lblCurrentDate.setBounds(btnSlowTime.getX() + btnSlowTime.getWidth(), 10, btnSpeedTime.getX() - (btnSlowTime.getX() + btnSlowTime.getWidth()), pnlTimer.getHeight() - 20);
         lblCurrentDate.setText("Turn: " + gameSettings.currentDate, gfxRepository.txtSubtitle, gfxRepository.clrText);
         lblCurrentDate.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
         lblCurrentDate.setVisible(true);
 
+        lblTimeScale = new XLabel();
+        pnlTimer.add(lblTimeScale);
+        lblTimeScale.setBounds(btnSlowTime.getX() + btnSlowTime.getWidth(), 10, btnSpeedTime.getX() - (btnSlowTime.getX() + btnSlowTime.getWidth()), pnlTimer.getHeight() - 20);
+        lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+        lblTimeScale.setAlignments(SwingConstants.CENTER, SwingConstants.BOTTOM);
+        lblTimeScale.setVisible(true);
+
+        /*
         XButton btnPause = new XButton("test", gfxRepository.txtSubtitle, gfxRepository.clrText, gfxRepository.clrDisable);
         layers.add(btnPause, new Integer(15), 0);
         btnPause.setBounds(0, 500, 100, 60);
@@ -2258,6 +2326,7 @@ public class guiCoreV4 {
                 window.refresh();
             }
         });
+        */
 
     }
 
@@ -2451,6 +2520,9 @@ public class guiCoreV4 {
 
         gameSettings.gameIsPaused = true; //pauses the game
 
+        pnlPauseMenu.removeAll();
+        pauseMenuOpen = true;
+
         //adds the title to the pause menu
         XLabel lblMenuTitle = new XLabel("Pause Menu", gfxRepository.txtHeader, gfxRepository.clrText);
         pnlPauseMenu.add(lblMenuTitle);
@@ -2534,7 +2606,7 @@ public class guiCoreV4 {
                 audioRepository.buttonClick();
                 //source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
-
+                pauseMenuOpen = false;
                 audioRepository.buttonSelect();
                 pnlOverlay.setVisible(false);
                 pnlPauseMenu.removeAll();
@@ -2658,7 +2730,7 @@ public class guiCoreV4 {
 
     /** System view **/
 
-    public void showSystemView(int x, int y) {
+    private void showSystemView(int x, int y) {
 
         clearUI();
 
@@ -2822,6 +2894,18 @@ public class guiCoreV4 {
 
             Random r = new Random();
 
+            if (star.planetList.get(i).isHomePlanet()) {
+                XLabel imgHomePlanet = new XLabel(gfxRepository.homePlanet);
+                pnlBG.add(imgHomePlanet);
+                imgHomePlanet.setBounds(((pnlBG.getWidth() / 2) + 225) + planetPosition, (pnlBG.getHeight() / 2) + 7, 32, 32);
+                imgHomePlanet.setVisible(true);
+            } else if (star.planetList.get(i).getPlanetColony() != null) {
+                XLabel imgColony = new XLabel(gfxRepository.colonyIcon);
+                pnlBG.add(imgColony);
+                imgColony.setBounds(((pnlBG.getWidth() / 2) + 225) + planetPosition, (pnlBG.getHeight() / 2) + 15, 32, 25);
+                imgColony.setVisible(true);
+            }
+
             XLabel imgPlanet = new XLabel();
             pnlBG.add(imgPlanet);
             imgPlanet.setBounds(((pnlBG.getWidth() / 2) + 250) + planetPosition, (pnlBG.getHeight() / 2) - 25, 50, 50);
@@ -2890,9 +2974,15 @@ public class guiCoreV4 {
                 }
             });
 
-            planetPosition = planetPosition + (75 + r.nextInt(160)); //TODO: Should eventually weight a little better....
+            planetPosition = planetPosition + (100 + r.nextInt(200)); //TODO: Should eventually weight a little better....
 
         }
+
+        XLabel imgSystemOutline = new XLabel(gfxRepository.systemOutline);
+        pnlBG.add(imgSystemOutline);
+        imgSystemOutline.setBounds((pnlBG.getWidth() / 2) - (planetPosition + 500), (pnlBG.getHeight() / 2) - (planetPosition + 500), (planetPosition + 500) * 2, (planetPosition + 500) * 2);
+        imgSystemOutline.scaleImage(gfxRepository.systemOutline);
+        imgSystemOutline.setVisible(true);
 
         //sets the viewport on the center of the map
         Rectangle mapViewSize = mapView.getViewport().getViewRect();
@@ -2915,6 +3005,8 @@ public class guiCoreV4 {
         //TODO: Can probably reuse star panel...?
 
         pnlPlanetData.removeAll();
+
+        audioRepository.planetAmbiance(planet.getPlanetType());
 
         pnlPlanetData.setVisible(true);
 
@@ -3009,9 +3101,22 @@ public class guiCoreV4 {
 
     }
 
-    public void turnTick() { //refreshes the UI elements that need it when the turn ticks up
-        lblCurrentDate.setText("Turn: " + gameSettings.currentDate, gfxRepository.txtSubtitle, gfxRepository.clrText);
 
+    /** Turn ticker **/
+
+    public void turnTick() { //refreshes the UI elements that need it when the turn ticks up
+        lblCurrentDate.setText("Turn " + gameSettings.currentDate, gfxRepository.txtSubtitle, gfxRepository.clrText);
+        lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+
+        if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
+            lblPauseBar.setVisible(true);
+            imgPauseBar.setVisible(true);
+            lblTimeScale.setText("PAUSED", gfxRepository.txtItalSubtitle, gfxRepository.clrDisable);
+
+        } else {
+            lblPauseBar.setVisible(false);
+            imgPauseBar.setVisible(false);
+        }
 
         window.refresh();
     }

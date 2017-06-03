@@ -59,7 +59,8 @@ public class gameSettings {
 
     //variables for time scale
 
-    public static final int[] timeScale = {500, 1000, 1500, 2000, 2500}; //essentially how fast each turn ticks
+    public static final int[] timeScale = {250, 1000, 1500, 2000, 2750}; //essentially how fast each turn ticks
+    public static final String[] timeLocale = {"Fastest", "Fast", "Normal", "Slow", "Slowest"};
     public static int currentTime = 2; //current time scale
     public static volatile int currentDate = 0;
 

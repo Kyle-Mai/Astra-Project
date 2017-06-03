@@ -24,12 +24,14 @@ public class XButton extends JButton {
 
     public XButton() {
         this.setFocusPainted(false);
+        this.setFocusable(false);
 
     }
 
     public XButton(int identifier) {
         this.setFocusPainted(false);
         this.identifier = identifier;
+        this.setFocusable(false);
 
     }
 
@@ -38,6 +40,7 @@ public class XButton extends JButton {
         this.setFont(font);
         this.setBackground(bgColor);
         this.setForeground(textColor);
+        this.setFocusable(false);
         this.setFocusPainted(false);
 
     }
@@ -47,6 +50,7 @@ public class XButton extends JButton {
         this.setFont(font);
         this.setBackground(bgColor);
         this.setForeground(txtColor);
+        this.setFocusable(false);
         this.setBorder(border);
         this.setFocusPainted(false);
 
@@ -56,6 +60,7 @@ public class XButton extends JButton {
         this.setBorder(null);
         this.setFocusPainted(false);
         this.setBackground(EXColorDefaults.NONE);
+        this.setFocusable(false);
         this.setOpaque(false);
         this.setIcon(new ImageIcon(image));
         this.setVerticalAlignment(SwingConstants.CENTER);
@@ -70,6 +75,7 @@ public class XButton extends JButton {
         this.setBackground(EXColorDefaults.NONE);
         this.setFont(font);
         this.setForeground(txtclr);
+        this.setFocusable(false);
         this.setText(text);
         this.setOpaque(false);
         this.setIcon(new ImageIcon(image));

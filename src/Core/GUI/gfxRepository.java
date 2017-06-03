@@ -139,6 +139,9 @@ public class gfxRepository {
     static BufferedImage leftButton;
     static BufferedImage rightButton;
     static BufferedImage pauseBar;
+    static BufferedImage systemOutline;
+    static BufferedImage homePlanet;
+    static BufferedImage colonyIcon;
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
@@ -330,6 +333,9 @@ public class gfxRepository {
             topbar_bg = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_background.png"));
             topbar_shield = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_shield_decoration.png"));
             orbitIndicator = ImageIO.read(new File(imageFolder + "/Resources/background/orbit_indicate.png"));
+            systemOutline = ImageIO.read(new File(imageFolder + "/Resources/effects/system_outline.png"));
+            homePlanet = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_capital.png"));
+            colonyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_colony.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

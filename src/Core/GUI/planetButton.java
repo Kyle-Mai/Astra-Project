@@ -23,6 +23,9 @@ public class planetButton extends XButton {
     public planetButton(starClass star, int identifier) { //creates a planet button
         this.star = star;
         this.identifier = identifier;
+        this.setFocusPainted(false);
+        this.setFocusable(false);
+        this.setOpaque(false);
 
     }
 
