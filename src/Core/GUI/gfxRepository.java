@@ -142,6 +142,9 @@ public class gfxRepository {
     static BufferedImage systemOutline;
     static BufferedImage homePlanet;
     static BufferedImage colonyIcon;
+    static BufferedImage unknownStar;
+    static BufferedImage systemRefuse;
+    static BufferedImage galaxyDust;
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
@@ -336,6 +339,9 @@ public class gfxRepository {
             systemOutline = ImageIO.read(new File(imageFolder + "/Resources/effects/system_outline.png"));
             homePlanet = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_capital.png"));
             colonyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_colony.png"));
+            unknownStar = ImageIO.read(new File(imageFolder + "/Resources/stars/unknown.png"));
+            systemRefuse = ImageIO.read(new File(imageFolder + "/Resources/ui/system_refuse.png"));
+            galaxyDust = ImageIO.read(new File(imageFolder + "/Resources/effects/galaxy_dust.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

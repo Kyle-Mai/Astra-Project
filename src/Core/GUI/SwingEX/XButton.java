@@ -85,6 +85,17 @@ public class XButton extends JButton {
 
     }
 
+    public void setIcon(BufferedImage image, int alignment) {
+        this.setVerticalAlignment(SwingConstants.CENTER);
+        this.setHorizontalAlignment(alignment);
+        this.setIcon(new ImageIcon(image));
+        this.setFocusable(false);
+        this.setOpaque(false);
+        this.setBorder(null);
+        this.setFocusPainted(false);
+        super.setContentAreaFilled(false);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX

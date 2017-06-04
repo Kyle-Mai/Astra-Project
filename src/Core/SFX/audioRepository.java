@@ -256,5 +256,17 @@ public class audioRepository {
 
     }
 
+    /** ship audio **/
+
+    public static void shipScienceSelect() {
+        audioCore buttonPress = new audioCore("/ship/select_science.wav", uiVolume, 0, 1500);
+        buttonPress.start();
+    }
+
+    public static void shipScienceMove() {
+        audioCore buttonPress = new audioCore("/ship/move_science.wav", uiVolume, 0, 1500);
+        buttonPress.start();
+    }
+
 
 }

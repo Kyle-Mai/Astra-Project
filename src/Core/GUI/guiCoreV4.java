@@ -1647,6 +1647,8 @@ public class guiCoreV4 {
     //loads the map view
     private void loadMapView() {
 
+        Random r = new Random();
+
         clearUI();
 
         XLabel lblBackdrop = new XLabel(gfxRepository.mainBackground);
@@ -1706,6 +1708,11 @@ public class guiCoreV4 {
         pnlBG.addMouseListener(mapScroller);
         pnlBG.addMouseMotionListener(mapScroller);
 
+        XLabel lblDustEffect = new XLabel(gfxRepository.galaxyDust);
+        pnlBG.add(lblDustEffect);
+        lblDustEffect.setBounds(300 + r.nextInt(1100), 300 + r.nextInt(1100), 900, 560);
+        lblDustEffect.setVisible(true);
+
         ArrayList<ArrayList<XLabel>> mapGFX = new ArrayList<>();
         ArrayList<ArrayList<XButton>> mapButton = new ArrayList<>();
 
@@ -1720,7 +1727,25 @@ public class guiCoreV4 {
 
             for (int j = 0; j < gameSettings.map.mapTiles.get(i).size(); j++) {
                 if (gameSettings.map.mapTiles.get(i).get(j).getStar()) {
-                    mapGFX.get(i).add(new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getIconGFX())); //adds the star's icon to the map
+
+                    if (gameSettings.map.mapTiles.get(i).get(j).getVisibility()) { //tile visible
+
+                        mapGFX.get(i).add(new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getIconGFX())); //adds the star's icon to the map
+                        XLabel starName = new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getStarName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+                        pnlBG.add(starName);
+                        starName.setBounds(tileSize * (positionX + 1) - 25, tileSize * (positionY + 1) + 25, tileSize + 50, tileSize);
+                        starName.setAlignments(SwingConstants.CENTER);
+                        starName.setVisible(true);
+
+                    } else { //tile not visible
+
+                        mapGFX.get(i).add(new XLabel(gfxRepository.unknownStar)); //star isn't visible, add an unknown icon
+                        XLabel starName = new XLabel("???", gfxRepository.txtItalSubtitle, gfxRepository.clrText); //who knows?
+                        pnlBG.add(starName);
+                        starName.setBounds(tileSize * (positionX + 1) - 25, tileSize * (positionY + 1) + 25, tileSize + 50, tileSize);
+                        starName.setAlignments(SwingConstants.CENTER);
+                        starName.setVisible(true);
+                    }
 
                     if (gameSettings.map.mapTiles.get(i).get(j).getStarData().isHomeSystem()) {
                         XLabel homeSystem = new XLabel(gfxRepository.homeSystem);
@@ -1730,58 +1755,103 @@ public class guiCoreV4 {
                         homeSystem.setVisible(true);
                     }
 
-                    XLabel starName = new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getStarName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-                    pnlBG.add(starName);
-                    starName.setBounds(tileSize * (positionX + 1) - 25, tileSize * (positionY + 1) + 25, tileSize + 50, tileSize);
-                    starName.setAlignments(SwingConstants.CENTER);
-                    starName.setVisible(true);
-
                     mapButton.get(i).add(new XButton(gfxRepository.mapHighlight, SwingConstants.LEFT));
                     mapGFX.get(i).get(j).add(mapButton.get(i).get(j));
                     mapButton.get(i).get(j).setOpaque(false);
                     mapButton.get(i).get(j).setVisible(true);
                     mapButton.get(i).get(j).setBounds(0, 0, tileSize, tileSize);
 
-                    mapButton.get(i).get(j).addMouseListener(new XMouseListener(i, j) {
-                        XButton source;
+                    if (gameSettings.map.mapTiles.get(i).get(j).getVisibility()) { //poorly optimized, don't care
 
-                        @Override
-                        public void mouseClicked(MouseEvent mouseEvent) {
-                            source = (XButton)mouseEvent.getSource();
-                            audioRepository.starSound();
-                            source.setHorizontalAlignment(SwingConstants.RIGHT);
-                            window.refresh();
-                            loadStarData(gameSettings.map.mapTiles.get(getValueX()).get(getValueY()).getStarData());
-                        }
+                        mapButton.get(i).get(j).addMouseListener(new XMouseListener(i, j) {
+                            XButton source;
 
-                        @Override
-                        public void mousePressed(MouseEvent mouseEvent) {
-                            source = (XButton)mouseEvent.getSource();
-                            source.setHorizontalAlignment(SwingConstants.RIGHT);
-                            window.refresh();
-                        }
+                            @Override
+                            public void mouseClicked(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                audioRepository.starSound();
+                                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                                window.refresh();
+                                loadStarData(gameSettings.map.mapTiles.get(getValueX()).get(getValueY()).getStarData());
+                            }
 
-                        @Override
-                        public void mouseReleased(MouseEvent mouseEvent) {
-                            source = (XButton)mouseEvent.getSource();
-                            source.setHorizontalAlignment(SwingConstants.LEFT);
-                            window.refresh();
-                        }
+                            @Override
+                            public void mousePressed(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                                window.refresh();
+                            }
 
-                        @Override
-                        public void mouseEntered(MouseEvent mouseEvent) {
-                            source = (XButton)mouseEvent.getSource();
-                            source.setHorizontalAlignment(SwingConstants.CENTER);
-                            window.refresh();
-                        }
+                            @Override
+                            public void mouseReleased(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.LEFT);
+                                window.refresh();
+                            }
 
-                        @Override
-                        public void mouseExited(MouseEvent mouseEvent) {
-                            source = (XButton)mouseEvent.getSource();
-                            source.setHorizontalAlignment(SwingConstants.LEFT);
-                            window.refresh();
-                        }
-                    });
+                            @Override
+                            public void mouseEntered(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.CENTER);
+                                window.refresh();
+                            }
+
+                            @Override
+                            public void mouseExited(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.LEFT);
+                                window.refresh();
+                            }
+                        });
+
+                    } else { //tile hasn't been surveyed yet, don't display any information
+
+                        mapButton.get(i).get(j).setIcon(gfxRepository.systemRefuse, SwingConstants.LEFT);
+
+                        mapButton.get(i).get(j).addMouseListener(new XMouseListener(i, j) {
+                            XButton source;
+
+                            @Override
+                            public void mouseClicked(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                audioRepository.gameInvalid();
+                                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                                window.refresh();
+                            }
+
+                            @Override
+                            public void mousePressed(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                                window.refresh();
+                            }
+
+                            @Override
+                            public void mouseReleased(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.LEFT);
+                                window.refresh();
+                            }
+
+                            @Override
+                            public void mouseEntered(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.CENTER);
+                                window.refresh();
+                            }
+
+                            @Override
+                            public void mouseExited(MouseEvent mouseEvent) {
+                                source = (XButton) mouseEvent.getSource();
+                                source.setHorizontalAlignment(SwingConstants.LEFT);
+                                window.refresh();
+                            }
+                        });
+
+
+                    }
+
+
                 } else {
                     mapGFX.get(i).add(new XLabel());
                     mapButton.get(i).add(null); //lololo cheating

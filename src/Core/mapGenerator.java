@@ -165,6 +165,9 @@ public class mapGenerator implements Serializable {
                 for (int j = 0; j < predefinedStars.size(); j++) {
                     if (indexX == predefinedStars.get(j).getMapLocationX() && indexY == predefinedStars.get(j).getMapLocationY()) {
                         this.mapTiles.get(indexY - 1).add(new mapTile(predefinedStars.get(j), indexX - 1, indexY - 1));
+                        if (predefinedStars.get(j).isHomeSystem()) {
+                            this.mapTiles.get(indexY - 1).get(indexX - 1).setVisiblity(true); //home system is visible!
+                        }
                         System.out.println("Loading predefined system " + predefinedStars.get(j).getStarName() + " (ID" + predefinedStars.get(j).getStarIndex() + ") at the location " + indexX + "|" + indexY);
                         preDefined = true;
                     }

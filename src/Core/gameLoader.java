@@ -1,5 +1,6 @@
 package Core;
 
+import Core.Craft.craftBuilder;
 import Core.GUI.gfxRepository;
 import Core.GUI.guiCoreV4;
 import Core.Player.playerData;
@@ -116,6 +117,7 @@ public class gameLoader {
         starCore.starPreloader();
         techCore.techPreloader();
         planetCore.planetPreloader();
+        craftBuilder.buildScienceShips();
 
 
     }

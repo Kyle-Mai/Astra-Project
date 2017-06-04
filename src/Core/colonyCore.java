@@ -47,6 +47,7 @@ public class colonyCore implements Serializable {
         this.industryFocus = 0;
         this.entertainmentFocus = 0;
         this.colonyAge = 0;
+        this.currentFood = 0;
         planet.setHabited(true); //sets the planet to inhabited
 
         this.colonyID = gameSettings.objectIDValue;
@@ -72,35 +73,48 @@ public class colonyCore implements Serializable {
 
     public void cycleTurn() { //cycles the turn and changes the values accordingly
         setUnrest();
-        setResourceProduction();
-        setTaxProduction();
-        setCurrentFood();
-        setPopulation();
+        adjustProduction();
+        adjustTaxes();
+        growPopulation();
         colonyAge++;
     }
 
-    private void setCurrentFood() {
+    public void cycleCollect() {
+        harvestFood();
+        collectTaxes();
+        collectResources();
+    }
+
+    private void harvestFood() {
         currentFood = currentFood + foodProduction;
     }
 
-    private void setPopulation() {
+    private void collectTaxes() { gameSettings.player.setFunds(gameSettings.player.getFunds() + this.taxProduction); }
+
+    private void collectResources() { gameSettings.player.setResources(gameSettings.player.getResources() + this.resourceProduction);}
+
+    private void growPopulation() {
         if (currentFood >= population) {
             currentFood = currentFood - population;
             population++;
         }
     }
 
-    private void setTaxProduction() { //sets the taxes this planet currently produces
+    public void setFoodProduction(double prod) { this.foodProduction = prod; }
+    public void setResourceProduction(double prod) { this.resourceProduction = prod; }
+    public void setTaxProduction(double prod) { this.taxProduction = prod; }
+
+    private void adjustTaxes() { //sets the taxes this planet currently produces
         taxProduction = (population * gameSettings.player.getTaxMultiplier()) - (0.4 * unrest);
     }
 
-    private void setResourceProduction() { //sets the resources this planet currently produces
+    private void adjustProduction() { //sets the resources this planet currently produces
         resourceProduction = (population * gameSettings.player.getProductionMultiplier()) - (0.2 * unrest);
         planet.setResources(-resourceProduction);
     }
 
     private void setUnrest() { //sets the current unrest of the colony
-         unrest = (1.2 * gameSettings.player.getTaxMultiplier()) + (0.1 * population) - (0.2 * entertainmentFocus) + (0.3 * industryFocus); //TODO: Switch multipliers to allow for variable
+         unrest = (1.2 * gameSettings.player.getTaxMultiplier()) + (0.08 * population) - (0.2 * entertainmentFocus) + (0.3 * industryFocus); //TODO: Switch multipliers to allow for variable
 
         if (unrest < 0) {
             unrest = 0;

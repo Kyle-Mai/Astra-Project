@@ -558,3 +558,21 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Current keybinds include space bar to pause/unpuase the game, + and - to speed up/slow down the turn ticker, and esc to open the pause menu.
 
 - Adjusted main menu moon animation slightly.
+
+**JUNE 3 2017** (ver.PTB-B) (U1)
+
+- Updated some planet GFX.
+
+- Added prototype spacecraft class (craftCore) and related classes to test.
+
+- Slightly updated colonyCore to handle turns better.
+
+- Updated map gen and GFX.
+
+    - If a tile isn't 'explored' and it has a star, the star will appear as a '?' mark and will not be accessible.
+
+    - If a tile is explored, behavior remains the same as previously.
+
+    - Added a somewhat randomly placed nebula of sorts to the star map, aesthetic purposes only.
+
+

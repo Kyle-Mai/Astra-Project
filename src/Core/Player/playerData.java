@@ -156,6 +156,10 @@ public class playerData {
 
     public double getFunds() { return this.funds; }
 
+    public void setFunds(double funds) { this.funds = funds; }
+    public void setResources(double resources) { this.resources = resources; }
+    public void setResearch(double research) { this.research = research; }
+
 
 
 }
