@@ -14,6 +14,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -37,7 +38,7 @@ public class gfxRepository {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final String gameVersion = "PTB-B Build 78a";
+    static final String gameVersion = "PTB-B Build 85a";
 
     public static final Color clrText = new Color(255, 255, 255, 255);
     public static final Color clrInvisible = new Color(0, 0, 0, 0);
@@ -145,6 +146,9 @@ public class gfxRepository {
     static BufferedImage unknownStar;
     static BufferedImage systemRefuse;
     static BufferedImage galaxyDust;
+    static BufferedImage foodIcon;
+    static BufferedImage populationIcon;
+    static BufferedImage unrestIcon;
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
@@ -325,8 +329,8 @@ public class gfxRepository {
             empireMenu = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_empire_button.png"));
             button99_48 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_99_48.png"));
             menuButton = ImageIO.read(new File(imageFolder + "/Resources/ui/topbar_menu_button.png"));
-            energyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/minerals2.png"));
-            mineralsIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/energy2.png"));
+            energyIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/energy2.png"));
+            mineralsIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/minerals2.png"));
             tallBox = ImageIO.read(new File(imageFolder + "/Resources/ui/tall_box_1.png"));
             galaxyReturn = ImageIO.read(new File(imageFolder + "/Resources/ui/button_galaxy_map.png"));
             systemTitle = ImageIO.read(new File(imageFolder + "/Resources/ui/starsystem_panel.png"));
@@ -342,6 +346,9 @@ public class gfxRepository {
             unknownStar = ImageIO.read(new File(imageFolder + "/Resources/stars/unknown.png"));
             systemRefuse = ImageIO.read(new File(imageFolder + "/Resources/ui/system_refuse.png"));
             galaxyDust = ImageIO.read(new File(imageFolder + "/Resources/effects/galaxy_dust.png"));
+            populationIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_pop.png"));
+            foodIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_food.png"));
+            unrestIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_unrest.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -575,4 +575,20 @@ Version moved to PTB-B with the creation of the colonyCore class.
 
     - Added a somewhat randomly placed nebula of sorts to the star map, aesthetic purposes only.
 
+**JUNE 4 2017** (ver.PTB-B) (U1)
 
+- Added new SwingEX content
+
+    - New XListSorter, which automatically sorts, lists, and places any items put into it onto the specified component. Similar to a Layout, but with far more freedom.
+
+    - New XTextImage, which takes an image and text as input, and places the text next to the image. Rather than initializing and placing two objects, now it only takes one.
+
+    - XConstants, a storage for useful constants.
+
+- Optimized UI code to use new SwingEX functions.
+
+    - All image/text combos have now been switched over to use the XTextImage, which halves (!) the number of lines needed to generate it.
+
+    - Switched over most listed content to use the new XListSorter. Less lines and faster initialization due to no dependencies. Can quickly swap order as needed, too.
+
+- Fixed some minor issues with the Sol System.

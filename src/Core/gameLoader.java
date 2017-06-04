@@ -69,11 +69,11 @@ public class gameLoader {
         solSystem.planetList.add(new planetClass(solSystem, "Mercury", 2014, 1, 57909050L, 2440, false, false, false, false, 0, false));
         solSystem.planetList.add(new planetClass(solSystem, "Venus", 2009, 2, 108208000L, 6051, true, false, false, false, 0, false));
         solSystem.planetList.add(new planetClass(solSystem, "Earth", 2000, 3, 149598023L, 6371, true, true, true, false, 1, true));
-        solSystem.planetList.add(new planetClass(solSystem, "Mars", 2014, 4, 227939134L, 3390, true, true, true, false, 2, false));
+        solSystem.planetList.add(new planetClass(solSystem, "Mars", 2001, 4, 227939134L, 3390, true, true, true, false, 2, false));
         solSystem.planetList.add(new planetClass(solSystem, "Jupiter", 2013, 5, 778297882L, 69911, false, false, false, false, 67, false));
         solSystem.planetList.add(new planetClass(solSystem, "Saturn", 2013, 6, 1429392695L, 58232, false, false, false, false, 62, false));
         solSystem.planetList.add(new planetClass(solSystem, "Uranus", 2021, 7, 2875031718L, 25362, false, false, false, false, 27, false));
-        solSystem.planetList.add(new planetClass(solSystem, "Neptune", 2013, 8, 4504449781L, 24622, false, false, false, false, 14, false));
+        solSystem.planetList.add(new planetClass(solSystem, "Neptune", 2021, 8, 4504449781L, 24622, false, false, false, false, 14, false));
 
         colonyCore earthColony = new colonyCore(solSystem.planetList.get(2), 89, 2608, 4, 7, 2.13, 11.15, 18.87, 3.67);
         colonyCore marsColony = new colonyCore(solSystem.planetList.get(3), 55, 255, 11, 3, 26.16, 21.12, 4.55, 4.26);

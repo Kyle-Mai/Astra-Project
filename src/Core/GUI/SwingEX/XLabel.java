@@ -17,7 +17,10 @@ public class XLabel extends JLabel {
     //default constructor
     public XLabel() {
         this.setFocusable(false);
-
+        this.setBackground(null); //transparent background
+        this.setFocusable(false);
+        this.setOpaque(false);
+        this.setBorder(null);
     }
 
     //animation

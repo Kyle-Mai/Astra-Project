@@ -2150,44 +2150,31 @@ public class guiCoreV4 {
             }
         });
 
-        XLabel icnTech = new XLabel(gfxRepository.researchIcon);
-        pnlTopBar.add(icnTech);
-        icnTech.setBounds(btnFleet.getX() + btnFleet.getWidth() + 10, 9, 34, 34);
-        icnTech.setVisible(true);
+        XListSorter srtPlayerBar = new XListSorter(XConstants.HORIZONTAL_SORT, 10, btnFleet.getX() + btnFleet.getWidth() + 10, 9);
 
-        XLabel lblTech = new XLabel(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo", gfxRepository.txtSubtitle, gfxRepository.clrText);
-        pnlTopBar.add(lblTech);
-        lblTech.setBounds(icnTech.getX() + icnTech.getWidth() + 2, icnTech.getY(), 90, icnTech.getHeight());
-        lblTech.setVerticalAlignment(SwingConstants.CENTER);
-        lblTech.setVisible(true);
+        XTextImage tmgTech = new XTextImage();
+        tmgTech.addImage(gfxRepository.researchIcon, 34, 34);
+        tmgTech.addText(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo", gfxRepository.txtSubtitle, gfxRepository.clrText, 90);
+        tmgTech.getText().setVerticalAlignment(SwingConstants.CENTER);
 
-        XLabel icnEnergy = new XLabel(gfxRepository.energyIcon);
-        pnlTopBar.add(icnEnergy);
-        icnEnergy.setBounds(lblTech.getX() + lblTech.getWidth() + 10, icnTech.getY(), 34, 34);
-        icnEnergy.setVisible(true);
-
-        XLabel lblEnergy = new XLabel(": " + uiFormat.format(gameSettings.player.getFunds()) + " (" + uiFormat.format(gameSettings.player.getCurrencyTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        XTextImage tmgEnergy = new XTextImage();
+        tmgEnergy.addImage(gfxRepository.energyIcon, 34, 34);
+        tmgEnergy.addText(": " + uiFormat.format(gameSettings.player.getFunds()) + " (" + uiFormat.format(gameSettings.player.getCurrencyTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText, 170);
         if (gameSettings.player.getCurrencyTurn() < 0) { //if the value is negative, display accordingly
-            lblEnergy.setForeground(gfxRepository.clrDisable);
+            tmgEnergy.getText().setForeground(gfxRepository.clrDisable);
         }
-        pnlTopBar.add(lblEnergy);
-        lblEnergy.setBounds(icnEnergy.getX() + icnEnergy.getWidth() + 2, icnEnergy.getY(), lblTech.getWidth() + 80, icnEnergy.getHeight());
-        lblEnergy.setVerticalAlignment(SwingConstants.CENTER);
-        lblEnergy.setVisible(true);
+        tmgEnergy.getText().setVerticalAlignment(SwingConstants.CENTER);
 
-        XLabel icnMinerals = new XLabel(gfxRepository.mineralsIcon);
-        pnlTopBar.add(icnMinerals);
-        icnMinerals.setBounds(lblEnergy.getX() + lblEnergy.getWidth() + 10, icnTech.getY(), 34, 34);
-        icnMinerals.setVisible(true);
-
-        XLabel lblMinerals = new XLabel(": " + uiFormat.format(gameSettings.player.getResources()) + " (" + uiFormat.format(gameSettings.player.getResourcesTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        XTextImage tmgMinerals = new XTextImage();
+        tmgMinerals.addImage(gfxRepository.mineralsIcon, 34, 34);
+        tmgMinerals.addText(": " + uiFormat.format(gameSettings.player.getResources()) + " (" + uiFormat.format(gameSettings.player.getResourcesTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText, 170);
         if (gameSettings.player.getResourcesTurn() < 0) { //if the value is negative, display accordingly
-            lblMinerals.setForeground(gfxRepository.clrDisable);
+            tmgMinerals.getText().setForeground(gfxRepository.clrDisable);
         }
-        pnlTopBar.add(lblMinerals);
-        lblMinerals.setBounds(icnMinerals.getX() + icnMinerals.getWidth() + 2, icnMinerals.getY(), lblEnergy.getWidth(), icnMinerals.getHeight());
-        lblMinerals.setVerticalAlignment(SwingConstants.CENTER);
-        lblMinerals.setVisible(true);
+        tmgMinerals.getText().setVerticalAlignment(SwingConstants.CENTER);
+
+        srtPlayerBar.addItems(tmgTech, tmgEnergy, tmgMinerals);
+        srtPlayerBar.placeItems(pnlTopBar);
 
         //displays the time scale
         pnlTimer = new XPanel();
@@ -2429,31 +2416,22 @@ public class guiCoreV4 {
         lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
         lblStatsBox.setVisible(true);
 
-        //adds an icon/text with the number of planets in the system
-        XLabel lblPlanetCountImg = new XLabel(gfxRepository.starPlanetCount);
-        lblStatsBox.add(lblPlanetCountImg);
-        lblPlanetCountImg.setBounds(15, 20, 30, 30);
-        lblPlanetCountImg.setToolTipText("Planets");
-        lblPlanetCountImg.setVisible(true);
+        XListSorter srtStar = new XListSorter(XConstants.VERTICAL_SORT, 15, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15);
 
-        XLabel lblPlanetCountText = new XLabel(" : " + star.getNumOfPlanets(), gfxRepository.txtSubtitle, gfxRepository.clrText);
-        lblStatsBox.add(lblPlanetCountText);
-        lblPlanetCountText.setBounds(lblPlanetCountImg.getX() + lblPlanetCountImg.getWidth() + 5, lblPlanetCountImg.getY() - 5, 70, 40);
-        lblPlanetCountText.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-        lblPlanetCountText.setVisible(true);
+        XTextImage tmgPlanets = new XTextImage();
+        tmgPlanets.addImage(gfxRepository.starPlanetCount, 30, 30);
+        tmgPlanets.addText(" : " + star.getNumOfPlanets(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+        tmgPlanets.getImage().setToolTipText("Planets");
+        tmgPlanets.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
 
-        //adds an icon/text with the number of colonies in the system
-        XLabel lblColonyCountImg = new XLabel(gfxRepository.colonyCount);
-        lblStatsBox.add(lblColonyCountImg);
-        lblColonyCountImg.setBounds(lblPlanetCountImg.getX(), lblPlanetCountImg.getY() + lblPlanetCountImg.getHeight() + 10, 30, 30);
-        lblColonyCountImg.setToolTipText("Colonies");
-        lblColonyCountImg.setVisible(true);
+        XTextImage tmgColonies = new XTextImage();
+        tmgColonies.addImage(gfxRepository.colonyCount, 30, 30);
+        tmgColonies.addText(" : " + star.getColonyCount(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+        tmgColonies.getImage().setToolTipText("Colonies");
+        tmgColonies.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
 
-        XLabel lblColonyCountText = new XLabel(" : " + star.getColonyCount(), gfxRepository.txtSubtitle, gfxRepository.clrText);
-        lblStatsBox.add(lblColonyCountText);
-        lblColonyCountText.setBounds(lblColonyCountImg.getX() + lblColonyCountImg.getWidth() + 5, lblColonyCountImg.getY() - 10, 70, 40);
-        lblColonyCountText.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-        lblColonyCountText.setVisible(true);
+        srtStar.addItems(tmgPlanets, tmgColonies);
+        srtStar.placeItems(lblBackground);
 
         //adds a button to enter the system view
         XLabel lblEnterSystem = new XLabel("Enter System", gfxRepository.txtButtonSmall, gfxRepository.clrText);
@@ -2969,11 +2947,13 @@ public class guiCoreV4 {
                 pnlBG.add(imgHomePlanet);
                 imgHomePlanet.setBounds(((pnlBG.getWidth() / 2) + 225) + planetPosition, (pnlBG.getHeight() / 2) + 7, 32, 32);
                 imgHomePlanet.setVisible(true);
+                imgHomePlanet.setToolTipText("Capital");
             } else if (star.planetList.get(i).getPlanetColony() != null) {
                 XLabel imgColony = new XLabel(gfxRepository.colonyIcon);
                 pnlBG.add(imgColony);
                 imgColony.setBounds(((pnlBG.getWidth() / 2) + 225) + planetPosition, (pnlBG.getHeight() / 2) + 15, 32, 25);
                 imgColony.setVisible(true);
+                imgColony.setToolTipText("Colony");
             }
 
             XLabel imgPlanet = new XLabel();
@@ -3101,6 +3081,42 @@ public class guiCoreV4 {
         lblBackground.add(lblStatsBox);
         lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
         lblStatsBox.setVisible(true);
+
+        XListSorter srtPlanet = new XListSorter(XConstants.VERTICAL_SORT, 15, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15); //adds a new list sorter
+
+        try {
+
+            XTextImage tmgPop = new XTextImage(); //tfw replacing 12 lines of tedious addition with 5 easy lines :ok_hand:
+            tmgPop.addImage(gfxRepository.populationIcon, 30, 30);
+            tmgPop.addText(" : " + planet.getPlanetColony().getPopulation(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgPop.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+            tmgPop.getImage().setToolTipText("Population");
+
+            XTextImage tmgFood = new XTextImage();
+            tmgFood.addImage(gfxRepository.foodIcon, 30, 30);
+            tmgFood.addText(" : " + planet.getPlanetColony().getCurrentFood(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgFood.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+            tmgFood.getImage().setToolTipText("Stored Food");
+
+            XTextImage tmgUnrest = new XTextImage();
+            tmgUnrest.addImage(gfxRepository.unrestIcon, 30, 30);
+            tmgUnrest.addText(" : " + planet.getPlanetColony().getUnrest(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgUnrest.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+            tmgUnrest.getImage().setToolTipText("Unrest");
+
+            XTextImage tmgEnergy = new XTextImage();
+            tmgEnergy.addImage(gfxRepository.energyIcon, 30, 30);
+            tmgEnergy.addText(" : " + planet.getPlanetColony().getTaxProduction(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgEnergy.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+            tmgEnergy.getImage().setToolTipText("Energy Production");
+
+            srtPlanet.addItems(tmgPop, tmgUnrest, tmgFood, tmgEnergy);
+
+        } catch (NullPointerException e) {
+
+        }
+
+        srtPlanet.placeItems(lblBackground); //place the items in the list
 
         XLabel lblPlanetName = new XLabel();
         lblPlanetName.setText(planet.getPlanetName() + " - " + planet.getPlanetClassName() , gfxRepository.txtHeader, gfxRepository.clrText);
