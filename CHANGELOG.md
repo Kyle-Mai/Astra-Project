@@ -614,3 +614,13 @@ Version moved to PTB-B with the creation of the colonyCore class.
   - Fixed minor UI display error in the time scale.
 
   - Fixed XListSorter error when positioning and displaying objects.
+
+**JUNE 5 2017** (ver.PTB-B) (U1)
+
+- More UI code optimizations.
+
+    - Converted the main menu new game settings window over to use the XListSorter. Much easier to edit the order and information now.
+
+    - Converted more buttons to use the XButtonCustom. More than halved the number of lines needed per button. (10 to 4)
+
+- Patched minor planet generation bug. Would occasionally generate planets >25 size. Shouldn't anymore.

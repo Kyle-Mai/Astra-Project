@@ -343,7 +343,7 @@ public class planetCore {
     }
 
     protected int calculateSize(){ //checks the size of the planet
-        return randomNumber(4, 25);
+        return randomNumber(4, 21);
 
     }
 

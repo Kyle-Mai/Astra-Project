@@ -142,7 +142,7 @@ public class mapGenerator implements Serializable {
     /** Standard Methods **/
 
     //generates tiles on the map
-    public void generateTiles() { //TODO: Weighted spawns to avoid clusters.
+    public void generateTiles() {
 
             //refresh the index
             int indexX = 1, indexY = 1;
