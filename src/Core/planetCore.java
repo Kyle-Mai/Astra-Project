@@ -17,7 +17,6 @@ public class planetCore {
     /** ArrayLists **/
 
     public static ArrayList<planetType> listOfPlanets = new ArrayList<>();
-    protected static ArrayList<planetSizes> listOfScales = new ArrayList<>();
     protected ArrayList<Integer> planetsToSpawn = new ArrayList<>();
 
 
@@ -37,17 +36,6 @@ public class planetCore {
 
     /** Planet size characteristics **/
     //An ArrayList dedicated to storing variable related to planet size (listOfScales), atmosphere chance, etc, so that it can remain centralized.
-
-    //Pre-defined blueprints for different planet scales, and the modifiers that go with it.
-    private static void createPlanetSizes(){
-        listOfScales.add(new planetSizes("Dwarf", 0, 0));
-        listOfScales.add(new planetSizes("Small", 1500, 1));
-        listOfScales.add(new planetSizes("Average", 2500, 2));
-        listOfScales.add(new planetSizes("Large", 4000, 5));
-        listOfScales.add(new planetSizes("Huge", 40000, 50));
-        listOfScales.add(new planetSizes("Absurd", 10000000, 0)); //redundancy just to make my moon weighter work a little nicer for now, will need to recode eventually
-
-    }
 
     private static class planetSizes {
         int moonWeight;
@@ -74,8 +62,8 @@ public class planetCore {
 
     //Sets all of the predefined blueprints into a variable ArrayList (listOfPlanets) to allow for dynamic addition/removal of planet types.
     private static void createPlanetTypes(){
-        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 82, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/continental_planet.png"));
-        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 58, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/water_planet.png"));
+        listOfPlanets.add(new planetType("Continental World", 2000, 2100, 82, "The landscape is dotted with numerous large continents and a temperate climate.", true, 3500, 2300, "/Core/GUI/Resources/portraits/continental_planet.png", "/Core/GUI/Resources/planets/continental_planet.png"));
+        listOfPlanets.add(new planetType("Oceanic World", 2001, 2100, 58, "Small islands poke out of the massive oceans encompassing this world. Very little of the planet is actually above water.", true, 3600, 2100, "/Core/GUI/Resources/portraits/ocean_planet.png", "/Core/GUI/Resources/planets/water_planet.png"));
         listOfPlanets.add(new planetType("Wetlands World", 2002, 2100, 55, "Thousands of rivers flow through the landscape of this planet. Much of the planet is covered with perpetual monsoon weather.", true, 2700, 1300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
         listOfPlanets.add(new planetType("Alpine World", 2003, 2101, 76, "Large mountain ranges, young and old, spread across the landscape of this planet.", false, 2500, 1300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
         listOfPlanets.add(new planetType("Tundra World", 2004, 2101, 58, "The surface of this planet is fairly barren, with large swaths of frozen ground. Some liquid water can be found around the equatorial region, but it is otherwise frozen.", true, 2300, 800, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/tundra_planet.png"));
@@ -149,7 +137,6 @@ public class planetCore {
     //Method that MUST run before anything else in this class.
 
     public static void planetPreloader(){
-        createPlanetSizes();
         createPlanetTypes();
         System.out.println("Preloading of planetCore complete.");
 
@@ -172,26 +159,6 @@ public class planetCore {
 
     /** General Methods **/
     //General methods used by the global planetCore objects.
-
-    //gets the number of moons orbiting the planet based on the size of the planet
-    protected int determineMoons(int planetRadius) {
-
-        int moons = 0; //keep track of the number of moons
-        int moonsAverage = 0; //average moons to be generated
-
-        //index the list of planet sizes to see what category this planet falls under
-        for (int i = 0; i < listOfScales.size(); i++) {
-            if (planetRadius < listOfScales.get(i).getPlanetScale()) {
-                moonsAverage = listOfScales.get(i - 1).getMoonWeight();
-                break; //indexing complete, close the for loop
-            }
-        }
-
-
-
-
-        return 0;
-    }
 
     //Determines the planet's distance from the star
     protected int determineDistanceFromStar(starClass parentStar, int planetNumber){
@@ -222,38 +189,13 @@ public class planetCore {
 
         distanceFromStar = randomNumber(distanceMin, distanceMax);
 
-        //If this isn't the first planet, we need to make sure the planet orbits don't overlap
-        /*if (planetNumber > 0) {
-            //until the conditions are met
-            while (incompatible) {
-                incompatible = false;
-                for (int i = 0; i < parentStar.planetList.size(); i++) { //check the other planets around the star
-                    //if this planet is too close to another,
-                    if (distanceFromStar < parentStar.planetList.get(i).getDistanceFromStar() + (parentStar.planetList.get(i).getPlanetRadius() * 4) || distanceFromStar > parentStar.planetList.get(i).getDistanceFromStar() - (parentStar.planetList.get(i).getPlanetRadius() * 4)) {
-                        incompatible = true;
-                    }
-                }
-                //if there's an incompatibility, regenerate the planet distance
-                if (incompatible) {
-                    distanceFromStar = randomNumber(distanceMin, distanceMax);
-                }
-            }
-        } */
-
         return distanceFromStar;
     }
 
     //Checks whether or not the planet is tidally locked to the star.
-    protected boolean checkTidalLock(int planetRadius, int starRadius){
-        //in order to be tidally locked, the planet must be within 6* the star's radius
-        if (planetRadius < (6*starRadius)) {
-            //check whether or not it's tidally locked based on the % chance via a random #
-            if (randomNumber() <= tidalLockChance) {
-                return true;
-            }
-        }
-        return false;
-    } //checks whether or not the planet is tidally locked
+    protected boolean checkTidalLock(){
+        return randomNumber() <= tidalLockChance;
+    }
 
     //gets the habitability of the planet class
     protected boolean determineHabitability(int planetID) {
@@ -262,7 +204,7 @@ public class planetCore {
 
     protected int getPlanetFromID(int planetID) {
         for (int i = 0; i < listOfPlanets.size(); i++) {
-            if (listOfPlanets.get(i).getPlanetID()== planetID) {
+            if (listOfPlanets.get(i).getPlanetID() == planetID) {
                 return i;
             }
         }
@@ -270,127 +212,127 @@ public class planetCore {
     }
 
     //determines the class of the planet generated
-    protected int determinePlanetClass(long distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar){ //sets the planetType of the planet
+    protected int determinePlanetClass(long distanceFromStar, int planetRadius, boolean tidalLock, boolean isHabitableZone, starClass parentStar) { //sets the planetType of the planet
         int randomPlanet; //gets a random number to determine the type of planet generated
 
         //first, clear the planetsToSpawn arraylist so we don't mix spawns.
         planetsToSpawn.clear();
 
-        //if the planet is tidally locked, we want to give it a tidal climate
-        if (tidalLock) {
-            for (int i = 0; i < listOfPlanets.size(); i++) {
-                if (listOfPlanets.get(i).getClimateID() == 2104) {
-                    //this next check allows for spawn weighting, so a higher weight = higher chance to spawn
-                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID()); //adds all planets with the tidal climate type to the list
-                    }
-                }
-            }
-        }
-
-        //planet is very large, therefore spawn a gas giant
-        if (planetRadius > 45000) {
-            //Planet radius is very large, therefore it is going to be a Gas Giant.
-            for (int i = 0; i < listOfPlanets.size(); i++) {
-                if (listOfPlanets.get(i).getClimateID() == 2108) {
-                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID()); //adds all planets with the gas giant type to the list
-                    }
-                }
-            }
-        }
-
-        //planet is within the habitable zone and not a gas giant
-        else if (isHabitableZone) {
-            int hotSpawnMult = 0, coldSpawnMult = 0, tempSpawnMult = 0;
-            boolean guaranteeGaia = false;
-
-            //planet is closer to the far reaches of the habitable zone, therefore should be slightly colder in bias
-            if (parentStar.getHabitableZoneMax() * AUtoKM - distanceFromStar > distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM) {
-                coldSpawnMult = 20;
-                hotSpawnMult = 0;
-                tempSpawnMult = 5;
-            } else if (parentStar.getHabitableZoneMax() * AUtoKM - distanceFromStar > distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM) {
-                hotSpawnMult = 20;
-                coldSpawnMult = 0;
-                tempSpawnMult = 5;
-            } else {
-                guaranteeGaia = true;
-            }
-
-            //(Longest equation ever...) Temperate bias if the planet is close to the center of the habitable zone.
-            if ((parentStar.getHabitableZoneMax() * AUtoKM - parentStar.getHabitableZoneMin() * AUtoKM) / 2 < distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM && ((((parentStar.getHabitableZoneMax() * AUtoKM) - (parentStar.getHabitableZoneMin() * AUtoKM)) / 2) * 3) > distanceFromStar - (parentStar.getHabitableZoneMin() * AUtoKM)) {
-                tempSpawnMult = 50;
-            }
-
-            //if the planet is perfectly centered in the habitable zone, guarantee a gaia world
-            if (guaranteeGaia) {
+        generation:{
+            if (tidalLock) { //planet is tidally locked, spawn a tidal planet
                 for (int i = 0; i < listOfPlanets.size(); i++) {
-                    if (listOfPlanets.get(i).getClimateID() == 2106) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                    if (listOfPlanets.get(i).getClimateID() == 2104) {
+                        //this next check allows for spawn weighting, so a higher weight = higher chance to spawn
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID()); //adds all planets with the tidal climate type to the list
+                        }
+                        break generation; //don't need any other planet types
                     }
                 }
-            } else {
+            }
+
+            if (planetRadius > 20) { //only large planets can be gas giant types
                 for (int i = 0; i < listOfPlanets.size(); i++) {
-                    //gather all of the habitable planets and place them into the list
-                    if (listOfPlanets.get(i).getClimateID() == 2106) { //Adds a weighted list of gaia type planets.
+                    if (listOfPlanets.get(i).getClimateID() == 2108) {
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID()); //adds all planets with the gas giant type to the list
+                        }
+                    }
+                }
+            }
+
+            //planet is within the habitable zone and not a gas giant
+            if (isHabitableZone) {
+                int hotSpawnMult = 0, coldSpawnMult = 0, tempSpawnMult = 0;
+                boolean guaranteeGaia = false;
+
+                //planet is closer to the far reaches of the habitable zone, therefore should be slightly colder in bias
+                if (parentStar.getHabitableZoneMax() * AUtoKM - distanceFromStar > distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM) {
+                    coldSpawnMult = 20;
+                    hotSpawnMult = 0;
+                    tempSpawnMult = 5;
+                } else if (parentStar.getHabitableZoneMax() * AUtoKM - distanceFromStar > distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM) {
+                    hotSpawnMult = 20;
+                    coldSpawnMult = 0;
+                    tempSpawnMult = 5;
+                } else {
+                    guaranteeGaia = true;
+                }
+
+                //(Longest equation ever...) Temperate bias if the planet is close to the center of the habitable zone.
+                if ((parentStar.getHabitableZoneMax() * AUtoKM - parentStar.getHabitableZoneMin() * AUtoKM) / 2 < distanceFromStar - parentStar.getHabitableZoneMin() * AUtoKM && ((((parentStar.getHabitableZoneMax() * AUtoKM) - (parentStar.getHabitableZoneMin() * AUtoKM)) / 2) * 3) > distanceFromStar - (parentStar.getHabitableZoneMin() * AUtoKM)) {
+                    tempSpawnMult = 50;
+                }
+
+                //if the planet is perfectly centered in the habitable zone, guarantee a gaia world
+                if (guaranteeGaia) {
+                    for (int i = 0; i < listOfPlanets.size(); i++) {
+                        if (listOfPlanets.get(i).getClimateID() == 2106) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < listOfPlanets.size(); i++) {
+                        //gather all of the habitable planets and place them into the list
+                        if (listOfPlanets.get(i).getClimateID() == 2106) { //Adds a weighted list of gaia type planets.
+                            for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                                planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                            }
+                        } else if (listOfPlanets.get(i).getClimateID() == 2100) { //Adds a weighted list of temperate planets.
+                            for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + tempSpawnMult; j++) {
+                                planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                            }
+                        } else if (listOfPlanets.get(i).getClimateID() == 2101) { //Adds a weighted list of hot planets.
+                            for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + hotSpawnMult; j++) {
+                                planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                            }
+                        } else if (listOfPlanets.get(i).getClimateID() == 2102) { //Adds a weighted list of cold planets.
+                            for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + coldSpawnMult; j++) {
+                                planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                            }
+                        } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107 || listOfPlanets.get(i).getClimateID() == 2106) { //Adds a weighted list of different barren/extreme planets as well as gaia
+                            for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
+                                planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            //Planet is not within habitable zone, act accordingly
+            else if (distanceFromStar < parentStar.getHabitableZoneMin() * AUtoKM) { //planet is closer to the star than the habitable zone, it'll be an extreme warm planet
+                int extremeHotMult = 0;
+                if (distanceFromStar < parentStar.getStarRadius() * 5) { //Planet is very close to the star, going to be extreme hot.
+                    extremeHotMult = 25;
+                }
+                for (int i = 0; i < listOfPlanets.size(); i++) {
+                    if (listOfPlanets.get(i).getClimateID() == 2109) { //Adds a weighted list of extreme hot planets
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + extremeHotMult; j++) {
+                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
+                        }
+                    } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107) { //Adds a weighted list of different barren/extreme planets
                         for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
                             planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
                         }
-                    } else if (listOfPlanets.get(i).getClimateID() == 2100) { //Adds a weighted list of temperate planets.
-                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + tempSpawnMult; j++) {
+                    }
+                }
+
+            } else if (distanceFromStar > parentStar.getHabitableZoneMax() * AUtoKM) {
+                //planet is further from the star than the habitable zone, it'll be a extreme cold planet
+                int extremeColdMult = 0;
+                if (distanceFromStar < parentStar.getStarRadius() * 5) { //Planet is very close to the star, going to be extreme hot.
+                    extremeColdMult = 25;
+                }
+                for (int i = 0; i < listOfPlanets.size(); i++) {
+                    if (listOfPlanets.get(i).getClimateID() == 2110) { //Adds a weighted list of extreme hot planets
+                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + extremeColdMult; j++) {
                             planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
                         }
-                    } else if (listOfPlanets.get(i).getClimateID() == 2101) { //Adds a weighted list of hot planets.
-                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + hotSpawnMult; j++) {
-                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
-                        }
-                    } else if (listOfPlanets.get(i).getClimateID() == 2102) { //Adds a weighted list of cold planets.
-                        for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + coldSpawnMult; j++) {
-                            planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
-                        }
-                    } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107 || listOfPlanets.get(i).getClimateID() == 2106 ) { //Adds a weighted list of different barren/extreme planets as well as gaia
+                    } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107) { //Adds a weighted list of different barren/extreme planets
                         for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
                             planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
                         }
-                    }
-                }
-            }
-
-        }
-
-        //Planet is not within habitable zone, act accordingly
-        else if (distanceFromStar < parentStar.getHabitableZoneMin() * AUtoKM) { //planet is closer to the star than the habitable zone, it'll be an extreme warm planet
-            int extremeHotMult = 0;
-            if (distanceFromStar < parentStar.getStarRadius() * 5) { //Planet is very close to the star, going to be extreme hot.
-            extremeHotMult = 25;
-            }
-            for (int i = 0; i < listOfPlanets.size(); i++) {
-                if (listOfPlanets.get(i).getClimateID() == 2109) { //Adds a weighted list of extreme hot planets
-                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + extremeHotMult; j++) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
-                    }
-                } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107) { //Adds a weighted list of different barren/extreme planets
-                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
-                    }
-                }
-            }
-
-        } else if (distanceFromStar > parentStar.getHabitableZoneMax() * AUtoKM) {
-            //planet is further from the star than the habitable zone, it'll be a extreme cold planet
-            int extremeColdMult = 0;
-            if (distanceFromStar < parentStar.getStarRadius() * 5) { //Planet is very close to the star, going to be extreme hot.
-                extremeColdMult = 25;
-            }
-            for (int i = 0; i < listOfPlanets.size(); i++) {
-                if (listOfPlanets.get(i).getClimateID() == 2110) { //Adds a weighted list of extreme hot planets
-                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight() + extremeColdMult; j++) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
-                    }
-                } else if (listOfPlanets.get(i).getClimateID() == 2105 || listOfPlanets.get(i).getClimateID() == 2103 || listOfPlanets.get(i).getClimateID() == 2107) { //Adds a weighted list of different barren/extreme planets
-                    for (int j = 0; j <= listOfPlanets.get(i).getSpawnWeight(); j++) {
-                        planetsToSpawn.add(listOfPlanets.get(i).getPlanetID());
                     }
                 }
             }
@@ -400,81 +342,8 @@ public class planetCore {
         return planetsToSpawn.get(randomPlanet); //returns the planet ID of the planet generated
     }
 
-    protected int calculateSize(int starRadius, long distanceFromStar){
-
-        if (distanceFromStar <= 4*starRadius) {
-
-            if (800 <= randomNumber()) { //what's this?! weighted planet sizes?!
-                //80% chance of being a fairly small planet
-                return (240 + (int)(Math.random() * 2200));
-            } else {
-                //20% chance to have a slightly larger range
-                return (120 + (int)(Math.random() * 3800));
-            }
-
-        } else if (distanceFromStar <= 15*starRadius && distanceFromStar > 4*starRadius) {
-
-            if (900 <= randomNumber()) {
-                //90% chance to be a fairly average planet
-                return (500 + (int)(Math.random() * 4500));
-            } else {
-                //10% chance to be a fairly large planet
-                return (2000 + (int)(Math.random() * 7900));
-            }
-
-        } else if (distanceFromStar <= 25*starRadius && distanceFromStar > 15*starRadius) {
-
-            if (700 <= randomNumber()) {
-                //70% chance to be somewhat above average
-                return (800 + (int)(Math.random() * 6000));
-            } else {
-                //30% chance to be fairly large
-                return (2000 + (int)(Math.random() * 20000));
-            }
-
-        } else if (distanceFromStar <= 40*starRadius && distanceFromStar > 25*starRadius) {
-
-            if (700 <= randomNumber()) {
-                //70% chance to be pretty much a certain gas giant
-                return (35000 + (int)(Math.random() * 150000));
-            } else {
-                //30% chance to be fairly huge planet
-                return (3600 + (int)(Math.random() * 44000));
-            }
-
-        } else if (distanceFromStar <= 60*starRadius && distanceFromStar > 40*starRadius) {
-
-            if (400 <= randomNumber()) {
-                //40% chance to be pretty much a certain gas giant
-                return (45000 + (int)(Math.random() * 90000));
-            } else {
-                //60% chance to be fairly average
-                return (800 + (int)(Math.random() * 15000));
-            }
-
-        } else if (distanceFromStar > 60*starRadius) {
-
-            if (900 <= randomNumber()) {
-                //90% chance to be small
-                return (200 + (int)(Math.random() * 2500));
-            } else {
-                //10% chance to be a probable gas giant
-                return (6000 + (int)(Math.random() * 70000));
-            }
-
-        }
-
-        //arbitrary, should never reach this point
-        return 0;
-
-    } //checks the size of the planet
-
-    protected boolean isInHabitableZone(long distanceFromStar, int upperBound, int lowerBound) {
-        if ((lowerBound * AUtoKM) <= distanceFromStar && (upperBound * AUtoKM) >= distanceFromStar) {
-            return true; //within habitable zone, return true
-        } else {
-            return false; //outside of habitable zone, return false
-        }
+    protected int calculateSize(){ //checks the size of the planet
+        return randomNumber(4, 25);
 
     }
 

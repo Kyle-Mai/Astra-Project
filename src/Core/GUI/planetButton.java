@@ -5,6 +5,7 @@ import Core.GUI.SwingEX.XButton;
 import Core.planetClass;
 import Core.starClass;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -14,7 +15,7 @@ import java.awt.*;
  * Adds nonsense to the XButton for planets.
  */
 
-public class planetButton extends XButton {
+public class planetButton extends JButton {
 
     starClass star;
     planetClass planet;
@@ -25,7 +26,9 @@ public class planetButton extends XButton {
         this.identifier = identifier;
         this.setFocusPainted(false);
         this.setFocusable(false);
+        this.setBackground(gfxRepository.clrInvisible);
         this.setOpaque(false);
+        this.setBorder(null);
 
     }
 

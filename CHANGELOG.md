@@ -592,3 +592,25 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Switched over most listed content to use the new XListSorter. Less lines and faster initialization due to no dependencies. Can quickly swap order as needed, too.
 
 - Fixed some minor issues with the Sol System.
+
+**JUNE 4 2017** (ver.PTB-B) (U2)
+
+- More UI optimizations.
+
+    - Simplified the creation of custom buttons using a new XButtonCustom class.
+
+    - More testing of the new XListSorter class, switching relevant data over to using it.
+
+- Reworked planet generation.
+
+    - Size is now measured as a metric between 4 and 25. Size 20+ planets can be gas giants. Will also allow for more advanced habitability algorithms later.
+
+    - Removed redundant methods - No more moon calculations and whatnot.
+
+- New GFX for continental & ocean planet portraits.
+
+- Bug fixes
+
+  - Fixed minor UI display error in the time scale.
+
+  - Fixed XListSorter error when positioning and displaying objects.

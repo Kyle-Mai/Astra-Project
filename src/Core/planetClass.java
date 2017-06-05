@@ -44,8 +44,8 @@ public class planetClass extends planetCore implements Serializable {
         this.parentStar = parentStar; //the parent star of the planet
         this.planetNumber = planetNumber; //the current planet being generated, with a higher number being further from the parent star
         this.distanceFromStar = determineDistanceFromStar(this.parentStar, this.planetNumber);
-        this.planetRadius = calculateSize(parentStar.getStarRadius(), this.distanceFromStar); //determines the radius of the planet in km
-        this.isTidallyLocked = checkTidalLock(this.planetRadius, parentStar.getStarRadius()); //runs a check to determine tidal lock
+        this.planetRadius = calculateSize(); //determines the radius of the planet in km
+        this.isTidallyLocked = checkTidalLock(); //runs a check to determine tidal lock
         //this.isInHabitableZone = isInHabitableZone(this.distanceFromStar, parentStar.getHabitableZoneMax(), parentStar.getHabitableZoneMin());
         this.planetType = determinePlanetClass(this.distanceFromStar, this.planetRadius, this.isTidallyLocked, this.parentStar.isStarHabitable(), this.parentStar); //determines the planet's class
         this.arrayLoc = getPlanetFromID(planetType); //Gets the planet's array location from the ID.

@@ -962,6 +962,10 @@ public class guiCoreV4 {
                 }
 
                 lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+
+                if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
+                    lblTimeScale.setText("PAUSED", gfxRepository.txtItalSubtitle, gfxRepository.clrDisable);
+                }
             }
         });
         screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "slow");
@@ -976,6 +980,10 @@ public class guiCoreV4 {
                 }
 
                 lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+
+                if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
+                    lblTimeScale.setText("PAUSED", gfxRepository.txtItalSubtitle, gfxRepository.clrDisable);
+                }
             }
         });
 
@@ -1903,23 +1911,18 @@ public class guiCoreV4 {
         lblTopBarShield.setBounds(0, 0, 66, 76);
         lblTopBarShield.setVisible(true);
 
-        XLabel lblMenu = new XLabel(gfxRepository.menuButton);
-        pnlTopBar.add(lblMenu);
-        lblMenu.setBounds(pnlTopBar.getWidth() - 99, 2, 99, 48);
-        lblMenu.setAlignments(SwingConstants.CENTER);
-        lblMenu.setVisible(true);
-
-        XButton btnMenu = new XButton(gfxRepository.button99_48, SwingConstants.LEFT);
-        pnlTopBar.add(btnMenu);
-        btnMenu.setBounds(lblMenu.getBounds());
+        XButtonCustom btnMenu = new XButtonCustom(gfxRepository.button99_48, SwingConstants.LEFT);
+        btnMenu.setBounds(pnlTopBar.getWidth() - 99, 2, 99, 48);
+        btnMenu.setImage(gfxRepository.menuButton);
+        btnMenu.placeOn(pnlTopBar);
         btnMenu.setVisible(true);
 
         btnMenu.addMouseListener(new XMouseListener() {
-            XButton source;
+            XButtonCustom source;
 
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
+                source = (XButtonCustom) mouseEvent.getSource();
                 audioRepository.buttonClick();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
@@ -1937,21 +1940,21 @@ public class guiCoreV4 {
 
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
+                source = (XButtonCustom) mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
             }
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
+                source = (XButtonCustom) mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.LEFT);
                 window.refresh();
             }
 
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
+                source = (XButtonCustom) mouseEvent.getSource();
                 audioRepository.menuTab();
                 source.setHorizontalAlignment(SwingConstants.CENTER);
                 window.refresh();
@@ -1959,17 +1962,13 @@ public class guiCoreV4 {
 
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
+                source = (XButtonCustom) mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.LEFT);
                 window.refresh();
             }
         });
 
         XButton btnTech = new XButton(gfxRepository.techMenu, SwingConstants.LEFT);
-        pnlTopBar.add(btnTech);
-        btnTech.setBounds(70, 0, 73, 53);
-        btnTech.setVisible(true);
-
         btnTech.addMouseListener(new XMouseListener() {
             XButton source;
 
@@ -2013,10 +2012,6 @@ public class guiCoreV4 {
         });
 
         XButton btnEmpire = new XButton(gfxRepository.empireMenu, SwingConstants.LEFT);
-        pnlTopBar.add(btnEmpire);
-        btnEmpire.setBounds(btnTech.getX() + btnTech.getWidth() + 2, btnTech.getY(), btnTech.getWidth(), btnTech.getHeight());
-        btnEmpire.setVisible(true);
-
         btnEmpire.addMouseListener(new XMouseListener() {
             XButton source;
 
@@ -2059,10 +2054,6 @@ public class guiCoreV4 {
         });
 
         XButton btnGovernment = new XButton(gfxRepository.governmentMenu, SwingConstants.LEFT);
-        pnlTopBar.add(btnGovernment);
-        btnGovernment.setBounds(btnEmpire.getX() + btnEmpire.getWidth() + 2, btnEmpire.getY(), btnEmpire.getWidth(), btnEmpire.getHeight());
-        btnGovernment.setVisible(true);
-
         btnGovernment.addMouseListener(new XMouseListener() {
             XButton source;
 
@@ -2105,10 +2096,6 @@ public class guiCoreV4 {
         });
 
         XButton btnFleet = new XButton(gfxRepository.fleetMenu, SwingConstants.LEFT);
-        pnlTopBar.add(btnFleet);
-        btnFleet.setBounds(btnGovernment.getX() + btnGovernment.getWidth() + 2, btnGovernment.getY(), btnGovernment.getWidth(), btnGovernment.getHeight());
-        btnFleet.setVisible(true);
-
         btnFleet.addMouseListener(new XMouseListener() {
             XButton source;
 
@@ -2150,7 +2137,10 @@ public class guiCoreV4 {
             }
         });
 
-        XListSorter srtPlayerBar = new XListSorter(XConstants.HORIZONTAL_SORT, 10, btnFleet.getX() + btnFleet.getWidth() + 10, 9);
+        XListSorter srtTopButtons = new XListSorter(XConstants.HORIZONTAL_SORT, 0, 70, 0); //sorts the buttons
+        srtTopButtons.forceItemSize(73, 53);
+        srtTopButtons.addItems(btnTech, btnEmpire, btnGovernment, btnFleet);
+        srtTopButtons.placeItems(pnlTopBar);
 
         XTextImage tmgTech = new XTextImage();
         tmgTech.addImage(gfxRepository.researchIcon, 34, 34);
@@ -2166,13 +2156,14 @@ public class guiCoreV4 {
         tmgEnergy.getText().setVerticalAlignment(SwingConstants.CENTER);
 
         XTextImage tmgMinerals = new XTextImage();
-        tmgMinerals.addImage(gfxRepository.mineralsIcon, 34, 34);
+        tmgMinerals.addImage(gfxRepository.resourceIcon, 34, 34);
         tmgMinerals.addText(": " + uiFormat.format(gameSettings.player.getResources()) + " (" + uiFormat.format(gameSettings.player.getResourcesTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText, 170);
         if (gameSettings.player.getResourcesTurn() < 0) { //if the value is negative, display accordingly
             tmgMinerals.getText().setForeground(gfxRepository.clrDisable);
         }
         tmgMinerals.getText().setVerticalAlignment(SwingConstants.CENTER);
 
+        XListSorter srtPlayerBar = new XListSorter(XConstants.HORIZONTAL_SORT, 10, btnFleet.getX() + btnFleet.getWidth() + 10, 9); //sorts the icons
         srtPlayerBar.addItems(tmgTech, tmgEnergy, tmgMinerals);
         srtPlayerBar.placeItems(pnlTopBar);
 
@@ -2230,6 +2221,10 @@ public class guiCoreV4 {
                 }
 
                 lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+
+                if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
+                    lblTimeScale.setText("PAUSED", gfxRepository.txtItalSubtitle, gfxRepository.clrDisable);
+                }
             }
 
             @Override
@@ -2284,6 +2279,10 @@ public class guiCoreV4 {
                 }
 
                 lblTimeScale.setText(gameSettings.timeLocale[gameSettings.currentTime], gfxRepository.txtItalSubtitle, gfxRepository.clrText);
+
+                if (gameSettings.gameIsPaused) { //if the game is paused, load the pause bar
+                    lblTimeScale.setText("PAUSED", gfxRepository.txtItalSubtitle, gfxRepository.clrDisable);
+                }
             }
 
             @Override
@@ -2418,6 +2417,15 @@ public class guiCoreV4 {
 
         XListSorter srtStar = new XListSorter(XConstants.VERTICAL_SORT, 15, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15);
 
+        XLabel lblStar = new XLabel("Star", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        lblStar.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
+        lblStar.setAlignments(SwingConstants.CENTER);
+
+        XPanel imgDivider = new XPanel(gfxRepository.clrDGrey);
+        imgDivider.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
+        XPanel imgDivider2 = new XPanel(gfxRepository.clrDGrey);
+        imgDivider2.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
+
         XTextImage tmgPlanets = new XTextImage();
         tmgPlanets.addImage(gfxRepository.starPlanetCount, 30, 30);
         tmgPlanets.addText(" : " + star.getNumOfPlanets(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
@@ -2430,7 +2438,7 @@ public class guiCoreV4 {
         tmgColonies.getImage().setToolTipText("Colonies");
         tmgColonies.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
 
-        srtStar.addItems(tmgPlanets, tmgColonies);
+        srtStar.addItems(imgDivider, lblStar, tmgPlanets, tmgColonies, imgDivider2);
         srtStar.placeItems(lblBackground);
 
         //adds a button to enter the system view
@@ -2940,37 +2948,35 @@ public class guiCoreV4 {
 
         for (int i = 0; i < star.planetList.size(); i++) {
 
+            int size = 0;
+
             Random r = new Random();
+
+            XLabel imgPlanet = new XLabel();
+            pnlBG.add(imgPlanet);
+            size = (6 * star.planetList.get(i).getPlanetRadius());
+            imgPlanet.setBounds(((pnlBG.getWidth() / 2) + 250) + planetPosition, (pnlBG.getHeight() / 2) - (size/2), size, size);
+            imgPlanet.scaleImage(planetCore.listOfPlanets.get(star.planetList.get(i).getArrayLoc()).getPlanetIcon());
+            imgPlanet.setVisible(true);
 
             if (star.planetList.get(i).isHomePlanet()) {
                 XLabel imgHomePlanet = new XLabel(gfxRepository.homePlanet);
                 pnlBG.add(imgHomePlanet);
-                imgHomePlanet.setBounds(((pnlBG.getWidth() / 2) + 225) + planetPosition, (pnlBG.getHeight() / 2) + 7, 32, 32);
+                imgHomePlanet.setBounds(imgPlanet.getX(), imgPlanet.getY() + imgPlanet.getHeight(), 32, 32);
                 imgHomePlanet.setVisible(true);
                 imgHomePlanet.setToolTipText("Capital");
             } else if (star.planetList.get(i).getPlanetColony() != null) {
                 XLabel imgColony = new XLabel(gfxRepository.colonyIcon);
                 pnlBG.add(imgColony);
-                imgColony.setBounds(((pnlBG.getWidth() / 2) + 225) + planetPosition, (pnlBG.getHeight() / 2) + 15, 32, 25);
+                imgColony.setBounds(imgPlanet.getX(), imgPlanet.getY() + imgPlanet.getHeight(), 32, 25);
                 imgColony.setVisible(true);
                 imgColony.setToolTipText("Colony");
             }
 
-            XLabel imgPlanet = new XLabel();
-            pnlBG.add(imgPlanet);
-            imgPlanet.setBounds(((pnlBG.getWidth() / 2) + 250) + planetPosition, (pnlBG.getHeight() / 2) - 25, 50, 50);
-            imgPlanet.scaleImage(planetCore.listOfPlanets.get(star.planetList.get(i).getArrayLoc()).getPlanetIcon());
-            imgPlanet.setVisible(true);
-
             planet.add(new planetButton(star, i));
-            //pnlBG.add(planet.get(i));
-            //planet.get(i).setBounds(((pnlBG.getWidth() / 2) + 250) + (90 * i), (pnlBG.getHeight() / 2) - 25, 50, 50);
             imgPlanet.add(planet.get(i));
             planet.get(i).setBounds(0, 0, imgPlanet.getWidth(), imgPlanet.getHeight());
-            planet.get(i).setBackground(gfxRepository.clrInvisible);
             planet.get(i).setPlanet(star.planetList.get(i));
-            planet.get(i).setBorder(null);
-            planet.get(i).setOpaque(false);
             planet.get(i).setVisible(true);
 
             planet.get(i).addMouseListener(new XMouseListener() {
@@ -2980,7 +2986,7 @@ public class guiCoreV4 {
                 public void mouseClicked(MouseEvent mouseEvent) {
                     source = (planetButton)mouseEvent.getSource();
                     audioRepository.buttonClick();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    //source.setHorizontalAlignment(SwingConstants.RIGHT);
                     window.refresh();
 
                     loadPlanetData(source.getPlanet());
@@ -2989,42 +2995,34 @@ public class guiCoreV4 {
                 @Override
                 public void mousePressed(MouseEvent mouseEvent) {
                     source = (planetButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    //source.setHorizontalAlignment(SwingConstants.RIGHT);
                     window.refresh();
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent mouseEvent) {
                     source = (planetButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    //source.setHorizontalAlignment(SwingConstants.LEFT);
                     window.refresh();
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent mouseEvent) {
                     source = (planetButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.CENTER);
-                    planetName = new XLabel();
-                    source.add(planetName);
-                    planetName.setBounds(source.getBounds());
-                    //planetName.setText(source.getPlanet().getPlanetName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-                    planetName.setText("View", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-                    planetName.setAlignments(SwingConstants.CENTER, SwingConstants.BOTTOM);
-                    planetName.setVisible(true);
-
+                    //source.setHorizontalAlignment(SwingConstants.CENTER);
                     window.refresh();
                 }
 
                 @Override
                 public void mouseExited(MouseEvent mouseEvent) {
                     source = (planetButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                    //source.setHorizontalAlignment(SwingConstants.LEFT);
                     source.removeAll();
                     window.refresh();
                 }
             });
 
-            planetPosition = planetPosition + (100 + r.nextInt(200)); //TODO: Should eventually weight a little better....
+            planetPosition = planetPosition + (150 + r.nextInt(220)); //TODO: Should eventually weight a little better....
 
         }
 
@@ -3082,8 +3080,30 @@ public class guiCoreV4 {
         lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
         lblStatsBox.setVisible(true);
 
-        XListSorter srtPlanet = new XListSorter(XConstants.VERTICAL_SORT, 15, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15); //adds a new list sorter
+        XListSorter srtPlanet = new XListSorter(XConstants.VERTICAL_SORT, 5, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15); //adds a new list sorter
 
+        //planet related details
+        XLabel lblPlanet = new XLabel("Planet", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        lblPlanet.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
+        lblPlanet.setAlignments(SwingConstants.CENTER);
+
+        XTextImage tmgSize = new XTextImage();
+        tmgSize.addImage(gfxRepository.planetSizeIcon, 30, 30);
+        tmgSize.addText(": " + planet.getPlanetRadius(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+        tmgSize.getImage().setToolTipText("Planet Size");
+
+        XTextImage tmgMinerals = new XTextImage();
+        tmgMinerals.addImage(gfxRepository.mineralsIcon, 30, 30);
+        tmgMinerals.addText(": " + planet.getResources(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+        tmgMinerals.getImage().setToolTipText("Mineral Deposits");
+
+        XPanel imgDivider = new XPanel(gfxRepository.clrDGrey);
+        imgDivider.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
+        XPanel imgDivider2 = new XPanel(gfxRepository.clrDGrey);
+        imgDivider2.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
+        srtPlanet.addItems(imgDivider, lblPlanet, tmgSize, tmgMinerals, imgDivider2); //TODO: Switch divider over to a class, maybe?
+
+        //colony related details (if applicable)
         try {
 
             XTextImage tmgPop = new XTextImage(); //tfw replacing 12 lines of tedious addition with 5 easy lines :ok_hand:
@@ -3110,7 +3130,24 @@ public class guiCoreV4 {
             tmgEnergy.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
             tmgEnergy.getImage().setToolTipText("Energy Production");
 
-            srtPlanet.addItems(tmgPop, tmgUnrest, tmgFood, tmgEnergy);
+            XTextImage tmgResources = new XTextImage();
+            tmgResources.addImage(gfxRepository.resourceIcon, 30, 30);
+            tmgResources.addText(" : " + planet.getPlanetColony().getResourceProduction(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgResources.getImage().setToolTipText("Resource Production");
+
+            XTextImage tmgResearch = new XTextImage();
+            tmgResearch.addImage(gfxRepository.researchIcon, 30, 30);
+            tmgResearch.addText(" : " + planet.getPlanetColony().getResearchProduction(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgResearch.getImage().setToolTipText("Research Production");
+
+            XLabel lblColony = new XLabel("Colony", gfxRepository.txtSubtitle, gfxRepository.clrText);
+            lblColony.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
+            lblColony.setAlignments(SwingConstants.CENTER);
+
+            XPanel imgDivider3 = new XPanel(gfxRepository.clrDGrey);
+            imgDivider3.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
+
+            srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgEnergy, tmgResources, tmgResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
 
         } catch (NullPointerException e) {
 
@@ -3125,11 +3162,17 @@ public class guiCoreV4 {
         lblPlanetName.setAlignments(SwingConstants.CENTER);
         lblPlanetName.setVisible(true);
 
+        XListSorter srtInfo = new XListSorter(XConstants.VERTICAL_SORT, 5, 40, lblPlanetName.getY() + lblPlanetName.getHeight() + 15);
+
         XLabel lblPlanetDesc = new XLabel("<html>" + planet.getPlanetClassDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-        lblBackground.add(lblPlanetDesc);
-        lblPlanetDesc.setBounds(40, lblPlanetName.getY() + lblPlanetName.getHeight() + 15, lblStatsBox.getX() - 40, 200);
+        lblPlanetDesc.setPreferredSize(new Dimension(lblStatsBox.getX() - 50, 100));
         lblPlanetDesc.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
-        lblPlanetDesc.setVisible(true);
+
+        XPanel imgDivider4 = new XPanel(gfxRepository.clrDGrey);
+        imgDivider4.setPreferredSize(new Dimension(lblStatsBox.getX() - 50, 3));
+
+        srtInfo.addItems(lblPlanetDesc, imgDivider4);
+        srtInfo.placeItems(lblBackground);
 
         //displays the close button
         XButton btnClose = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);

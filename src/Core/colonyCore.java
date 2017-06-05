@@ -30,6 +30,7 @@ public class colonyCore implements Serializable {
     private double resourceProduction;
     private double taxProduction;
     private double foodProduction;
+    private double researchProduction;
     private double currentFood;
     private int population;
     private double unrest;
@@ -57,7 +58,7 @@ public class colonyCore implements Serializable {
     }
 
     //creates a colony from predefined values
-    public colonyCore (planetClass planet, int population, int colonyAge, int industryFocus, int entertainmentFocus, double currentFood, double resourceProduction, double taxProduction, double foodProduction) {
+    public colonyCore (planetClass planet, int population, int colonyAge, int industryFocus, int entertainmentFocus, double currentFood, double resourceProduction, double taxProduction, double foodProduction, double researchProduction) {
 
         this.planet = planet;
         this.population = population;
@@ -68,6 +69,7 @@ public class colonyCore implements Serializable {
         this.resourceProduction = resourceProduction;
         this.taxProduction = taxProduction;
         this.foodProduction = foodProduction;
+        this.researchProduction = researchProduction;
 
     }
 
@@ -132,6 +134,7 @@ public class colonyCore implements Serializable {
     public double getCurrentFood() { return this.currentFood; }
     public double getResourceProduction() { return this.resourceProduction; }
     public double getTaxProduction() { return this.taxProduction; }
+    public double getResearchProduction() { return this.researchProduction; }
     public double getFoodProduction() { return this.foodProduction; }
     public boolean isHomePlanet() { return this.homePlanet; }
 

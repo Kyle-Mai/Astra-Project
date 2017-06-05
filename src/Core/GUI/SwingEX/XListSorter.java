@@ -112,6 +112,7 @@ public class XListSorter implements XConstants {
             } else { //use component's current size
                 s1 = 0;
                 s2 = 0;
+                item.setSize(item.getPreferredSize());
                 switch (sort) {
                     case HORIZONTAL_SORT:
                         item.setLocation(posx + s1, posy);
