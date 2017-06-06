@@ -634,4 +634,11 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Turn Ticker updated.
 
     - Now supports decay of mineral deposits and increase of other parameters (energy, food, etc)
-   
+
+**JUNE 6 2017** (ver.PTB-B) (U1)
+
+- Added basis for event window.
+
+- Integrated planet resources into the turn ticker properly so it refreshes when necessary even while visible now.
+
+- Slightly improved the colony functionality.

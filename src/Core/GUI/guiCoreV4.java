@@ -14,6 +14,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -103,6 +104,10 @@ public class guiCoreV4 {
     private XTextImage tmgPlanetEnergy;
     private XTextImage tmgPlanetResources;
     private XTextImage tmgResearch;
+    private XTextImage tmgPlanetResearch;
+
+    private planetClass currentPlanet;
+    private starClass currentStar;
 
 
     private boolean pauseMenuOpen = false;
@@ -3018,6 +3023,8 @@ public class guiCoreV4 {
 
         pnlPlanetData.removeAll();
 
+        currentPlanet = planet; //refresh current planet
+
         audioRepository.planetAmbiance(planet.getPlanetType());
 
         pnlPlanetData.setVisible(true);
@@ -3058,7 +3065,7 @@ public class guiCoreV4 {
 
         tmgPlanetMinerals = new XTextImage();
         tmgPlanetMinerals.addImage(gfxRepository.mineralsIcon, 30, 30);
-        tmgPlanetMinerals.addText(": " + uiFormat.format(planet.getResources()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+        tmgPlanetMinerals.addText(" : " + uiFormat.format(planet.getResources()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
         tmgPlanetMinerals.getImage().setToolTipText("Mineral Deposits");
 
         XPanel imgDivider = new XPanel(gfxRepository.clrDGrey);
@@ -3099,10 +3106,10 @@ public class guiCoreV4 {
             tmgPlanetResources.addText(" : " + uiFormat.format(planet.getPlanetColony().getResourceProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
             tmgPlanetResources.getImage().setToolTipText("Resource Production");
 
-            tmgResearch = new XTextImage();
-            tmgResearch.addImage(gfxRepository.researchIcon, 30, 30);
-            tmgResearch.addText(" : " + uiFormat.format(planet.getPlanetColony().getResearchProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgResearch.getImage().setToolTipText("Research Production");
+            tmgPlanetResearch = new XTextImage();
+            tmgPlanetResearch.addImage(gfxRepository.researchIcon, 30, 30);
+            tmgPlanetResearch.addText(" : " + uiFormat.format(planet.getPlanetColony().getResearchProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgPlanetResearch.getImage().setToolTipText("Research Production");
 
             XLabel lblColony = new XLabel("Colony", gfxRepository.txtSubtitle, gfxRepository.clrText);
             lblColony.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
@@ -3111,9 +3118,9 @@ public class guiCoreV4 {
             XPanel imgDivider3 = new XPanel(gfxRepository.clrDGrey);
             imgDivider3.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
 
-            srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgPlanetEnergy, tmgPlanetResources, tmgResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
+            srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgPlanetEnergy, tmgPlanetResources, tmgPlanetResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e) { //no colony found, just skip the block
 
         }
 
@@ -3195,6 +3202,39 @@ public class guiCoreV4 {
     }
 
 
+    /** Event Windows **/
+
+    private void loadPopupView(String name, BufferedImage gfx, String desc) { //pop-up window, no effects
+        //TODO: Add in GFX & Buttons.
+
+        XPanel pnlPopup = new XPanel();
+        layers.add(pnlPopup, new Integer(15), 0);
+        pnlPopup.setBounds((window.getWidth() / 2) - 318, 150, 635, 500);
+        pnlPopup.setVisible(true);
+
+        XLabel lblHeader = new XLabel(gfxRepository.greenHeader); //header at the top of the event window
+        pnlPopup.add(lblHeader);
+        lblHeader.setBounds(0, 0, 635, 25);
+        lblHeader.setVisible(true);
+
+        XLabel lblPopupBG = new XLabel();
+        pnlPopup.add(lblPopupBG);
+        lblPopupBG.setBounds(0, 25, pnlPopup.getWidth(), pnlPopup.getHeight());
+        lblPopupBG.scaleImage(gfxRepository.menuBackground);
+        lblPopupBG.setVisible(true);
+
+        XLabel lblEvtName = new XLabel(name, gfxRepository.txtButtonSmall, gfxRepository.clrText);
+        lblHeader.add(lblEvtName);
+        lblEvtName.setBounds(0, 0, lblHeader.getWidth(), lblHeader.getHeight());
+        lblEvtName.setVisible(true);
+
+        XLabel lblEvtDesc = new XLabel("<html>" + desc + "</html>", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+        lblPopupBG.add(lblEvtDesc);
+        lblEvtDesc.setBounds(15, 15, lblPopupBG.getWidth() - 30, 300);
+        lblEvtDesc.setVisible(true);
+
+    }
+
     /** Turn ticker **/
 
     public void turnTick() { //refreshes the UI elements that need it when the turn ticks up
@@ -3213,10 +3253,20 @@ public class guiCoreV4 {
 
         //TODO: Finish allowing dynamic display of elements.
 
+        //if either the star panel or planet panel are visible, refresh the text in them when the ticker runs
         if (pnlStarData != null && pnlStarData.isVisible()) {
 
-        } else if (pnlPlanetData != null && pnlPlanetData.isVisible()) {
+        } else if (pnlPlanetData != null && pnlPlanetData.isVisible() && currentPlanet != null) {
+            tmgPlanetEnergy.getText().setText(" : " + uiFormat.format(currentPlanet.getPlanetColony().getTaxProduction()));
+            tmgPlanetResearch.getText().setText(" : " + uiFormat.format(currentPlanet.getPlanetColony().getResearchProduction()));
+            tmgPlanetResources.getText().setText(" : " + uiFormat.format(currentPlanet.getPlanetColony().getResourceProduction()));
+            tmgUnrest.getText().setText(" : " + uiFormat.format(currentPlanet.getPlanetColony().getUnrest()));
+            tmgFood.getText().setText(" : " + uiFormat.format(currentPlanet.getPlanetColony().getCurrentFood()));
+            tmgPop.getText().setText(" : " + currentPlanet.getPlanetColony().getPopulation());
+            tmgPlanetMinerals.getText().setText(" : " + uiFormat.format(currentPlanet.getResources()));
 
+            pnlPlanetData.revalidate();
+            pnlPlanetData.repaint();
         }
 
         tmgTech.getText().setText(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo");

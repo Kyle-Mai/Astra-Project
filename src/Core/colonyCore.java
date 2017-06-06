@@ -14,19 +14,7 @@ public class colonyCore implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public String toString() {
-
-        StringBuffer data = new StringBuffer();
-
-        data.append("/");
-
-
-        return data.toString();
-
-    }
-
-    planetClass planet;
+    private planetClass planet;
     private double resourceProduction;
     private double taxProduction;
     private double foodProduction;
@@ -90,8 +78,8 @@ public class colonyCore implements Serializable {
         currentFood = currentFood + foodProduction;
     }
 
-    private void growPopulation() {
-        if (currentFood >= population) {
+    private void growPopulation() { //increase planet population if food reaches an appropriate amount
+        if (currentFood >= population && population <= 6 * planet.getPlanetRadius()) {
             currentFood = currentFood - population;
             population++;
         }
@@ -137,10 +125,8 @@ public class colonyCore implements Serializable {
     public double getResearchProduction() { return this.researchProduction; }
     public double getFoodProduction() { return this.foodProduction; }
     public boolean isHomePlanet() { return this.homePlanet; }
+    //public planetClass getPlanet() { return this.planet; }
 
-    public void setHomePlanet(boolean home) {
-        this.homePlanet = home;
-
-    }
+    public void setHomePlanet(boolean home) { this.homePlanet = home; }
 
 }

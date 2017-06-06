@@ -151,6 +151,7 @@ public class gfxRepository {
     static BufferedImage unrestIcon;
     static BufferedImage planetSizeIcon;
     static BufferedImage resourceIcon;
+    static BufferedImage greenHeader;
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
@@ -353,6 +354,7 @@ public class gfxRepository {
             unrestIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_unrest.png"));
             planetSizeIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_size.png"));
             resourceIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_resource.png"));
+            greenHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_green.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
