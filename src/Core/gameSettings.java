@@ -22,6 +22,8 @@ public class gameSettings {
 
     public volatile static turnTicker turn;
 
+    public volatile  static techCore tech;
+
     //TODO: Experiment with volatile...
 
     //variables for the resource abundance

@@ -38,7 +38,7 @@ public class gfxRepository {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final String gameVersion = "PTB-B Build 86a";
+    static final String gameVersion = "PTB-B Build 87a";
 
     public static final Color clrText = new Color(255, 255, 255, 255);
     public static final Color clrInvisible = new Color(0, 0, 0, 0);

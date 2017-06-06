@@ -1,5 +1,6 @@
 package Core.Player;
 
+import Core.SFX.audioRepository;
 import Core.colonyCore;
 import Core.gameSettings;
 import Core.mapGenerator;
@@ -47,10 +48,6 @@ public class playerData {
     private double currencyTurn = 0;
     private double resourcesTurn = 0;
 
-    private String tech1;
-    private String tech2;
-    private String tech3;
-
     private int difficulty;
 
     private double resources;
@@ -59,15 +56,7 @@ public class playerData {
     private double taxMultiplier = 1;
     private double productionMultiplier = 1;
 
-    private ArrayList<colonyCore> playerColonies = new ArrayList<>();
-
-    public void turnTick() { //ticks the turn
-        this.research = this.research + this.researchTurn;
-        this.funds = this.funds + this.currencyTurn;
-        this.resources = this.resources + this.resourcesTurn;
-        this.currentTurn = gameSettings.currentDate;
-
-    }
+    private transient ArrayList<colonyCore> playerColonies = new ArrayList<>();
 
     public playerData() {
     }
@@ -159,6 +148,39 @@ public class playerData {
     public void setFunds(double funds) { this.funds = funds; }
     public void setResources(double resources) { this.resources = resources; }
     public void setResearch(double research) { this.research = research; }
+
+    public void tickStats() { //updates the stats as the turn ticks
+
+        resourcesTurn = 0;
+        researchTurn = 0;
+        currencyTurn = 0;
+
+        if (gameSettings.currentDate % 10 == 0) {
+
+            audioRepository.repairNotification();
+
+            for (int i = 0; i < playerColonies.size(); i++) {
+                resourcesTurn += playerColonies.get(i).getResourceProduction();
+                currencyTurn += playerColonies.get(i).getTaxProduction();
+                researchTurn += playerColonies.get(i).getResearchProduction();
+                playerColonies.get(i).cycleCollect();
+                playerColonies.get(i).cycleTurn();
+            }
+            resources += resourcesTurn;
+            research += researchTurn;
+            funds += currencyTurn;
+        } else {
+            for (int i = 0; i < playerColonies.size(); i++) {
+                resourcesTurn += playerColonies.get(i).getResourceProduction();
+                currencyTurn += playerColonies.get(i).getTaxProduction();
+                researchTurn += playerColonies.get(i).getResearchProduction();
+                playerColonies.get(i).cycleTurn();
+            }
+        }
+
+
+
+    }
 
 
 

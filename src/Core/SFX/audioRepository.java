@@ -77,6 +77,11 @@ public class audioRepository {
         buttonPress.start();
     }
 
+    public static void repairNotification() {
+        audioCore buttonPress = new audioCore("/ui/notification_repair.wav", uiVolume, 0, 1500);
+        buttonPress.start();
+    }
+
     /** Music **/
 
     public static void setMusicVolume() { //changes the volume of the music
@@ -192,66 +197,6 @@ public class audioRepository {
 
     public static void starSound() {
         ambiance_other = new audioCore("/ambiance/solar_fusion_01.wav", audioRepository.ambianceVolume, 0, 5500);
-        ambiance_other.start();
-
-    }
-
-    public static void planetHot() {
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
-        }
-        ambiance_other = new audioCore("/ambiance/molten_planet.wav", audioRepository.ambianceVolume, 0, 2600);
-        ambiance_other.start();
-
-    }
-
-    public static void planetGas() {
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
-        }
-        ambiance_other = new audioCore("/ambiance/gas_giant.wav", audioRepository.ambianceVolume, 0, 2600);
-        ambiance_other.start();
-
-    }
-
-    public static void planetCold() {
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
-        }
-        ambiance_other = new audioCore("/ambiance/frozen_planet.wav", audioRepository.ambianceVolume, 0, 2600);
-        ambiance_other.start();
-
-    }
-
-    public static void planetStorm() {
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
-        }
-        ambiance_other = new audioCore("/ambiance/storm_planet.wav", audioRepository.ambianceVolume, 0, 2600);
-        ambiance_other.start();
-
-    }
-
-    public static void planetHabitable() {
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
-        }
-        ambiance_other = new audioCore("/ambiance/continental_planet.wav", audioRepository.ambianceVolume, 0, 2600);
-        ambiance_other.start();
-
-    }
-
-    public static void planetBarren() {
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
-        }
-        ambiance_other = new audioCore("/ambiance/barren_planet.wav", audioRepository.ambianceVolume, 0, 2600);
         ambiance_other.start();
 
     }

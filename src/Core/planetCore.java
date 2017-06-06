@@ -75,7 +75,7 @@ public class planetCore {
         listOfPlanets.add(new planetType("Frozen World", 2010, 2110, 35,  "", false, 2300, 1700, "/Core/GUI/Resources/portraits/frozen_planet.png", "/Core/GUI/Resources/planets/frozen_planet.png"));
         listOfPlanets.add(new planetType("Molten World", 2011, 2109, 42, "", false, 3200, 2000, "/Core/GUI/Resources/portraits/molten_planet.png", "/Core/GUI/Resources/planets/molten_planet.png"));
         listOfPlanets.add(new planetType("Storm World", 2012, 2103, 11, "Never ending storms batter the surface of this hostile planet, and most of the atmosphere is covered in a thick layer of storm clouds.", false, 3800, 2400, "/Core/GUI/Resources/portraits/storm_planet.png", "/Core/GUI/Resources/planets/storm_planet.png"));
-        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 17, "", false, 80000, 32000, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/planets/gas_giant_01.png"));
+        listOfPlanets.add(new planetType("Gas Giant", 2013, 2108, 17, "", false, 0, 0, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/planets/gas_giant_01.png"));
         listOfPlanets.add(new planetType("Barren World", 2014, 2105, 84, "", false, 3000, 2400, "/Core/GUI/Resources/portraits/barren_planet.png", "/Core/GUI/Resources/planets/barren_planet_01.png"));
         listOfPlanets.add(new planetType("Damaged World", 2015, 2105, 14, "", false, 2600, 1200, "/Core/GUI/Resources/portraits/asteroid_sky.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
         listOfPlanets.add(new planetType("Tidal World", 2016, 2104, 10, "", false, 1800, 900, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/toxic_planet_02.png"));
@@ -83,7 +83,7 @@ public class planetCore {
         listOfPlanets.add(new planetType("Carbon World", 2018, 2105, 18, "", false, 2700, 1300, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/carbon_planet.png"));
         listOfPlanets.add(new planetType("Iron World", 2019, 2105, 10, "This world possesses an unusually high iron content, and is fairly dense as a result. It is likely that over 60% of the planet's material is iron based.", false, 4700, 3100, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/iron_planet.png"));
         listOfPlanets.add(new planetType("Gaia World", 2020, 2106, 2, "A world that possesses traits that make it extremely well-fitted to supporting life. It is, in essence, a perfect world.", true, 2600, 400, "/Core/GUI/Resources/portraits/b_star.png", "/Core/GUI/Resources/planets/lush_planet.png"));
-        listOfPlanets.add(new planetType("Ice Giant", 2021, 2108, 10, "An ice giant, while similar to gas giants, contains more 'icey' elements such as water, ammonia, and methane.", false, 320000, 10000, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/planets/ice_giant.png"));
+        listOfPlanets.add(new planetType("Ice Giant", 2021, 2108, 10, "An ice giant, while similar to gas giants, contains more 'icey' elements such as water, ammonia, and methane.", false, 0, 0, "/Core/GUI/Resources/portraits/gas_giant.png", "/Core/GUI/Resources/planets/ice_giant.png"));
 
     }
 
@@ -91,35 +91,39 @@ public class planetCore {
     public static class planetType {
         //Variable declarations.
         String className;
-        int planetID, climateID, sizeWeight, sizeVariation, spawnWeight;
+        int planetID, climateID, spawnWeight;
         String classDesc;
         boolean habitable;
         String icon;
         String gfx;
+        int resourceWeight;
+        int resourceVariation;
         BufferedImage gfxImage;
         BufferedImage planetIcon;
 
         //Constructor method.
-        public planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int sizeWeight, int sizeVariation, String gfx, String icon){
+        public planetType(String Name, int objectID, int climateID, int spawnWeight, String planetDesc, boolean isHabitable, int resourceWeight, int resourceVariation, String gfx, String icon){
             this.className = Name; //Name of the world's biome.
             this.planetID = objectID; //The ID used to reference the planet.
             this.spawnWeight = spawnWeight; //The weight assigned to this planet type. Determines how often it spawns relative to other planets in the same climate class.
             this.climateID = climateID; //The ID of this planet's climate.
             this.classDesc = planetDesc; //The planet type's description.
             this.habitable = isHabitable; //Whether or not the player can build a settlement here.
-            this.sizeWeight = sizeWeight; //Weighted median size, determines the average size of this type of planet.
-            this.sizeVariation = sizeVariation; //Determines how much the size of the planet varies from the median.
+            this.resourceWeight = resourceWeight; //Weighted median size, determines the average size of this type of planet.
+            this.resourceVariation = resourceVariation; //Determines how much the size of the planet varies from the median.
             this.icon = icon;
             this.gfx = gfx;
         }
 
         //Accessor methods for calling the planet blueprint variables.
-        protected int getPlanetID() { return this.planetID; }
-        protected int getClimateID() { return this.climateID; }
-        protected String getClassName() { return this.className; }
-        protected String getClassDesc() { return this.classDesc; }
-        protected boolean getHabitable() { return this.habitable; }
-        protected int getSpawnWeight() { return this.spawnWeight; }
+        int getPlanetID() { return this.planetID; }
+        int getClimateID() { return this.climateID; }
+        String getClassName() { return this.className; }
+        String getClassDesc() { return this.classDesc; }
+        boolean getHabitable() { return this.habitable; }
+        int getSpawnWeight() { return this.spawnWeight; }
+        int getResourceWeight() { return this.resourceWeight; }
+        int getResourceVariation() { return this.resourceVariation; }
         public BufferedImage getGfxImage() { return this.gfxImage; }
         public BufferedImage getPlanetIcon() { return this.planetIcon; }
         public String getIcon() { return this.icon; }
@@ -340,6 +344,10 @@ public class planetCore {
 
         randomPlanet = randomNumber(0, planetsToSpawn.size() - 1); //gets a random number from the list
         return planetsToSpawn.get(randomPlanet); //returns the planet ID of the planet generated
+    }
+
+    protected int calculateResources(int arrayLoc) {
+        return randomNumber(listOfPlanets.get(arrayLoc).getResourceWeight() - listOfPlanets.get(arrayLoc).getResourceVariation(), listOfPlanets.get(arrayLoc).getResourceWeight() + listOfPlanets.get(arrayLoc).getResourceVariation());
     }
 
     protected int calculateSize(){ //checks the size of the planet

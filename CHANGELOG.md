@@ -624,3 +624,14 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Converted more buttons to use the XButtonCustom. More than halved the number of lines needed per button. (10 to 4)
 
 - Patched minor planet generation bug. Would occasionally generate planets >25 size. Shouldn't anymore.
+
+**JUNE 5 2017** (ver.PTB-B) (U2)
+
+- Removed redundant planet/star variables.
+
+- Integrated planet resources into the UI and coding for planets and colonies.
+
+- Turn Ticker updated.
+
+    - Now supports decay of mineral deposits and increase of other parameters (energy, food, etc)
+   

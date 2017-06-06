@@ -75,25 +75,20 @@ public class colonyCore implements Serializable {
 
     public void cycleTurn() { //cycles the turn and changes the values accordingly
         setUnrest();
-        adjustProduction();
         adjustTaxes();
         growPopulation();
+        adjustProduction();
         colonyAge++;
     }
 
     public void cycleCollect() {
         harvestFood();
-        collectTaxes();
-        collectResources();
+        planet.setResources(resourceProduction);
     }
 
     private void harvestFood() {
         currentFood = currentFood + foodProduction;
     }
-
-    private void collectTaxes() { gameSettings.player.setFunds(gameSettings.player.getFunds() + this.taxProduction); }
-
-    private void collectResources() { gameSettings.player.setResources(gameSettings.player.getResources() + this.resourceProduction);}
 
     private void growPopulation() {
         if (currentFood >= population) {
@@ -107,16 +102,21 @@ public class colonyCore implements Serializable {
     public void setTaxProduction(double prod) { this.taxProduction = prod; }
 
     private void adjustTaxes() { //sets the taxes this planet currently produces
-        taxProduction = (population * gameSettings.player.getTaxMultiplier()) - (0.4 * unrest);
+        taxProduction = (population * gameSettings.player.getTaxMultiplier()) - (0.7 * unrest);
     }
 
     private void adjustProduction() { //sets the resources this planet currently produces
         resourceProduction = (population * gameSettings.player.getProductionMultiplier()) - (0.2 * unrest);
-        planet.setResources(-resourceProduction);
+        if (planet.getResources() <= resourceProduction) {
+            resourceProduction = planet.getResources();
+        } else if (planet.getResources() <= 0) {
+            resourceProduction = 0;
+        }
+
     }
 
     private void setUnrest() { //sets the current unrest of the colony
-         unrest = (1.2 * gameSettings.player.getTaxMultiplier()) + (0.08 * population) - (0.2 * entertainmentFocus) + (0.3 * industryFocus); //TODO: Switch multipliers to allow for variable
+         unrest = (1.1 * gameSettings.player.getTaxMultiplier()) + (0.06 * population) - (0.3 * entertainmentFocus) + (0.4 * industryFocus); //TODO: Switch multipliers to allow for variable
 
         if (unrest < 0) {
             unrest = 0;

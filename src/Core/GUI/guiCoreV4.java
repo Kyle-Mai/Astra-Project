@@ -93,6 +93,18 @@ public class guiCoreV4 {
     private XLabel imgPauseBar;
     private XLabel lblPauseBar;
 
+    private XTextImage tmgMinerals;
+    private XTextImage tmgEnergy;
+    private XTextImage tmgTech;
+    private XTextImage tmgPlanetMinerals;
+    private XTextImage tmgPop;
+    private XTextImage tmgFood;
+    private XTextImage tmgUnrest;
+    private XTextImage tmgPlanetEnergy;
+    private XTextImage tmgPlanetResources;
+    private XTextImage tmgResearch;
+
+
     private boolean pauseMenuOpen = false;
 
     private int launcherContentLoaded = 0; //tracks the content on the launcher
@@ -834,7 +846,7 @@ public class guiCoreV4 {
 
                 if (load == 1) { //loading core content
 
-                    Thread.sleep(80 + random.nextInt(600)); //unnecessary, but will help to reduce load
+                    Thread.sleep(80 + random.nextInt(100)); //unnecessary, but will help to reduce load
 
                     switch (i) { //using a switch so i can set individual functions to each % up to 100%
                         case 1:
@@ -855,7 +867,7 @@ public class guiCoreV4 {
 
                 } else if (load == 2) { //loading new game
 
-                    Thread.sleep(30 + random.nextInt(150)); //unnecessary, but will help to reduce load
+                    Thread.sleep(30 + random.nextInt(100)); //unnecessary, but will help to reduce load
 
                     switch(i) {
                         case 1:
@@ -914,6 +926,8 @@ public class guiCoreV4 {
                 loadMapView();
                 gameSettings.turn = new turnTicker();
                 gameSettings.turn.start();
+                gameSettings.player.tickStats();
+                gameSettings.ui.turnTick();
 
             }
         }
@@ -2092,12 +2106,12 @@ public class guiCoreV4 {
         srtTopButtons.addItems(btnTech, btnEmpire, btnGovernment, btnFleet);
         srtTopButtons.placeItems(pnlTopBar);
 
-        XTextImage tmgTech = new XTextImage();
+        tmgTech = new XTextImage();
         tmgTech.addImage(gfxRepository.researchIcon, 34, 34);
         tmgTech.addText(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo", gfxRepository.txtSubtitle, gfxRepository.clrText, 90);
         tmgTech.getText().setVerticalAlignment(SwingConstants.CENTER);
 
-        XTextImage tmgEnergy = new XTextImage();
+        tmgEnergy = new XTextImage();
         tmgEnergy.addImage(gfxRepository.energyIcon, 34, 34);
         tmgEnergy.addText(": " + uiFormat.format(gameSettings.player.getFunds()) + " (" + uiFormat.format(gameSettings.player.getCurrencyTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText, 170);
         if (gameSettings.player.getCurrencyTurn() < 0) { //if the value is negative, display accordingly
@@ -2105,7 +2119,7 @@ public class guiCoreV4 {
         }
         tmgEnergy.getText().setVerticalAlignment(SwingConstants.CENTER);
 
-        XTextImage tmgMinerals = new XTextImage();
+        tmgMinerals = new XTextImage();
         tmgMinerals.addImage(gfxRepository.resourceIcon, 34, 34);
         tmgMinerals.addText(": " + uiFormat.format(gameSettings.player.getResources()) + " (" + uiFormat.format(gameSettings.player.getResourcesTurn()) + "/mo)", gfxRepository.txtSubtitle, gfxRepository.clrText, 170);
         if (gameSettings.player.getResourcesTurn() < 0) { //if the value is negative, display accordingly
@@ -2365,7 +2379,7 @@ public class guiCoreV4 {
         lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
         lblStatsBox.setVisible(true);
 
-        XListSorter srtStar = new XListSorter(XConstants.VERTICAL_SORT, 15, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15);
+        XListSorter srtStar = new XListSorter(XConstants.VERTICAL_SORT, 5, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15);
 
         XLabel lblStar = new XLabel("Star", gfxRepository.txtSubtitle, gfxRepository.clrText);
         lblStar.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
@@ -3042,52 +3056,52 @@ public class guiCoreV4 {
         tmgSize.addText(": " + planet.getPlanetRadius(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
         tmgSize.getImage().setToolTipText("Planet Size");
 
-        XTextImage tmgMinerals = new XTextImage();
-        tmgMinerals.addImage(gfxRepository.mineralsIcon, 30, 30);
-        tmgMinerals.addText(": " + planet.getResources(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-        tmgMinerals.getImage().setToolTipText("Mineral Deposits");
+        tmgPlanetMinerals = new XTextImage();
+        tmgPlanetMinerals.addImage(gfxRepository.mineralsIcon, 30, 30);
+        tmgPlanetMinerals.addText(": " + uiFormat.format(planet.getResources()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+        tmgPlanetMinerals.getImage().setToolTipText("Mineral Deposits");
 
         XPanel imgDivider = new XPanel(gfxRepository.clrDGrey);
         imgDivider.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
         XPanel imgDivider2 = new XPanel(gfxRepository.clrDGrey);
         imgDivider2.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
-        srtPlanet.addItems(imgDivider, lblPlanet, tmgSize, tmgMinerals, imgDivider2); //TODO: Switch divider over to a class, maybe?
+        srtPlanet.addItems(imgDivider, lblPlanet, tmgSize, tmgPlanetMinerals, imgDivider2); //TODO: Switch divider over to a class, maybe?
 
         //colony related details (if applicable)
         try {
 
-            XTextImage tmgPop = new XTextImage(); //tfw replacing 12 lines of tedious addition with 5 easy lines :ok_hand:
+            tmgPop = new XTextImage(); //tfw replacing 12 lines of tedious addition with 5 easy lines :ok_hand:
             tmgPop.addImage(gfxRepository.populationIcon, 30, 30);
             tmgPop.addText(" : " + planet.getPlanetColony().getPopulation(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
             tmgPop.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
             tmgPop.getImage().setToolTipText("Population");
 
-            XTextImage tmgFood = new XTextImage();
+            tmgFood = new XTextImage();
             tmgFood.addImage(gfxRepository.foodIcon, 30, 30);
-            tmgFood.addText(" : " + planet.getPlanetColony().getCurrentFood(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgFood.addText(" : " + uiFormat.format(planet.getPlanetColony().getCurrentFood()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
             tmgFood.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
             tmgFood.getImage().setToolTipText("Stored Food");
 
-            XTextImage tmgUnrest = new XTextImage();
+            tmgUnrest = new XTextImage();
             tmgUnrest.addImage(gfxRepository.unrestIcon, 30, 30);
-            tmgUnrest.addText(" : " + planet.getPlanetColony().getUnrest(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgUnrest.addText(" : " + uiFormat.format(planet.getPlanetColony().getUnrest()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
             tmgUnrest.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
             tmgUnrest.getImage().setToolTipText("Unrest");
 
-            XTextImage tmgEnergy = new XTextImage();
-            tmgEnergy.addImage(gfxRepository.energyIcon, 30, 30);
-            tmgEnergy.addText(" : " + planet.getPlanetColony().getTaxProduction(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgEnergy.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-            tmgEnergy.getImage().setToolTipText("Energy Production");
+            tmgPlanetEnergy = new XTextImage();
+            tmgPlanetEnergy.addImage(gfxRepository.energyIcon, 30, 30);
+            tmgPlanetEnergy.addText(" : " + uiFormat.format(planet.getPlanetColony().getTaxProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgPlanetEnergy.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+            tmgPlanetEnergy.getImage().setToolTipText("Energy Production");
 
-            XTextImage tmgResources = new XTextImage();
-            tmgResources.addImage(gfxRepository.resourceIcon, 30, 30);
-            tmgResources.addText(" : " + planet.getPlanetColony().getResourceProduction(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgResources.getImage().setToolTipText("Resource Production");
+            tmgPlanetResources = new XTextImage();
+            tmgPlanetResources.addImage(gfxRepository.resourceIcon, 30, 30);
+            tmgPlanetResources.addText(" : " + uiFormat.format(planet.getPlanetColony().getResourceProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgPlanetResources.getImage().setToolTipText("Resource Production");
 
-            XTextImage tmgResearch = new XTextImage();
+            tmgResearch = new XTextImage();
             tmgResearch.addImage(gfxRepository.researchIcon, 30, 30);
-            tmgResearch.addText(" : " + planet.getPlanetColony().getResearchProduction(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
+            tmgResearch.addText(" : " + uiFormat.format(planet.getPlanetColony().getResearchProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
             tmgResearch.getImage().setToolTipText("Research Production");
 
             XLabel lblColony = new XLabel("Colony", gfxRepository.txtSubtitle, gfxRepository.clrText);
@@ -3097,7 +3111,7 @@ public class guiCoreV4 {
             XPanel imgDivider3 = new XPanel(gfxRepository.clrDGrey);
             imgDivider3.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
 
-            srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgEnergy, tmgResources, tmgResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
+            srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgPlanetEnergy, tmgPlanetResources, tmgResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
 
         } catch (NullPointerException e) {
 
@@ -3196,6 +3210,22 @@ public class guiCoreV4 {
             lblPauseBar.setVisible(false);
             imgPauseBar.setVisible(false);
         }
+
+        //TODO: Finish allowing dynamic display of elements.
+
+        if (pnlStarData != null && pnlStarData.isVisible()) {
+
+        } else if (pnlPlanetData != null && pnlPlanetData.isVisible()) {
+
+        }
+
+        tmgTech.getText().setText(": " + uiFormat.format(gameSettings.player.getResearchTurn()) + "/mo");
+        tmgEnergy.getText().setText(": " + uiFormat.format(gameSettings.player.getFunds()) + " (" + uiFormat.format(gameSettings.player.getCurrencyTurn()) + "/mo)");
+        tmgMinerals.getText().setText(": " + uiFormat.format(gameSettings.player.getResources()) + " (" + uiFormat.format(gameSettings.player.getResourcesTurn()) + "/mo)");
+
+        pnlTopBar.revalidate();
+        pnlTopBar.repaint();
+
 
         window.refresh();
     }
