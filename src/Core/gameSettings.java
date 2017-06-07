@@ -2,6 +2,7 @@ package Core;
 
 import Core.GUI.guiCoreV4;
 import Core.Player.playerData;
+import Core.events.eventCoreV2;
 
 /**
  * KM
@@ -15,14 +16,10 @@ public class gameSettings {
     //variables to store the core classes of each type to allow them to be passed around to whatever thread requests them
 
     public volatile static mapGenerator map;
-
     public volatile static playerData player;
-
     public volatile static guiCoreV4 ui;
-
     public volatile static turnTicker turn;
-
-    public volatile  static techCore tech;
+    public volatile static eventCoreV2 eventhandler;
 
     //TODO: Experiment with volatile...
 

@@ -650,3 +650,13 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - New format uses anonymous classes and is far more fluid than the previous XML-forced style.
 
 - Added new GFX content, mostly event pictures.
+
+**JUNE 7 2017** (ver.PTB-B) (U1)
+
+- Continued work on events.
+
+    - Started building the event GUI elements.
+
+    - Finished creating the main event builder.
+
+    - Added new GFX.

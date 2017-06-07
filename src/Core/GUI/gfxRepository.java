@@ -151,7 +151,16 @@ public class gfxRepository {
     static BufferedImage unrestIcon;
     static BufferedImage planetSizeIcon;
     static BufferedImage resourceIcon;
-    static BufferedImage greenHeader;
+
+    public static BufferedImage greenHeader;
+    public static BufferedImage blueHeader;
+    public static BufferedImage brownHeader;
+    public static BufferedImage greyHeader;
+    public static BufferedImage redHeader;
+    public static BufferedImage yellowHeader;
+    public static BufferedImage purpleHeader;
+    public static BufferedImage orangeHeader;
+    public static BufferedImage cyanHeader;
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
@@ -354,7 +363,16 @@ public class gfxRepository {
             unrestIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_unrest.png"));
             planetSizeIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_size.png"));
             resourceIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_resource.png"));
+
             greenHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_green.png"));
+            redHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_red.png"));
+            orangeHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_orange.png"));
+            blueHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_blue.png"));
+            cyanHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_cyan.png"));
+            brownHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_brown.png"));
+            greyHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_grey.png"));
+            yellowHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_yellow.png"));
+            purpleHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_purple.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

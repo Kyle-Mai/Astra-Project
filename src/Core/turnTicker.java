@@ -18,7 +18,7 @@ public class turnTicker extends Thread {
     }
 
     private void runTurn() {
-
+        //TODO: Switch to timer class, maybe?
         if (!gameSettings.gameIsPaused) {
             try {
                 Thread.sleep((long)gameSettings.timeScale[gameSettings.currentTime]);
@@ -43,6 +43,20 @@ public class turnTicker extends Thread {
         gameSettings.currentDate++;
         gameSettings.player.tickStats(); //update player info
         gameSettings.ui.turnTick(); //refresh the UI
+
+        for (int i = 0; i < gameSettings.eventhandler.events.size(); i++) {
+
+            if (gameSettings.eventhandler.events.get(i).eventTrigger()) { //event has reached the conditions required to trigger
+
+
+
+                if (!gameSettings.eventhandler.events.get(i).isRepeatable()) { //event is not repeatable, make sure it doesn't trigger again
+                    gameSettings.eventhandler.events.remove(i); //...by removing it completely from the array!
+                }
+            }
+
+        }
+
 
         runTurn();
 
