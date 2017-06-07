@@ -642,3 +642,11 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Integrated planet resources into the turn ticker properly so it refreshes when necessary even while visible now.
 
 - Slightly improved the colony functionality.
+
+**JUNE 6 2017** (ver.PTB-B) (U2)
+
+- Started working on converting the techCore and eventCore over to a new format.
+
+    - New format uses anonymous classes and is far more fluid than the previous XML-forced style.
+
+- Added new GFX content, mostly event pictures.

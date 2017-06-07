@@ -1,5 +1,7 @@
 package Core.SFX;
 
+import java.util.Random;
+
 /**
  * KM
  * May 18 2017
@@ -19,6 +21,7 @@ public class audioRepository {
     private static audioCore music;
     private static audioCore ambiance;
     private static audioCore ambiance_other = null;
+    private static audioCore tutorial = null;
 
     /** UI actions **/
 
@@ -211,6 +214,48 @@ public class audioRepository {
     public static void shipScienceMove() {
         audioCore buttonPress = new audioCore("/ship/move_science.wav", uiVolume, 0, 1500);
         buttonPress.start();
+    }
+
+    /** Advisor audio **/
+
+    public static void tutorial_01() {
+        tutorial = new audioCore("/advisor/tutorial_greeting.wav", voiceVolume);
+        tutorial.start();
+    }
+
+    public static void tutorial_off() {
+        Random r = new Random();
+        int opt = 1 + r.nextInt(6); //pick the audio to play
+
+        if (tutorial != null) { //stop tutorial audio thread if it's playing already
+            tutorial.interrupt();
+        }
+
+        switch (opt) {
+            case 1:
+                tutorial = new audioCore("/advisor/no_tut_advisor_01.wav", voiceVolume, 0, 2200);
+                break;
+            case 2:
+                tutorial = new audioCore("/advisor/no_tut_advisor_02.wav", voiceVolume, 0, 2200);
+                break;
+            case 3:
+                tutorial = new audioCore("/advisor/no_tut_advisor_03.wav", voiceVolume, 0, 2200);
+                break;
+            case 4:
+                tutorial = new audioCore("/advisor/no_tut_advisor_04.wav", voiceVolume, 0, 2200);
+                break;
+            case 5:
+                tutorial = new audioCore("/advisor/no_tut_advisor_05.wav", voiceVolume, 0, 2200);
+                break;
+            case 6:
+                tutorial = new audioCore("/advisor/no_tut_advisor_06.wav", voiceVolume, 0, 2200);
+                break;
+            default:
+                tutorial = new audioCore("/advisor/no_tut_advisor_07.wav", voiceVolume, 0, 2200);
+                break;
+        }
+
+        tutorial.start();
     }
 
 
