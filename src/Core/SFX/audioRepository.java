@@ -219,7 +219,18 @@ public class audioRepository {
     /** Advisor audio **/
 
     public static void tutorial_01() {
+        if (tutorial != null) { //stop tutorial audio thread if it's playing already
+            tutorial.interrupt();
+        }
         tutorial = new audioCore("/advisor/tutorial_greeting.wav", voiceVolume);
+        tutorial.start();
+    }
+
+    public static void tutorial_02() {
+        if (tutorial != null) { //stop tutorial audio thread if it's playing already
+            tutorial.interrupt();
+        }
+        tutorial = new audioCore("/advisor/tut_survey_intro_01.wav", voiceVolume);
         tutorial.start();
     }
 
@@ -233,25 +244,25 @@ public class audioRepository {
 
         switch (opt) {
             case 1:
-                tutorial = new audioCore("/advisor/no_tut_advisor_01.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_01.wav", voiceVolume, 0, 2200);
                 break;
             case 2:
-                tutorial = new audioCore("/advisor/no_tut_advisor_02.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_02.wav", voiceVolume, 0, 2200);
                 break;
             case 3:
-                tutorial = new audioCore("/advisor/no_tut_advisor_03.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_03.wav", voiceVolume, 0, 2200);
                 break;
             case 4:
-                tutorial = new audioCore("/advisor/no_tut_advisor_04.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_04.wav", voiceVolume, 0, 2200);
                 break;
             case 5:
-                tutorial = new audioCore("/advisor/no_tut_advisor_05.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_05.wav", voiceVolume, 0, 2200);
                 break;
             case 6:
-                tutorial = new audioCore("/advisor/no_tut_advisor_06.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_06.wav", voiceVolume, 0, 2200);
                 break;
             default:
-                tutorial = new audioCore("/advisor/no_tut_advisor_07.wav", voiceVolume, 0, 2200);
+                tutorial = new audioCore("/advisor/no_tut_advior_07.wav", voiceVolume, 0, 2200);
                 break;
         }
 

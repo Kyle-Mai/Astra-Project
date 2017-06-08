@@ -151,6 +151,9 @@ public class gfxRepository {
     static BufferedImage unrestIcon;
     static BufferedImage planetSizeIcon;
     static BufferedImage resourceIcon;
+    static BufferedImage button532_42;
+    static BufferedImage eventOverlay;
+    static BufferedImage eventBorder;
 
     public static BufferedImage greenHeader;
     public static BufferedImage blueHeader;
@@ -363,6 +366,7 @@ public class gfxRepository {
             unrestIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_unrest.png"));
             planetSizeIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/planet_size.png"));
             resourceIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/icon_resource.png"));
+            button532_42 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_532_42.png"));
 
             greenHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_green.png"));
             redHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_red.png"));
@@ -373,6 +377,8 @@ public class gfxRepository {
             greyHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_grey.png"));
             yellowHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_yellow.png"));
             purpleHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_purple.png"));
+            eventOverlay = ImageIO.read(new File(imageFolder + "/Resources/event/event_overlay.png"));
+            eventBorder = ImageIO.read(new File(imageFolder + "/Resources/event/event_border.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

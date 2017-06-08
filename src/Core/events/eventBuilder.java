@@ -1,6 +1,9 @@
 package Core.events;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +20,7 @@ public abstract class eventBuilder {
     BufferedImage image; //the image in the event window
     boolean repeatable; //whether or not the event will trigger more than once
     public ArrayList<Option> button = new ArrayList<>(); //the buttons that will be displayed in the event window
+    private final File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI/Resources/event/");
 
     eventBuilder(String name, int type, boolean willRepeat, String desc) { //constructor
         this.name = name;
@@ -26,10 +30,24 @@ public abstract class eventBuilder {
 
     }
 
+    eventBuilder(String name, int type, boolean willRepeat, String image, String desc) { //constructor with image
+        this.name = name;
+        this.desc = desc;
+        this.type = type;
+        this.repeatable = willRepeat;
+
+        try { //breaking my usual UI initialization just this once
+            this.image = ImageIO.read(new File(imageFolder + image));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public abstract boolean eventTrigger(); //the conditions required to trigger the event
 
     public void loadOptions() { //method for constructing buttons
-        Option btnDefault = new Option("No button data!", "Uh oh!", 0) {
+        Option btnDefault = new Option("No button data!", "Uh oh!") {
             @Override
             public void clickButton() {
                 System.out.println("Event broken! No buttons initialized!");
@@ -53,19 +71,16 @@ public abstract class eventBuilder {
     public abstract class Option { //a way of creating and storing the different buttons in the event
         String buttonText; //text on the button itself
         String mouseOverText; //text displayed when moused over
-        int option; //identifier for the button
 
-        Option(String text, String tooltip, int option) { //constructor
+        Option(String text, String tooltip) { //constructor
             this.buttonText = text;
             this.mouseOverText = tooltip;
-            this.option = option;
         }
 
         public abstract void clickButton(); // method is run when the button is clicked
 
         public final String getButtonText() { return this.buttonText; }
         public final String getMouseOverText() { return this.mouseOverText; }
-        public final int getOption() { return this.option; }
 
     }
 

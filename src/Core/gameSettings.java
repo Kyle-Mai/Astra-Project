@@ -72,5 +72,6 @@ public class gameSettings {
     //game progression
 
     public static boolean FTLenabled = false; //whether or not the player can send ships through FTL
+    public static boolean tutorialEnabled = true; //whether or not tutorial events will trigger
 
 }

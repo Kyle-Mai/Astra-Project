@@ -45,6 +45,13 @@ public class XButtonCustom extends JButton {
         buttonText.setAlignments(SwingConstants.CENTER);
     }
 
+    public void setVisible(boolean visible) { // but does it work??
+        super.setVisible(visible);
+        this.getParent().add(buttonText);
+        buttonText.setBounds(this.getBounds());
+        buttonText.setAlignments(SwingConstants.CENTER);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX

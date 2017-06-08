@@ -96,6 +96,7 @@ public class guiCoreV4 {
     private XLabel lblTimeScale;
     private XLabel imgPauseBar;
     private XLabel lblPauseBar;
+    private XPanel pnlPopup;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -891,7 +892,8 @@ public class guiCoreV4 {
                         case 32: //load the map string
                             gameLoader.mapLoader(gameSettings.map, gameSettings.player);
                             break;
-                        case 43: //save the data to the user file
+                        case 43: //load the events core
+                            gameSettings.eventhandler = new eventCoreV2();
                             break;
                         case 44:
                             break;
@@ -900,6 +902,7 @@ public class guiCoreV4 {
                         case 80: //set up some of the UI content
                             pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
                             pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
+                            pnlPopup = new XPanel();
                             btnQuit = new XButton();
                             break;
                     }
@@ -3207,14 +3210,14 @@ public class guiCoreV4 {
 
     /** Event Windows **/
 
-    private void loadEventWindow(eventBuilder event) { //loads the event window
+    public void loadEventWindow(eventBuilder event) { //loads the event window
 
         try { //because i'm using such a vague declaration, gotta use a try/catch in case something foreign enters
             event.loadOptions();
 
-            XPanel pnlPopup = new XPanel();
+            pnlPopup.setVisible(true);
             layers.add(pnlPopup, new Integer(15), 0);
-            pnlPopup.setBounds((window.getWidth() / 2) - 318, 150, 635, 500);
+            pnlPopup.setBounds((window.getWidth() / 2) - 318, 150, 635, 600);
             pnlPopup.setVisible(true);
 
             XLabel lblHeader = new XLabel(gameSettings.eventhandler.getHeader(event.getType())); //header at the top of the event window
@@ -3230,23 +3233,48 @@ public class guiCoreV4 {
 
             XLabel lblEvtName = new XLabel(event.getName(), gfxRepository.txtButtonSmall, gfxRepository.clrText);
             lblHeader.add(lblEvtName);
-            lblEvtName.setBounds(0, 0, lblHeader.getWidth(), lblHeader.getHeight());
+            lblEvtName.setBounds(5, 0, lblHeader.getWidth(), lblHeader.getHeight());
             lblEvtName.setVisible(true);
 
-            XLabel lblEvtDesc = new XLabel("<html>" + event.getDesc() + "</html>", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            XLabel lblEvtDesc = new XLabel("<html>" + event.getDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
             lblPopupBG.add(lblEvtDesc);
-            lblEvtDesc.setBounds(15, 15, lblPopupBG.getWidth() - 30, 200);
+            lblEvtDesc.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+            lblEvtDesc.setBounds(15, 165, lblPopupBG.getWidth() - 30, 230);
             lblEvtDesc.setVisible(true);
+
+            XLabel lblEvtImage = new XLabel();
+            lblPopupBG.add(lblEvtImage);
+            lblEvtImage.setBounds((lblPopupBG.getWidth() / 2) - 235, 0, 470, 164);
+            lblEvtImage.setAlignments(SwingConstants.CENTER);
+            try {
+                lblEvtImage.setIcon(new ImageIcon(event.getImage())); //attempt to load image
+
+                XLabel imgEvtOverlay = new XLabel(gfxRepository.eventOverlay); //overlay in front of the image
+                lblEvtImage.add(imgEvtOverlay);
+                imgEvtOverlay.setBounds(0, 0, lblEvtImage.getWidth(), lblEvtImage.getHeight());
+                imgEvtOverlay.setAlignments(SwingConstants.CENTER);
+                imgEvtOverlay.setVisible(true);
+            } catch (NullPointerException e) {
+                lblEvtImage.setText("[NO PIC]", gfxRepository.txtButtonLarge, gfxRepository.clrText); //if the image fails to load, load no pic text instead
+            }
+            lblEvtImage.setVisible(true);
+
+            XLabel imgEvtBorder = new XLabel(gfxRepository.eventBorder); //border around the image
+            lblEvtImage.add(imgEvtBorder);
+            imgEvtBorder.setBounds(0, 0, lblEvtImage.getWidth(), lblEvtImage.getHeight());
+            imgEvtBorder.setAlignments(SwingConstants.CENTER);
+            imgEvtBorder.setVisible(true);
+
 
             //TODO: Make more efficient.
 
-            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT, 5, 20, 220);
+            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT_REVERSE, 0, (lblPopupBG.getWidth() / 2) - 266, lblPopupBG.getHeight() - 25);
 
             for (int i = 0; i < event.button.size(); i++) { //load in the buttons
-                XButtonCustom btnOption = new XButtonCustom(null, SwingConstants.LEFT);
+                XButtonCustom btnOption = new XButtonCustom(gfxRepository.button532_42, SwingConstants.LEFT);
                 btnOption.setText(event.button.get(i).getButtonText(), gfxRepository.txtSubtitle, gfxRepository.clrText);
                 btnOption.setToolTipText(event.button.get(i).getMouseOverText());
-                btnOption.setPreferredSize(new Dimension(lblPopupBG.getWidth() - 40, 40));
+                btnOption.setPreferredSize(new Dimension(532, 42));
 
                 btnOption.addMouseListener(new EMouseListener(event.button.get(i)) {
                     XButtonCustom source;
@@ -3254,41 +3282,54 @@ public class guiCoreV4 {
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
-                        source.getContent().setHorizontalAlignment(SwingConstants.RIGHT);
+                        source.setHorizontalAlignment(SwingConstants.RIGHT);
                         getButton().clickButton();
                         audioRepository.buttonConfirm();
+                        pnlPopup.removeAll();
+                        pnlPopup.setVisible(false);
 
+                        window.refresh();
                     }
 
                     @Override
                     public void mousePressed(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
-                        source.getContent().setHorizontalAlignment(SwingConstants.RIGHT);
+                        source.setHorizontalAlignment(SwingConstants.RIGHT);
+
+                        window.refresh();
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
-                        source.getContent().setHorizontalAlignment(SwingConstants.LEFT);
+                        source.setHorizontalAlignment(SwingConstants.LEFT);
+
+                        window.refresh();
                     }
 
                     @Override
                     public void mouseEntered(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
-                        source.getContent().setHorizontalAlignment(SwingConstants.CENTER);
+                        audioRepository.menuTab();
+                        source.setHorizontalAlignment(SwingConstants.CENTER);
+
+                        window.refresh();
                     }
 
                     @Override
                     public void mouseExited(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
-                        source.getContent().setHorizontalAlignment(SwingConstants.LEFT);
+                        source.setHorizontalAlignment(SwingConstants.LEFT);
+
+                        window.refresh();
                     }
                 });
 
                 eventButtons.addItem(btnOption);
             }
 
-            eventButtons.placeItems(lblPopupBG);
+            eventButtons.placeItems(lblPopupBG); //place the event window on the panel
+            event.eventOpen(); //play the event's open method
 
         } catch (Exception e) {
             e.printStackTrace();

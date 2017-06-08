@@ -15,7 +15,7 @@ import java.util.Arrays;
  * None in specific. Completely custom created through previously acquired knowledge.
  *
  * CONCEPTS:
- * Swing, ArrayLists, Classes/Objects,
+ * Swing, ArrayLists, Classes/Objects, for loops, try/catch block, if/else, case statements
  */
 
 public class XListSorter implements XConstants {
@@ -123,6 +123,13 @@ public class XListSorter implements XConstants {
                         item.setLocation(posx, posy + s2);
                         posy += item.getHeight() + space;
                         s2 = item.getHeight();
+                        break;
+                    case VERTICAL_SORT_REVERSE:
+                        s2 = item.getHeight() + space;
+                        item.setLocation(posx, posy - s2);
+                        //System.out.println(posy + " " + item.getHeight() + " " + space); //pls work
+                        posy = item.getY();
+                        System.out.println(posy);
                         break;
                     default:
                         item.setLocation(posx + s1, posy);

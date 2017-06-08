@@ -15,6 +15,8 @@ public interface XConstants {
     int ORIENT_TOP = 5;
     int ORIENT_BOTTOM = 6;
     int ORIENT_CENTER = 7;
+    int VERTICAL_SORT_REVERSE = 8;
+    int HORIZONTAL_SORT_REVERSE = 9;
 
 
 }

@@ -660,3 +660,19 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Finished creating the main event builder.
 
     - Added new GFX.
+
+**JUNE 7 2017** (ver.PTB-B) (U2)
+
+- Finished building the new event system.
+
+    - Can handle events with multiple options and actions.
+
+    - Each event can also contain unique triggers and activation sequences.
+
+    - Each event has an option for a customized header, image, title, and description, as well as whether or not it will be repeatable (activates more than once, if conditions are met)
+
+- Improved the functionality of the XButtonCustom and XListSorter
+
+    - XListSorter now supports bottom up sorting! It will place things at the bottom and sort up instead of down. Right-to-left not yet supported.
+
+    - XButtonCustom's initialization was made more smooth, and no longer requires calling a unique "placeOn" method to initialize. This should increase the compatibilities.
