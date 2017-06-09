@@ -9,6 +9,7 @@ import Core.SFX.audioRepository;
 import Core.events.EMouseListener;
 import Core.events.eventBuilder;
 import Core.events.eventCoreV2;
+import Core.techTree.techCoreV2;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.swing.*;
@@ -97,6 +98,7 @@ public class guiCoreV4 {
     private XLabel imgPauseBar;
     private XLabel lblPauseBar;
     private XPanel pnlPopup;
+    private XPanel pnlTechTree;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -896,13 +898,15 @@ public class guiCoreV4 {
                             gameSettings.eventhandler = new eventCoreV2();
                             break;
                         case 44:
+                            gameSettings.techtree = new techCoreV2();
                             break;
                         case 45:
                             break;
                         case 80: //set up some of the UI content
                             pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
                             pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
-                            pnlPopup = new XPanel();
+                            pnlTechTree = new XPanel();
+                            pnlTechTree.setVisible(false);
                             btnQuit = new XButton();
                             break;
                     }
@@ -1627,6 +1631,7 @@ public class guiCoreV4 {
 
 
     /** Map screen UI **/
+    //Handles the display of the map screen's UI.
 
     //loads the map view
     private void loadMapView() {
@@ -1889,9 +1894,8 @@ public class guiCoreV4 {
         XButtonCustom btnMenu = new XButtonCustom(gfxRepository.button99_48, SwingConstants.LEFT);
         btnMenu.setBounds(pnlTopBar.getWidth() - 99, 2, 99, 48);
         btnMenu.setImage(gfxRepository.menuButton);
-        btnMenu.placeOn(pnlTopBar);
+        pnlTopBar.add(btnMenu);
         btnMenu.setVisible(true);
-
         btnMenu.addMouseListener(new XMouseListener() {
             XButtonCustom source;
 
@@ -1950,10 +1954,17 @@ public class guiCoreV4 {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
-                audioRepository.buttonClick();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
 
+                if (pnlTechTree.isVisible()) { //check whether or not tech tree is already visible
+                    audioRepository.buttonDisable();
+                    pnlTechTree.removeAll();
+                    pnlTechTree.setVisible(false);
+                } else {
+                    audioRepository.buttonClick();
+                    showTechTree(); //load the tech tree screen
+                }
             }
 
             @Override
@@ -2760,6 +2771,7 @@ public class guiCoreV4 {
 
 
     /** System view **/
+    //Handles the UI specific to the system view. Namely, the display of planet data and the star system itself.
 
     private void showSystemView(int x, int y) {
 
@@ -3208,9 +3220,11 @@ public class guiCoreV4 {
     }
 
 
-    /** Event Windows **/
+    /** Event Window **/
+    //Handles the display of the events as they are triggered. Event is primarily called from the turnTicker class in the runTurn() method.
 
     public void loadEventWindow(eventBuilder event) { //loads the event window
+        pnlPopup = new XPanel();
 
         try { //because i'm using such a vague declaration, gotta use a try/catch in case something foreign enters
             event.loadOptions();
@@ -3231,7 +3245,7 @@ public class guiCoreV4 {
             lblPopupBG.scaleImage(gfxRepository.menuBackground);
             lblPopupBG.setVisible(true);
 
-            XLabel lblEvtName = new XLabel(event.getName(), gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            XLabel lblEvtName = new XLabel(event.getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
             lblHeader.add(lblEvtName);
             lblEvtName.setBounds(5, 0, lblHeader.getWidth(), lblHeader.getHeight());
             lblEvtName.setVisible(true);
@@ -3255,7 +3269,7 @@ public class guiCoreV4 {
                 imgEvtOverlay.setAlignments(SwingConstants.CENTER);
                 imgEvtOverlay.setVisible(true);
             } catch (NullPointerException e) {
-                lblEvtImage.setText("[NO PIC]", gfxRepository.txtButtonLarge, gfxRepository.clrText); //if the image fails to load, load no pic text instead
+                lblEvtImage.setText("[ NO SIGNAL ]", gfxRepository.txtButtonLarge, gfxRepository.clrText); //if the image fails to load, load no pic text instead
             }
             lblEvtImage.setVisible(true);
 
@@ -3265,17 +3279,13 @@ public class guiCoreV4 {
             imgEvtBorder.setAlignments(SwingConstants.CENTER);
             imgEvtBorder.setVisible(true);
 
-
-            //TODO: Make more efficient.
-
-            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT_REVERSE, 0, (lblPopupBG.getWidth() / 2) - 266, lblPopupBG.getHeight() - 25);
+            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT_REVERSE, 0, (lblPopupBG.getWidth() / 2) - 266, lblPopupBG.getHeight() - 30);
 
             for (int i = 0; i < event.button.size(); i++) { //load in the buttons
                 XButtonCustom btnOption = new XButtonCustom(gfxRepository.button532_42, SwingConstants.LEFT);
                 btnOption.setText(event.button.get(i).getButtonText(), gfxRepository.txtSubtitle, gfxRepository.clrText);
                 btnOption.setToolTipText(event.button.get(i).getMouseOverText());
                 btnOption.setPreferredSize(new Dimension(532, 42));
-
                 btnOption.addMouseListener(new EMouseListener(event.button.get(i)) {
                     XButtonCustom source;
 
@@ -3324,20 +3334,136 @@ public class guiCoreV4 {
                         window.refresh();
                     }
                 });
-
-                eventButtons.addItem(btnOption);
+                eventButtons.addItem(btnOption); //add the button to the sorter
             }
-
             eventButtons.placeItems(lblPopupBG); //place the event window on the panel
             event.eventOpen(); //play the event's open method
 
-        } catch (Exception e) {
+        } catch (Exception e) { //abort if something goes wrong
             e.printStackTrace();
+            pnlPopup.removeAll(); //clear the panel in case it ends up half-generated
+            pnlPopup.setVisible(false);
         }
 
     }
 
+    /** Tech Tree Window **/
+    //Displays the tech tree screen and elements.
+
+    private void showTechTree() {
+        //clear and reload the tech tree panel
+        layers.add(pnlTechTree, new Integer(14), 0);
+        pnlTechTree.setBounds(0, pnlTopBar.getHeight() + 20, 452, 520);
+        pnlTechTree.removeAll();
+        pnlTechTree.setVisible(true);
+
+        XLabel imgTechBG = new XLabel();
+        pnlTechTree.add(imgTechBG);
+        imgTechBG.setBounds(0, 0, pnlTechTree.getWidth(), pnlTechTree.getHeight());
+        imgTechBG.scaleImage(gfxRepository.techBackground);
+        imgTechBG.setVisible(true);
+
+        XLabel lblTechTitle = new XLabel("Research Overview", gfxRepository.txtSubheader, gfxRepository.clrText);
+        imgTechBG.add(lblTechTitle);
+        lblTechTitle.setBounds(10, 5, imgTechBG.getWidth() - 20, 40);
+        lblTechTitle.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+        lblTechTitle.setVisible(true);
+
+        //sets up panel for the first tech
+        XPanel tech_1 = new XPanel();
+        tech_1.setOpaque(false);
+        imgTechBG.add(tech_1);
+        tech_1.setBounds(0, 50, 452, 110);
+        XLabel tech_1_header = new XLabel();
+        tech_1.add(tech_1_header);
+        tech_1_header.setBounds(0, 0, tech_1.getWidth(), 25);
+        XLabel tech_1_header_text = new XLabel();
+        tech_1_header.add(tech_1_header_text);
+        tech_1_header_text.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+        tech_1_header_text.setBounds(10, 0, tech_1_header.getWidth() - 20, tech_1_header.getHeight());
+        XLabel tech_1_main = new XLabel();
+        tech_1.add(tech_1_main);
+        tech_1_main.setBounds(0, 25, tech_1.getWidth(), 85);
+        XLabel tech_1_name = new XLabel();
+        tech_1_main.add(tech_1_name);
+        tech_1_name.setBounds(5, 1, tech_1_main.getWidth() - 10, 30);
+        tech_1_name.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+        XButton tech_1_button = new XButton(gfxRepository.techButton, SwingConstants.LEFT);
+        tech_1_main.add(tech_1_button);
+        tech_1_button.setBounds(-13, -5, 478, 110);
+        tech_1_button.addMouseListener(new XMouseListener() {
+            XButton source;
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                audioRepository.buttonConfirm();
+                window.refresh();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        if (gameSettings.techtree.currentResearch_1 != null) {
+            tech_1_header.setIcon(new ImageIcon(gfxRepository.techBlueHeader));
+            tech_1_header_text.setText(gameSettings.techtree.currentResearch_1.getResearchTree(), gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_1_name.setText(gameSettings.techtree.currentResearch_1.getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+            if (gameSettings.techtree.currentResearch_1.getRarity() < 10 && !gameSettings.techtree.currentResearch_1.isDangerous()) { //tech is rare, showcase rare colour
+                tech_1_main.setIcon(new ImageIcon(gfxRepository.techPurpleBG));
+                XLabel tech_1_main_mask = new XLabel(gfxRepository.techMask);
+                tech_1_main.add(tech_1_main_mask);
+                tech_1_main_mask.setBounds(0, 0, tech_1_main.getWidth(), tech_1_main.getHeight());
+            } else if (gameSettings.techtree.currentResearch_1.isDangerous()) { //dangerous technology, display accordingly
+                tech_1_main.setIcon(new ImageIcon(gfxRepository.techRedBG));
+            } else { //regular tech, display regular colour
+                tech_1_main.setIcon(new ImageIcon(gfxRepository.techBlueBG));
+            }
+        } else { //no current research
+            tech_1_header.setIcon(new ImageIcon(gfxRepository.techGreyHeader));
+            tech_1_header_text.setText("???", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_1_main.setIcon(new ImageIcon(gfxRepository.techGreyBG));
+            tech_1_name.setText("No active research project.", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        }
+        tech_1_button.setVisible(true);
+        tech_1_name.setVisible(true);
+        tech_1_header_text.setVisible(true);
+        tech_1.setVisible(true);
+        tech_1_header.setVisible(true);
+        tech_1_main.setVisible(true);
+
+
+        window.refresh();
+    }
+
     /** Turn ticker **/
+    //Handles the refreshing of elements during the turn ticker.
 
     public void turnTick() { //refreshes the UI elements that need it when the turn ticks up
         lblCurrentDate.setText("Turn " + gameSettings.currentDate, gfxRepository.txtSubtitle, gfxRepository.clrText);

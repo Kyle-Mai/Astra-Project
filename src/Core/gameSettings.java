@@ -3,6 +3,7 @@ package Core;
 import Core.GUI.guiCoreV4;
 import Core.Player.playerData;
 import Core.events.eventCoreV2;
+import Core.techTree.techCoreV2;
 
 /**
  * KM
@@ -20,6 +21,7 @@ public class gameSettings {
     public volatile static guiCoreV4 ui;
     public volatile static turnTicker turn;
     public volatile static eventCoreV2 eventhandler;
+    public volatile static techCoreV2 techtree;
 
     //TODO: Experiment with volatile...
 

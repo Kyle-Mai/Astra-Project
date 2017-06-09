@@ -234,6 +234,14 @@ public class audioRepository {
         tutorial.start();
     }
 
+    public static void tutorial_03() {
+        if (tutorial != null) { //stop tutorial audio thread if it's playing already
+            tutorial.interrupt();
+        }
+        tutorial = new audioCore("/advisor/tut_technologies_intro_01.wav", voiceVolume);
+        tutorial.start();
+    }
+
     public static void tutorial_off() {
         Random r = new Random();
         int opt = 1 + r.nextInt(6); //pick the audio to play

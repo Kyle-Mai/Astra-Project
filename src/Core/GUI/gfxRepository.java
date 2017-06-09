@@ -165,6 +165,20 @@ public class gfxRepository {
     public static BufferedImage orangeHeader;
     public static BufferedImage cyanHeader;
 
+    public static BufferedImage techBlueBG;
+    public static BufferedImage techBlueHeader;
+    public static BufferedImage techOrangeBG;
+    public static BufferedImage techOrangeHeader;
+    public static BufferedImage techGreenBG;
+    public static BufferedImage techGreenHeader;
+    public static BufferedImage techGreyBG;
+    public static BufferedImage techGreyHeader;
+    public static BufferedImage techPurpleBG;
+    public static BufferedImage techMask;
+    public static BufferedImage techRedBG;
+    public static BufferedImage techBackground;
+    static BufferedImage techButton;
+
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
     static BufferedImage orbitIndicator;
@@ -379,6 +393,20 @@ public class gfxRepository {
             purpleHeader = ImageIO.read(new File(imageFolder + "/Resources/ui/header_purple.png"));
             eventOverlay = ImageIO.read(new File(imageFolder + "/Resources/event/event_overlay.png"));
             eventBorder = ImageIO.read(new File(imageFolder + "/Resources/event/event_border.png"));
+
+            techBlueBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_blue.png"));
+            techBlueHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_blue.png"));
+            techGreyBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_grey.png"));
+            techGreyHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/header_grey.png"));
+            techGreenBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_green.png"));
+            techGreenHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/header_green.png"));
+            techOrangeBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_orange.png"));
+            techOrangeHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/header_orange.png"));
+            techPurpleBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_rare.png"));
+            techRedBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_dangerous.png"));
+            techMask = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_rare_mask.png"));
+            techBackground = ImageIO.read(new File(imageFolder + "/Resources/tech/tech_background.png"));
+            techButton = ImageIO.read(new File(imageFolder + "/Resources/tech/tech_button.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

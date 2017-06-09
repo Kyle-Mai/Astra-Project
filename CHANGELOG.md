@@ -676,3 +676,17 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - XListSorter now supports bottom up sorting! It will place things at the bottom and sort up instead of down. Right-to-left not yet supported.
 
     - XButtonCustom's initialization was made more smooth, and no longer requires calling a unique "placeOn" method to initialize. This should increase the compatibilities.
+
+**JUNE 8 2017** (ver.PTB-B) (U1)
+
+- Began building the framework for the tech tree.
+
+    - Created a basic UI for the tech tree, still missing most of the functionality.
+
+    - Added new GFX.
+
+    - Adjusted the tech tree data slightly, switched it over to an ArrayList format (same as the events)
+
+- Slight adjustments to the events.
+
+    - Testing of more HTML formatting and whatnot.

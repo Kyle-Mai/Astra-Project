@@ -27,7 +27,6 @@ public class eventCoreV2 implements eventConstants {
     }
 
     private void initializeEvents() { //sets up the events
-
         events.add(new eventBuilder("???", EVENT_ORANGE, false, "/sentient_AI.png", "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You’re fucking dead, kiddo.") { //TODO: Change text from Navy Seal copypasta to something serious.
             @Override public void loadOptions() {
                 addOption(new Option("Power down. (No tutorial)", "Disable the tutorial and play without.") {
@@ -42,22 +41,32 @@ public class eventCoreV2 implements eventConstants {
                     }
                 });
             }
-            @Override
-            public boolean eventTrigger() {
-                if (gameSettings.currentDate >= 2 && gameSettings.tutorialEnabled) { //event will trigger when these conditions are met
-                    return true;
-                } else {
-                    return false;
-                }
+            @Override public boolean eventTrigger() {
+                return (gameSettings.currentDate >= 2 && gameSettings.tutorialEnabled);
             }
-
-            @Override
-            public void eventOpen() {
+            @Override public void eventOpen() {
                 audioRepository.tutorial_01(); //play tutorial opening audio
-                gameSettings.gameIsPaused = true;
+                gameSettings.gameIsPaused = true; //pauses the game
             }
         });
 
+        events.add(new eventBuilder("Message from Vir", EVENT_ORANGE, false, "/sentient_AI.png", "We should look into expanding our empire's technological prowess. Our first step should be our research sector though funding and supporting specific areas of research. <br> <br> A good place to start would be the <b>New Worlds Protocol</b> technology, as it will open up the possibility of colonization across the galaxy. <br> But first, we must research the <b>String Drive Prototype</b> in order to even reach those systems in a reasonable time frame! <br> <br> Select the Tech Tree view button at the top left-hand corner of the screen to view our research policies.") { //TODO: Change text from Navy Seal copypasta to something serious.
+            @Override public void loadOptions() {
+                addOption(new Option("Understood.", "") {
+                    @Override public void clickButton() {
+
+                    }
+                });
+            }
+            @Override public boolean eventTrigger() {
+                return (gameSettings.currentDate >= 7 && gameSettings.tutorialEnabled);
+            }
+
+            @Override public void eventOpen() {
+                audioRepository.tutorial_03();
+                gameSettings.gameIsPaused = true;
+            }
+        });
     }
 
     public BufferedImage getHeader(int header) {

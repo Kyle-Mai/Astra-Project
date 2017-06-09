@@ -42,7 +42,6 @@ public class turnTicker extends Thread {
 
         gameSettings.currentDate++;
         gameSettings.player.tickStats(); //update player info
-        gameSettings.ui.turnTick(); //refresh the UI
 
         for (int i = 0; i < gameSettings.eventhandler.events.size(); i++) {
 
@@ -57,6 +56,8 @@ public class turnTicker extends Thread {
             }
 
         }
+
+        gameSettings.ui.turnTick(); //refresh the UI
 
         runTurn();
 
