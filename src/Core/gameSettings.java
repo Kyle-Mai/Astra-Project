@@ -1,5 +1,6 @@
 package Core;
 
+import Core.Craft.craftBuilder;
 import Core.GUI.guiCoreV4;
 import Core.Player.playerData;
 import Core.events.eventCoreV2;
@@ -22,6 +23,7 @@ public class gameSettings {
     public volatile static turnTicker turn;
     public volatile static eventCoreV2 eventhandler;
     public volatile static techCoreV2 techtree;
+    public volatile static craftBuilder shipbuilder;
 
     //TODO: Experiment with volatile...
 

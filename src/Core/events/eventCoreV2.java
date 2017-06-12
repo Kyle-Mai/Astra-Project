@@ -58,7 +58,7 @@ public class eventCoreV2 implements eventConstants {
                 });
             }
             @Override public boolean eventTrigger() {
-                return (gameSettings.currentDate >= 7 && gameSettings.tutorialEnabled);
+                return (gameSettings.currentDate >= 9 && gameSettings.tutorialEnabled);
             }
 
             @Override public void eventOpen() {
@@ -71,6 +71,7 @@ public class eventCoreV2 implements eventConstants {
             @Override public void loadOptions() {
                 addOption(new Option("Understood.", "") {
                     @Override public void clickButton() {
+                        gameSettings.gameIsPaused = false;
                     }
                 });
             }

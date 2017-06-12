@@ -2,6 +2,7 @@ package Core.GUI;
 
 //import all relevant stuff
 import Core.*;
+import Core.Craft.craftBuilder;
 import Core.GUI.SwingEX.*;
 import Core.Player.SaveDirectoryConstants;
 import Core.Player.playerData;
@@ -93,7 +94,6 @@ public class guiCoreV4 {
     private XPanel pnlBG;
     private XPanel pnlLoadSaves;
     private XPanel pnlTimer;
-    private XLabel planetName;
     private XLabel lblCurrentDate;
     private XPanel pnlTopBar;
     private XLabel lblTimeScale;
@@ -102,6 +102,7 @@ public class guiCoreV4 {
     private XPanel pnlPopup;
     private XPanel pnlTechTree;
     private XPanel pnlTechSelect;
+    private XPanel pnlShipBuilder;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -904,6 +905,11 @@ public class guiCoreV4 {
                             gameSettings.techtree = new techCoreV2();
                             break;
                         case 45:
+                            gameSettings.shipbuilder = new craftBuilder();
+                            gameSettings.shipbuilder.buildScienceShips();
+                            break;
+                        case 46:
+                            gameSettings.shipbuilder.refreshArray();
                             break;
                         case 80: //set up some of the UI content
                             pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
@@ -3044,8 +3050,6 @@ public class guiCoreV4 {
 
     private void loadPlanetData(planetClass planet) {
 
-        //TODO: Can probably reuse star panel...?
-
         pnlPlanetData.removeAll();
 
         currentPlanet = planet; //refresh current planet
@@ -3146,7 +3150,6 @@ public class guiCoreV4 {
             srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgPlanetEnergy, tmgPlanetResources, tmgPlanetResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
 
         } catch (NullPointerException e) { //no colony found, just skip the block
-
         }
 
         srtPlanet.placeItems(lblBackground); //place the items in the list
@@ -3227,6 +3230,35 @@ public class guiCoreV4 {
     }
 
     private void loadShipBuilder() { //builds ships at the specified colony
+        pnlShipBuilder = new XPanel();
+        layers.add(pnlShipBuilder, new Integer(12), 0);
+        pnlShipBuilder.setBounds(pnlPlanetData.getX() - 270, pnlPlanetData.getY(), 260, pnlPlanetData.getHeight());
+
+        XLabel imgShipBuilder = new XLabel();
+        pnlShipBuilder.add(imgShipBuilder);
+        imgShipBuilder.setBounds(0, 0, pnlShipBuilder.getWidth(), pnlShipBuilder.getHeight());
+        imgShipBuilder.scaleImage(gfxRepository.menuBackground);
+        imgShipBuilder.setVisible(true);
+
+        XLabel lblBuilderTitle = new XLabel("Orbital Shipyard", gfxRepository.txtSubheader, gfxRepository.clrText);
+        imgShipBuilder.add(lblBuilderTitle);
+        lblBuilderTitle.setBounds(0, 0, imgShipBuilder.getWidth(), 20);
+        lblBuilderTitle.setAlignments(SwingConstants.CENTER);
+        lblBuilderTitle.setVisible(true);
+
+        XPanel pnlViewer = new XPanel();
+        imgShipBuilder.add(pnlViewer);
+        pnlViewer.setBounds(5, 20, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 25);
+        pnlViewer.setVisible(true);
+
+        XScrollPane scrBuilder = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        imgShipBuilder.add(scrBuilder);
+        scrBuilder.setBounds(pnlViewer.getBounds());
+        scrBuilder.setViewportView(pnlViewer);
+        scrBuilder.setViewportBorder(null);
+        scrBuilder.setVisible(true);
+
+
 
 
     }

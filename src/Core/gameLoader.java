@@ -117,7 +117,6 @@ public class gameLoader {
         starCore.starPreloader();
         techCore.techPreloader();
         planetCore.planetPreloader();
-        craftBuilder.buildScienceShips();
 
 
     }

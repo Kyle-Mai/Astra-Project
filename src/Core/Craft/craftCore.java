@@ -61,6 +61,7 @@ public abstract class craftCore {
         private int mapX, mapY; //ship's location on the map
         private int systemX, systemY; //ship's location in the system
         private int moveToX, moveToY; //used to store the location the ship is moving to on the map
+        private boolean isUnlocked; //whether or not the ship is available to build
 
         public craftCore(String name, double speed, int range, int health, double buildCost, int buildTime, double maintenanceCost, String shipGFXDir) {
             this.speed = speed;
@@ -131,6 +132,7 @@ public abstract class craftCore {
         public final boolean isInInterstellarSpace() { return this.inInterstellarSpace; }
         public final int getMapX() { return this.mapX; }
         public final int getMapY() { return this.mapY; }
+        public final boolean isUnlocked() { return this.isUnlocked; }
 
         //setter methods
         public final void setHealth(int hp) { //sets the health of the ship
@@ -153,5 +155,6 @@ public abstract class craftCore {
         public final void setTimeUntilAction(int time) { this.timeUntilAction = time; }
         public final void setMapLocation(int x, int y) { this.mapX = x; this.mapY = y; } //sets the map location of the ship
         public final void moveToLocation(int x, int y) { this.moveToX = x; this.moveToY = y; }
+        public final void setUnlocked() { this.isUnlocked = !this.isUnlocked; }
 
 }

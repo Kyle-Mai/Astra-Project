@@ -704,3 +704,13 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Slight improvements to SwingEX functionality.
 
 - Added new tutorial event.
+
+**JUNE 12 2017** (ver.PTB-B) (U1)
+
+- Began working on UI integration of ships.
+
+    - Slightly improved ship core handling.
+
+    - Added in basis for the ship builder UI to the planets.
+
+- Slightly improved event handling.
