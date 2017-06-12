@@ -12,6 +12,7 @@ import Core.events.eventCoreV2;
 import Core.techTree.techCoreV2;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -22,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -99,6 +101,7 @@ public class guiCoreV4 {
     private XLabel lblPauseBar;
     private XPanel pnlPopup;
     private XPanel pnlTechTree;
+    private XPanel pnlTechSelect;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -906,6 +909,8 @@ public class guiCoreV4 {
                             pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
                             pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
                             pnlTechTree = new XPanel();
+                            pnlTechSelect = new XPanel();
+                            pnlTechSelect.setVisible(false);
                             pnlTechTree.setVisible(false);
                             btnQuit = new XButton();
                             break;
@@ -1959,6 +1964,8 @@ public class guiCoreV4 {
 
                 if (pnlTechTree.isVisible()) { //check whether or not tech tree is already visible
                     audioRepository.buttonDisable();
+                    pnlTechSelect.removeAll();
+                    pnlTechSelect.setVisible(false);
                     pnlTechTree.removeAll();
                     pnlTechTree.setVisible(false);
                 } else {
@@ -3219,6 +3226,11 @@ public class guiCoreV4 {
 
     }
 
+    private void loadShipBuilder() { //builds ships at the specified colony
+
+
+    }
+
 
     /** Event Window **/
     //Handles the display of the events as they are triggered. Event is primarily called from the turnTicker class in the runTurn() method.
@@ -3288,7 +3300,6 @@ public class guiCoreV4 {
                 btnOption.setPreferredSize(new Dimension(532, 42));
                 btnOption.addMouseListener(new EMouseListener(event.button.get(i)) {
                     XButtonCustom source;
-
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
@@ -3353,7 +3364,7 @@ public class guiCoreV4 {
     private void showTechTree() {
         //clear and reload the tech tree panel
         layers.add(pnlTechTree, new Integer(14), 0);
-        pnlTechTree.setBounds(0, pnlTopBar.getHeight() + 20, 452, 520);
+        pnlTechTree.setBounds(0, pnlTopBar.getHeight() + 38, 452, 520);
         pnlTechTree.removeAll();
         pnlTechTree.setVisible(true);
 
@@ -3365,25 +3376,32 @@ public class guiCoreV4 {
 
         XLabel lblTechTitle = new XLabel("Research Overview", gfxRepository.txtSubheader, gfxRepository.clrText);
         imgTechBG.add(lblTechTitle);
-        lblTechTitle.setBounds(10, 5, imgTechBG.getWidth() - 20, 40);
+        lblTechTitle.setBounds(5, 5, imgTechBG.getWidth() - 20, 40);
         lblTechTitle.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
         lblTechTitle.setVisible(true);
+
+        XLabel lblLine = new XLabel(gfxRepository.line_316); //line decoration under the header text
+        imgTechBG.add(lblLine);
+        lblLine.setBounds(5, 20, 316, 17);
+        lblLine.setVisible(true);
 
         //sets up panel for the first tech
         XPanel tech_1 = new XPanel();
         tech_1.setOpaque(false);
         imgTechBG.add(tech_1);
         tech_1.setBounds(0, 50, 452, 110);
-        XLabel tech_1_header = new XLabel();
+        XLabel tech_1_header = new XLabel(gfxRepository.greyHeader);
+        tech_1_header.setOpaque(false);
         tech_1.add(tech_1_header);
-        tech_1_header.setBounds(0, 0, tech_1.getWidth(), 25);
+        tech_1_header.setBounds(0, 0, 452, 25);
+        tech_1_header.setAlignments(SwingConstants.CENTER);
         XLabel tech_1_header_text = new XLabel();
         tech_1_header.add(tech_1_header_text);
         tech_1_header_text.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-        tech_1_header_text.setBounds(10, 0, tech_1_header.getWidth() - 20, tech_1_header.getHeight());
+        tech_1_header_text.setBounds(5, 0, tech_1_header.getWidth() - 20, tech_1_header.getHeight());
         XLabel tech_1_main = new XLabel();
         tech_1.add(tech_1_main);
-        tech_1_main.setBounds(0, 25, tech_1.getWidth(), 85);
+        tech_1_main.setBounds(0, 25, 452, 85);
         XLabel tech_1_name = new XLabel();
         tech_1_main.add(tech_1_name);
         tech_1_name.setBounds(5, 1, tech_1_main.getWidth() - 10, 30);
@@ -3399,22 +3417,25 @@ public class guiCoreV4 {
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 audioRepository.buttonConfirm();
                 window.refresh();
+                if (!pnlTechSelect.isVisible()) {
+                    selectResearch(1);
+                } else {
+                    pnlTechSelect.removeAll();
+                    pnlTechSelect.setVisible(false);
+                }
             }
-
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
             }
-
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.LEFT);
                 window.refresh();
             }
-
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
@@ -3422,7 +3443,6 @@ public class guiCoreV4 {
                 audioRepository.menuTab();
                 window.refresh();
             }
-
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
@@ -3433,8 +3453,17 @@ public class guiCoreV4 {
 
         if (gameSettings.techtree.currentResearch_1 != null) {
             tech_1_header.setIcon(new ImageIcon(gfxRepository.techBlueHeader));
-            tech_1_header_text.setText(gameSettings.techtree.currentResearch_1.getResearchTree(), gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_1_header_text.setText(gameSettings.techtree.currentResearch_1.getResearchTree(), gfxRepository.txtHeader, gfxRepository.clrText);
             tech_1_name.setText(gameSettings.techtree.currentResearch_1.getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+            XLabel tech_1_icon = new XLabel();
+            tech_1_main.add(tech_1_icon);
+            tech_1_icon.setBounds(70, 30, 52, 52);
+            try {
+            tech_1_icon.scaleImage(ImageIO.read(new File(System.getProperty("user.dir") + "/src/Core/GUI/Resources/tech/" + gameSettings.techtree.currentResearch_1.getIcon())));
+            } catch (IOException e) {
+                tech_1_icon.scaleImage(gfxRepository.missingIconTech);
+            }
+            tech_1_icon.setVisible(true);
             if (gameSettings.techtree.currentResearch_1.getRarity() < 10 && !gameSettings.techtree.currentResearch_1.isDangerous()) { //tech is rare, showcase rare colour
                 tech_1_main.setIcon(new ImageIcon(gfxRepository.techPurpleBG));
                 XLabel tech_1_main_mask = new XLabel(gfxRepository.techMask);
@@ -3460,6 +3489,225 @@ public class guiCoreV4 {
 
 
         window.refresh();
+    }
+
+    private void selectResearch(int tech_line) { //window to select new research from available options
+        pnlTechSelect.removeAll();
+
+        layers.add(pnlTechSelect, new Integer(14), 0);
+        pnlTechSelect.setBounds(pnlTechTree.getX() + pnlTechTree.getWidth() + 10, pnlTopBar.getHeight() + 45, 500, 500);
+
+        XLabel imgTechSelect = new XLabel(); //background image
+        pnlTechSelect.add(imgTechSelect);
+        imgTechSelect.setBounds(0, 0, pnlTechSelect.getWidth(), pnlTechSelect.getHeight());
+        imgTechSelect.scaleImage(gfxRepository.menuBackground);
+        imgTechSelect.setVisible(true);
+
+        XLabel lblHeader = new XLabel("Choose New Research:", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+        imgTechSelect.add(lblHeader);
+        lblHeader.setBounds(0, 0, imgTechSelect.getWidth(), 30);
+        lblHeader.setAlignments(SwingConstants.CENTER);
+        lblHeader.setVisible(true);
+
+        XButton btnClose = new XButton(gfxRepository.closeButton, SwingConstants.LEFT); //closes the tech selection window
+        imgTechSelect.add(btnClose);
+        btnClose.setBounds(imgTechSelect.getWidth() - 38, 0, 38, 38);
+        btnClose.addMouseListener(new XMouseListener() {
+            XButton source;
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                audioRepository.buttonDisable();
+                window.refresh();
+
+                pnlTechSelect.setVisible(false);
+                pnlTechSelect.removeAll();
+            }
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+                window.refresh();
+            }
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+        btnClose.setVisible(true);
+
+        XListSorter lstTech = new XListSorter(XConstants.VERTICAL_SORT, 5, 5, 40);
+
+        for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) { //searches through the tech tree for different techs
+
+            boolean display = false; //by default, we're not displaying the currently indexed tech unless it asks for it
+            //TODO: Add in generation weights.
+            switch (tech_line) { //search for valid tech of the same type
+                case 1:
+                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_PROPULSION) {
+                        if (gameSettings.techtree.techTree.get(i).getTier() == gameSettings.player.getTechLevel()) { //make sure tech is of the correct tier before displaying
+                            display = true;
+                        }
+                    }
+                    break;
+                case 2:
+                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_AGRICULTURE) {
+                        if (gameSettings.techtree.techTree.get(i).getTier() == gameSettings.player.getTechLevel()) { //make sure tech is of the correct tier before displaying
+                            display = true;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_INFRASTRUCTURE || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_KINETICS) {
+                        if (gameSettings.techtree.techTree.get(i).getTier() == gameSettings.player.getTechLevel()) { //make sure tech is of the correct tier before displaying
+                            display = true;
+                        }
+                    }
+                    break;
+                default:
+                    System.out.println("Error: Unknown tech line!");
+                    break;
+            }
+
+            if (display) { //generating UI elements
+                XPanel pnlTechOption = new XPanel();
+                pnlTechOption.setPreferredSize(new Dimension(pnlTechSelect.getWidth() - 10, 110));
+                pnlTechOption.setOpaque(false);
+                pnlTechOption.setSize(pnlTechOption.getPreferredSize());
+
+                XLabel imgTechIcon = new XLabel();
+                pnlTechOption.add(imgTechIcon);
+                imgTechIcon.setBounds( 6, 6, 52, 52);
+                try { //attempt to apply the tech's image
+                    imgTechIcon.scaleImage(ImageIO.read(new File(System.getProperty("user.dir") + "/src/Core/GUI/Resources/tech/" + gameSettings.techtree.techTree.get(i).getIcon())));
+                } catch (IOException e) {
+                    imgTechIcon.scaleImage(gfxRepository.missingIconTech);
+                }
+                imgTechIcon.setVisible(true);
+
+                XLabel lblTechTitle = new XLabel("[" + gameSettings.techtree.techTree.get(i).getResearchTree() + "] " + gameSettings.techtree.techTree.get(i).getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+                pnlTechOption.add(lblTechTitle);
+                lblTechTitle.setBounds(imgTechIcon.getX() + imgTechIcon.getWidth() + 6, 0, pnlTechOption.getWidth() - imgTechIcon.getWidth() - 12, 20);
+                lblTechTitle.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+                lblTechTitle.setVisible(true);
+
+                XLabel lblTechDesc = new XLabel();
+                lblTechDesc.setFont(gfxRepository.txtMicro);
+                lblTechDesc.setForeground(gfxRepository.clrText);
+                lblTechDesc.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+                lblTechDesc.setOpaque(false);
+                lblTechDesc.setText("<html>" + gameSettings.techtree.techTree.get(i).getDesc() + "</html>");
+                pnlTechOption.add(lblTechDesc);
+                lblTechDesc.setBounds(imgTechIcon.getX() + imgTechIcon.getWidth() + 6, 20, pnlTechOption.getWidth() - imgTechIcon.getWidth() - 12, pnlTechOption.getHeight() - 45);
+                lblTechDesc.setVisible(true);
+
+                XButton btnSelect = new XButton(gfxRepository.techHighlight, SwingConstants.LEFT);
+                pnlTechOption.add(btnSelect);
+                btnSelect.setBounds(0, 0, pnlTechOption.getWidth(), pnlTechOption.getHeight());
+                btnSelect.scaleImage(gfxRepository.techHighlight);
+                btnSelect.setIdentifier(i);
+                if (gameSettings.techtree.currentResearch_1 == gameSettings.techtree.techTree.get(i)) { //if this is the current tech, show it accordingly
+                    btnSelect.toggleState();
+                    btnSelect.setHorizontalAlignment(SwingConstants.RIGHT);
+                }
+                if (!btnSelect.isState()) { //if this isn't the currently selected tech, enable the button's listener
+                    btnSelect.addMouseListener(new XMouseListener(tech_line) {
+                        XButton source;
+                        @Override
+                        public void mouseClicked(MouseEvent mouseEvent) {
+                            source = (XButton) mouseEvent.getSource();
+                            source.setHorizontalAlignment(SwingConstants.RIGHT);
+                            audioRepository.startResearch();
+                            window.refresh();
+
+                            switch (this.getIdentifier()) {
+                                case 1:
+                                    gameSettings.techtree.currentResearch_1 = gameSettings.techtree.techTree.get(source.getIdentifier());
+                                    break;
+                                case 2:
+                                    gameSettings.techtree.currentResearch_2 = gameSettings.techtree.techTree.get(source.getIdentifier());
+                                    break;
+                                case 3:
+                                    gameSettings.techtree.currentResearch_3 = gameSettings.techtree.techTree.get(source.getIdentifier());
+                                    break;
+                                default:
+                                    System.out.println("What?");
+                                    break;
+                            }
+                            pnlTechSelect.setVisible(false);
+                            showTechTree();
+                            pnlTechSelect.removeAll();
+                        }
+                        @Override
+                        public void mousePressed(MouseEvent mouseEvent) {
+                            source = (XButton) mouseEvent.getSource();
+                            source.setHorizontalAlignment(SwingConstants.RIGHT);
+                            window.refresh();
+                        }
+                        @Override
+                        public void mouseReleased(MouseEvent mouseEvent) {
+                            source = (XButton) mouseEvent.getSource();
+                            source.setHorizontalAlignment(SwingConstants.LEFT);
+                            window.refresh();
+                        }
+                        @Override
+                        public void mouseEntered(MouseEvent mouseEvent) {
+                            source = (XButton) mouseEvent.getSource();
+                            source.setHorizontalAlignment(SwingConstants.CENTER);
+                            audioRepository.menuTab();
+                            window.refresh();
+                        }
+                        @Override
+                        public void mouseExited(MouseEvent mouseEvent) {
+                            source = (XButton) mouseEvent.getSource();
+                            source.setHorizontalAlignment(SwingConstants.LEFT);
+                            window.refresh();
+                        }
+                    });
+                } else { //if tech is selected already, show accordingly
+                    XLabel lblSelected = new XLabel("ACTIVE", gfxRepository.txtButtonLarge, gfxRepository.clrTextTranslucent);
+                    pnlTechOption.add(lblSelected);
+                    lblSelected.setAlignments(SwingConstants.CENTER);
+                    lblSelected.setBounds(0, 0, pnlTechOption.getWidth(), pnlTechOption.getHeight());
+                    lblSelected.setVisible(true);
+                }
+                btnSelect.setVisible(true);
+
+                JProgressBar barProgress = new JProgressBar(0, gameSettings.techtree.techTree.get(i).getCost());
+                pnlTechOption.add(barProgress);
+                barProgress.setBounds(6, pnlTechOption.getHeight() - 20, pnlTechOption.getWidth() - 12, 16);
+                barProgress.setValue((int)gameSettings.techtree.techTree.get(i).getProgress());
+                barProgress.setForeground(gfxRepository.clrEnable);
+                barProgress.setBackground(gfxRepository.clrBGOpaque);
+                barProgress.setBorderPainted(false);
+                barProgress.setFont(gfxRepository.txtTiny);
+                barProgress.setString(uiFormat.format(gameSettings.techtree.techTree.get(i).getProgress()) + " / " + gameSettings.techtree.techTree.get(i).getCost());
+                barProgress.setStringPainted(true);
+                barProgress.setVisible(true);
+
+                lstTech.addItem(pnlTechOption); //add the tech display to the list sorter
+            }
+
+        }
+        lstTech.placeItems(imgTechSelect);
+
+        pnlTechSelect.setVisible(true);
     }
 
     /** Turn ticker **/

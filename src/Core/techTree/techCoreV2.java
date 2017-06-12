@@ -29,7 +29,7 @@ public class techCoreV2 implements techConstants {
     }
 
     private void initializeTechTree() { //load the tech tree data
-        techTree.add(new techBuilder("String Drive Prototype", 0, 20, 1, TECH_PROPULSION, false, "The string drive is the result of our experiments into FTL technology. The final hurdle - staying on course - was solved by laying a long line of specially manufactured material, known as the string-line. String drives utilize this material to maintain course, allowing for extremely fast and efficient travel through the galaxy.") {
+        techTree.add(new techBuilder("String Drive Prototype", 0, 20, 100, TECH_PROPULSION, false, "/tech_string_drive_1.png", "The string drive is the result of our experiments into FTL technology. The final hurdle - staying on course - was solved by laying a long line of specially manufactured material, known as the string-line. String drives utilize this material to maintain course, allowing for extremely fast and efficient travel through the galaxy.") {
             @Override
             public void finishResearch() {
                 gameSettings.FTLenabled = true; //enable the FTL portion of the game

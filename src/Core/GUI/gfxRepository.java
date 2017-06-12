@@ -41,6 +41,7 @@ public class gfxRepository {
     static final String gameVersion = "PTB-B Build 87a";
 
     public static final Color clrText = new Color(255, 255, 255, 255);
+    public static final Color clrTextTranslucent = new Color(255, 255, 255, 150);
     public static final Color clrInvisible = new Color(0, 0, 0, 0);
     public static final Color clrTrueBlack = new Color(0, 0, 0, 255);
     public static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
@@ -65,6 +66,7 @@ public class gfxRepository {
     public static Font txtTitle;
     public static Font txtLargeTitle;
     public static Font txtTiny;
+    public static Font txtMicro;
     public static Font txtLargeText;
 
     public static final Border bdrButtonEnabled = BorderFactory.createCompoundBorder( BorderFactory.createBevelBorder( BevelBorder.RAISED, clrEnable, clrForeground), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -89,6 +91,7 @@ public class gfxRepository {
             txtHeader = styleSquare.deriveFont(Font.BOLD, 22f);
             txtSubheader = styleSquare.deriveFont(Font.BOLD, 20f);
             txtTiny = styleSquare.deriveFont(Font.PLAIN, 12f);
+            txtMicro = styleSquare.deriveFont(Font.PLAIN, 10f);
 
         } catch (Exception e) {
             e.getMessage();
@@ -178,6 +181,9 @@ public class gfxRepository {
     public static BufferedImage techRedBG;
     public static BufferedImage techBackground;
     static BufferedImage techButton;
+    static BufferedImage line_316;
+    static BufferedImage missingIconTech;
+    static BufferedImage techHighlight;
 
     static BufferedImage topbar_bg;
     static BufferedImage topbar_shield;
@@ -395,7 +401,7 @@ public class gfxRepository {
             eventBorder = ImageIO.read(new File(imageFolder + "/Resources/event/event_border.png"));
 
             techBlueBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_blue.png"));
-            techBlueHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_blue.png"));
+            techBlueHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/header_blue.png"));
             techGreyBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_grey.png"));
             techGreyHeader = ImageIO.read(new File(imageFolder + "/Resources/tech/header_grey.png"));
             techGreenBG = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_green.png"));
@@ -407,6 +413,9 @@ public class gfxRepository {
             techMask = ImageIO.read(new File(imageFolder + "/Resources/tech/bg_rare_mask.png"));
             techBackground = ImageIO.read(new File(imageFolder + "/Resources/tech/tech_background.png"));
             techButton = ImageIO.read(new File(imageFolder + "/Resources/tech/tech_button.png"));
+            line_316 = ImageIO.read(new File(imageFolder + "/Resources/tech/line.png"));
+            missingIconTech = ImageIO.read(new File(imageFolder + "/Resources/tech/unknown.png"));
+            techHighlight = ImageIO.read(new File(imageFolder + "/Resources/tech/selection_highlight.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

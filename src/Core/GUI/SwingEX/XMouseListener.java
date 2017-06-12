@@ -14,6 +14,7 @@ public abstract class XMouseListener implements MouseListener {
     private String IDValue;
     private int Xv;
     private int Yv;
+    private int identifier;
 
     //constructors
     public  XMouseListener() { //blank constructor
@@ -28,6 +29,10 @@ public abstract class XMouseListener implements MouseListener {
         this.Yv = y;
     }
 
+    public XMouseListener(int id) { //for setting up a listener with an ID
+        this.identifier = id;
+    }
+
     //setters
     public void setIDValue(String ID) { this.IDValue = ID; }
 
@@ -38,6 +43,7 @@ public abstract class XMouseListener implements MouseListener {
 
     //getters
     public String getIDValue() { return this.IDValue; }
+    public int getIdentifier() { return this.identifier; }
     public int getValueX() {
         return this.Xv;
     }

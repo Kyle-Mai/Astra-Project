@@ -96,6 +96,15 @@ public class XButton extends JButton {
         super.setContentAreaFilled(false);
     }
 
+    public void scaleImage(BufferedImage image) {
+        Image scaledImage = image.getScaledInstance(this.getWidth() * 3, this.getHeight(), Image.SCALE_SMOOTH);
+        this.setIcon(new ImageIcon(scaledImage));
+
+    }
+
+    public void setIdentifier(int id) { this.identifier = id; }
+    public int getIdentifier() { return this.identifier; }
+
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX

@@ -690,3 +690,17 @@ Version moved to PTB-B with the creation of the colonyCore class.
 - Slight adjustments to the events.
 
     - Testing of more HTML formatting and whatnot.
+
+**JUNE 11 2017** (ver.PTB-B) (U1)
+
+- Finished basic UI integration of the tech tree.
+
+    - Only supports one of the three tech lines at the moment, and with very limited tech selection.
+
+    - Integrated with the turn ticker and continually ticks research.
+
+    - Research selector showcases all relevant information, and the regular tech window shows most.
+
+- Slight improvements to SwingEX functionality.
+
+- Added new tutorial event.

@@ -129,7 +129,7 @@ public class XListSorter implements XConstants {
                         item.setLocation(posx, posy - s2);
                         //System.out.println(posy + " " + item.getHeight() + " " + space); //pls work
                         posy = item.getY();
-                        System.out.println(posy);
+                        //System.out.println(posy);
                         break;
                     default:
                         item.setLocation(posx + s1, posy);

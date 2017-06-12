@@ -24,10 +24,11 @@ public abstract class techBuilder implements techConstants {
     private int type; //the type of research
     private long techID; //creates an ID for the tech
     private boolean dangerous = false; //if the tech is dangerous
-    private BufferedImage icon; //icon for the tech
+    private String icon; //icon for the tech
+    private double progress; //the current progress towards researching the tech
 
     //default constructor layout
-    public techBuilder(String name, int tier, int cost, int rarity, int type, boolean dangerous, String desc) { //sorted by importance
+    public techBuilder(String name, int tier, int cost, int rarity, int type, boolean dangerous, String icon, String desc) { //sorted by importance
         this.name = name;
         this.tier = tier;
         this.cost = cost;
@@ -35,6 +36,7 @@ public abstract class techBuilder implements techConstants {
         this.rarity = rarity;
         this.type = type;
         this.dangerous = dangerous;
+        this.icon = icon;
         assignID(); //gives the tech a unique ID
     }
 
@@ -52,7 +54,18 @@ public abstract class techBuilder implements techConstants {
     public final int getType() { return this.type; }
     public final long getTechID() { return this.techID; }
     public final boolean isDangerous() { return this.dangerous; }
-    public final BufferedImage getIcon() { return this.icon; }
+    public final String getIcon() { return this.icon; }
+    public final double getProgress() { return this.progress; }
+
+    public final void setProgress(double prog) {
+        this.progress += prog;
+
+        if (progress > cost) { //run a couple of checks just to ensure the input is valid
+            progress = cost;
+        } else if (progress < 0) {
+            progress = 0;
+        }
+    }
 
     public final String getResearchTree() { //gets the tree of research
         switch (this.type) {
@@ -64,6 +77,20 @@ public abstract class techBuilder implements techConstants {
                 return "Agriculture";
             case TECH_KINETICS:
                 return "Kinetics";
+            case TECH_GENETICS:
+                return "Genetics";
+            case TECH_COMPUTING:
+                return "Computing";
+            case TECH_CHEMISTRY:
+                return "Chemistry";
+            case TECH_ECOLOGY:
+                return "Ecology";
+            case TECH_GEOLOGY:
+                return "Geology";
+            case TECH_OPTICS:
+                return "Optics";
+            case TECH_SOCIOLOGY:
+                return "Sociology";
             default:
                 return "Unknown";
         }

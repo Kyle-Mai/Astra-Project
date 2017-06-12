@@ -85,6 +85,11 @@ public class audioRepository {
         buttonPress.start();
     }
 
+    public static void startResearch() {
+        audioCore buttonPress = new audioCore("/ui/start_research_01.wav", uiVolume, 0, 1000);
+        buttonPress.start();
+    }
+
     /** Music **/
 
     public static void setMusicVolume() { //changes the volume of the music
@@ -242,6 +247,14 @@ public class audioRepository {
         tutorial.start();
     }
 
+    public static void tutorial_04() {
+        if (tutorial != null) { //stop tutorial audio thread if it's playing already
+            tutorial.interrupt();
+        }
+        tutorial = new audioCore("/advisor/tut_technologies_success_01.wav", voiceVolume);
+        tutorial.start();
+    }
+
     public static void tutorial_off() {
         Random r = new Random();
         int opt = 1 + r.nextInt(6); //pick the audio to play
@@ -275,6 +288,11 @@ public class audioRepository {
         }
 
         tutorial.start();
+    }
+
+    public static void announce_researchComplete() {
+        audioCore announcer = new audioCore("/advisor/research_complete.wav", voiceVolume, 0, 2000);
+        announcer.start();
     }
 
 

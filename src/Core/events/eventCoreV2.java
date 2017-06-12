@@ -42,7 +42,7 @@ public class eventCoreV2 implements eventConstants {
                 });
             }
             @Override public boolean eventTrigger() {
-                return (gameSettings.currentDate >= 2 && gameSettings.tutorialEnabled);
+                return (gameSettings.currentDate >= 1 && gameSettings.tutorialEnabled);
             }
             @Override public void eventOpen() {
                 audioRepository.tutorial_01(); //play tutorial opening audio
@@ -54,7 +54,6 @@ public class eventCoreV2 implements eventConstants {
             @Override public void loadOptions() {
                 addOption(new Option("Understood.", "") {
                     @Override public void clickButton() {
-
                     }
                 });
             }
@@ -64,6 +63,23 @@ public class eventCoreV2 implements eventConstants {
 
             @Override public void eventOpen() {
                 audioRepository.tutorial_03();
+                gameSettings.gameIsPaused = true;
+            }
+        });
+
+        events.add(new eventBuilder("Message from Vir", EVENT_ORANGE, false, "/sentient_AI.png", "Excellent work, the research put into these new technologies should put us in a strong position to begin colonizing nearby stars. <br> <br> Before we do so, however, it may be wise to do an in-depth survey of the nearby star systems with FTL-equipped surveyor ships. By doing so, we can narrow down colonization candidates and ensure our inter-stellar colonies have the greatest chance of success. <br> <br> <b>TASK: Survey nearby star systems.</b>") { //TODO: Change text from Navy Seal copypasta to something serious.
+            @Override public void loadOptions() {
+                addOption(new Option("Understood.", "") {
+                    @Override public void clickButton() {
+                    }
+                });
+            }
+            @Override public boolean eventTrigger() {
+                return (gameSettings.FTLenabled && gameSettings.tutorialEnabled);
+            }
+
+            @Override public void eventOpen() {
+                audioRepository.tutorial_04();
                 gameSettings.gameIsPaused = true;
             }
         });

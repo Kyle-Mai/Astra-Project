@@ -1,8 +1,12 @@
 package Core;
 
 /*
-
+KM
+June whenever 2017
+Handles the turn ticker's main events.
 */
+
+import Core.SFX.audioRepository;
 
 public class turnTicker extends Thread {
 
@@ -11,7 +15,7 @@ public class turnTicker extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run() { //open the thread
         System.out.println("[TT] (run) Let the games begin!");
         runTurn();
 
@@ -19,7 +23,7 @@ public class turnTicker extends Thread {
 
     private void runTurn() {
         //TODO: Switch to timer class, maybe?
-        if (!gameSettings.gameIsPaused) {
+        if (!gameSettings.gameIsPaused) { //check whether or not the game is paused
             try {
                 Thread.sleep((long)gameSettings.timeScale[gameSettings.currentTime]);
             } catch (InterruptedException e) {
@@ -57,10 +61,65 @@ public class turnTicker extends Thread {
 
         }
 
+        if (gameSettings.currentDate % 10 == 0) {
+
+            try {
+                gameSettings.techtree.currentResearch_1.setProgress(gameSettings.player.getResearchTurn());
+                if (gameSettings.techtree.currentResearch_1.getProgress() == gameSettings.techtree.currentResearch_1.getCost()) { //if the research is complete, complete it
+                    gameSettings.techtree.currentResearch_1.finishResearch();
+                    audioRepository.announce_researchComplete();
+
+                    for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
+                        if (gameSettings.techtree.currentResearch_1 == gameSettings.techtree.techTree.get(i)) {
+                            gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                        }
+                        gameSettings.techtree.currentResearch_1 = null; //reset
+                    }
+
+                }
+            } catch (NullPointerException e) {
+                //System.out.println("No tech selected for research 1!");
+            }
+
+            try {
+                gameSettings.techtree.currentResearch_2.setProgress(gameSettings.player.getResearchTurn());
+                if (gameSettings.techtree.currentResearch_2.getProgress() == gameSettings.techtree.currentResearch_2.getCost()) {
+                    gameSettings.techtree.currentResearch_2.finishResearch();
+                    audioRepository.announce_researchComplete();
+                }
+
+                for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
+                    if (gameSettings.techtree.currentResearch_2 == gameSettings.techtree.techTree.get(i)) {
+                        gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                    }
+                    gameSettings.techtree.currentResearch_2 = null; //reset
+                }
+            } catch (NullPointerException e) {
+                //System.out.println("No tech selected for research 2!");
+            }
+
+            try {
+                gameSettings.techtree.currentResearch_3.setProgress(gameSettings.player.getResearchTurn());
+                if (gameSettings.techtree.currentResearch_3.getProgress() == gameSettings.techtree.currentResearch_3.getCost()) {
+                    gameSettings.techtree.currentResearch_3.finishResearch();
+                    audioRepository.announce_researchComplete();
+                }
+
+                for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
+                    if (gameSettings.techtree.currentResearch_3 == gameSettings.techtree.techTree.get(i)) {
+                        gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                    }
+                    gameSettings.techtree.currentResearch_3 = null; //reset
+                }
+            } catch (NullPointerException e) {
+                //System.out.println("No tech selected for research 3!");
+            }
+
+        }
+
         gameSettings.ui.turnTick(); //refresh the UI
 
-        runTurn();
-
+        runTurn(); //recurse back and run the loop again\
     }
 
 }

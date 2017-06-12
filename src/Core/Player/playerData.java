@@ -142,7 +142,7 @@ public class playerData {
     public double getProductionMultiplier() { return this.productionMultiplier; }
 
     public double getResources() { return this.resources; }
-
+    public int getTechLevel() { return this.techLevel; }
     public double getFunds() { return this.funds; }
 
     public void setFunds(double funds) { this.funds = funds; }
