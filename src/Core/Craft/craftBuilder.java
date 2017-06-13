@@ -20,7 +20,7 @@ public class craftBuilder {
 
     public void buildScienceShips() { //builds the science ships
         System.out.println("Preparing science ships...");
-        s_trailblazer = new shipScience("Trailblazer", 20, 4, 25, 40, 20, 0.45, "/Core/GUI/Resources/ships/trailblazer_01.png", 15);
+        s_trailblazer = new shipScience("Trailblazer", 20, 4, 25, 40, 20, 0.45, "trailblazer_01.png", 15);
 
     }
 

@@ -714,3 +714,15 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Added in basis for the ship builder UI to the planets.
 
 - Slightly improved event handling.
+
+**JUNE 12 2017** (ver.PTB-B) (U2)
+
+- Fixed some minor bugs when invalid input is given to the program.
+
+- Zerg-rushed a prototype for the spacecraft builder (deadline tomorrow~!!!!!)
+
+- More tech tree integration.
+
+    - Couple of test (useless) techs and the second tree category.
+
+- Updated events slightly, again.

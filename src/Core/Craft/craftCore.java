@@ -1,10 +1,14 @@
 package Core.Craft;
 
+import Core.GUI.SwingEX.XPanel;
 import Core.SFX.audioRepository;
 import Core.gameSettings;
 import Core.starClass;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * KM
@@ -62,6 +66,10 @@ public abstract class craftCore {
         private int systemX, systemY; //ship's location in the system
         private int moveToX, moveToY; //used to store the location the ship is moving to on the map
         private boolean isUnlocked; //whether or not the ship is available to build
+        private XPanel shipVisuals; //the ship UI elements
+        private boolean isSelected; //whether or not ship is selected
+
+        private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI/");
 
         public craftCore(String name, double speed, int range, int health, double buildCost, int buildTime, double maintenanceCost, String shipGFXDir) {
             this.speed = speed;
@@ -89,7 +97,7 @@ public abstract class craftCore {
             }
         }
 
-        abstract void performAction(); //determines what the ship is doing
+        public abstract void performAction(); //determines what the ship is doing
 
         public void idleTick() { //checked every turn to determine whether or not the ship can perform actions
             if (this.isActive() && this.getTimeUntilAction() > 0) {
@@ -109,10 +117,10 @@ public abstract class craftCore {
             }
         }
 
-        abstract void actionComplete(); //indicates an action is finished being performed
+        public abstract void actionComplete(); //indicates an action is finished being performed
 
-        abstract void playAudioMove(); //audio that plays when the craft moves
-        abstract void playAudioSelected(); //audio that plays when the craft is selected
+        public abstract void playAudioMove(); //audio that plays when the craft moves
+        public abstract void playAudioSelected(); //audio that plays when the craft is selected
 
         private boolean isInRange(int distance) {
             return (distance <= this.range);
@@ -125,7 +133,19 @@ public abstract class craftCore {
         public final String getShipGFXDir() { return this.shipGFXDir; }
         public final int getRange() { return this.range; }
         public final double getSpeed() { return this.speed; }
-        public final BufferedImage getShipGFX() { return  this.shipGFX; }
+        public final int getSystemX() { return this.systemX; }
+        public final int getSystemY() { return this.systemY; }
+        public final XPanel getShipVisuals() { return this.shipVisuals; }
+        public final BufferedImage getShipGFX() {
+            if (this.shipGFX == null) { //if it hasn't been initialized, initialize it
+                try {
+                    this.shipGFX = ImageIO.read(new File(imageFolder + "/Resources/ships/" + this.shipGFXDir));
+                } catch (IOException e) {
+                }
+            }
+
+            return this.shipGFX;
+        }
         public final String getCraftName() { return this.craftName; }
         public final boolean isActive() { return this.isActive; }
         public final int getTimeUntilAction() { return this.timeUntilAction; }
@@ -133,6 +153,7 @@ public abstract class craftCore {
         public final int getMapX() { return this.mapX; }
         public final int getMapY() { return this.mapY; }
         public final boolean isUnlocked() { return this.isUnlocked; }
+        public final boolean isSelected() { return this.isSelected; }
 
         //setter methods
         public final void setHealth(int hp) { //sets the health of the ship
@@ -156,5 +177,8 @@ public abstract class craftCore {
         public final void setMapLocation(int x, int y) { this.mapX = x; this.mapY = y; } //sets the map location of the ship
         public final void moveToLocation(int x, int y) { this.moveToX = x; this.moveToY = y; }
         public final void setUnlocked() { this.isUnlocked = !this.isUnlocked; }
+        public final void setPosition(int x, int y) { this.systemX = x; this.systemY = y; }
+        public final void renderShip(XPanel ship) { this.shipVisuals = ship; }
+        public final void setSelected() { this.isSelected = !this.isSelected; }
 
 }

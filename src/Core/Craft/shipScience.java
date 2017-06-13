@@ -29,7 +29,7 @@ public class shipScience extends craftCore {
     }
 
     @Override
-    void actionComplete() {
+    public void actionComplete() {
 
     }
 

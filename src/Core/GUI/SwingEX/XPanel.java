@@ -8,6 +8,8 @@ package Core.GUI.SwingEX;
 
 
 //import all relevant stuff
+import Core.starClass;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,6 +17,7 @@ import java.awt.image.BufferedImage;
 
 public class XPanel extends JPanel {
 
+    private int posX, posY;
 
     /** Main Constructor **/
 
@@ -34,6 +37,10 @@ public class XPanel extends JPanel {
         this.setBorder(null);
 
     }
+
+    public int getPosX() { return this.posX; }
+    public int getPosY() { return this.posY; }
+    public void setPosValues(int x, int y) { this.posX = x; this.posY = y; }
 
 
     /** Base Methods **/

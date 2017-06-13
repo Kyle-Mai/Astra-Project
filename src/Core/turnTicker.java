@@ -22,30 +22,10 @@ public class turnTicker extends Thread {
     }
 
     private void runTurn() {
-        //TODO: Switch to timer class, maybe?
-        if (!gameSettings.gameIsPaused) { //check whether or not the game is paused
-            try {
-                Thread.sleep((long)gameSettings.timeScale[gameSettings.currentTime]);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            while (gameSettings.gameIsPaused) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
-                if (!gameSettings.gameIsPaused) {
-                    break;
-                }
-            }
-
+        if (gameSettings.currentDate > 1) {
+            gameSettings.player.tickStats(); //update player info
         }
-
-        gameSettings.currentDate++;
-        gameSettings.player.tickStats(); //update player info
 
         for (int i = 0; i < gameSettings.eventhandler.events.size(); i++) {
 
@@ -72,8 +52,8 @@ public class turnTicker extends Thread {
                     for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
                         if (gameSettings.techtree.currentResearch_1 == gameSettings.techtree.techTree.get(i)) {
                             gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                            gameSettings.techtree.currentResearch_1 = null; //reset
                         }
-                        gameSettings.techtree.currentResearch_1 = null; //reset
                     }
 
                 }
@@ -91,8 +71,8 @@ public class turnTicker extends Thread {
                 for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
                     if (gameSettings.techtree.currentResearch_2 == gameSettings.techtree.techTree.get(i)) {
                         gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                        gameSettings.techtree.currentResearch_2 = null; //reset
                     }
-                    gameSettings.techtree.currentResearch_2 = null; //reset
                 }
             } catch (NullPointerException e) {
                 //System.out.println("No tech selected for research 2!");
@@ -108,14 +88,40 @@ public class turnTicker extends Thread {
                 for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
                     if (gameSettings.techtree.currentResearch_3 == gameSettings.techtree.techTree.get(i)) {
                         gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                        gameSettings.techtree.currentResearch_3 = null; //reset
                     }
-                    gameSettings.techtree.currentResearch_3 = null; //reset
                 }
             } catch (NullPointerException e) {
                 //System.out.println("No tech selected for research 3!");
             }
 
         }
+
+        gameSettings.ui.turnTick(); //refresh the UI
+
+        //TODO: Switch to timer class, maybe?
+        if (!gameSettings.gameIsPaused) { //check whether or not the game is paused
+            try {
+                Thread.sleep((long)gameSettings.timeScale[gameSettings.currentTime]);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            while (gameSettings.gameIsPaused) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (!gameSettings.gameIsPaused) {
+                    break;
+                }
+            }
+
+        }
+
+        gameSettings.currentDate++;
 
         gameSettings.ui.turnTick(); //refresh the UI
 

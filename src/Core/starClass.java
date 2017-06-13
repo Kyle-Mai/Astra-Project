@@ -1,5 +1,7 @@
 package Core;
 
+import Core.Craft.craftCore;
+
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class starClass extends starCore implements Serializable {
     private transient int arrayLoc;
     private String starName;
     private boolean homeSystem = false;
+    public ArrayList<craftCore> shipsInSystem = new ArrayList<>(); //all of the ships currently in this system
 
     //creates a randomized star
     public starClass(int mapLocationX, int mapLocationY){

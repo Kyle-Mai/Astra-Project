@@ -34,6 +34,7 @@ public class planetClass extends planetCore implements Serializable {
     private double resources;
     private int colonyID;
     private boolean homePlanet;
+    private int systemPosX, systemPosY;
 
     //generates a random planet
     public planetClass(starClass parentStar, int planetNumber) {
@@ -85,6 +86,8 @@ public class planetClass extends planetCore implements Serializable {
     public String getPlanetClassName() { return planetClass.listOfPlanets.get(arrayLoc).getClassName(); }
     public String getPlanetClassDesc() { return planetClass.listOfPlanets.get(arrayLoc).getClassDesc(); }
     public boolean isHomePlanet() { return this.homePlanet; }
+    public int getSystemPosX() { return this.systemPosX; }
+    public int getSystemPosY() { return this.systemPosY; }
 
     /** Setter methods **/
 
@@ -104,5 +107,8 @@ public class planetClass extends planetCore implements Serializable {
             this.resources = 0;
         }
     }
+
+    public void setSystemPosX(int x) { this.systemPosX = x; }
+    public void setSystemPosY(int y) { this.systemPosY = y; }
 
 }

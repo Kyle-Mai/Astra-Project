@@ -3,6 +3,7 @@ package Core.GUI;
 //import all relevant stuff
 import Core.*;
 import Core.Craft.craftBuilder;
+import Core.Craft.craftCore;
 import Core.GUI.SwingEX.*;
 import Core.Player.SaveDirectoryConstants;
 import Core.Player.playerData;
@@ -55,6 +56,8 @@ public class guiCoreV4 {
 
     private int tileSize = 50;
     private int screenScaleChoice = 5;
+
+    public ArrayList<XPanel> shipList = new ArrayList<>();
 
     private ArrayList<XPanel> pnlExpansions = new ArrayList<>();
     private ArrayList<XLabel> lblExpansions = new ArrayList<>();
@@ -917,6 +920,8 @@ public class guiCoreV4 {
                             pnlTechTree = new XPanel();
                             pnlTechSelect = new XPanel();
                             pnlTechSelect.setVisible(false);
+                            pnlShipBuilder = new XPanel();
+                            pnlShipBuilder.setVisible(false);
                             pnlTechTree.setVisible(false);
                             btnQuit = new XButton();
                             break;
@@ -1728,7 +1733,7 @@ public class guiCoreV4 {
             for (int j = 0; j < gameSettings.map.mapTiles.get(i).size(); j++) {
                 if (gameSettings.map.mapTiles.get(i).get(j).getStar()) {
 
-                    if (gameSettings.map.mapTiles.get(i).get(j).getVisibility()) { //tile visible
+                    //if (gameSettings.map.mapTiles.get(i).get(j).getVisibility()) { //tile visible
 
                         mapGFX.get(i).add(new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getIconGFX())); //adds the star's icon to the map
                         XLabel starName = new XLabel(gameSettings.map.mapTiles.get(i).get(j).getStarData().getStarName(), gfxRepository.txtItalSubtitle, gfxRepository.clrText);
@@ -1737,7 +1742,7 @@ public class guiCoreV4 {
                         starName.setAlignments(SwingConstants.CENTER);
                         starName.setVisible(true);
 
-                    } else { //tile not visible
+                    /*} else { //tile not visible
 
                         mapGFX.get(i).add(new XLabel(gfxRepository.unknownStar)); //star isn't visible, add an unknown icon
                         XLabel starName = new XLabel("???", gfxRepository.txtItalSubtitle, gfxRepository.clrText); //who knows?
@@ -1745,7 +1750,7 @@ public class guiCoreV4 {
                         starName.setBounds(tileSize * (positionX + 1) - 25, tileSize * (positionY + 1) + 25, tileSize + 50, tileSize);
                         starName.setAlignments(SwingConstants.CENTER);
                         starName.setVisible(true);
-                    }
+                    } */
 
                     if (gameSettings.map.mapTiles.get(i).get(j).getStarData().isHomeSystem()) {
                         XLabel homeSystem = new XLabel(gfxRepository.homeSystem);
@@ -1761,7 +1766,7 @@ public class guiCoreV4 {
                     mapButton.get(i).get(j).setVisible(true);
                     mapButton.get(i).get(j).setBounds(0, 0, tileSize, tileSize);
 
-                    if (gameSettings.map.mapTiles.get(i).get(j).getVisibility()) { //poorly optimized, don't care
+                    //if (gameSettings.map.mapTiles.get(i).get(j).getVisibility()) { //poorly optimized, don't care
 
                         mapButton.get(i).get(j).addMouseListener(new XMouseListener(i, j) {
                             XButton source;
@@ -1804,7 +1809,7 @@ public class guiCoreV4 {
                             }
                         });
 
-                    } else { //tile hasn't been surveyed yet, don't display any information
+                    /* } else { //tile hasn't been surveyed yet, don't display any information
 
                         mapButton.get(i).get(j).setIcon(gfxRepository.systemRefuse, SwingConstants.LEFT);
 
@@ -1849,7 +1854,7 @@ public class guiCoreV4 {
                         });
 
 
-                    }
+                    } */
 
                 } else {
                     mapGFX.get(i).add(new XLabel());
@@ -2795,6 +2800,7 @@ public class guiCoreV4 {
         ArrayList<planetButton> planet = new ArrayList<>();
 
         starClass star = gameSettings.map.mapTiles.get(y).get(x).getStarData();
+        currentStar = gameSettings.map.mapTiles.get(y).get(x).getStarData();
 
         bgPanel = new XLabel(gfxRepository.mainBackground);
         layers.add(bgPanel, new Integer(0), 0);
@@ -2956,6 +2962,8 @@ public class guiCoreV4 {
             pnlBG.add(imgPlanet);
             size = (6 * star.planetList.get(i).getPlanetRadius());
             imgPlanet.setBounds(((pnlBG.getWidth() / 2) + 250) + planetPosition, (pnlBG.getHeight() / 2) - (size/2), size, size);
+            star.planetList.get(i).setSystemPosX(imgPlanet.getX() + (imgPlanet.getWidth() / 2));
+            star.planetList.get(i).setSystemPosY(imgPlanet.getY() + (imgPlanet.getHeight() / 2));
             imgPlanet.scaleImage(planetCore.listOfPlanets.get(star.planetList.get(i).getArrayLoc()).getPlanetIcon());
             imgPlanet.setVisible(true);
 
@@ -3026,6 +3034,12 @@ public class guiCoreV4 {
 
         }
 
+        for (int i = 0; i < currentStar.shipsInSystem.size(); i++) {
+            pnlBG.add(currentStar.shipsInSystem.get(i).getShipVisuals()); //adds the relevant ships to the system
+            currentStar.shipsInSystem.get(i).getShipVisuals().setBounds(currentStar.shipsInSystem.get(i).getSystemX(), currentStar.shipsInSystem.get(i).getSystemY(), currentStar.shipsInSystem.get(i).getShipVisuals().getWidth(), currentStar.shipsInSystem.get(i).getShipVisuals().getHeight());
+            currentStar.shipsInSystem.get(i).getShipVisuals().setVisible(true);
+        }
+
         XLabel imgSystemOutline = new XLabel(gfxRepository.systemOutline);
         pnlBG.add(imgSystemOutline);
         imgSystemOutline.setBounds((pnlBG.getWidth() / 2) - (planetPosition + 500), (pnlBG.getHeight() / 2) - (planetPosition + 500), (planetPosition + 500) * 2, (planetPosition + 500) * 2);
@@ -3051,6 +3065,8 @@ public class guiCoreV4 {
     private void loadPlanetData(planetClass planet) {
 
         pnlPlanetData.removeAll();
+        pnlShipBuilder.setVisible(false);
+        pnlShipBuilder.removeAll();
 
         currentPlanet = planet; //refresh current planet
 
@@ -3190,6 +3206,8 @@ public class guiCoreV4 {
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
 
+                pnlShipBuilder.removeAll();
+                pnlShipBuilder.setVisible(false);
                 pnlPlanetData.removeAll();
                 pnlPlanetData.setVisible(false);
             }
@@ -3225,14 +3243,18 @@ public class guiCoreV4 {
             }
         });
 
+        if (planet.getPlanetColony() != null) {
+            loadShipBuilder();
+        }
+
         window.refresh();
 
     }
 
     private void loadShipBuilder() { //builds ships at the specified colony
-        pnlShipBuilder = new XPanel();
         layers.add(pnlShipBuilder, new Integer(12), 0);
-        pnlShipBuilder.setBounds(pnlPlanetData.getX() - 270, pnlPlanetData.getY(), 260, pnlPlanetData.getHeight());
+        pnlShipBuilder.setBounds(pnlPlanetData.getX() - 200, pnlPlanetData.getY(), 190, pnlPlanetData.getHeight());
+        pnlShipBuilder.setVisible(true);
 
         XLabel imgShipBuilder = new XLabel();
         pnlShipBuilder.add(imgShipBuilder);
@@ -3242,24 +3264,215 @@ public class guiCoreV4 {
 
         XLabel lblBuilderTitle = new XLabel("Orbital Shipyard", gfxRepository.txtSubheader, gfxRepository.clrText);
         imgShipBuilder.add(lblBuilderTitle);
-        lblBuilderTitle.setBounds(0, 0, imgShipBuilder.getWidth(), 20);
+        lblBuilderTitle.setBounds(0, 0, imgShipBuilder.getWidth(), 25);
         lblBuilderTitle.setAlignments(SwingConstants.CENTER);
         lblBuilderTitle.setVisible(true);
 
         XPanel pnlViewer = new XPanel();
         imgShipBuilder.add(pnlViewer);
-        pnlViewer.setBounds(5, 20, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 25);
+        pnlViewer.setBounds(5, 25, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 25);
+        pnlViewer.setPreferredSize(new Dimension(pnlViewer.getWidth(), pnlViewer.getHeight()));
+        pnlViewer.setBackground(gfxRepository.clrBGOpaque);
+        pnlViewer.setForeground(gfxRepository.clrBGOpaque);
+        pnlViewer.setOpaque(false);
         pnlViewer.setVisible(true);
 
         XScrollPane scrBuilder = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         imgShipBuilder.add(scrBuilder);
-        scrBuilder.setBounds(pnlViewer.getBounds());
+        scrBuilder.setBounds(5, 20, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 25);
         scrBuilder.setViewportView(pnlViewer);
         scrBuilder.setViewportBorder(null);
+        scrBuilder.setBackground(gfxRepository.clrBGOpaque);
+        scrBuilder.setForeground(gfxRepository.clrBGOpaque);
+        scrBuilder.setOpaque(false);
         scrBuilder.setVisible(true);
 
+        XListSorter srtShips = new XListSorter(XConstants.VERTICAL_SORT, 5, 0, 0);
+
+        for (int i = 0; i < gameSettings.shipbuilder.shipStorage.size(); i++) {
+
+            if (gameSettings.shipbuilder.shipStorage.get(i).isUnlocked()) { //check whether or not ship is available for building
+
+                XPanel pnlShip = new XPanel();
+                pnlShip.setPreferredSize(new Dimension(pnlViewer.getWidth(), 60));
+                pnlShip.setSize(pnlShip.getPreferredSize());
+                pnlShip.setOpaque(false);
+                pnlShip.setVisible(true);
+
+                XLabel imgMinerals = new XLabel(gfxRepository.mineralsIconSmall);
+                pnlShip.add(imgMinerals);
+                imgMinerals.setBounds(pnlShip.getWidth() - 18, pnlShip.getHeight() - 18, 18, 18);
+                imgMinerals.setVisible(true);
+
+                XLabel lblMinerals = new XLabel(gameSettings.shipbuilder.shipStorage.get(i).getBuildCost() + " ", gfxRepository.txtSubtitle, gfxRepository.clrText);
+                pnlShip.add(lblMinerals);
+                lblMinerals.setBounds(imgMinerals.getX() - 100, imgMinerals.getY(), 100, imgMinerals.getHeight());
+                lblMinerals.setAlignments(SwingConstants.RIGHT, SwingConstants.CENTER);
+                lblMinerals.setVisible(true);
+
+                XLabel lblShipName = new XLabel(gameSettings.shipbuilder.shipStorage.get(i).getCraftName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+                pnlShip.add(lblShipName);
+                lblShipName.setBounds(0, 0, pnlShip.getWidth(), 25);
+                lblShipName.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+                lblShipName.setVisible(true);
+
+                XButton btnBuildShip = new XButton(gfxRepository.techHighlight, SwingConstants.LEFT);
+                pnlShip.add(btnBuildShip);
+                btnBuildShip.setBounds(0, 0, pnlShip.getWidth(), pnlShip.getHeight());
+                btnBuildShip.scaleImage(gfxRepository.techHighlight);
+                btnBuildShip.setVisible(true);
+                btnBuildShip.addMouseListener(new XMouseListener(i) {
+                    XButton source;
+                    @Override
+                    public void mouseClicked(MouseEvent mouseEvent) {
+                        source = (XButton)mouseEvent.getSource();
+                        source.setHorizontalAlignment(SwingConstants.RIGHT);
+                        window.refresh();
+
+                        try { //build a ship if the player has enough resources to do so
+                            if (gameSettings.player.getResources() >= gameSettings.shipbuilder.shipStorage.get(getIdentifier()).getBuildCost()) {
+                                gameSettings.player.setResources(gameSettings.player.getResources() - gameSettings.shipbuilder.shipStorage.get(getIdentifier()).getBuildCost());
+                                audioRepository.constructShip();
+                                newShip(gameSettings.shipbuilder.shipStorage.get(getIdentifier())); //build new ship
+                            } else {
+                                audioRepository.buttonDisable();
+                            }
+                        } catch (NullPointerException e) {
+                            //o no ship doesn't exist wat do
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent mouseEvent) {
+                        source = (XButton)mouseEvent.getSource();
+                        source.setHorizontalAlignment(SwingConstants.RIGHT);
+                        window.refresh();
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent mouseEvent) {
+                        source = (XButton)mouseEvent.getSource();
+                        source.setHorizontalAlignment(SwingConstants.LEFT);
+                        window.refresh();
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent mouseEvent) {
+                        source = (XButton)mouseEvent.getSource();
+                        source.setHorizontalAlignment(SwingConstants.CENTER);
+                        audioRepository.menuTab();
+                        window.refresh();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent mouseEvent) {
+                        source = (XButton)mouseEvent.getSource();
+                        source.setHorizontalAlignment(SwingConstants.LEFT);
+                        window.refresh();
+                    }
+                });
+
+                srtShips.addItem(pnlShip);
+            }
+        }
+
+        srtShips.placeItems(pnlViewer);
 
 
+    }
+
+    /** Ship Builder **/
+
+    private void newShip(craftCore newShip) { //creates a new ship
+
+        XPanel ship = new XPanel();
+        ship.setPreferredSize(new Dimension(120, 130)); //size of ship TODO: Dynamic
+        ship.setSize(ship.getPreferredSize());
+        ship.setOpaque(false);
+        ship.setVisible(true);
+
+        currentStar.shipsInSystem.add(newShip);
+        currentStar.shipsInSystem.get(currentStar.shipsInSystem.indexOf(newShip)).setPosition(currentPlanet.getSystemPosX(), currentPlanet.getSystemPosY());
+        currentStar.shipsInSystem.get(currentStar.shipsInSystem.indexOf(newShip)).toggleActive();
+
+        XButton btnShipSelector = new XButton(gfxRepository.shipHighlight, SwingConstants.LEFT);
+        ship.add(btnShipSelector);
+        btnShipSelector.setBounds(0, 0, 120, 120);
+        btnShipSelector.setVisible(true);
+        btnShipSelector.setIdentifier(currentStar.shipsInSystem.indexOf(newShip));
+        btnShipSelector.addMouseListener(new XMouseListener() {
+            XButton source;
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                } else {
+                    currentStar.shipsInSystem.get(source.getIdentifier()).playAudioSelected();
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                }
+                window.refresh();
+                //select ship
+                currentStar.shipsInSystem.get(source.getIdentifier()).setSelected();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                } else {
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                }
+                window.refresh();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                } else {
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                }
+                window.refresh();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                window.refresh();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
+                    source.setHorizontalAlignment(SwingConstants.RIGHT);
+                } else {
+                    source.setHorizontalAlignment(SwingConstants.LEFT);
+                }
+                window.refresh();
+            }
+        });
+
+        XLabel imgShip = new XLabel(newShip.getShipGFX());
+        ship.add(imgShip);
+        imgShip.setBounds(0, 0, ship.getWidth(), ship.getHeight() - 10);
+        imgShip.setVisible(true);
+
+        XLabel lblShipName = new XLabel(newShip.getCraftName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+        ship.add(lblShipName);
+        lblShipName.setBounds(0, 120, ship.getWidth(), 10);
+        lblShipName.setAlignments(SwingConstants.CENTER);
+        lblShipName.setVisible(true);
+
+        //shipList.add(ship);
+
+        currentStar.shipsInSystem.get(currentStar.shipsInSystem.indexOf(newShip)).renderShip(ship);
+        audioRepository.constructionComplete();
 
     }
 
@@ -3518,6 +3731,107 @@ public class guiCoreV4 {
         tech_1.setVisible(true);
         tech_1_header.setVisible(true);
         tech_1_main.setVisible(true);
+
+        XPanel tech_2 = new XPanel();
+        tech_2.setOpaque(false);
+        imgTechBG.add(tech_2);
+        tech_2.setBounds(0, tech_1.getY() + tech_1.getHeight() + 15, 452, 110);
+        XLabel tech_2_header = new XLabel(gfxRepository.greyHeader);
+        tech_2_header.setOpaque(false);
+        tech_2.add(tech_2_header);
+        tech_2_header.setBounds(0, 0, 452, 25);
+        tech_2_header.setAlignments(SwingConstants.CENTER);
+        XLabel tech_2_header_text = new XLabel();
+        tech_2_header.add(tech_2_header_text);
+        tech_2_header_text.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+        tech_2_header_text.setBounds(5, 0, tech_2_header.getWidth() - 20, tech_2_header.getHeight());
+        XLabel tech_2_main = new XLabel();
+        tech_2.add(tech_2_main);
+        tech_2_main.setBounds(0, 25, 452, 85);
+        XLabel tech_2_name = new XLabel();
+        tech_2_main.add(tech_2_name);
+        tech_2_name.setBounds(5, 1, tech_2_main.getWidth() - 10, 30);
+        tech_2_name.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+        XButton tech_2_button = new XButton(gfxRepository.techButton, SwingConstants.LEFT);
+        tech_2_main.add(tech_2_button);
+        tech_2_button.setBounds(-13, -5, 478, 110);
+        tech_2_button.addMouseListener(new XMouseListener() {
+            XButton source;
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                audioRepository.buttonConfirm();
+                window.refresh();
+                if (!pnlTechSelect.isVisible()) {
+                    selectResearch(2);
+                } else {
+                    pnlTechSelect.removeAll();
+                    pnlTechSelect.setVisible(false);
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+                window.refresh();
+            }
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        if (gameSettings.techtree.currentResearch_2 != null) {
+            tech_2_header.setIcon(new ImageIcon(gfxRepository.techGreenHeader));
+            tech_2_header_text.setText(gameSettings.techtree.currentResearch_2.getResearchTree(), gfxRepository.txtHeader, gfxRepository.clrText);
+            tech_2_name.setText(gameSettings.techtree.currentResearch_2.getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+            XLabel tech_2_icon = new XLabel();
+            tech_2_main.add(tech_2_icon);
+            tech_2_icon.setBounds(70, 30, 52, 52);
+            try {
+                tech_2_icon.scaleImage(ImageIO.read(new File(System.getProperty("user.dir") + "/src/Core/GUI/Resources/tech/" + gameSettings.techtree.currentResearch_2.getIcon())));
+            } catch (IOException e) {
+                tech_2_icon.scaleImage(gfxRepository.missingIconTech);
+            }
+            tech_2_icon.setVisible(true);
+            if (gameSettings.techtree.currentResearch_2.getRarity() < 10 && !gameSettings.techtree.currentResearch_2.isDangerous()) { //tech is rare, showcase rare colour
+                tech_2_main.setIcon(new ImageIcon(gfxRepository.techPurpleBG));
+                XLabel tech_2_main_mask = new XLabel(gfxRepository.techMask);
+                tech_2_main.add(tech_2_main_mask);
+                tech_2_main_mask.setBounds(0, 0, tech_2_main.getWidth(), tech_2_main.getHeight());
+            } else if (gameSettings.techtree.currentResearch_2.isDangerous()) { //dangerous technology, display accordingly
+                tech_2_main.setIcon(new ImageIcon(gfxRepository.techRedBG));
+            } else { //regular tech, display regular colour
+                tech_2_main.setIcon(new ImageIcon(gfxRepository.techGreenBG));
+            }
+        } else { //no current research
+            tech_2_header.setIcon(new ImageIcon(gfxRepository.techGreyHeader));
+            tech_2_header_text.setText("???", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_2_main.setIcon(new ImageIcon(gfxRepository.techGreyBG));
+            tech_2_name.setText("No active research project.", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        }
+        tech_2_button.setVisible(true);
+        tech_2_name.setVisible(true);
+        tech_2_header_text.setVisible(true);
+        tech_2.setVisible(true);
+        tech_2_header.setVisible(true);
+        tech_2_main.setVisible(true);
 
 
         window.refresh();

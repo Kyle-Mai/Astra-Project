@@ -193,6 +193,11 @@ public class gfxRepository {
     static BufferedImage mineralsIcon;
     static BufferedImage energyIcon;
 
+    static BufferedImage mineralsIconSmall;
+    static BufferedImage energyIconSmall;
+
+    static BufferedImage shipHighlight;
+
     static BufferedImage cursorIcon;
 
     static Cursor defaultCursor;
@@ -416,6 +421,11 @@ public class gfxRepository {
             line_316 = ImageIO.read(new File(imageFolder + "/Resources/tech/line.png"));
             missingIconTech = ImageIO.read(new File(imageFolder + "/Resources/tech/unknown.png"));
             techHighlight = ImageIO.read(new File(imageFolder + "/Resources/tech/selection_highlight.png"));
+
+            mineralsIconSmall = ImageIO.read(new File(imageFolder + "/Resources/ui/minerals.png"));
+            energyIconSmall = ImageIO.read(new File(imageFolder + "/Resources/ui/energy.png"));
+
+            shipHighlight = ImageIO.read(new File(imageFolder + "/Resources/ships/ship_selection.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

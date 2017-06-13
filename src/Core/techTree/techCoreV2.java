@@ -29,14 +29,27 @@ public class techCoreV2 implements techConstants {
     }
 
     private void initializeTechTree() { //load the tech tree data
-        techTree.add(new techBuilder("String Drive Prototype", 0, 20, 100, TECH_PROPULSION, false, "/tech_string_drive_1.png", "The string drive is the result of our experiments into FTL technology. The final hurdle - staying on course - was solved by laying a long line of specially manufactured material, known as the string-line. String drives utilize this material to maintain course, allowing for extremely fast and efficient travel through the galaxy.") {
+        techTree.add(new techBuilder("String Drive Prototype", 0, 20, 100, TECH_PROPULSION, false, "tech_string_drive_1.png", "The string drive is the result of our experiments into FTL technology. The final hurdle - staying on course - was solved by laying a long line of specially manufactured material, known as the string-line. String drives utilize this material to maintain course, allowing for extremely fast and efficient travel through the galaxy.") {
             @Override
             public void finishResearch() {
                 gameSettings.FTLenabled = true; //enable the FTL portion of the game
+                gameSettings.shipbuilder.shipStorage.get(gameSettings.shipbuilder.shipStorage.indexOf(gameSettings.shipbuilder.s_trailblazer)).setUnlocked(); //unlock the trailblazer
             }
         });
 
+        techTree.add(new techBuilder("New Worlds Protocol", 0, 35, 100, TECH_AGRICULTURE, false, "tech_colonization_1.png", "The time has come to begin researching into long-term stasis and mega-construction techniques. By doing so, we can begin construction of colony ships which will allow us to colonize new worlds in far off systems.") {
+            @Override
+            public void finishResearch() {
 
+            }
+        });
+
+        techTree.add(new techBuilder("Vertical Farming", 0, 50, 100, TECH_AGRICULTURE, false, "", "Did you hear? The guards in Hammerfell have curved swords. Curved. Swords.") {
+            @Override
+            public void finishResearch() {
+
+            }
+        });
 
     }
 
@@ -57,13 +70,6 @@ public class techCoreV2 implements techConstants {
     };
 
     techBuilder infr_Arcologies = new techBuilder("Arcologies", 6, 2100, 1, TECH_INFRASTRUCTURE, "The arcology is a massive structure housing a large, self-sustaining population within it. With very minimal ecological impact, we can more effectively utilize the planet's resources without as high a risk of ecological disaster.") {
-        @Override
-        public void finishResearch() {
-
-        }
-    };
-
-    techBuilder agri_VerticalFarming = new techBuilder("Vertical Farming", 1, 70, 90, TECH_AGRICULTURE, "") {
         @Override
         public void finishResearch() {
 

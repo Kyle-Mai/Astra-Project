@@ -90,6 +90,16 @@ public class audioRepository {
         buttonPress.start();
     }
 
+    public static void constructShip() {
+        audioCore buttonPress = new audioCore("/ui/queuing_ship_01.wav", voiceVolume, 0, 1600);
+        buttonPress.start();
+    }
+
+    public static void constructionComplete() {
+        audioCore buttonPress = new audioCore("/ui/construction_complete.wav", uiVolume, 0, 1800);
+        buttonPress.start();
+    }
+
     /** Music **/
 
     public static void setMusicVolume() { //changes the volume of the music
