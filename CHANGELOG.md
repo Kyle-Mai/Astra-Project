@@ -726,3 +726,22 @@ Version moved to PTB-B with the creation of the colonyCore class.
     - Couple of test (useless) techs and the second tree category.
 
 - Updated events slightly, again.
+
+---
+
+Everything from this point on is post-submission.
+
+**JUNE 16 2017** (U1.0 Dev-Build) (1)
+
+- Began rework of UI code.
+
+    - Moving different sections of it into isolated classes to make the code neater and less convoluted.
+
+    - Changed some layouts to be more formal, better scaling and whatnot.
+
+    - Reworked the loading screen code to be a little more modular.
+
+    - Event window is now much more easily accessed and utilized by the program.
+
+- Patched a major bug in the saveData. Will now validate the save folder itself before attempting to create a new player save.
+

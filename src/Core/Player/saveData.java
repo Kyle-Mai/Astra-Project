@@ -39,12 +39,17 @@ public class saveData {
     }
 
     public void create() { //creates a new folder if one doesn't already exist
-        if (!validate()) {
-            saveDirectory.mkdir();
-            if (validate()) {
-                System.out.println("[SD](create) New folder created successfully.");
-            }
 
+        if (!SaveDirectoryConstants.SAVEDIRECTORY.exists()) { //if the saves folder is compromised, create a new one
+            SaveDirectoryConstants.SAVEDIRECTORY.mkdir();
+            System.out.println("[SD](create) Unexpected token - Save directory not found. Creating...");
+        }
+
+        if (!validate()) { //check to ensure we don't overwrite an existing save
+            saveDirectory.mkdir(); //attempt to create the save folder
+            if (validate()) {
+                System.out.println("[SD](create) New save folder created successfully."); //if it is created successfully, output accordingly
+            }
         } else {
             System.out.println("[SD](create) Unexpected Error - User directory already exists.");
         }

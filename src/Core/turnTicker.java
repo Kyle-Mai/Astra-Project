@@ -32,7 +32,7 @@ public class turnTicker extends Thread {
             if (gameSettings.eventhandler.events.get(i).eventTrigger()) { //event has reached the conditions required to trigger
 
                 System.out.println("Event triggered!");
-                gameSettings.ui.loadEventWindow(gameSettings.eventhandler.events.get(i)); //load the event
+                gameSettings.ui.eventWindow.loadEvent(gameSettings.eventhandler.events.get(i)); //load the event
 
                 if (!gameSettings.eventhandler.events.get(i).isRepeatable()) { //event is not repeatable, make sure it doesn't trigger again
                     gameSettings.eventhandler.events.remove(i); //...by removing it completely from the array!

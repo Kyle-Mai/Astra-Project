@@ -4,6 +4,9 @@ package Core.GUI;
 import Core.*;
 import Core.Craft.craftBuilder;
 import Core.Craft.craftCore;
+import Core.GUI.Design.EventWindow;
+import Core.GUI.Design.LauncherWindow;
+import Core.GUI.Design.LoadingScreen;
 import Core.GUI.SwingEX.*;
 import Core.Player.SaveDirectoryConstants;
 import Core.Player.playerData;
@@ -55,7 +58,7 @@ public class guiCoreV4 {
     DecimalFormat uiFormat = new DecimalFormat("###,##0.00");
 
     private int tileSize = 50;
-    private int screenScaleChoice = 5;
+    private int screenScaleChoice = 3;
 
     public ArrayList<XPanel> shipList = new ArrayList<>();
 
@@ -73,23 +76,15 @@ public class guiCoreV4 {
     private double screenWidth = monitorSize.getWidth();
     private double screenHeight = monitorSize.getHeight();
 
-    private XPanel pnlExpansionHeader;
-    private XPanel pnlModHeader;
-    private XFrame window;
+    public XFrame window;
     private JLayeredPane layers; //sorts the layers of the screen
     private XPanel screen;
-    private XPanel contentController;
-    private XScrollPane contentList;
-    private JProgressBar loadingBar;
     private XLabel bgPanel;
     private XLabel imgLogo;
-    private XPanel pnlPauseMenu;
-    private XPanel pnlOverlay;
     private XPanel settingsMenu;
     private animCore menuSpaceport;
     private animCore menuMoon1;
     private animCore menuMoon2;
-    private XButton btnQuit;
     private XPanel pnlStarData;
     private XPanel pnlPlanetData;
     private XLabel lblLogo;
@@ -102,10 +97,14 @@ public class guiCoreV4 {
     private XLabel lblTimeScale;
     private XLabel imgPauseBar;
     private XLabel lblPauseBar;
-    private XPanel pnlPopup;
     private XPanel pnlTechTree;
     private XPanel pnlTechSelect;
     private XPanel pnlShipBuilder;
+    private XPanel pnlPauseMenu;
+    private XPanel pnlOverlay;
+
+    public EventWindow eventWindow;
+    private LoadingScreen loadingScreen;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -126,8 +125,6 @@ public class guiCoreV4 {
     private boolean pauseMenuOpen = false;
 
     private int launcherContentLoaded = 0; //tracks the content on the launcher
-
-    private int load;
 
 
     /** UI scaling code**/
@@ -218,7 +215,7 @@ public class guiCoreV4 {
 
     }
 
-    private void clearUI() {
+    public void clearUI() {
         //clears the content off of the UI
         screen.removeAll();
         layers.removeAll(); //clean the layer slate
@@ -232,7 +229,6 @@ public class guiCoreV4 {
 
     public void loadLauncherScreen() {
         System.out.println("Loading launcher data...");
-        XLabel imgBackground, imgBorder;
 
         //initialize the layers
         layers = new JLayeredPane();
@@ -240,299 +236,14 @@ public class guiCoreV4 {
         //add the layered window to the content pane
         window.getContentPane().add(layers);
 
-        //attempt to load images
-        imgBackground = new XLabel(gfxRepository.mainBackground, gfxRepository.clrTrueBlack);
+        LauncherWindow launcher = new LauncherWindow();
+        layers.add(launcher, 0);
 
-        imgLogo = new XLabel(gfxRepository.gameLogo);
-        layers.add(imgBackground, new Integer(0), 0);
-        layers.add(imgLogo, new Integer(9), 0);
-        imgLogo.setBounds(40, 20, 50, 60);
-        imgLogo.setVisible(true);
-        imgBackground.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        imgBackground.scaleImage(gfxRepository.mainBackground);
-        imgBackground.setVisible(true);
-
-        imgBorder = new XLabel(gfxRepository.launcherBorder);
-        layers.add(imgBorder, new Integer(1), 0);
-        imgBorder.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        imgBorder.setVisible(true);
-
-        //load exit button
-        XButton btnExit = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
-
-        layers.add(btnExit, new Integer(2), 0);
-        btnExit.setBounds(getUIScaleX() - 58, 6, 38, 38);
-        btnExit.setOpaque(false);
-
-        btnExit.addMouseListener(new MouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                audioRepository.buttonClick();
-                window.closeProgram();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                audioRepository.menuTab();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-        });
-
-        btnExit.setVisible(true);
-
-        //load minimize button
-        XButton btnLauncherAudio = new XButton(gfxRepository.audioButton, SwingConstants.LEFT);
-
-        layers.add(btnLauncherAudio, new Integer(2), 0);
-        btnLauncherAudio.setBounds(btnExit.getX() - btnExit.getWidth(), btnExit.getY(), btnExit.getWidth(), btnExit.getHeight());
-        btnLauncherAudio.setOpaque(false);
-        btnLauncherAudio.setVisible(true);
-
-        btnLauncherAudio.addMouseListener(new MouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                source.toggleState();
-                audioRepository.buttonClick();
-
-                if (source.isState()) {
-                    source.setIcon(new ImageIcon(gfxRepository.muteButton));
-                    audioRepository.muteMusic();
-                } else {
-                    source.setIcon(new ImageIcon(gfxRepository.audioButton));
-                    audioRepository.setMusicVolume();
-                }
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                audioRepository.menuTab();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-        });
-
-        //load settings button
-        XButton btnSettings = new XButton(gfxRepository.settingsButton, SwingConstants.LEFT);
-
-        layers.add(btnSettings, new Integer(2), 0);
-        btnSettings.setBounds(btnLauncherAudio.getX() - btnLauncherAudio.getWidth(), btnExit.getY(), btnExit.getWidth(), btnExit.getHeight());
-        btnSettings.setOpaque(false);
-        btnSettings.setVisible(true);
-
-        btnSettings.addMouseListener(new MouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                audioRepository.buttonClick();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                audioRepository.menuTab();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-        });
-
-        //load the game title
-        XLabel lblTitle = new XLabel("stra Project", gfxRepository.txtTitle, gfxRepository.clrText);
-        layers.add(lblTitle, new Integer(3), 0);
-        lblTitle.setBounds(imgLogo.getX() + 45, 30, 300, 75);
-        lblTitle.setVerticalAlignment(SwingConstants.TOP);
-        lblTitle.setVisible(true);
-
-        //load the game version
-        XLabel lblVersion = new XLabel("Version; " + gfxRepository.gameVersion, gfxRepository.txtTiny, gfxRepository.clrText);
-        layers.add(lblVersion, new Integer(4), 0);
-        lblVersion.setBounds(25, getUIScaleY() - 50, 200, 35);
-        lblVersion.setAlignments(SwingConstants.LEFT, SwingConstants.BOTTOM);
-        lblVersion.setVisible(true);
-
-        //load the scroll window
-        contentController = new XPanel(gfxRepository.clrBackground);
-        layers.add(contentController, new Integer(5), 0);
-        contentList = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        layers.add(contentList, new Integer(6), 0);
-        contentController.setBounds(getUIScaleX() - 325, 45, 300, 310);
-        contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight()));
-
-        XScrollBar contentScroller = new XScrollBar(gfxRepository.clrEnable, gfxRepository.clrDark);
-        contentScroller.addAdjustmentListener(new AdjustmentListener() {
-            @Override
-            public void adjustmentValueChanged(AdjustmentEvent adjustmentEvent) {
-                window.refresh();
-            }
-        });
-
-        contentList.add(contentScroller);
-        contentScroller.setBounds(contentController.getX() + contentController.getWidth() - 20, contentController.getY(), 15, contentController.getHeight());
-        contentScroller.setVisible(true);
-
-        contentController.setVisible(true);
-
-        contentList.setBounds(getUIScaleX() - (contentController.getWidth() + 25), 45, contentController.getWidth(), contentController.getHeight());
-        contentList.setPreferredSize(new Dimension(contentList.getWidth(), contentList.getHeight()));
-        contentList.setViewportView(contentController);
-        contentList.getViewport().setPreferredSize(new Dimension(contentList.getWidth(), contentList.getHeight()));
-        contentList.setVerticalScrollBar(contentScroller); //custom scroll bar design
-        contentList.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0)); //dirty way of changing scroll bar width
-        contentList.setVisible(true);
-
-        //load the expansion header
-        pnlExpansionHeader = new XPanel(gfxRepository.clrDark);
-        pnlExpansionHeader.setBounds(5, 5, contentController.getWidth() - 20, 25);
-        pnlExpansionHeader.setVisible(true);
-
-        //load expansion header text
-        XLabel lblExpHeaderText = new XLabel("Expansion Packs", gfxRepository.txtSubheader, gfxRepository.clrText);
-        pnlExpansionHeader.add(lblExpHeaderText);
-        lblExpHeaderText.setBounds(5, 5, pnlExpansionHeader.getWidth() - 10, pnlExpansionHeader.getHeight() - 10);
-        lblExpHeaderText.setAlignments(SwingConstants.CENTER, SwingConstants.CENTER);
-        lblExpHeaderText.setVisible(true);
-
-        //load the mod header
-        pnlModHeader = new XPanel(gfxRepository.clrDark);
-        pnlModHeader.setBounds(5, pnlExpansionHeader.getY() + pnlExpansionHeader.getHeight() + 5, contentController.getWidth() - 20, 25);
-        pnlModHeader.setVisible(true);
-
-        //adds the mod header text data
-        XLabel lblModHeaderText = new XLabel("Mods", gfxRepository.txtSubheader, gfxRepository.clrText);
-        pnlModHeader.add(lblModHeaderText);
-        lblModHeaderText.setBounds(5, 5, pnlModHeader.getWidth() - 10, pnlModHeader.getHeight() - 10);
-        lblModHeaderText.setAlignments(SwingConstants.CENTER, SwingConstants.CENTER);
-        lblModHeaderText.setVisible(true);
-
-        //load launch button
-        XButton btnLaunch = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
-        layers.add(btnLaunch, new Integer(7), 0);
-        btnLaunch.setBounds(contentController.getX() - 10, contentController.getY() + contentController.getHeight(), 319, 80);
-        btnLaunch.setOpaque(true);
-        XLabel lblLaunch = new XLabel("PLAY", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        layers.add(lblLaunch, new Integer(7), 0);
-        lblLaunch.setBounds(btnLaunch.getX(), btnLaunch.getY(), btnLaunch.getWidth(), btnLaunch.getHeight());
-        lblLaunch.setAlignments(SwingConstants.CENTER);
-        lblLaunch.setVisible(true);
-
-        btnLaunch.addMouseListener(new XMouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                audioRepository.buttonSelect();
-                window.setTitle("Astra Project"); //changes the title from the launcher to the game window
-                window.refresh();
-                audioRepository.musicTitleScreen(); //plays the title screen music
-                clearUI();
-                rescaleScreen(screenScaleChoice); //resizes the screen according to the user's choice
-                loadLoadingScreen(1);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                audioRepository.menuTab();
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-
-            }
-        });
-
-        audioRepository.musicLauncherScreen();
-
-        loadLauncherExpansions(); //load the expansion packs
+        //loadLauncherExpansions(); //load the expansion packs
 
     }
 
+    /*
     public void loadLauncherExpansions() { //Loads the expansion content for the launcher
 
         String expansionID;
@@ -792,189 +503,65 @@ public class guiCoreV4 {
         window.refresh();
 
     }
+    */
 
+    public void launchGame() {
+        window.setTitle("Astra Project"); //changes the title from the launcher to the game window
+        window.refresh();
+        audioRepository.musicTitleScreen(); //plays the title screen music
+        clearUI();
+        rescaleScreen(screenScaleChoice); //resizes the screen according to the user's choice
+        loadingScreen = new LoadingScreen();
+
+        XLoader loadMainContent = new XLoader() {
+            @Override
+            protected void loadOperation(int percent) {
+                Random r = new Random();
+                try {
+                    Thread.sleep(80 + r.nextInt(100));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                switch(percent) {
+                    case 1:
+                        gfxRepository.loadMainGFX();
+                        break;
+                    case 42:
+                        gameLoader.loadXMLData();
+                        break;
+                    case 65:
+                        gfxRepository.loadContentGFX();
+                        break;
+                    case 84:
+                        gameLoader.cleanContent();
+                        break;
+                }
+            }
+
+            @Override
+            protected void done() {
+                clearUI();
+                loadMainMenu();
+            }
+        };
+        loadGame(loadMainContent);
+
+    }
 
     /** Loading screen UI elements **/
     //shown when the game is loading new content
 
     //load the loading screen and game content
-    private void loadLoadingScreen(int toLoad) {
+    private void loadGame(XLoader loader) {
 
-        load = toLoad;
-
-        gfxRepository.randomBackground(); //picks a random background image for the loading screen
-
+        clearUI();
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         layers.setBounds(0, 0, getUIScaleX(), getUIScaleY()); //reset the size
 
-        bgPanel = new XLabel(gfxRepository.mainBackground, gfxRepository.clrTrueBlack);
-        layers.add(bgPanel, new Integer(0), 0);
-        bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        bgPanel.setVisible(true);
+        screen.add(loadingScreen);
+        loadingScreen.load(loader);
 
-        //loads the loading icon gif that plays during the loading screen
-        XLabel bgLoadIcon = new XLabel(gfxRepository.loadingIcon);
-        layers.add(bgLoadIcon, new Integer(1), 0);
-        bgLoadIcon.setBounds((getUIScaleX() / 2) - 240, getUIScaleY() - 400, 480, 320);
-        bgLoadIcon.setVisible(true);
-
-        //loads the loading bar at the bottom of the screen that shows the progress of the loading
-        loadingBar = new JProgressBar(0, 100);
-        layers.add(loadingBar, new Integer(2), 0);
-        loadingBar.setBounds(40, getUIScaleY() - 60, getUIScaleX() - 80, 30);
-        loadingBar.setFocusable(false);
-        loadingBar.setOpaque(true);
-        loadingBar.setValue(0);
-        loadingBar.setFont(gfxRepository.txtSubheader);
-        loadingBar.setForeground(gfxRepository.clrEnable);
-        loadingBar.setBackground(gfxRepository.clrDGrey);
-        loadingBar.setStringPainted(true);
-        loadingBar.setBorderPainted(false);
-        loadingBar.setVisible(true);
-
-        //loads the text box above the loading bar
-        XLabel lblInformation = new XLabel("Astra Project - Work In Progress", gfxRepository.txtLargeText, gfxRepository.clrText);
-        layers.add(lblInformation, new Integer(3), 0);
-        lblInformation.setBounds((getUIScaleX() / 2) - 500, getUIScaleY() - 120, 1000, 50);
-        lblInformation.setAlignments(SwingConstants.CENTER, SwingConstants.BOTTOM);
-        lblInformation.setVisible(true);
-
-        window.refresh();
-
-        loadingBar.setIndeterminate(true);
-
-        //open a new thread to load content in the background
-        backgroundLoader loader = new backgroundLoader();
-        loader.addPropertyChangeListener(new propertyListener());
-        loader.execute();
-    }
-
-    //opens a new thread to load content in the background without interrupting the UI
-    private class backgroundLoader extends SwingWorker<Void, Void> {
-
-        @Override
-        protected Void doInBackground() throws Exception {
-            Random random = new Random();
-            int progress;
-
-            for (int i = 1; i <= 100; i++) {
-                progress = i;
-                setProgress(Math.min(progress, 100));
-
-                if (load == 1) { //loading core content
-
-                    Thread.sleep(80 + random.nextInt(100)); //unnecessary, but will help to reduce load
-
-                    switch (i) { //using a switch so i can set individual functions to each % up to 100%
-                        case 1:
-                            gfxRepository.loadMainGFX(); //loads the main GFX content
-                            break;
-                        case 20:
-                            break;
-                        case 42:
-                            gameLoader.loadXMLData();
-                            break;
-                        case 65:
-                            gfxRepository.loadContentGFX();
-                            break;
-                        case 84:
-                            gameLoader.cleanContent();
-                            break;
-                    }
-
-                } else if (load == 2) { //loading new game
-
-                    Thread.sleep(30 + random.nextInt(100)); //unnecessary, but will help to reduce load
-
-                    switch(i) {
-                        case 1:
-                            gameSettings.player = new playerData();
-                            gfxRepository.loadMapGFX();
-                            break;
-                        case 15: //create the new user
-                            gameSettings.player.newPlayer("Test Player");
-                            break;
-                        case 20: //set up the map
-                            gameSettings.map  = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
-                            break;
-                        case 32: //load the map string
-                            gameLoader.mapLoader(gameSettings.map, gameSettings.player);
-                            break;
-                        case 43: //load the events core
-                            gameSettings.eventhandler = new eventCoreV2();
-                            break;
-                        case 44:
-                            gameSettings.techtree = new techCoreV2();
-                            break;
-                        case 45:
-                            gameSettings.shipbuilder = new craftBuilder();
-                            gameSettings.shipbuilder.buildScienceShips();
-                            break;
-                        case 46:
-                            gameSettings.shipbuilder.refreshArray();
-                            break;
-                        case 80: //set up some of the UI content
-                            pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
-                            pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
-                            pnlTechTree = new XPanel();
-                            pnlTechSelect = new XPanel();
-                            pnlTechSelect.setVisible(false);
-                            pnlShipBuilder = new XPanel();
-                            pnlShipBuilder.setVisible(false);
-                            pnlTechTree.setVisible(false);
-                            btnQuit = new XButton();
-                            break;
-                    }
-                }
-
-            }
-
-            System.out.println("Loading of [" + load + "] complete.");
-
-            setProgress(100);
-
-            Thread.sleep(2000); //wait a couple before loading main screen
-
-            return null;
-        }
-
-        protected void done() {
-
-            loadingBar.setString("Loading Complete.");
-
-            if (load == 1) { //load main menu
-
-                clearUI();
-                loadMainMenu();
-                loadMainMenuAnimation();
-
-            } else if (load == 2) { //load map
-
-                audioRepository.musicShuffle();
-                audioRepository.ambianceMainGame();
-                setMainKeybindings();
-                loadMapView();
-                gameSettings.turn = new turnTicker();
-                gameSettings.turn.start();
-                gameSettings.player.tickStats();
-                gameSettings.ui.turnTick();
-
-            }
-        }
-    }
-
-    //property listener for the loading bar
-    private class propertyListener implements PropertyChangeListener { //monitors the loading bar and changes it
-
-        public void propertyChange(PropertyChangeEvent e) {
-            if ("progress".equals(e.getPropertyName())) {
-                int progress = (Integer)e.getNewValue();
-                loadingBar.setIndeterminate(false);
-                loadingBar.setValue(progress);
-            }
-
-        }
     }
 
     private void setMainKeybindings() { //adds keybindings to the game
@@ -1035,29 +622,6 @@ public class guiCoreV4 {
 
     /** Main menu elements **/
 
-    //separates the main menu animation loading
-    private void loadMainMenuAnimation() {
-
-        //TODO: Should eventually position buttons as a metric of 1/4th the screen width rather than side by side, will not port well to higher resolutions right now
-
-        Random randomizePosition = new Random();
-
-        menuSpaceport = new animCore(new ImageIcon(gfxRepository.menuSpaceport), 2, layers, window);
-        menuSpaceport.setAnimationSmoothness(0.1, 200);
-        menuSpaceport.start();
-
-        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -200, 640);
-        menuMoon2.setAnimationSmoothness(0.1, 180);
-        menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
-        menuMoon2.start();
-
-        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 600);
-        menuMoon1.setAnimationSmoothness(0.1, 150);
-        menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
-        menuMoon1.start();
-
-    }
-
     private void loadMainMenu() {
 
         //background image
@@ -1104,13 +668,13 @@ public class guiCoreV4 {
         lblBottom.setBounds(pnlMenuBarH.getWidth() - 305, pnlMenuBarH.getHeight() - 45, 300, 40);
         lblBottom.setAlignments(SwingConstants.RIGHT, SwingConstants.BOTTOM);
 
-        //TODO: Fix custom button to work with XListSorter
+        XListSorter srtMenuButtons = new XListSorter(XConstants.HORIZONTAL_SORT, (screen.getWidth() - (319 * 4)) / 5, (screen.getWidth() - (319 * 4)) / 5, 0);
 
         //button to start new game
         XButtonCustom btcNewGame = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT); //replaced 10 lines with 4 using this
         btcNewGame.setText("New Game", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcNewGame.setBounds(0, 0, 319, 80);
-        btcNewGame.placeOn(pnlMenuBarH);
+        btcNewGame.setPreferredSize(new Dimension(319, 80));
+        btcNewGame.setSize(btcNewGame.getPreferredSize());
         btcNewGame.addMouseListener(new MouseListener() {
             XButtonCustom source;
 
@@ -1154,12 +718,13 @@ public class guiCoreV4 {
                 window.refresh();
             }
         });
+        srtMenuButtons.addItem(btcNewGame);
 
         //button to load game
         XButtonCustom btcLoadGame = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT);
         btcLoadGame.setText("Load Game", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcLoadGame.setBounds(btcNewGame.getX() + btcNewGame.getWidth(), btcNewGame.getY(), btcNewGame.getWidth(), btcNewGame.getHeight());
-        btcLoadGame.placeOn(pnlMenuBarH);
+        btcLoadGame.setPreferredSize(btcNewGame.getPreferredSize());
+        btcLoadGame.setSize(btcLoadGame.getPreferredSize());
         btcLoadGame.addMouseListener(new XMouseListener() {
             XButtonCustom source;
 
@@ -1204,12 +769,13 @@ public class guiCoreV4 {
                 window.refresh();
             }
         });
+        srtMenuButtons.addItem(btcLoadGame);
 
         //button to adjust game settings
         XButtonCustom btcSettings = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT);
         btcSettings.setText("Options", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcSettings.setBounds(btcLoadGame.getX() + btcLoadGame.getWidth(), btcNewGame.getY(), btcNewGame.getWidth(), btcNewGame.getHeight());
-        btcSettings.placeOn(pnlMenuBarH);
+        btcSettings.setPreferredSize(btcNewGame.getPreferredSize());
+        btcSettings.setSize(btcSettings.getPreferredSize());
         btcSettings.addMouseListener(new XMouseListener() {
             XButtonCustom source;
 
@@ -1250,12 +816,13 @@ public class guiCoreV4 {
                 window.refresh();
             }
         });
+        srtMenuButtons.addItem(btcSettings);
 
         //quit button
         XButtonCustom btcQuit = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT);
         btcQuit.setText("Quit", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcQuit.setBounds(btcSettings.getX() + btcSettings.getWidth(), btcNewGame.getY(), btcNewGame.getWidth(), btcNewGame.getHeight());
-        btcQuit.placeOn(pnlMenuBarH);
+        btcQuit.setPreferredSize(btcNewGame.getPreferredSize());
+        btcQuit.setSize(btcQuit.getPreferredSize());
         btcQuit.addMouseListener(new XMouseListener() {
             XButtonCustom source;
 
@@ -1297,6 +864,9 @@ public class guiCoreV4 {
                 window.refresh();
             }
         });
+        srtMenuButtons.addItem(btcQuit);
+
+        srtMenuButtons.placeItems(pnlMenuBarH); //place the buttons
 
         settingsMenu = new XPanel(gfxRepository.clrBackground);
         layers.add(settingsMenu, new Integer(13), 0);
@@ -1309,6 +879,22 @@ public class guiCoreV4 {
         pnlLoadSaves.setVisible(false);
 
         window.refresh();
+
+        Random randomizePosition = new Random();
+
+        menuSpaceport = new animCore(new ImageIcon(gfxRepository.menuSpaceport), 2, layers, window);
+        menuSpaceport.setAnimationSmoothness(0.1, 200);
+        menuSpaceport.start();
+
+        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -200, 640);
+        menuMoon2.setAnimationSmoothness(0.1, 180);
+        menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
+        menuMoon2.start();
+
+        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 600);
+        menuMoon1.setAnimationSmoothness(0.1, 150);
+        menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
+        menuMoon1.start();
 
     }
 
@@ -1505,7 +1091,70 @@ public class guiCoreV4 {
                 menuMoon1.stopAnimation();
                 menuMoon2.stopAnimation();
                 clearUI();
-                loadLoadingScreen(2);
+
+                XLoader loadNewGame = new XLoader() {
+                    @Override
+                    protected void loadOperation(int percent) {
+                        Random r = new Random();
+                        try {
+                            Thread.sleep(30 + r.nextInt(80));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        switch(percent) {
+                            case 1:
+                                gameSettings.player = new playerData();
+                                gfxRepository.loadMapGFX();
+                                break;
+                            case 15: //create the new user
+                                gameSettings.player.newPlayer("Test Player");
+                                break;
+                            case 20: //set up the map
+                                gameSettings.map  = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
+                                break;
+                            case 32: //load the map string
+                                gameLoader.mapLoader(gameSettings.map, gameSettings.player);
+                                break;
+                            case 43: //load the events core
+                                gameSettings.eventhandler = new eventCoreV2();
+                                break;
+                            case 44:
+                                gameSettings.techtree = new techCoreV2();
+                                break;
+                            case 45:
+                                gameSettings.shipbuilder = new craftBuilder();
+                                gameSettings.shipbuilder.buildScienceShips();
+                                break;
+                            case 46:
+                                gameSettings.shipbuilder.refreshArray();
+                                break;
+                            case 80: //set up some of the UI content
+                                pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
+                                pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
+                                pnlTechTree = new XPanel();
+                                pnlTechSelect = new XPanel();
+                                pnlTechSelect.setVisible(false);
+                                pnlShipBuilder = new XPanel();
+                                pnlShipBuilder.setVisible(false);
+                                pnlTechTree.setVisible(false);
+                                break;
+                        }
+                    }
+
+                    @Override
+                    protected void done() {
+                        audioRepository.musicShuffle();
+                        audioRepository.ambianceMainGame();
+                        setMainKeybindings();
+                        loadMapView();
+                        gameSettings.turn = new turnTicker();
+                        gameSettings.turn.start();
+                        gameSettings.player.tickStats();
+                        gameSettings.ui.turnTick();
+                    }
+                };
+
+                loadGame(loadNewGame);
             }
 
             @Override
@@ -1892,8 +1541,12 @@ public class guiCoreV4 {
 
     private void loadPlayerBar() { //loads the bar at the top of the screen with the relevant player information
 
+        eventWindow = new EventWindow();
+        eventWindow.setLocation((screen.getWidth() / 2) - (eventWindow.getWidth() / 2), (screen.getHeight() / 2) - (eventWindow.getHeight() / 2));
+
         pnlTopBar = new XPanel();
         layers.add(pnlTopBar, new Integer(8), 0);
+        layers.add(eventWindow, new Integer(15), 0);
         pnlTopBar.setBounds(0, 0, screen.getWidth(), 53);
 
         XLabel lblTopBarBackground = new XLabel(gfxRepository.topbar_bg);
@@ -2590,6 +2243,7 @@ public class guiCoreV4 {
         lblMenuTitle.setAlignments(SwingConstants.CENTER);
         lblMenuTitle.setVisible(true);
 
+        XButton btnQuit = new XButton();
         pnlPauseMenu.add(btnQuit);
         btnQuit.setBounds(10, pnlPauseMenu.getHeight() - 50, pnlPauseMenu.getWidth() - 20, 40);
         btnQuit.setOpaque(true);
@@ -3476,132 +3130,6 @@ public class guiCoreV4 {
 
     }
 
-
-    /** Event Window **/
-    //Handles the display of the events as they are triggered. Event is primarily called from the turnTicker class in the runTurn() method.
-
-    public void loadEventWindow(eventBuilder event) { //loads the event window
-        pnlPopup = new XPanel();
-
-        try { //because i'm using such a vague declaration, gotta use a try/catch in case something foreign enters
-            event.loadOptions();
-
-            pnlPopup.setVisible(true);
-            layers.add(pnlPopup, new Integer(15), 0);
-            pnlPopup.setBounds((window.getWidth() / 2) - 318, 150, 635, 600);
-            pnlPopup.setVisible(true);
-
-            XLabel lblHeader = new XLabel(gameSettings.eventhandler.getHeader(event.getType())); //header at the top of the event window
-            pnlPopup.add(lblHeader);
-            lblHeader.setBounds(0, 0, 635, 25);
-            lblHeader.setVisible(true);
-
-            XLabel lblPopupBG = new XLabel();
-            pnlPopup.add(lblPopupBG);
-            lblPopupBG.setBounds(0, 25, pnlPopup.getWidth(), pnlPopup.getHeight());
-            lblPopupBG.scaleImage(gfxRepository.menuBackground);
-            lblPopupBG.setVisible(true);
-
-            XLabel lblEvtName = new XLabel(event.getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
-            lblHeader.add(lblEvtName);
-            lblEvtName.setBounds(5, 0, lblHeader.getWidth(), lblHeader.getHeight());
-            lblEvtName.setVisible(true);
-
-            XLabel lblEvtDesc = new XLabel("<html>" + event.getDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-            lblPopupBG.add(lblEvtDesc);
-            lblEvtDesc.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
-            lblEvtDesc.setBounds(15, 165, lblPopupBG.getWidth() - 30, 230);
-            lblEvtDesc.setVisible(true);
-
-            XLabel lblEvtImage = new XLabel();
-            lblPopupBG.add(lblEvtImage);
-            lblEvtImage.setBounds((lblPopupBG.getWidth() / 2) - 235, 0, 470, 164);
-            lblEvtImage.setAlignments(SwingConstants.CENTER);
-            try {
-                lblEvtImage.setIcon(new ImageIcon(event.getImage())); //attempt to load image
-
-                XLabel imgEvtOverlay = new XLabel(gfxRepository.eventOverlay); //overlay in front of the image
-                lblEvtImage.add(imgEvtOverlay);
-                imgEvtOverlay.setBounds(0, 0, lblEvtImage.getWidth(), lblEvtImage.getHeight());
-                imgEvtOverlay.setAlignments(SwingConstants.CENTER);
-                imgEvtOverlay.setVisible(true);
-            } catch (NullPointerException e) {
-                lblEvtImage.setText("[ NO SIGNAL ]", gfxRepository.txtButtonLarge, gfxRepository.clrText); //if the image fails to load, load no pic text instead
-            }
-            lblEvtImage.setVisible(true);
-
-            XLabel imgEvtBorder = new XLabel(gfxRepository.eventBorder); //border around the image
-            lblEvtImage.add(imgEvtBorder);
-            imgEvtBorder.setBounds(0, 0, lblEvtImage.getWidth(), lblEvtImage.getHeight());
-            imgEvtBorder.setAlignments(SwingConstants.CENTER);
-            imgEvtBorder.setVisible(true);
-
-            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT_REVERSE, 0, (lblPopupBG.getWidth() / 2) - 266, lblPopupBG.getHeight() - 30);
-
-            for (int i = 0; i < event.button.size(); i++) { //load in the buttons
-                XButtonCustom btnOption = new XButtonCustom(gfxRepository.button532_42, SwingConstants.LEFT);
-                btnOption.setText(event.button.get(i).getButtonText(), gfxRepository.txtSubtitle, gfxRepository.clrText);
-                btnOption.setToolTipText(event.button.get(i).getMouseOverText());
-                btnOption.setPreferredSize(new Dimension(532, 42));
-                btnOption.addMouseListener(new EMouseListener(event.button.get(i)) {
-                    XButtonCustom source;
-                    @Override
-                    public void mouseClicked(MouseEvent mouseEvent) {
-                        source = (XButtonCustom)mouseEvent.getSource();
-                        source.setHorizontalAlignment(SwingConstants.RIGHT);
-                        getButton().clickButton();
-                        audioRepository.buttonConfirm();
-                        pnlPopup.removeAll();
-                        pnlPopup.setVisible(false);
-
-                        window.refresh();
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent mouseEvent) {
-                        source = (XButtonCustom)mouseEvent.getSource();
-                        source.setHorizontalAlignment(SwingConstants.RIGHT);
-
-                        window.refresh();
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent mouseEvent) {
-                        source = (XButtonCustom)mouseEvent.getSource();
-                        source.setHorizontalAlignment(SwingConstants.LEFT);
-
-                        window.refresh();
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent mouseEvent) {
-                        source = (XButtonCustom)mouseEvent.getSource();
-                        audioRepository.menuTab();
-                        source.setHorizontalAlignment(SwingConstants.CENTER);
-
-                        window.refresh();
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent mouseEvent) {
-                        source = (XButtonCustom)mouseEvent.getSource();
-                        source.setHorizontalAlignment(SwingConstants.LEFT);
-
-                        window.refresh();
-                    }
-                });
-                eventButtons.addItem(btnOption); //add the button to the sorter
-            }
-            eventButtons.placeItems(lblPopupBG); //place the event window on the panel
-            event.eventOpen(); //play the event's open method
-
-        } catch (Exception e) { //abort if something goes wrong
-            e.printStackTrace();
-            pnlPopup.removeAll(); //clear the panel in case it ends up half-generated
-            pnlPopup.setVisible(false);
-        }
-
-    }
 
     /** Tech Tree Window **/
     //Displays the tech tree screen and elements.

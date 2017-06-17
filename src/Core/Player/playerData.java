@@ -144,6 +144,7 @@ public class playerData {
     public double getResources() { return this.resources; }
     public int getTechLevel() { return this.techLevel; }
     public double getFunds() { return this.funds; }
+    public double getResearch() { return this.research; }
 
     public void setFunds(double funds) { this.funds = funds; }
     public void setResources(double resources) { this.resources = resources; }

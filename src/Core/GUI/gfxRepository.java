@@ -38,7 +38,7 @@ public class gfxRepository {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    static final String gameVersion = "PTB-B Build 87a";
+    public static final String gameVersion = "U1.0 Dev-Build";
 
     public static final Color clrText = new Color(255, 255, 255, 255);
     public static final Color clrTextTranslucent = new Color(255, 255, 255, 150);
@@ -101,62 +101,62 @@ public class gfxRepository {
 
     /** Element declarations **/
 
-    static BufferedImage closeButton;
-    static BufferedImage settingsButton;
-    static BufferedImage audioButton;
-    static BufferedImage muteButton;
-    static BufferedImage acceptButton;
-    static BufferedImage rejectButton;
-    static BufferedImage wideButton;
-    static BufferedImage wideButton2;
-    static BufferedImage button435_80;
-    static BufferedImage button99_48;
-    static BufferedImage menuButton;
+    public static BufferedImage closeButton;
+    public static BufferedImage settingsButton;
+    public static BufferedImage audioButton;
+    public static BufferedImage muteButton;
+    public static BufferedImage acceptButton;
+    public static BufferedImage rejectButton;
+    public static BufferedImage wideButton;
+    public static BufferedImage wideButton2;
+    public static BufferedImage button435_80;
+    public static BufferedImage button99_48;
+    public static BufferedImage menuButton;
 
-    static BufferedImage mainBackground;
-    static BufferedImage launcherBorder;
-    static BufferedImage menuPlanet;
-    static BufferedImage menuGlare;
+    public static BufferedImage mainBackground;
+    public static BufferedImage launcherBorder;
+    public static BufferedImage menuPlanet;
+    public static BufferedImage menuGlare;
 
     private static ArrayList<BufferedImage> loadingScreenBGList = new ArrayList<>();
 
-    static BufferedImage gameLogo;
-    static BufferedImage gameLogoLarge;
-    static BufferedImage menuSpaceport;
+    public static BufferedImage gameLogo;
+    public static BufferedImage gameLogoLarge;
+    public static BufferedImage menuSpaceport;
 
-    static BufferedImage moon1Icon;
-    static BufferedImage moon2Icon;
+    public static BufferedImage moon1Icon;
+    public static BufferedImage moon2Icon;
 
-    static BufferedImage portraitBorder;
-    static BufferedImage menuBackground;
-    static BufferedImage starPlanetCount;
-    static BufferedImage colonyCount;
-    static BufferedImage homeSystem;
-    static BufferedImage techMenu;
-    static BufferedImage empireMenu;
+    public static BufferedImage portraitBorder;
+    public static BufferedImage menuBackground;
+    public static BufferedImage starPlanetCount;
+    public static BufferedImage colonyCount;
+    public static BufferedImage homeSystem;
+    public static BufferedImage techMenu;
+    public static BufferedImage empireMenu;
     static BufferedImage fleetMenu;
     static BufferedImage governmentMenu;
     static BufferedImage mapHighlight;
     static BufferedImage tallBox;
     static BufferedImage galaxyReturn;
-    static BufferedImage systemTitle;
-    static BufferedImage leftButton;
-    static BufferedImage rightButton;
-    static BufferedImage pauseBar;
-    static BufferedImage systemOutline;
-    static BufferedImage homePlanet;
-    static BufferedImage colonyIcon;
-    static BufferedImage unknownStar;
-    static BufferedImage systemRefuse;
-    static BufferedImage galaxyDust;
-    static BufferedImage foodIcon;
-    static BufferedImage populationIcon;
-    static BufferedImage unrestIcon;
-    static BufferedImage planetSizeIcon;
-    static BufferedImage resourceIcon;
-    static BufferedImage button532_42;
-    static BufferedImage eventOverlay;
-    static BufferedImage eventBorder;
+    public static BufferedImage systemTitle;
+    public static BufferedImage leftButton;
+    public static BufferedImage rightButton;
+    public static BufferedImage pauseBar;
+    public static BufferedImage systemOutline;
+    public static BufferedImage homePlanet;
+    public static BufferedImage colonyIcon;
+    public static BufferedImage unknownStar;
+    public static BufferedImage systemRefuse;
+    public static BufferedImage galaxyDust;
+    public static BufferedImage foodIcon;
+    public static BufferedImage populationIcon;
+    public static BufferedImage unrestIcon;
+    public static BufferedImage planetSizeIcon;
+    public static BufferedImage resourceIcon;
+    public static BufferedImage button532_42;
+    public static BufferedImage eventOverlay;
+    public static BufferedImage eventBorder;
 
     public static BufferedImage greenHeader;
     public static BufferedImage blueHeader;
@@ -198,11 +198,7 @@ public class gfxRepository {
 
     static BufferedImage shipHighlight;
 
-    static BufferedImage cursorIcon;
-
-    static Cursor defaultCursor;
-
-    static Icon loadingIcon;
+    public static Icon loadingIcon;
 
     private static Toolkit kit = Toolkit.getDefaultToolkit();
 
@@ -225,25 +221,22 @@ public class gfxRepository {
             rejectButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_reject.png"));
             wideButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large.png"));
             wideButton2 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large2.png"));
-            //cursorIcon = ImageIO.read(new File(imageFolder + "/Resources/ui/ono.gif"));
-
-            //defaultCursor = kit.createCustomCursor(cursorIcon, new Point(0,0), "Default");
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
                     try {
                         //adds other papers to the loading screen randomize
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_2.jpg")));
-                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_3.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_4.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_5.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_6.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_7.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_8.jpg")));
-                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_9.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_9.jpg")));
                         loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_10.jpg")));
-                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_11.jpg")));
-                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_13.jpg")));
+                        loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_11.jpg")));
+                        //loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG_13.jpg")));
                         System.out.println("GFX background images finished loading successfully.");
                     } catch (IOException e) {
                         e.printStackTrace();
