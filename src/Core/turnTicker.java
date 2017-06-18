@@ -66,12 +66,12 @@ public class turnTicker extends Thread {
                 if (gameSettings.techtree.currentResearch_2.getProgress() == gameSettings.techtree.currentResearch_2.getCost()) {
                     gameSettings.techtree.currentResearch_2.finishResearch();
                     audioRepository.announce_researchComplete();
-                }
 
-                for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
-                    if (gameSettings.techtree.currentResearch_2 == gameSettings.techtree.techTree.get(i)) {
-                        gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
-                        gameSettings.techtree.currentResearch_2 = null; //reset
+                    for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
+                        if (gameSettings.techtree.currentResearch_2 == gameSettings.techtree.techTree.get(i)) {
+                            gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                            gameSettings.techtree.currentResearch_2 = null; //reset
+                        }
                     }
                 }
             } catch (NullPointerException e) {
@@ -83,12 +83,12 @@ public class turnTicker extends Thread {
                 if (gameSettings.techtree.currentResearch_3.getProgress() == gameSettings.techtree.currentResearch_3.getCost()) {
                     gameSettings.techtree.currentResearch_3.finishResearch();
                     audioRepository.announce_researchComplete();
-                }
 
-                for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
-                    if (gameSettings.techtree.currentResearch_3 == gameSettings.techtree.techTree.get(i)) {
-                        gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
-                        gameSettings.techtree.currentResearch_3 = null; //reset
+                    for (int i = 0; i < gameSettings.techtree.techTree.size(); i++) {
+                        if (gameSettings.techtree.currentResearch_3 == gameSettings.techtree.techTree.get(i)) {
+                            gameSettings.techtree.techTree.remove(i); //research is done, remove it from the list
+                            gameSettings.techtree.currentResearch_3 = null; //reset
+                        }
                     }
                 }
             } catch (NullPointerException e) {

@@ -37,7 +37,7 @@ public abstract class eventBuilder {
         this.repeatable = willRepeat;
 
         try { //breaking my usual UI initialization just this once
-            this.image = ImageIO.read(new File(imageFolder + image));
+            this.image = ImageIO.read(new File(imageFolder + "/" + image));
         } catch (IOException e) {
             e.printStackTrace();
         }

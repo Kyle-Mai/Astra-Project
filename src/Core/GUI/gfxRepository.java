@@ -134,11 +134,11 @@ public class gfxRepository {
     public static BufferedImage homeSystem;
     public static BufferedImage techMenu;
     public static BufferedImage empireMenu;
-    static BufferedImage fleetMenu;
-    static BufferedImage governmentMenu;
-    static BufferedImage mapHighlight;
-    static BufferedImage tallBox;
-    static BufferedImage galaxyReturn;
+    public static BufferedImage fleetMenu;
+    public static BufferedImage governmentMenu;
+    public static BufferedImage mapHighlight;
+    public static BufferedImage tallBox;
+    public static BufferedImage galaxyReturn;
     public static BufferedImage systemTitle;
     public static BufferedImage leftButton;
     public static BufferedImage rightButton;
@@ -180,27 +180,25 @@ public class gfxRepository {
     public static BufferedImage techMask;
     public static BufferedImage techRedBG;
     public static BufferedImage techBackground;
-    static BufferedImage techButton;
-    static BufferedImage line_316;
-    static BufferedImage missingIconTech;
-    static BufferedImage techHighlight;
+    public static BufferedImage techButton;
+    public static BufferedImage line_316;
+    public static BufferedImage missingIconTech;
+    public static BufferedImage techHighlight;
 
-    static BufferedImage topbar_bg;
-    static BufferedImage topbar_shield;
-    static BufferedImage orbitIndicator;
+    public static BufferedImage topbar_bg;
+    public static BufferedImage topbar_shield;
+    public static BufferedImage orbitIndicator;
 
-    static BufferedImage researchIcon;
-    static BufferedImage mineralsIcon;
-    static BufferedImage energyIcon;
+    public static BufferedImage researchIcon;
+    public static BufferedImage mineralsIcon;
+    public static BufferedImage energyIcon;
 
-    static BufferedImage mineralsIconSmall;
-    static BufferedImage energyIconSmall;
+    public static BufferedImage mineralsIconSmall;
+    public static BufferedImage energyIconSmall;
 
-    static BufferedImage shipHighlight;
+    public static BufferedImage shipHighlight;
 
     public static Icon loadingIcon;
-
-    private static Toolkit kit = Toolkit.getDefaultToolkit();
 
     /** Methods **/
 

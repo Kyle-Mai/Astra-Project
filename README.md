@@ -1,5 +1,3 @@
-### ICS4U 2017 - Final Project
-
 # Project Astra
 
 ## Description

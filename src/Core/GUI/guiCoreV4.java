@@ -4,9 +4,7 @@ package Core.GUI;
 import Core.*;
 import Core.Craft.craftBuilder;
 import Core.Craft.craftCore;
-import Core.GUI.Design.EventWindow;
-import Core.GUI.Design.LauncherWindow;
-import Core.GUI.Design.LoadingScreen;
+import Core.GUI.Design.*;
 import Core.GUI.SwingEX.*;
 import Core.Player.SaveDirectoryConstants;
 import Core.Player.playerData;
@@ -105,6 +103,7 @@ public class guiCoreV4 {
 
     public EventWindow eventWindow;
     private LoadingScreen loadingScreen;
+    public CelestialObject celestialObject;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -1131,6 +1130,7 @@ public class guiCoreV4 {
                             case 80: //set up some of the UI content
                                 pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
                                 pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
+                                celestialObject = new CelestialObject();
                                 pnlTechTree = new XPanel();
                                 pnlTechSelect = new XPanel();
                                 pnlTechSelect.setVisible(false);
@@ -1419,14 +1419,12 @@ public class guiCoreV4 {
 
                         mapButton.get(i).get(j).addMouseListener(new XMouseListener(i, j) {
                             XButton source;
-
                             @Override
                             public void mouseClicked(MouseEvent mouseEvent) {
                                 source = (XButton) mouseEvent.getSource();
-                                audioRepository.starSound();
                                 source.setHorizontalAlignment(SwingConstants.RIGHT);
+                                celestialObject.showStar(gameSettings.map.mapTiles.get(getValueX()).get(getValueY()).getStarData());
                                 window.refresh();
-                                loadStarData(gameSettings.map.mapTiles.get(getValueX()).get(getValueY()).getStarData());
                             }
 
                             @Override
@@ -1543,6 +1541,10 @@ public class guiCoreV4 {
 
         eventWindow = new EventWindow();
         eventWindow.setLocation((screen.getWidth() / 2) - (eventWindow.getWidth() / 2), (screen.getHeight() / 2) - (eventWindow.getHeight() / 2));
+
+        celestialObject = new CelestialObject();
+        layers.add(celestialObject, 12, 0);
+        celestialObject.setBounds((screen.getWidth() / 2) - (celestialObject.getWidth() / 2), (screen.getHeight() / 2) - (celestialObject.getHeight() / 2), celestialObject.getWidth(), celestialObject.getHeight());
 
         pnlTopBar = new XPanel();
         layers.add(pnlTopBar, new Integer(8), 0);
@@ -2043,191 +2045,6 @@ public class guiCoreV4 {
 
     }
 
-    private void loadStarData(starClass star) { //shows the star information screen
-
-        pnlStarData.removeAll(); //clears the UI to avoid overlap
-
-        pnlStarData.setVisible(true);
-
-        //displays the star's portrait
-        XLabel lblStarPortrait = new XLabel(star.getPortraitGFX(), gfxRepository.clrTrueBlack);
-        pnlStarData.add(lblStarPortrait);
-        lblStarPortrait.setBounds((pnlStarData.getWidth() / 2) - 280, 0, 560, 185);
-        lblStarPortrait.setVisible(true);
-
-        XLabel lblPortraitBorder = new XLabel(gfxRepository.portraitBorder);
-        lblStarPortrait.add(lblPortraitBorder);
-        lblPortraitBorder.setBounds(0, 0, lblStarPortrait.getWidth(), lblStarPortrait.getHeight());
-        lblPortraitBorder.setVisible(true);
-
-        //displays the background
-        XLabel lblBackground = new XLabel(gfxRepository.menuBackground, gfxRepository.clrBGOpaque);
-        pnlStarData.add(lblBackground);
-        lblBackground.setBounds(0, lblStarPortrait.getHeight(), pnlStarData.getWidth(), pnlStarData.getHeight() - lblStarPortrait.getHeight());
-        lblBackground.scaleImage(gfxRepository.menuBackground);
-        lblBackground.setVisible(true);
-
-        XLabel lblStatsBox = new XLabel(gfxRepository.tallBox);
-        lblBackground.add(lblStatsBox);
-        lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
-        lblStatsBox.setVisible(true);
-
-        XListSorter srtStar = new XListSorter(XConstants.VERTICAL_SORT, 5, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15);
-
-        XLabel lblStar = new XLabel("Star", gfxRepository.txtSubtitle, gfxRepository.clrText);
-        lblStar.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
-        lblStar.setAlignments(SwingConstants.CENTER);
-
-        XPanel imgDivider = new XPanel(gfxRepository.clrDGrey);
-        imgDivider.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
-        XPanel imgDivider2 = new XPanel(gfxRepository.clrDGrey);
-        imgDivider2.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
-
-        XTextImage tmgPlanets = new XTextImage();
-        tmgPlanets.addImage(gfxRepository.starPlanetCount, 30, 30);
-        tmgPlanets.addText(" : " + star.getNumOfPlanets(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-        tmgPlanets.getImage().setToolTipText("Planets");
-        tmgPlanets.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-
-        XTextImage tmgColonies = new XTextImage();
-        tmgColonies.addImage(gfxRepository.colonyCount, 30, 30);
-        tmgColonies.addText(" : " + star.getColonyCount(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-        tmgColonies.getImage().setToolTipText("Colonies");
-        tmgColonies.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-
-        srtStar.addItems(imgDivider, lblStar, tmgPlanets, tmgColonies, imgDivider2);
-        srtStar.placeItems(lblBackground);
-
-        //adds a button to enter the system view
-        XLabel lblEnterSystem = new XLabel("Enter System", gfxRepository.txtButtonSmall, gfxRepository.clrText);
-        lblBackground.add(lblEnterSystem);
-        lblEnterSystem.setBounds(lblStatsBox.getX() - 4, lblStatsBox.getY() + lblStatsBox.getHeight(), 170, 64);
-        lblEnterSystem.setAlignments(SwingConstants.CENTER);
-        lblEnterSystem.setVisible(true);
-
-        XButton btnEnterSystem = new XButton(gfxRepository.wideButton, SwingConstants.LEFT);
-        lblBackground.add(btnEnterSystem);
-        btnEnterSystem.setBounds(lblEnterSystem.getBounds());
-        btnEnterSystem.setVisible(true);
-
-        btnEnterSystem.addMouseListener(new XMouseListener(star.getMapLocationX(), star.getMapLocationY()) {
-
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.buttonClick();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-
-                showSystemView(getValueX(), getValueY());
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-
-        //displays the star's name
-        XLabel lblStarName = new XLabel();
-        if (star.isBinarySystem()) {
-            lblStarName.setText(star.getStarName() + " - Binary " +star.getStarClassName(), gfxRepository.txtHeader, gfxRepository.clrText);
-        } else {
-            lblStarName.setText(star.getStarName() + " - " +star.getStarClassName(), gfxRepository.txtHeader, gfxRepository.clrText);
-        }
-        lblBackground.add(lblStarName);
-        lblStarName.setBounds((pnlStarData.getWidth() / 2) - 350, 5, 700, 40);
-        lblStarName.setAlignments(SwingConstants.CENTER);
-        lblStarName.setVisible(true);
-
-        //displays the star class's description
-        XLabel lblStarDesc = new XLabel("<html>" + star.getStarClassDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-        lblBackground.add(lblStarDesc);
-        lblStarDesc.setBounds(40, lblStarName.getY() + lblStarName.getHeight() + 15, lblStatsBox.getX() - 40, 200);
-        lblStarDesc.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
-        lblStarDesc.setVisible(true);
-
-        //displays the close button
-        XButton btnClose = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
-        lblBackground.add(btnClose);
-        btnClose.setBounds(lblBackground.getWidth() - 48, 10, 38, 38);
-        btnClose.setOpaque(true);
-        btnClose.setVisible(true);
-
-        btnClose.addMouseListener(new XMouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.buttonDisable();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-
-                pnlStarData.removeAll();
-                pnlStarData.setVisible(false);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-
-        window.refresh();
-
-
-    }
 
     private void showPauseMenu() {
 
@@ -2445,9 +2262,12 @@ public class guiCoreV4 {
     /** System view **/
     //Handles the UI specific to the system view. Namely, the display of planet data and the star system itself.
 
-    private void showSystemView(int x, int y) {
+    public void showSystemView(int x, int y) {
 
         clearUI();
+
+        layers.add(celestialObject, 14);
+        celestialObject.setBounds((screen.getWidth() / 2) - (celestialObject.getWidth() / 2), (screen.getHeight() / 2) - (celestialObject.getHeight() / 2), celestialObject.getWidth(), celestialObject.getHeight());
 
         int planetPosition = 0;
 
@@ -2643,15 +2463,13 @@ public class guiCoreV4 {
 
             planet.get(i).addMouseListener(new XMouseListener() {
                 planetButton source;
-
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     source = (planetButton)mouseEvent.getSource();
                     audioRepository.buttonClick();
                     //source.setHorizontalAlignment(SwingConstants.RIGHT);
+                    celestialObject.showPlanet(source.getPlanet());
                     window.refresh();
-
-                    loadPlanetData(source.getPlanet());
                 }
 
                 @Override
@@ -2689,9 +2507,9 @@ public class guiCoreV4 {
         }
 
         for (int i = 0; i < currentStar.shipsInSystem.size(); i++) {
-            pnlBG.add(currentStar.shipsInSystem.get(i).getShipVisuals()); //adds the relevant ships to the system
-            currentStar.shipsInSystem.get(i).getShipVisuals().setBounds(currentStar.shipsInSystem.get(i).getSystemX(), currentStar.shipsInSystem.get(i).getSystemY(), currentStar.shipsInSystem.get(i).getShipVisuals().getWidth(), currentStar.shipsInSystem.get(i).getShipVisuals().getHeight());
-            currentStar.shipsInSystem.get(i).getShipVisuals().setVisible(true);
+            pnlBG.add(currentStar.shipsInSystem.get(i).getShipInterface());
+            currentStar.shipsInSystem.get(i).getShipInterface().setBounds(currentStar.shipsInSystem.get(i).getShipData().getSystemX(), currentStar.shipsInSystem.get(i).getShipData().getSystemY(), currentStar.shipsInSystem.get(i).getShipInterface().getWidth(), currentStar.shipsInSystem.get(i).getShipInterface().getHeight());
+            currentStar.shipsInSystem.get(i).getShipInterface().setVisible(true);
         }
 
         XLabel imgSystemOutline = new XLabel(gfxRepository.systemOutline);
@@ -2716,198 +2534,9 @@ public class guiCoreV4 {
 
     }
 
-    private void loadPlanetData(planetClass planet) {
-
-        pnlPlanetData.removeAll();
-        pnlShipBuilder.setVisible(false);
-        pnlShipBuilder.removeAll();
-
-        currentPlanet = planet; //refresh current planet
-
-        audioRepository.planetAmbiance(planet.getPlanetType());
-
-        pnlPlanetData.setVisible(true);
-
-        XLabel lblPlanetPortrait = new XLabel(planetCore.listOfPlanets.get(planet.getArrayLoc()).getGfxImage(), gfxRepository.clrTrueBlack);
-        pnlPlanetData.add(lblPlanetPortrait);
-        lblPlanetPortrait.setBounds((pnlPlanetData.getWidth() / 2) - 280, 0, 560, 185);
-        lblPlanetPortrait.setVisible(true);
-
-        XLabel lblPortraitBorder = new XLabel(gfxRepository.portraitBorder);
-        lblPlanetPortrait.add(lblPortraitBorder);
-        lblPortraitBorder.setBounds(0, 0, lblPlanetPortrait.getWidth(), lblPlanetPortrait.getHeight());
-        lblPortraitBorder.setVisible(true);
-
-        //displays the background
-        XLabel lblBackground = new XLabel(gfxRepository.menuBackground, gfxRepository.clrBGOpaque);
-        pnlPlanetData.add(lblBackground);
-        lblBackground.setBounds(0, lblPlanetPortrait.getHeight(), pnlPlanetData.getWidth(), pnlPlanetData.getHeight() - lblPlanetPortrait.getHeight());
-        lblBackground.scaleImage(gfxRepository.menuBackground);
-        lblBackground.setVisible(true);
-
-        XLabel lblStatsBox = new XLabel(gfxRepository.tallBox);
-        lblBackground.add(lblStatsBox);
-        lblStatsBox.setBounds(lblBackground.getWidth() - 174, 50, 164, 470);
-        lblStatsBox.setVisible(true);
-
-        XListSorter srtPlanet = new XListSorter(XConstants.VERTICAL_SORT, 5, lblStatsBox.getX() + 15, lblStatsBox.getY() + 15); //adds a new list sorter
-
-        //planet related details
-        XLabel lblPlanet = new XLabel("Planet", gfxRepository.txtSubtitle, gfxRepository.clrText);
-        lblPlanet.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
-        lblPlanet.setAlignments(SwingConstants.CENTER);
-
-        XTextImage tmgSize = new XTextImage();
-        tmgSize.addImage(gfxRepository.planetSizeIcon, 30, 30);
-        tmgSize.addText(": " + planet.getPlanetRadius(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-        tmgSize.getImage().setToolTipText("Planet Size");
-
-        tmgPlanetMinerals = new XTextImage();
-        tmgPlanetMinerals.addImage(gfxRepository.mineralsIcon, 30, 30);
-        tmgPlanetMinerals.addText(" : " + uiFormat.format(planet.getResources()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-        tmgPlanetMinerals.getImage().setToolTipText("Mineral Deposits");
-
-        XPanel imgDivider = new XPanel(gfxRepository.clrDGrey);
-        imgDivider.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
-        XPanel imgDivider2 = new XPanel(gfxRepository.clrDGrey);
-        imgDivider2.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
-        srtPlanet.addItems(imgDivider, lblPlanet, tmgSize, tmgPlanetMinerals, imgDivider2); //TODO: Switch divider over to a class, maybe?
-
-        //colony related details (if applicable)
-        try {
-
-            tmgPop = new XTextImage(); //tfw replacing 12 lines of tedious addition with 5 easy lines :ok_hand:
-            tmgPop.addImage(gfxRepository.populationIcon, 30, 30);
-            tmgPop.addText(" : " + planet.getPlanetColony().getPopulation(), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgPop.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-            tmgPop.getImage().setToolTipText("Population");
-
-            tmgFood = new XTextImage();
-            tmgFood.addImage(gfxRepository.foodIcon, 30, 30);
-            tmgFood.addText(" : " + uiFormat.format(planet.getPlanetColony().getCurrentFood()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgFood.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-            tmgFood.getImage().setToolTipText("Stored Food");
-
-            tmgUnrest = new XTextImage();
-            tmgUnrest.addImage(gfxRepository.unrestIcon, 30, 30);
-            tmgUnrest.addText(" : " + uiFormat.format(planet.getPlanetColony().getUnrest()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgUnrest.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-            tmgUnrest.getImage().setToolTipText("Unrest");
-
-            tmgPlanetEnergy = new XTextImage();
-            tmgPlanetEnergy.addImage(gfxRepository.energyIcon, 30, 30);
-            tmgPlanetEnergy.addText(" : " + uiFormat.format(planet.getPlanetColony().getTaxProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgPlanetEnergy.getText().setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
-            tmgPlanetEnergy.getImage().setToolTipText("Energy Production");
-
-            tmgPlanetResources = new XTextImage();
-            tmgPlanetResources.addImage(gfxRepository.resourceIcon, 30, 30);
-            tmgPlanetResources.addText(" : " + uiFormat.format(planet.getPlanetColony().getResourceProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgPlanetResources.getImage().setToolTipText("Resource Production");
-
-            tmgPlanetResearch = new XTextImage();
-            tmgPlanetResearch.addImage(gfxRepository.researchIcon, 30, 30);
-            tmgPlanetResearch.addText(" : " + uiFormat.format(planet.getPlanetColony().getResearchProduction()), gfxRepository.txtSubtitle, gfxRepository.clrText, 80);
-            tmgPlanetResearch.getImage().setToolTipText("Research Production");
-
-            XLabel lblColony = new XLabel("Colony", gfxRepository.txtSubtitle, gfxRepository.clrText);
-            lblColony.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 15));
-            lblColony.setAlignments(SwingConstants.CENTER);
-
-            XPanel imgDivider3 = new XPanel(gfxRepository.clrDGrey);
-            imgDivider3.setPreferredSize(new Dimension(lblStatsBox.getWidth() - 30, 3));
-
-            srtPlanet.addItems(lblColony, tmgPop, tmgUnrest, tmgFood, tmgPlanetEnergy, tmgPlanetResources, tmgPlanetResearch, imgDivider3); //initialization order does not matter, such a breath of fresh air
-
-        } catch (NullPointerException e) { //no colony found, just skip the block
-        }
-
-        srtPlanet.placeItems(lblBackground); //place the items in the list
-
-        XLabel lblPlanetName = new XLabel();
-        lblPlanetName.setText(planet.getPlanetName() + " - " + planet.getPlanetClassName() , gfxRepository.txtHeader, gfxRepository.clrText);
-        lblBackground.add(lblPlanetName);
-        lblPlanetName.setBounds((pnlPlanetData.getWidth() / 2) - 350, 5, 700, 40);
-        lblPlanetName.setAlignments(SwingConstants.CENTER);
-        lblPlanetName.setVisible(true);
-
-        XListSorter srtInfo = new XListSorter(XConstants.VERTICAL_SORT, 5, 40, lblPlanetName.getY() + lblPlanetName.getHeight() + 15);
-
-        XLabel lblPlanetDesc = new XLabel("<html>" + planet.getPlanetClassDesc() + "</html>", gfxRepository.txtItalSubtitle, gfxRepository.clrText);
-        lblPlanetDesc.setPreferredSize(new Dimension(lblStatsBox.getX() - 50, 100));
-        lblPlanetDesc.setAlignments(SwingConstants.CENTER, SwingConstants.TOP);
-
-        XPanel imgDivider4 = new XPanel(gfxRepository.clrDGrey);
-        imgDivider4.setPreferredSize(new Dimension(lblStatsBox.getX() - 50, 3));
-
-        srtInfo.addItems(lblPlanetDesc, imgDivider4);
-        srtInfo.placeItems(lblBackground);
-
-        //displays the close button
-        XButton btnClose = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
-        lblBackground.add(btnClose);
-        btnClose.setBounds(lblBackground.getWidth() - 48, 10, 38, 38);
-        btnClose.setOpaque(true);
-        btnClose.setVisible(true);
-
-        btnClose.addMouseListener(new XMouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.buttonDisable();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-
-                pnlShipBuilder.removeAll();
-                pnlShipBuilder.setVisible(false);
-                pnlPlanetData.removeAll();
-                pnlPlanetData.setVisible(false);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-
-        if (planet.getPlanetColony() != null) {
-            loadShipBuilder();
-        }
-
-        window.refresh();
-
-    }
-
     private void loadShipBuilder() { //builds ships at the specified colony
         layers.add(pnlShipBuilder, new Integer(12), 0);
-        pnlShipBuilder.setBounds(pnlPlanetData.getX() - 200, pnlPlanetData.getY(), 190, pnlPlanetData.getHeight());
+        pnlShipBuilder.setBounds(pnlPlanetData.getX() - 200, pnlPlanetData.getY() + 200, 190, pnlPlanetData.getHeight() - 200);
         pnlShipBuilder.setVisible(true);
 
         XLabel imgShipBuilder = new XLabel();
@@ -2918,17 +2547,16 @@ public class guiCoreV4 {
 
         XLabel lblBuilderTitle = new XLabel("Orbital Shipyard", gfxRepository.txtSubheader, gfxRepository.clrText);
         imgShipBuilder.add(lblBuilderTitle);
-        lblBuilderTitle.setBounds(0, 0, imgShipBuilder.getWidth(), 25);
+        lblBuilderTitle.setBounds(0, 0, imgShipBuilder.getWidth(), 30);
         lblBuilderTitle.setAlignments(SwingConstants.CENTER);
         lblBuilderTitle.setVisible(true);
 
         XPanel pnlViewer = new XPanel();
         imgShipBuilder.add(pnlViewer);
-        pnlViewer.setBounds(5, 25, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 25);
+        pnlViewer.setBounds(5, 30, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 50);
         pnlViewer.setPreferredSize(new Dimension(pnlViewer.getWidth(), pnlViewer.getHeight()));
-        pnlViewer.setBackground(gfxRepository.clrBGOpaque);
-        pnlViewer.setForeground(gfxRepository.clrBGOpaque);
-        pnlViewer.setOpaque(false);
+        pnlViewer.setBackground(gfxRepository.clrBlkTransparent);
+        pnlViewer.setOpaque(true);
         pnlViewer.setVisible(true);
 
         XScrollPane scrBuilder = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -2936,9 +2564,6 @@ public class guiCoreV4 {
         scrBuilder.setBounds(5, 20, imgShipBuilder.getWidth() - 10, imgShipBuilder.getHeight() - 25);
         scrBuilder.setViewportView(pnlViewer);
         scrBuilder.setViewportBorder(null);
-        scrBuilder.setBackground(gfxRepository.clrBGOpaque);
-        scrBuilder.setForeground(gfxRepository.clrBGOpaque);
-        scrBuilder.setOpaque(false);
         scrBuilder.setVisible(true);
 
         XListSorter srtShips = new XListSorter(XConstants.VERTICAL_SORT, 5, 0, 0);
@@ -2987,7 +2612,11 @@ public class guiCoreV4 {
                             if (gameSettings.player.getResources() >= gameSettings.shipbuilder.shipStorage.get(getIdentifier()).getBuildCost()) {
                                 gameSettings.player.setResources(gameSettings.player.getResources() - gameSettings.shipbuilder.shipStorage.get(getIdentifier()).getBuildCost());
                                 audioRepository.constructShip();
-                                newShip(gameSettings.shipbuilder.shipStorage.get(getIdentifier())); //build new ship
+                                SpaceCraft newCraft = new SpaceCraft(gameSettings.shipbuilder.shipStorage.get(getIdentifier())); //build new ship
+                                newCraft.setCurrentSystem(currentStar);
+                                newCraft.startConstruction();
+                                newCraft.setSystemLocation(currentPlanet.getSystemPosX(), currentPlanet.getSystemPosY());
+                                currentStar.shipsInSystem.add(newCraft);
                             } else {
                                 audioRepository.buttonDisable();
                             }
@@ -3033,100 +2662,6 @@ public class guiCoreV4 {
 
         srtShips.placeItems(pnlViewer);
 
-
-    }
-
-    /** Ship Builder **/
-
-    private void newShip(craftCore newShip) { //creates a new ship
-
-        XPanel ship = new XPanel();
-        ship.setPreferredSize(new Dimension(120, 130)); //size of ship TODO: Dynamic
-        ship.setSize(ship.getPreferredSize());
-        ship.setOpaque(false);
-        ship.setVisible(true);
-
-        currentStar.shipsInSystem.add(newShip);
-        currentStar.shipsInSystem.get(currentStar.shipsInSystem.indexOf(newShip)).setPosition(currentPlanet.getSystemPosX(), currentPlanet.getSystemPosY());
-        currentStar.shipsInSystem.get(currentStar.shipsInSystem.indexOf(newShip)).toggleActive();
-
-        XButton btnShipSelector = new XButton(gfxRepository.shipHighlight, SwingConstants.LEFT);
-        ship.add(btnShipSelector);
-        btnShipSelector.setBounds(0, 0, 120, 120);
-        btnShipSelector.setVisible(true);
-        btnShipSelector.setIdentifier(currentStar.shipsInSystem.indexOf(newShip));
-        btnShipSelector.addMouseListener(new XMouseListener() {
-            XButton source;
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                } else {
-                    currentStar.shipsInSystem.get(source.getIdentifier()).playAudioSelected();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                }
-                window.refresh();
-                //select ship
-                currentStar.shipsInSystem.get(source.getIdentifier()).setSelected();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                } else {
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                }
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                } else {
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                }
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                if (currentStar.shipsInSystem.get(source.getIdentifier()).isSelected()) {
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                } else {
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                }
-                window.refresh();
-            }
-        });
-
-        XLabel imgShip = new XLabel(newShip.getShipGFX());
-        ship.add(imgShip);
-        imgShip.setBounds(0, 0, ship.getWidth(), ship.getHeight() - 10);
-        imgShip.setVisible(true);
-
-        XLabel lblShipName = new XLabel(newShip.getCraftName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
-        ship.add(lblShipName);
-        lblShipName.setBounds(0, 120, ship.getWidth(), 10);
-        lblShipName.setAlignments(SwingConstants.CENTER);
-        lblShipName.setVisible(true);
-
-        //shipList.add(ship);
-
-        currentStar.shipsInSystem.get(currentStar.shipsInSystem.indexOf(newShip)).renderShip(ship);
-        audioRepository.constructionComplete();
 
     }
 
@@ -3434,21 +2969,21 @@ public class guiCoreV4 {
             //TODO: Add in generation weights.
             switch (tech_line) { //search for valid tech of the same type
                 case 1:
-                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_PROPULSION) {
+                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_PROPULSION || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_OPTICS || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_COMPUTING) {
                         if (gameSettings.techtree.techTree.get(i).getTier() == gameSettings.player.getTechLevel()) { //make sure tech is of the correct tier before displaying
                             display = true;
                         }
                     }
                     break;
                 case 2:
-                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_AGRICULTURE) {
+                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_AGRICULTURE || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_ECOLOGY || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_GENETICS || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_SOCIOLOGY) {
                         if (gameSettings.techtree.techTree.get(i).getTier() == gameSettings.player.getTechLevel()) { //make sure tech is of the correct tier before displaying
                             display = true;
                         }
                     }
                     break;
                 case 3:
-                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_INFRASTRUCTURE || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_KINETICS) {
+                    if (gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_INFRASTRUCTURE || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_KINETICS || gameSettings.techtree.techTree.get(i).getType() == techCoreV2.TECH_GEOLOGY) {
                         if (gameSettings.techtree.techTree.get(i).getTier() == gameSettings.player.getTechLevel()) { //make sure tech is of the correct tier before displaying
                             display = true;
                         }

@@ -51,7 +51,7 @@ public class LoadingScreen extends XLabel {
         //loading bar
         loadingBar = new JProgressBar(0, 100);
         this.add(loadingBar);
-        loadingBar.setBounds(60, this.getHeight() - 120, this.getWidth() - 120, 60);
+        loadingBar.setBounds(75, this.getHeight() - 120, this.getWidth() - 150, 50);
         loadingBar.setFocusable(false);
         loadingBar.setOpaque(true);
         loadingBar.setValue(0);
@@ -61,7 +61,7 @@ public class LoadingScreen extends XLabel {
         loadingBar.setStringPainted(true);
         loadingBar.setBorderPainted(false);
         loadingBar.setVisible(true);
-        loadingBar.setIndeterminate(true);
+        //loadingBar.setIndeterminate(true);
 
         this.revalidate();
         this.repaint();

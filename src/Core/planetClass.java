@@ -1,5 +1,6 @@
 package Core;
 
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 /**
@@ -88,6 +89,7 @@ public class planetClass extends planetCore implements Serializable {
     public boolean isHomePlanet() { return this.homePlanet; }
     public int getSystemPosX() { return this.systemPosX; }
     public int getSystemPosY() { return this.systemPosY; }
+    public BufferedImage getPlanetPortrait() { return planetClass.listOfPlanets.get(arrayLoc).getGfxImage(); }
 
     /** Setter methods **/
 

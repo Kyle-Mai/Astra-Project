@@ -745,3 +745,32 @@ Everything from this point on is post-submission.
 
 - Patched a major bug in the saveData. Will now validate the save folder itself before attempting to create a new player save.
 
+**JUNE 17 2017** (U1.0 Dev-Build) (1)
+
+- Reworked spacecraft handling.
+
+    - Now uses a more centralized set of code for management, which will make it easier to manipulate and access.
+
+    - Reworked UI creation.
+
+- Polished and rebuilt the spacecraft build UI.
+
+    - UI looks a lot cleaner now, is better sized to fit the planet window and coloured more effectively.
+
+    - Patched an issue with the display that rendered it a solid white.
+
+- Updated storm planet portrait GFX.
+
+- Added new event content.
+
+    - Brand new custom-ish event portraits.
+
+    - New event audio.
+
+    - New non-tutorial events.
+
+    - Patched display bug in the event window that would prevent it from properly displaying anything after the first event.
+
+- Reformatted the main star/planet information window to the new UI format.
+
+- Fixed a minor mistake in the tech tree. The code structure was incorrect for tech lines 2 & 3 and would immediately remove them from the queue. Shouldn't happen anymore.

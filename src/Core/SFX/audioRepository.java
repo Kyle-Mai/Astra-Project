@@ -305,5 +305,10 @@ public class audioRepository {
         announcer.start();
     }
 
+    public static void event_conversation() {
+        audioCore event = new audioCore("/event/event_conversation.wav", uiVolume, 0, 5000);
+        event.start();
+    }
+
 
 }

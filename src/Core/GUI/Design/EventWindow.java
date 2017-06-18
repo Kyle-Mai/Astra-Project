@@ -39,8 +39,10 @@ public class EventWindow extends XPanel {
     public void loadEvent(eventBuilder event) { //sets the event
 
         main.removeAll();
+        this.removeAll();
 
         try {
+            this.add(main);
             this.event = event;
             event.loadOptions();
 
@@ -94,7 +96,6 @@ public class EventWindow extends XPanel {
                 btnOption.setPreferredSize(new Dimension(532, 42));
                 btnOption.addMouseListener(new EMouseListener(event.button.get(i)) {
                     XButtonCustom source;
-
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
@@ -104,14 +105,12 @@ public class EventWindow extends XPanel {
                         main.repaint();
                         main.revalidate();
                         main.getParent().setVisible(false);
-                        main.getParent().removeAll();
                     }
 
                     @Override
                     public void mousePressed(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
                         source.setHorizontalAlignment(SwingConstants.RIGHT);
-
                         main.repaint();
                         main.revalidate();
                     }
@@ -120,7 +119,6 @@ public class EventWindow extends XPanel {
                     public void mouseReleased(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
                         source.setHorizontalAlignment(SwingConstants.LEFT);
-
                         main.repaint();
                         main.revalidate();
                     }
@@ -130,7 +128,6 @@ public class EventWindow extends XPanel {
                         source = (XButtonCustom)mouseEvent.getSource();
                         audioRepository.menuTab();
                         source.setHorizontalAlignment(SwingConstants.CENTER);
-
                         main.repaint();
                         main.revalidate();
                     }
@@ -139,7 +136,6 @@ public class EventWindow extends XPanel {
                     public void mouseExited(MouseEvent mouseEvent) {
                         source = (XButtonCustom)mouseEvent.getSource();
                         source.setHorizontalAlignment(SwingConstants.LEFT);
-
                         main.repaint();
                         main.revalidate();
                     }
@@ -150,12 +146,13 @@ public class EventWindow extends XPanel {
             event.eventOpen(); //play the event's open method
 
             this.setVisible(true);
+            main.setVisible(true);
             this.repaint();
             this.revalidate();
 
         } catch (Exception e) { //problem occurred during loading, abort process
             e.printStackTrace();
-            this.removeAll();
+            main.removeAll();
             this.setVisible(false);
             System.out.println("[EVT-WIN](loadEvent) Error occurred while loading, aborting process - " + e.getMessage());
         }

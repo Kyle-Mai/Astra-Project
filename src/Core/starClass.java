@@ -1,6 +1,6 @@
 package Core;
 
-import Core.Craft.craftCore;
+import Core.GUI.Design.SpaceCraft;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
@@ -36,7 +36,7 @@ public class starClass extends starCore implements Serializable {
     private transient int arrayLoc;
     private String starName;
     private boolean homeSystem = false;
-    public ArrayList<craftCore> shipsInSystem = new ArrayList<>(); //all of the ships currently in this system
+    public ArrayList<SpaceCraft> shipsInSystem = new ArrayList<>(); //all of the ships currently in this system
 
     //creates a randomized star
     public starClass(int mapLocationX, int mapLocationY){
