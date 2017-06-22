@@ -10,14 +10,14 @@ import java.awt.image.BufferedImage;
  * Advanced XButton designed to handle custom design layouts.
  */
 
-public class XButtonCustom extends JButton {
+public class XButtonCustom extends JButton implements EXColorDefaults {
 
     private XLabel buttonText = new XLabel();
 
     public XButtonCustom(BufferedImage image, int position) {
         this.setBorder(null);
         this.setFocusPainted(false);
-        this.setBackground(EXColorDefaults.NONE);
+        this.setBackground(NONE);
         this.setFocusable(false);
         this.setOpaque(false);
         this.setIcon(new ImageIcon(image));
@@ -54,7 +54,7 @@ public class XButtonCustom extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX
+        g.setColor(NONE); //GOODBYE STUPID WHITE BOX
         super.paintComponent(g);
     }
 

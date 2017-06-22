@@ -31,7 +31,7 @@ import java.util.Random;
  * Self - All of the coding here is done through my own ideas and initiatives, sans the File path, which is listed under the xmlLoader references.
  */
 
-public class gfxRepository {
+public class gfxRepository implements gfxConstants {
 
     /** UI Design **/
     //Stores all of the colour and fonts that the game uses.
@@ -39,23 +39,6 @@ public class gfxRepository {
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
     public static final String gameVersion = "U1.0 Dev-Build";
-
-    public static final Color clrText = new Color(255, 255, 255, 255);
-    public static final Color clrTextTranslucent = new Color(255, 255, 255, 150);
-    public static final Color clrInvisible = new Color(0, 0, 0, 0);
-    public static final Color clrTrueBlack = new Color(0, 0, 0, 255);
-    public static final Color clrBlkTransparent = new Color(15, 35, 25, 175);
-    public static final Color clrBlk = new Color(25, 35, 35, 255);
-    public static final Color clrDGrey = new Color(47, 80, 68, 255);
-    public static final Color clrDisableBorder = new Color(75, 5, 25, 255);
-    public static final Color clrDisable = new Color(135, 15, 55, 255);
-    public static final Color clrEnable = new Color(108, 255, 224, 255);
-    public static final Color clrDark = new Color(70, 170, 160, 255);
-    public static final Color clrButtonBackground = new Color(0, 125, 90, 255);
-    public static final Color clrBGOpaque = new Color(25, 90, 60, 255);
-    public static final Color clrButtonMain = new Color(0, 155, 90, 255);
-    public static final Color clrBackground = new Color(54, 95, 77, 105);
-    public static final Color clrForeground = new Color(0, 185, 110, 155);
 
     public static Font txtSubtitle;
     public static Font txtItalSubtitle;

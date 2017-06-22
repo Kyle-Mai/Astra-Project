@@ -13,5 +13,3 @@ package Core.GUI.SwingEX;
  It also removes many of the default styles of Swing objects, as their aesthetic is far too static.
 
 */
-
-//TODO: Need to remove all external references from the components in here eventually.

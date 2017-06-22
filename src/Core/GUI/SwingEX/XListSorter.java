@@ -1,7 +1,6 @@
 package Core.GUI.SwingEX;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,22 +19,23 @@ import java.util.Arrays;
 
 public class XListSorter implements XConstants {
 
+    /**
+     Variable declarations.
+     */
+
     private ArrayList<JComponent> list = new ArrayList<>(); //items that will be sent for placement
-
-    private int sort;
-    //private int orientationx, orientationy;
-    private int sizex, sizey, posx, posy;
-    private int space;
-    //private boolean resize = false;
+    private int sizex, sizey, posx, posy, space, sort;
+    private boolean resize = false;
     private boolean autosize = false;
-    private int inx, iny;
 
-    public XListSorter() { //blank constructor
-    }
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     Constructors.
+     */
 
-    public XListSorter(int sort) {
-        this.sort = sort;
-    }
+    public XListSorter() {} //blank constructor
+
+    public XListSorter(int sort) { this.sort = sort; }
 
     public XListSorter(int sort, int space) {
         this.space = space;
@@ -55,26 +55,50 @@ public class XListSorter implements XConstants {
         this.space = space;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+    Container editor methods.
+     */
+
     public void forceItemSize(int x, int y) { this.sizex = x; this.sizey = y; this.autosize = true; } //sets the scale of the items in the list
-    public void setListPosition(int x, int y) { this.posx = x; this.posy = y; } //sets the list's position on the component
-    public void setSpacing(int space) { this.space = space; } //spacing between components
-    //public void resizeContainer(boolean b) { this.resize = b; } //whether or not the list will resize the container to fit the items (default false)
+    public void setLocation(int x, int y) { this.posx = x; this.posy = y; } //sets the list's position on the component
+    public void setItemSpacing(int space) { this.space = space; } //spacing between components
+    public void scaleParent(boolean b) { this.resize = b; } //whether or not the list will resize the container to fit the items (default false)
+    public void setAlignment(int sortStyle) { this.sort = sortStyle; } //sets the alignment of the sorter
 
-    public void setOrientation(int orientation) { this.sort = orientation; } //sets the orientation of the list sorter
-    //public void setXAlignment(int orientation) { this.orientationx = orientation; } //sets the horizontal alignment of the list
-    //public void setYAlignment(int orientation) { this.orientationy = orientation; } //sets the vertical alignment of the list
-    //public void setAlignments(int o, int o2) { this.orientationx = o; this.orientationy = o2; } //sets both orientations at the same time
+    public boolean willAutoSize() { return autosize; }
+    public boolean willResize() { return resize; }
 
-    //adds items to the listsorter, either singular or multiple at once
+    public int getPosX() { return posx; }
+    public int getPosY() { return  posy; }
+    public int getSizeX() { return sizex; }
+    public int getSizeY() { return  sizey; }
+    public int getSortStyle() { return sort; }
+    public int getSpace() { return space; }
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     List editor variables.
+     */
+
     public void addItem(JComponent c) { list.add(c); } //adds a component to the list sorter
+    public void addItem(int layer, JComponent item) { list.add(layer, item); } //adds an items to a specific layer
     public void addItems(JComponent... c) { list.addAll(Arrays.asList(c)); } //adds a group of components to the list sorter
+    public void replaceItem(JComponent newComponent, JComponent oldComponent) { list.add(list.indexOf(oldComponent), newComponent); } //replaces an item in the list
 
-    //clears items from the list
     public void removeItem(JComponent c) { list.remove(c); }
     public void removeItem(int loc) { list.remove(loc); }
     public void removeAll() { list.clear(); }
 
-    public JComponent getComponent(JComponent c) { return list.get(list.indexOf(c)); } //gets a component from the list
+    public JComponent getItem(int arraypos) { return list.get(arraypos); }
+    public JComponent getItem(JComponent c) { return list.get(list.indexOf(c)); } //gets a component from the list
+    public int getItemCount() { return list.size(); } //returns the number of items in the sorter
+    public int getItemIndex(JComponent component) { return list.indexOf(component); } //returns the index of an item in the list
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     Main methodology.
+     */
 
     public void placeItems(JComponent c) { //adds the components to the specified component
         int s1, s2; // size
@@ -107,40 +131,55 @@ public class XListSorter implements XConstants {
                 System.out.println("ListSorter component #" + (counter + 1) + " was not initialized: " + e.getMessage());
                 continue;
             }
-            if (autosize) { //automatically scale components
-                item.setBounds(posx + (s1 * counter), posy + (s2 * counter), sizex, sizey);
-            } else { //use component's current size
-                s1 = 0;
-                s2 = 0;
+
+            if (autosize) { //force specific scale on components
+                item.setSize(sizex, sizey);
+            } else { //use component's existing size
                 item.setSize(item.getPreferredSize());
-                switch (sort) {
-                    case HORIZONTAL_SORT:
-                        item.setLocation(posx + s1, posy);
-                        posx += item.getWidth() + space;
-                        s1 = item.getWidth();
-                        break;
-                    case VERTICAL_SORT:
-                        item.setLocation(posx, posy + s2);
-                        posy += item.getHeight() + space;
-                        s2 = item.getHeight();
-                        break;
-                    case VERTICAL_SORT_REVERSE:
-                        s2 = item.getHeight() + space;
-                        item.setLocation(posx, posy - s2);
-                        //System.out.println(posy + " " + item.getHeight() + " " + space); //pls work
-                        posy = item.getY();
-                        //System.out.println(posy);
-                        break;
-                    default:
-                        item.setLocation(posx + s1, posy);
-                        posx += item.getWidth() + space;
-                        s1 = item.getWidth();
-                        break;
-                }
             }
+
+            switch (sort) {
+                case HORIZONTAL_SORT:
+                    item.setLocation(posx + s1, posy);
+                    posx += item.getWidth() + space;
+                    s1 = item.getWidth();
+                    break;
+                case VERTICAL_SORT:
+                    item.setLocation(posx, posy + s2);
+                    posy += item.getHeight() + space;
+                    s2 = item.getHeight();
+                    break;
+                case VERTICAL_SORT_REVERSE:
+                    s2 = item.getHeight() + space;
+                    item.setLocation(posx, posy - s2);
+                    posy = item.getY();
+                    break;
+                case HORIZONTAL_SORT_REVERSE:
+                    s1 = item.getWidth() + space;
+                    item.setLocation(posx - s1, posy);
+                    posx = item.getX();
+                    break;
+                default:
+                    System.out.println("ListSorter sort method not properly specified. Defaulting to HORIZONTAL_SORT.");
+                    item.setLocation(posx + s1, posy);
+                    posx += item.getWidth() + space;
+                    s1 = item.getWidth();
+                    break;
+            }
+
+            if (resize) { //if the sorter is allowed to resize the parent container, resize it when necessary
+                if (posx + space > c.getWidth()) {
+                    c.setSize(posx + space, c.getHeight());
+                } else if (posy + space > c.getHeight()) {
+                    c.setSize(c.getWidth(), posy + space);
+                }
+
+            }
+
             item.setVisible(true);
             counter++;
         }
+
     } //placeItems method complete
 
 

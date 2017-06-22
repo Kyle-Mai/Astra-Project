@@ -49,7 +49,7 @@ import java.util.Random;
 //TODO: Garbage coding... really need to clean it up.
 
 
-public class guiCoreV4 {
+public class guiCoreV4 implements gfxConstants {
 
     /** Stores resource declarations **/
 

@@ -14,15 +14,20 @@ import java.awt.*;
  * Stack Overflow - Used Stack Overflow to help me understand how to create a custom scrollbar to begin with.
  * Java API - Used Java API to help me understand the methods I needed to replace, along with Stack Overflow.
  */
-public class XScrollBarUI extends BasicScrollBarUI {
+public class XScrollBarUI extends BasicScrollBarUI implements EXColorDefaults {
 
-    Color foreground, background;
+    Color foreground = WHITE;
+    Color background = GREY;
 
     public XScrollBarUI(Color fore, Color back) { //sets up the UI colors
         this.foreground = fore;
         this.background = back;
-
     }
+
+    public void setForegroundColor(Color c) { this.foreground = c; }
+    public void setBackgroundColor(Color c) { this.background = c; }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {

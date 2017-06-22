@@ -44,7 +44,7 @@ public class audioCore extends Thread {
             }
         }
 
-        Thread.currentThread().interrupt(); //closes the thread down
+        currentThread().interrupt(); //closes the thread down
     }
 
     private void initializeAudioData() { //initializes the audio file's data

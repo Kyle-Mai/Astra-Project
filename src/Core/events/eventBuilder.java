@@ -12,13 +12,13 @@ import java.util.ArrayList;
  * Abstract class for constructing event blueprints.
  */
 
-public abstract class eventBuilder {
+public abstract class eventBuilder implements eventConstants {
 
-    String name; //name of the event
-    String desc; //event's description text
-    int type; //the event header colour
-    BufferedImage image; //the image in the event window
-    boolean repeatable; //whether or not the event will trigger more than once
+    private String name; //name of the event
+    private String desc; //event's description text
+    private int type; //the event header colour
+    private BufferedImage image; //the image in the event window
+    private boolean repeatable; //whether or not the event will trigger more than once
     public ArrayList<Option> button = new ArrayList<>(); //the buttons that will be displayed in the event window
     private final File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI/Resources/event/");
 
@@ -46,11 +46,11 @@ public abstract class eventBuilder {
 
     public abstract boolean eventTrigger(); //the conditions required to trigger the event
 
-    public void loadOptions() { //method for constructing buttons
-        Option btnDefault = new Option("No button data!", "Uh oh!") {
+    public void loadOptions() { //method for constructing buttons, can be overwritten
+        Option btnDefault = new Option("Okay.", "") {
             @Override
             public void clickButton() {
-                System.out.println("Event broken! No buttons initialized!");
+                System.out.println("Default button pressed - were the event's proper buttons not initialized?");
             }
         };
         button.add(btnDefault); //load a default button in case none are initialized

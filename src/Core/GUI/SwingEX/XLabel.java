@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  * Extends JLabel with extra functionality and constructors.
  * Essentially simplifies Swing object declaration so I don't have to use as many lines.
  */
-public class XLabel extends JLabel {
+public class XLabel extends JLabel implements EXColorDefaults {
 
     //default constructor
     public XLabel() {
@@ -84,7 +84,7 @@ public class XLabel extends JLabel {
 
     public void setImage(BufferedImage image) {
         this.setIcon(new ImageIcon(image));
-        this.setBackground(EXColorDefaults.BLACK);
+        this.setBackground(BLACK);
         this.setBorder(null);
         this.setOpaque(true);
 

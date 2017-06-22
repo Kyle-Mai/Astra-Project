@@ -23,14 +23,14 @@ import java.io.ObjectOutputStream;
  */
 
 
-public class saveData {
+public class saveData implements DataConstants, SaveDirectoryConstants {
 
     private String userID;
     private File saveDirectory;
 
     saveData(String userID) {
         this.userID = userID;
-        saveDirectory = new File(SaveDirectoryConstants.SAVEDIRECTORY + "/" + userID);
+        saveDirectory = new File(SAVEDIRECTORY + "/" + userID);
 
     }
 
@@ -40,8 +40,8 @@ public class saveData {
 
     public void create() { //creates a new folder if one doesn't already exist
 
-        if (!SaveDirectoryConstants.SAVEDIRECTORY.exists()) { //if the saves folder is compromised, create a new one
-            SaveDirectoryConstants.SAVEDIRECTORY.mkdir();
+        if (!SAVEDIRECTORY.exists()) { //if the saves folder is compromised, create a new one
+            SAVEDIRECTORY.mkdir();
             System.out.println("[SD](create) Unexpected token - Save directory not found. Creating...");
         }
 
@@ -58,51 +58,50 @@ public class saveData {
     public void add(File directory, int dataType, String fileName) { //adds new folders to the current folder
 
         File temp;
-
-        success:{
-            switch (dataType) {
-                case 1: //folder
-                    temp = new File(directory + "/" + fileName);
-                    if (!temp.exists()) {
-                        temp.mkdir();
-                    }
-                    break success; //if the file is created, end the method
-
-                case 2: //serial file
-                    temp = new File(directory + "/" + fileName + ".ser");
-                    if (!temp.exists()) {
-                        temp.mkdir();
-                    }
-                    break;
-
-                case 3:
-                    break;
-
-                case 4:
-                    break;
-
-                case 5:
-                    temp = new File(directory + "/" + fileName + ".xml");
-
-                    break;
-
-                default:
-                    System.out.println("[SD](add) Unknown file type.");
-                    break success;
-
+        if (directory.exists()) {
+            success:
+            {
+                switch (dataType) {
+                    case FOLDER: //folder
+                        temp = new File(directory + "/" + fileName);
+                        if (!temp.exists()) {
+                            temp.mkdir();
+                        }
+                        break success; //if the file is created, end the method
+                    case SERIAL: //serial file
+                        temp = new File(directory + "/" + fileName + ".ser");
+                        if (!temp.exists()) {
+                            temp.mkdir();
+                        }
+                        break;
+                    case TEXT:
+                        break;
+                    case IMAGE:
+                        break;
+                    case XML:
+                        temp = new File(directory + "/" + fileName + ".xml");
+                        if (!temp.exists()) {
+                            temp.mkdir();
+                        }
+                        break success;
+                    default:
+                        System.out.println("[SD](add) Unknown file type.");
+                        break success;
                 }
-            System.out.println("[SD](add) File creation failed.");
+                System.out.println("[SD](add) File creation failed.");
+            }
+        } else {
+            System.out.println("[SD](add) Unexpected Error - Directory invalid.");
         }
+
     }
 
     public File get() {
         return this.saveDirectory;
     }
-
     public File get(String directory) {
         return new File(saveDirectory + "/" + directory);
     }
-
     public File get(File location, String name) {
         return new File(location + "/" + name);
     }

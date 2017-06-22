@@ -774,3 +774,23 @@ Everything from this point on is post-submission.
 - Reformatted the main star/planet information window to the new UI format.
 
 - Fixed a minor mistake in the tech tree. The code structure was incorrect for tech lines 2 & 3 and would immediately remove them from the queue. Shouldn't happen anymore.
+
+**JUNE 22 2017** (U1.0 Dev-Build) (1)
+
+- Added onto the SwingEX repository.
+
+    - Finished primary methodology of the XListSorter.
+
+- Improved the saveData methods, less likely to break now.
+
+- Rebuilt the audioCore from scratch as the 'sfxPlayer'.
+
+    - Made the method structure more clear and efficient. Reuses as little as possible now, and methods are better defined in function.
+
+    - Changed some of the handling to allow for more fluid functionality. Easier to change variables and access information.
+
+    - Improved playing of audio. Shouldn't be as touchy as the old version, and should function a lot better now.
+
+- Experimenting with gfxConstants to move some of the gfxRepository information over to it.
+
+- Slight improvements to the event builder.

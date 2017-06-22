@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
  Self - All else.
 */
 
-public class XButton extends JButton {
+public class XButton extends JButton implements EXColorDefaults {
 
     private boolean state = false;
     private int identifier = 0;
@@ -25,14 +25,12 @@ public class XButton extends JButton {
     public XButton() {
         this.setFocusPainted(false);
         this.setFocusable(false);
-
     }
 
     public XButton(int identifier) {
         this.setFocusPainted(false);
         this.identifier = identifier;
         this.setFocusable(false);
-
     }
 
     public XButton(String text, Font font, Color textColor, Color bgColor) {
@@ -42,7 +40,6 @@ public class XButton extends JButton {
         this.setForeground(textColor);
         this.setFocusable(false);
         this.setFocusPainted(false);
-
     }
 
     public XButton(String text, Font font, Color txtColor, Color bgColor, Border border) {
@@ -53,26 +50,24 @@ public class XButton extends JButton {
         this.setFocusable(false);
         this.setBorder(border);
         this.setFocusPainted(false);
-
     }
 
     public XButton(BufferedImage image, int position) {
         this.setBorder(null);
         this.setFocusPainted(false);
-        this.setBackground(EXColorDefaults.NONE);
+        this.setBackground(NONE);
         this.setFocusable(false);
         this.setOpaque(false);
         this.setIcon(new ImageIcon(image));
         this.setVerticalAlignment(SwingConstants.CENTER);
         this.setHorizontalAlignment(position);
         super.setContentAreaFilled(false);
-
     }
 
     public XButton(BufferedImage image, int position, String text, Font font, Color txtclr) {
         this.setBorder(null);
         this.setFocusPainted(false);
-        this.setBackground(EXColorDefaults.NONE);
+        this.setBackground(NONE);
         this.setFont(font);
         this.setForeground(txtclr);
         this.setFocusable(false);
@@ -82,7 +77,6 @@ public class XButton extends JButton {
         this.setVerticalAlignment(SwingConstants.CENTER);
         this.setHorizontalAlignment(position);
         super.setContentAreaFilled(false);
-
     }
 
     public void setIcon(BufferedImage image, int alignment) {
@@ -99,7 +93,6 @@ public class XButton extends JButton {
     public void scaleImage(BufferedImage image) {
         Image scaledImage = image.getScaledInstance(this.getWidth() * 3, this.getHeight(), Image.SCALE_SMOOTH);
         this.setIcon(new ImageIcon(scaledImage));
-
     }
 
     public void setIdentifier(int id) { this.identifier = id; }
@@ -109,7 +102,6 @@ public class XButton extends JButton {
     protected void paintComponent(Graphics g) {
         g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX
         super.paintComponent(g);
-
     }
 
     @Override
