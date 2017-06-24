@@ -53,8 +53,9 @@ public class XPanel extends JPanel {
 
     }
 
-
-
-
+    public void refresh() {
+        this.revalidate();
+        this.repaint();
+    }
 
 }

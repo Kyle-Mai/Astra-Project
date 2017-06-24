@@ -1,7 +1,5 @@
 package Core;
 
-import Core.Player.playerData;
-
 import java.io.Serializable;
 
 /**

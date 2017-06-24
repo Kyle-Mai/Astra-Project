@@ -28,5 +28,9 @@ public class XSlider extends JSlider {
         this.setPaintLabels(true);
     }
 
+    public void refresh() {
+        this.revalidate();
+        this.repaint();
+    }
 
 }

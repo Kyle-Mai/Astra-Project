@@ -56,7 +56,6 @@ public class guiCoreV4 implements gfxConstants {
     DecimalFormat uiFormat = new DecimalFormat("###,##0.00");
 
     private int tileSize = 50;
-    private int screenScaleChoice = 3;
 
     public ArrayList<XPanel> shipList = new ArrayList<>();
 
@@ -129,86 +128,30 @@ public class guiCoreV4 implements gfxConstants {
     /** UI scaling code**/
     //handles the scaling of the UI
 
-    private Dimension screenSize;
-
     //methods to return the UI elements
-    public int getUIScaleX() { return (int)screenSize.getWidth(); }
+    public int getUIScaleX() { return window.getWidth(); }
 
-    public int getUIScaleY() { return (int)screenSize.getHeight(); }
+    public int getUIScaleY() { return window.getHeight(); }
 
-    //sets the window size to the chosen monitor scale
-    public void rescaleScreen(int option) {
-
-        Dimension old = screenSize;
-
-        switch (option) {
-            //Widescreen monitors
-            case 1: //4K
-                screenSize = screenScale.W_4KHD.size();
-                break;
-            case 2: //2K
-                screenSize = screenScale.W_2KHD.size();
-                break;
-            case 3: //1K
-                screenSize = screenScale.W_1KHD.size();
-                break;
-            case 4:
-                screenSize = screenScale.W_HD.size();
-                break;
-            case 5:
-                screenSize = screenScale.U_SXGA.size();
-                break;
-            case 6:
-                screenSize = screenScale.U_WSXGAP.size();
-                break;
-            //4:3 and similar monitor scales
-            case 7:
-                screenSize = screenScale.U_WUXGA.size();
-                break;
-            case 8:
-                screenSize = screenScale.U_WXGAP.size();
-                break;
-            case 9:
-
-                break;
-            case 10:
-
-                break;
-            case 11: //Launcher UI scale
-                screenSize = screenScale.LAUNCHER.size();
-                break;
-            default: //safety net
-
-                break;
-        }
-
-        if (this.getUIScaleX() > screenWidth || this.getUIScaleY() > screenHeight) {
-            System.out.println("Monitor is not large enough to support this resolution.");
-            screenSize = old;
-        } else {
-            //no incompatibilities, proceed
-            System.out.println("UI successfully rescaled to " + getUIScaleX() + "x" + getUIScaleY() + ".");
-        }
-
+    public void resizeWindow() {
+        window.setBounds((int)(screenScale.monitorSize.getWidth() / 2) - ((int)screenScale.screenSize.getWidth() / 2), (int)(screenScale.monitorSize.getHeight() / 2) - ((int)screenScale.screenSize.getHeight() / 2), (int)screenScale.screenSize.getWidth(), (int)screenScale.screenSize.getHeight());
+        screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
     }
-
 
     /** Main Data **/
 
     //builds the core framework
-    public guiCoreV4(int screenScaleOption) {
+    public guiCoreV4() {
 
         window = new XFrame("Astra Launcher", gfxRepository.gameLogo);
         screen = new XPanel(gfxRepository.clrBlk);
-
-        rescaleScreen(screenScaleOption);
 
         screen.setFocusable(true);
         screen.setVisible(true);
         window.setContentPane(screen);
         //window.getRootPane().setCursor(gfxRepository.defaultCursor);
         window.pack();
-        window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
+        window.setBounds((int)(screenScale.monitorSize.getWidth() / 2) - ((int)screenScale.LAUNCHER.size().getWidth() / 2), (int)(screenScale.monitorSize.getHeight() / 2) - ((int)screenScale.LAUNCHER.size().getHeight() / 2), (int)screenScale.LAUNCHER.size().getWidth(), (int)screenScale.LAUNCHER.size().getHeight());
         screen.setBounds(0, 0, getUIScaleX(), getUIScaleY());
         window.setVisible(true);
 
@@ -242,274 +185,12 @@ public class guiCoreV4 implements gfxConstants {
 
     }
 
-    /*
-    public void loadLauncherExpansions() { //Loads the expansion content for the launcher
-
-        String expansionID;
-        launcherContentLoaded = 0;
-
-        //empties and refactors content
-        if (pnlExpansions.size() > 0) {
-            contentController.removeAll();
-            pnlExpansions.clear();
-            lblExpansions.clear();
-            lblExpanDesc.clear();
-            btnExpanEnable.clear();
-            lblExpanID.clear();
-        }
-
-        contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentList.getHeight()));
-
-        //add the expansion pack header to the content window
-        contentController.add(pnlExpansionHeader);
-
-        for (int i = 0; i < xmlLoader.listOfExpansions.size(); i ++) {
-
-            pnlExpansions.add(new XPanel(gfxRepository.clrForeground));
-            lblExpansions.add(new XLabel(xmlLoader.listOfExpansions.get(i).getName(), gfxRepository.txtSubheader, gfxRepository.clrText));
-            lblExpanDesc.add(new XLabel(xmlLoader.listOfExpansions.get(i).getSubtitle(), gfxRepository.txtItalSubtitle, gfxRepository.clrText));
-            btnExpanEnable.add(new XButton(gfxRepository.rejectButton, SwingConstants.RIGHT));
-            lblExpanID.add(new XLabel(xmlLoader.listOfExpansions.get(i).getID(), gfxRepository.txtTiny, gfxRepository.clrText));
-
-            expansionID = xmlLoader.listOfExpansions.get(i).getID();
-
-            contentController.add(pnlExpansions.get(i)); //moves all of the content to the content controller
-
-            pnlExpansions.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
-            pnlExpansions.get(i).add(lblExpansions.get(i));
-            pnlExpansions.get(i).add(lblExpanDesc.get(i));
-            pnlExpansions.get(i).add(btnExpanEnable.get(i));
-            pnlExpansions.get(i).add(lblExpanID.get(i));
-
-            lblExpansions.get(i).setBounds(5, 5, 195, 25);
-            lblExpansions.get(i).setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
-
-            lblExpanDesc.get(i).setBounds(5, 35, 170, 20);
-
-            btnExpanEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 30, 30);
-            btnExpanEnable.get(i).setForeground(gfxRepository.clrText);
-            btnExpanEnable.get(i).setOpaque(true);
-            btnExpanEnable.get(i).setFocusable(false);
-            btnExpanEnable.get(i).setFont(gfxRepository.txtSubheader);
-
-            if (xmlLoader.listOfExpansions.get(i).getEnabledStatus()) { //checks the current status and adjusts the button accordingly
-                btnExpanEnable.get(i).setIcon(new ImageIcon(gfxRepository.acceptButton));
-                btnExpanEnable.get(i).toggleState();
-            } else {
-                btnExpanEnable.get(i).setIcon(new ImageIcon(gfxRepository.rejectButton));
-            }
-
-            //TODO: Custom tooltip design.
-
-            btnExpanEnable.get(i).addMouseListener(new XMouseListener(expansionID) { //adds the mouse listener to the enable/disable button
-                XButton source;
-
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                    source.toggleState();
-
-                    if (source.isState()) {
-                        source.setIcon(new ImageIcon(gfxRepository.acceptButton));
-                        audioRepository.buttonConfirm();
-                        source.setToolTipText("Disable");
-                    } else {
-                        source.setIcon(new ImageIcon(gfxRepository.rejectButton));
-                        audioRepository.buttonDisable();
-                        source.setToolTipText("Enable");
-                    }
-
-                    xmlLoader.changeExpansionInfo(getIDValue(), source.isState());
-
-                    window.refresh();
-
-                }
-
-                @Override
-                public void mousePressed(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                    window.refresh();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                    window.refresh();
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.CENTER);
-                    audioRepository.buttonHighlight();
-                    window.refresh();
-                }
-
-                @Override
-                public void mouseExited(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                    window.refresh();
-                }
-            });
-
-            lblExpanID.get(i).setBounds(contentController.getWidth() - 80, 35, 55, 20);
-            lblExpanID.get(i).setHorizontalAlignment(SwingConstants.RIGHT);
-
-            //enable everything lel
-            lblExpanID.get(i).setVisible(true);
-            btnExpanEnable.get(i).setVisible(true);
-            lblExpanDesc.get(i).setVisible(true);
-            lblExpansions.get(i).setVisible(true);
-            pnlExpansions.get(i).setVisible(true);
-
-            if (contentController.getHeight() < 10 + (65 * launcherContentLoaded) + pnlExpansionHeader.getHeight()) {
-                System.out.println("Increasing content window scale.");
-                contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight() + 70));
-            }
-
-            launcherContentLoaded++;
-
-        }
-
-        System.out.println("Loaded expansion data into GUI.");
-
-        loadLauncherMods();
-
-    }
-
-    //loads the mods to the launcher
-    public void loadLauncherMods() {
-
-        String modID;
-
-        if (pnlMods.size() > 0) {
-            pnlMods.clear();
-            lblMods.clear();
-            lblModAuthor.clear();
-            btnModEnable.clear();
-        }
-
-        contentController.add(pnlModHeader);
-        pnlModHeader.setBounds(5, pnlExpansions.get(pnlExpansions.size() - 1).getY() + pnlExpansions.get(pnlExpansions.size() - 1).getHeight() + 5, pnlModHeader.getWidth(), pnlModHeader.getHeight());
-
-        for (int i = 0; i < xmlLoader.listOfMods.size(); i++) {
-
-            pnlMods.add(new XPanel(gfxRepository.clrForeground));
-            lblMods.add(new XLabel(xmlLoader.listOfMods.get(i).getModName(), gfxRepository.txtSubheader, gfxRepository.clrText));
-            btnModEnable.add(new XButton(gfxRepository.rejectButton, SwingConstants.RIGHT));
-            lblModAuthor.add(new XLabel()); //TODO: Add mod author.
-
-            contentController.add(pnlMods.get(i));
-
-            modID = xmlLoader.listOfMods.get(i).getModName();
-
-            pnlMods.get(i).setBounds(5, 5 + (65 * launcherContentLoaded) + (pnlModHeader.getHeight() + 5) + (pnlExpansionHeader.getHeight() + 5), contentController.getWidth() - 20, 60);
-            pnlMods.get(i).add(lblMods.get(i));
-            pnlMods.get(i).add(btnModEnable.get(i));
-
-            lblMods.get(i).setBounds(5, 5, 195, 25);
-            lblMods.get(i).setVerticalAlignment(SwingConstants.TOP);
-
-            btnModEnable.get(i).setBounds(contentController.getWidth() - 50, 5, 30, 30);
-            btnModEnable.get(i).setForeground(gfxRepository.clrText);
-            btnModEnable.get(i).setOpaque(true);
-            btnModEnable.get(i).setFont(gfxRepository.txtSubheader);
-
-            //adjust the enable/disable button based on the current status of the content
-            if (xmlLoader.listOfMods.get(i).getModEnabled()) {
-                //content is enabled, set the button accordingly
-                btnModEnable.get(i).setIcon(new ImageIcon(gfxRepository.acceptButton));
-                btnModEnable.get(i).toggleState();
-            } else {
-                //content is disabled, set the button accordingly
-                btnModEnable.get(i).setIcon(new ImageIcon(gfxRepository.rejectButton));
-            }
-
-            btnModEnable.get(i).addMouseListener(new XMouseListener(modID) {
-                XButton source;
-
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                    source.toggleState();
-
-                    if (source.isState()) {
-                        source.setIcon(new ImageIcon(gfxRepository.acceptButton));
-                        audioRepository.buttonConfirm();
-                        source.setToolTipText("Disable");
-                    } else {
-                        source.setIcon(new ImageIcon(gfxRepository.rejectButton));
-                        audioRepository.buttonDisable();
-                        source.setToolTipText("Enable");
-                    }
-
-                    xmlLoader.changeModInfo(getIDValue(), source.isState());
-
-                    window.refresh();
-                }
-
-                @Override
-                public void mousePressed(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.LEFT);
-                    window.refresh();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                    window.refresh();
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.CENTER);
-                    audioRepository.buttonHighlight();
-                    window.refresh();
-                }
-
-                @Override
-                public void mouseExited(MouseEvent mouseEvent) {
-                    source = (XButton)mouseEvent.getSource();
-                    source.setHorizontalAlignment(SwingConstants.RIGHT);
-                    window.refresh();
-                }
-            });
-
-            //enable all
-            pnlMods.get(i).setVisible(true);
-            lblMods.get(i).setVisible(true);
-            btnModEnable.get(i).setVisible(true);
-
-            if (contentController.getHeight() < 15 + (65 * launcherContentLoaded) + pnlExpansionHeader.getHeight() + pnlModHeader.getHeight()) {
-                System.out.println("Increasing content window scale.");
-                contentController.setPreferredSize(new Dimension(contentController.getWidth(), contentController.getHeight() + 70));
-            }
-
-            launcherContentLoaded++;
-
-        }
-
-        System.out.println("Loaded mod data into GUI.");
-
-        window.refresh();
-
-    }
-    */
-
     public void launchGame() {
         window.setTitle("Astra Project"); //changes the title from the launcher to the game window
         window.refresh();
         audioRepository.musicTitleScreen(); //plays the title screen music
         clearUI();
-        rescaleScreen(screenScaleChoice); //resizes the screen according to the user's choice
+        resizeWindow();
         loadingScreen = new LoadingScreen();
 
         XLoader loadMainContent = new XLoader() {
@@ -624,9 +305,10 @@ public class guiCoreV4 implements gfxConstants {
     private void loadMainMenu() {
 
         //background image
-        bgPanel = new XLabel(gfxRepository.mainBackground);
+        bgPanel = new XLabel();
         layers.add(bgPanel, new Integer(0), 0);
         bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
+        bgPanel.scaleImage(gfxRepository.mainBackground);
         bgPanel.setOpaque(true);
         bgPanel.setVisible(true);
 
@@ -650,9 +332,10 @@ public class guiCoreV4 implements gfxConstants {
         menuPlanet.setVisible(true);
 
         //lens flares
-        XLabel lblLensGlare = new XLabel(gfxRepository.menuGlare);
+        XLabel lblLensGlare = new XLabel();
         layers.add(lblLensGlare, new Integer(9), 0);
         lblLensGlare.setBounds(0, 0, screen.getWidth(), screen.getHeight());
+        lblLensGlare.scaleImage(gfxRepository.menuGlare);
         lblLensGlare.setVisible(true);
 
         //bottom menu bar

@@ -51,7 +51,7 @@ public class gameLoader {
         System.out.println("Loading UI core...");
         javax.swing.SwingUtilities.invokeLater(new Runnable() { //open up a new thread for the UI
             public void run() {
-                gameSettings.ui = new guiCoreV4(11);
+                gameSettings.ui = new guiCoreV4();
                 gameSettings.ui.loadLauncherScreen();
             }
         } );
@@ -106,7 +106,7 @@ public class gameLoader {
     public static void cleanContent() {
 
         //sorts the data in the arraylists by ID for slightly faster indexing (in theory)
-        techCore.sortTechs();
+
 
     }
 
@@ -115,7 +115,7 @@ public class gameLoader {
 
         //preloads default planet and star types
         starCore.starPreloader();
-        techCore.techPreloader();
+
         planetCore.planetPreloader();
 
 

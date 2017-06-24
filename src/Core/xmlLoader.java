@@ -54,8 +54,8 @@ public class xmlLoader {
 
     //loads the XML content
     public static void loadContent() {
-        System.out.println("Attempting to load tech tree data...");
-        loadXML(techTreeFolder); //loads the tech tree content
+        //System.out.println("Attempting to load tech tree data...");
+        //loadXML(techTreeFolder); //loads the tech tree content
         System.out.println("Attempting to load expansion files...");
         loadXML(expansionFolder); //loads the content in the expansion pack folder
         System.out.println("Attempting to load mods...");
@@ -103,8 +103,6 @@ public class xmlLoader {
                                     loadExpansions(elements);
                                 } else if (baseNode.equals("loadMod")) { //loading mods
                                     loadMods(elements);
-                                } else if (baseNode.equals("techTree")) {
-                                    loadTechTree(elements);
                                 } else { //the stuff found was not valid XML
                                     errorPrint(7);
                                 }
@@ -201,100 +199,7 @@ public class xmlLoader {
 
     }
 
-    //reads tech tree XML data
-    private static void loadTechTree(NodeList nodeList) {
-        final int numOfTechLines = 6; //easy access when editing the total types of techs
 
-        System.out.println("Attempting to load tech tree data...");
-        boolean techIsValid = false;
-
-        int techLine = 0;
-        int techID = 0;
-        int techCost = 0;
-        int techLevel = 0;
-        String techName = "NO NAME";
-        String techDesc = "No description.";
-        int techRarity = 0;
-
-        if (nodeList != null) {
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node parentNode = nodeList.item(i);
-                if (parentNode.getNodeName().equals("newTech")) {
-                    System.out.println("New tech found. Attempting to load...");
-                    NodeList nodes = parentNode.getChildNodes();
-                    techLine = Integer.parseInt(parentNode.getAttributes().getNamedItem("techline").getNodeValue()); //gets the ID of the tech
-                    if (techLine > 0 && techLine < numOfTechLines) {
-                        techIsValid = true; //probably valid, begin indexing information
-                        for (int j = 0; j < nodes.getLength(); j++) {
-                            if (nodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                                if (nodes.item(j).getNodeName().equals("name") && nodes.item(j).getTextContent() != null) {
-                                    techName = nodes.item(j).getTextContent();
-                                } else if (nodes.item(j).getNodeName().equals("description")) {
-                                    if (nodes.item(j).getTextContent() != null) { //don't try to parse nothing, safety net code
-                                        techDesc = nodes.item(j).getTextContent();
-                                    }
-                                } else if (nodes.item(j).getNodeName().equals("id") && nodes.item(j).getTextContent() != null) {
-                                    techID = Integer.parseInt(nodes.item(j).getTextContent());
-                                    if (techID > 200 || techID < 1) { //invalid ID
-                                        techIsValid = false;
-                                        break;
-                                    }
-                                } else if (nodes.item(j).getNodeName().equals("level") && nodes.item(j).getTextContent() != null) {
-                                    techLevel = Integer.parseInt(nodes.item(j).getTextContent());
-                                    if (techLevel < 0 && techLevel > 10) { //tech is not a valid level
-                                        techIsValid = false;
-                                        break;
-                                    }
-                                } else if (nodes.item(j).getNodeName().equals("cost") && nodes.item(j).getTextContent() != null) {
-                                    techCost = Integer.parseInt(nodes.item(j).getTextContent());
-                                    if (techCost < 1) {
-                                        techIsValid = false;
-                                        break;
-                                    }
-                                } else if (nodes.item(j).getNodeName().equals("rarity") && nodes.item(j).getTextContent() != null) {
-                                    techRarity = Integer.parseInt(nodes.item(j).getTextContent());
-                                    if (techRarity < 0) {
-                                        techIsValid = false;
-                                        break;
-                                    }
-                                }
-                                //TODO: Add handling for the different things that techs unlock.
-
-                            } else {
-                                //not an element node, don't attempt to index
-                            }
-                        }
-                    } else {
-                        //invalid tech ID, mod should not be loaded
-                    }
-
-                    if (techIsValid) {
-                        System.out.println("New tech valid. Initializing...");
-                        boolean replacesContent = false;
-
-                        for (int k = 0; k < techCore.techTree.size(); k++) { //find duplicate IDs
-                            for (int j = 0; j < techCore.techTree.get(k).size(); j++) {
-                                if (techCore.techTree.get(k).get(j).getID() == techID) {
-                                    replacesContent = true;
-                                    techCore.techTree.get(k).add(j, new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
-                                    System.out.println("[OVERWRITE] Tech '" + techName + "' successfully added to " + techCore.techPaths[techLine -1]);
-                                    break; //once the duplicate is found, there's no need to continue indexing
-                                }
-                            }
-                        }
-                        if (!replacesContent) {
-                            techCore.techTree.get(techLine - 1).add(new techCore.tech(techName, techName, techID, techLine, techLevel, techCost, techRarity));
-                            System.out.println("[NEW] Tech '" + techName + "' successfully added to line #" + techLine + " - " + techCore.techPaths[techLine -1]);
-                        }
-                    } else {
-                        System.out.println("An error has occurred while loading tech tree XML data. Loading aborted.");
-                    }
-                }
-            }
-        } else {
-            errorPrint(12);
-        }
-    }
 
     //writes content into the XML file
     private static void writeToFile(Document docSource, File path) {

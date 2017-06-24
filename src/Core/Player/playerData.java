@@ -32,7 +32,7 @@ import java.util.Date;
  * Self - All other work.
  */
 
-public class playerData {
+public class playerData implements DataConstants, SaveDirectoryConstants {
 
     private saveData save;
 
@@ -80,10 +80,10 @@ public class playerData {
 
         save = new saveData(userID);
         save.create();
-        save.add(save.get(), DataConstants.FOLDER, SaveDirectoryConstants.DATA);
-        save.add(save.get(SaveDirectoryConstants.DATA), DataConstants.FOLDER, "map");
-        save.add(save.get(SaveDirectoryConstants.DATA), DataConstants.FOLDER, "stars");
-        save.add(save.get(SaveDirectoryConstants.DATA), DataConstants.FOLDER, "planets");
+        save.add(save.get(), FOLDER, DATA);
+        save.add(save.get(DATA), FOLDER, "map");
+        save.add(save.get(DATA), FOLDER, "stars");
+        save.add(save.get(DATA), FOLDER, "planets");
 
         try { //creates a base XML file to store simple player info
 

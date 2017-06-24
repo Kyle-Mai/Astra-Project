@@ -38,7 +38,7 @@ public class gfxRepository implements gfxConstants {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    public static final String gameVersion = "U1.0 Dev-Build";
+    public static final String gameVersion = "U1.1 Dev-Build";
 
     public static Font txtSubtitle;
     public static Font txtItalSubtitle;

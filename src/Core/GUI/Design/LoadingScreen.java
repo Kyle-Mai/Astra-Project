@@ -24,16 +24,17 @@ public class LoadingScreen extends XLabel {
 
     public LoadingScreen() {
         gfxRepository.randomBackground();
-        this.setIcon(new ImageIcon(gfxRepository.mainBackground));
         this.setBackground(gfxRepository.clrTrueBlack);
         this.setAlignments(SwingConstants.CENTER);
         this.setPreferredSize(new Dimension(gameSettings.ui.getUIScaleX(), gameSettings.ui.getUIScaleY()));
         this.setSize(this.getPreferredSize());
         this.setVisible(true);
-        this.loadElements();
+        loadElements();
     }
 
     private void loadElements() { //loads the elements into the loading screen
+
+        this.scaleImage(gfxRepository.mainBackground);
 
         //loads the loading icon gif that plays during the loading screen
         XLabel loadIcon = new XLabel(gfxRepository.loadingIcon);
@@ -61,7 +62,6 @@ public class LoadingScreen extends XLabel {
         loadingBar.setStringPainted(true);
         loadingBar.setBorderPainted(false);
         loadingBar.setVisible(true);
-        //loadingBar.setIndeterminate(true);
 
         this.revalidate();
         this.repaint();

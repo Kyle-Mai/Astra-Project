@@ -794,3 +794,23 @@ Everything from this point on is post-submission.
 - Experimenting with gfxConstants to move some of the gfxRepository information over to it.
 
 - Slight improvements to the event builder.
+
+**JUNE 23 2017** (U1.1 Dev-Build) (1)
+
+- Patched minor error in XListSorter logic.
+
+    - Should now correctly position items again. Also simplified the logic somewhat.
+
+    - Should also now correctly resize the parent window when the autosizer function is enabled.
+
+- Removed some code from the XML loader to prepare for a total overhaul of it.
+
+- Re-added XML mods/expansion packs to the launcher window.
+
+- Added some more SwingEX functionality, namely the refresh() command to more than just the XFrame, which simplifies repainting somewhat.
+
+- Added additional functionality to the screenScale enum, as well as reworking the way screen scale is handled throughout the program.
+
+- Added proper scaling to a few select UI elements (namely related to backgrounds)
+
+- Added more comments to existing code to make it easier to read.

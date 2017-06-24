@@ -1,6 +1,7 @@
 package Core.GUI.SwingEX;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -66,8 +67,8 @@ public class XListSorter implements XConstants {
     public void scaleParent(boolean b) { this.resize = b; } //whether or not the list will resize the container to fit the items (default false)
     public void setAlignment(int sortStyle) { this.sort = sortStyle; } //sets the alignment of the sorter
 
-    public boolean willAutoSize() { return autosize; }
-    public boolean willResize() { return resize; }
+    public boolean isAutoSizing() { return autosize; }
+    public boolean isResizing() { return resize; }
 
     public int getPosX() { return posx; }
     public int getPosY() { return  posy; }
@@ -75,6 +76,8 @@ public class XListSorter implements XConstants {
     public int getSizeY() { return  sizey; }
     public int getSortStyle() { return sort; }
     public int getSpace() { return space; }
+
+    public void resizeParent(boolean b) { this.resize = b; }
 
     //------------------------------------------------------------------------------------------------------------------
     /**
@@ -101,34 +104,17 @@ public class XListSorter implements XConstants {
      */
 
     public void placeItems(JComponent c) { //adds the components to the specified component
-        int s1, s2; // size
-        int counter = 0;
 
         if (list.size() == 0) { //no items > don't attempt to place
             System.out.println("XListSorter - No items in the queue, aborting item placer.");
             return;
         }
 
-        switch (sort) { //sets the orientation parameters
-            case HORIZONTAL_SORT: //horizontal list
-                s1 = sizex + space;
-                s2 = 0;
-            break;
-            case VERTICAL_SORT: //vertical list
-                s2 = sizey + space;
-                s1 = 0;
-                break;
-            default: //default to horizontal in worst case
-                s1 = sizex + space;
-                s2 = 0;
-                break;
-        }
-
         for (JComponent item : list) { //get the inputted components
             try { //attempt to add item to the specified component
                 c.add(item);
             } catch (Exception e) { //if it errors during generation, skip it and move to the next iteration
-                System.out.println("ListSorter component #" + (counter + 1) + " was not initialized: " + e.getMessage());
+                System.out.println("ListSorter component was not initialized: " + e.getMessage());
                 continue;
             }
 
@@ -140,44 +126,40 @@ public class XListSorter implements XConstants {
 
             switch (sort) {
                 case HORIZONTAL_SORT:
-                    item.setLocation(posx + s1, posy);
+                    item.setLocation(posx, posy);
                     posx += item.getWidth() + space;
-                    s1 = item.getWidth();
                     break;
                 case VERTICAL_SORT:
-                    item.setLocation(posx, posy + s2);
+                    item.setLocation(posx, posy);
                     posy += item.getHeight() + space;
-                    s2 = item.getHeight();
                     break;
                 case VERTICAL_SORT_REVERSE:
-                    s2 = item.getHeight() + space;
-                    item.setLocation(posx, posy - s2);
-                    posy = item.getY();
+                    posy = item.getY() - (item.getHeight() + space);
+                    item.setLocation(posx, posy);
                     break;
                 case HORIZONTAL_SORT_REVERSE:
-                    s1 = item.getWidth() + space;
-                    item.setLocation(posx - s1, posy);
-                    posx = item.getX();
+                    posx = item.getX() - (item.getWidth() + space);
+                    item.setLocation(posx, posy);
                     break;
                 default:
                     System.out.println("ListSorter sort method not properly specified. Defaulting to HORIZONTAL_SORT.");
-                    item.setLocation(posx + s1, posy);
+                    item.setLocation(posx, posy);
                     posx += item.getWidth() + space;
-                    s1 = item.getWidth();
                     break;
             }
 
             if (resize) { //if the sorter is allowed to resize the parent container, resize it when necessary
-                if (posx + space > c.getWidth()) {
+                if (posx + space > c.getWidth() && sort == HORIZONTAL_SORT) {
+                    c.setPreferredSize(new Dimension(posx + space, c.getHeight()));
                     c.setSize(posx + space, c.getHeight());
-                } else if (posy + space > c.getHeight()) {
+                } else if (posy + space > c.getHeight() && sort == VERTICAL_SORT) {
+                    c.setPreferredSize(new Dimension(c.getWidth(), posy + space));
                     c.setSize(c.getWidth(), posy + space);
                 }
-
+                //todo: add auto-sizing for reverse sorts
             }
 
             item.setVisible(true);
-            counter++;
         }
 
     } //placeItems method complete

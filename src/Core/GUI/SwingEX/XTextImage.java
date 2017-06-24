@@ -45,4 +45,9 @@ public class XTextImage extends JPanel {
     public XLabel getImage() { return this.image; }
     public XLabel getText() { return this.text; }
 
+    public void refresh() {
+        this.revalidate();
+        this.repaint();
+    }
+
 }

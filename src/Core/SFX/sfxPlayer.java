@@ -58,27 +58,27 @@ public class sfxPlayer extends Thread {
      Can be accessed outside of the SFX player to edit values.
      */
 
-    public void addFile(File... file) { audioFile.addAll(Arrays.asList(file)); }
-    public void removeFile(File f) { audioFile.remove(f); }
-    public void removeFile(int i) { audioFile.remove(i); }
+    public void addFile(File... file) { audioFile.addAll(Arrays.asList(file)); } //adds a new audio file to the sfx player
+    public void removeFile(File f) { audioFile.remove(f); } //removes a file
+    public void removeFile(int i) { audioFile.remove(i); } //removes a file from the selected index
 
-    public File getFile(File f) { return audioFile.get(audioFile.indexOf(f)); }
-    public File getFile(int i) { return audioFile.get(i); }
-    public int getFileIndex(File f) { return audioFile.indexOf(f); }
+    public File getFile(File f) { return audioFile.get(audioFile.indexOf(f)); } //gets a file
+    public File getFile(int i) { return audioFile.get(i); } //gets a file from an index
+    public int getFileIndex(File f) { return audioFile.indexOf(f); } //gets the index of a file
 
-    public void setVolume(double volume) {mediaPlayer.setVolume(0.01 * volume); }
-    public void setDelay(double delay) { this.delay = delay; }
+    public void setVolume(double volume) {mediaPlayer.setVolume(0.01 * volume); } //sets the volume of the audio player
+    public void setDelay(double delay) { this.delay = delay; } //sets the delay between initialization and playing
 
-    public double getVolume() { return mediaPlayer.getVolume() * 100; }
-    public double getDuration() { return mediaPlayer.getTotalDuration().toMillis(); }
-    public double getDelay() { return delay; }
+    public double getVolume() { return mediaPlayer.getVolume() * 100; } //gets the volume of the audio player
+    public double getDuration() { return mediaPlayer.getTotalDuration().toMillis(); } //gets the duration of the current audio
+    public double getDelay() { return delay; } //gets the currently selected delay
 
-    public void loop() { mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); }
-    public boolean isLooping() { return loop; }
-    public void shuffle() { this.shuffle = true; }
-    public boolean isShuffling() { return shuffle; }
+    public void loop() { mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); } //loops the audio
+    public boolean isLooping() { return loop; } //whether or not the audio is looping
+    public void shuffle() { this.shuffle = true; } //shuffles the audio
+    public boolean isShuffling() { return shuffle; } //whether or not the audio is being shuffled
 
-    public void stopAudio() { mediaPlayer.stop(); }
+    public void stopAudio() { mediaPlayer.stop(); } //stops the audio
 
     //------------------------------------------------------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ public class sfxPlayer extends Thread {
      */
 
     @Override
-    public void run() {
+    public void run() { //plays the audio
         initializeData();
 
         if (loop && !shuffle && audio.size() <= 1) { loop(); }
@@ -106,7 +106,7 @@ public class sfxPlayer extends Thread {
         currentThread().interrupt(); //closes the thread down
     }
 
-    private void initializeData() {
+    private void initializeData() { //initializes the audio files from the data
         audio.clear();
 
         if (audioFile.size() == 0) {
@@ -119,7 +119,7 @@ public class sfxPlayer extends Thread {
         }
     }
 
-    private void loadAudio(Media media) {
+    private void loadAudio(Media media) { //loads the audio into the media player and plays it after the delay (if one was set)
         mediaPlayer = new MediaPlayer(media);
         try {
             sleep((long)delay);
@@ -129,15 +129,15 @@ public class sfxPlayer extends Thread {
         mediaPlayer.play();
     }
 
-    private void shuffleAudio() {
+    private void shuffleAudio() { //selects a random audio from the list and plays it, looping when applicable
         Random shuffler = new Random();
         loadAudio(audio.get(shuffler.nextInt(audio.size() - 1)));
-        if (loop) {
+        if (loop) { //if the program is set to loop, choose another audio file after the current one finishes playing
             shuffleAudio();
         }
     }
 
-    private void playList() {
+    private void playList() { //plays the audio in order
         for (int i = 0; i < audio.size(); i++) {
             loadAudio(audio.get(i));
         }

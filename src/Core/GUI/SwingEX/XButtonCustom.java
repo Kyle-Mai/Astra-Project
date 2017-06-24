@@ -66,5 +66,10 @@ public class XButtonCustom extends JButton implements EXColorDefaults {
         return this.buttonText;
     }
 
+    public void refresh() {
+        this.revalidate();
+        this.repaint();
+    }
+
 
 }

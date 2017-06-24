@@ -94,9 +94,7 @@ public class XLabel extends JLabel implements EXColorDefaults {
     public void scaleImage(BufferedImage image) {
         Image scaledImage = image.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
         this.setIcon(new ImageIcon(scaledImage));
-
     }
-
 
     //sets the horizontal and vertical alignment separately
     public void setAlignments(int alignmentH, int alignmentV) {
@@ -110,6 +108,11 @@ public class XLabel extends JLabel implements EXColorDefaults {
         this.setHorizontalAlignment(alignment);
         this.setVerticalAlignment(alignment);
 
+    }
+
+    public void refresh() {
+        this.revalidate();
+        this.repaint();
     }
 
 }
