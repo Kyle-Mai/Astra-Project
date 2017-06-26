@@ -36,15 +36,14 @@ public class EventWindow extends XPanel {
 
     }
 
-    public void loadEvent(eventBuilder event) { //sets the event
+    public void loadEvent(eventBuilder evt) { //sets the event
 
         main.removeAll();
         this.removeAll();
 
         try {
             this.add(main);
-            this.event = event;
-            event.loadOptions();
+            this.event = evt;
 
             XLabel titleBG = new XLabel(gameSettings.eventhandler.getHeader(event.getType()));
             this.add(titleBG);
@@ -87,13 +86,17 @@ public class EventWindow extends XPanel {
             imgEvtBorder.setAlignments(SwingConstants.CENTER);
             imgEvtBorder.setVisible(true);
 
-            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT_REVERSE, 0, (main.getWidth() / 2) - 266, main.getHeight() - 30);
+            event.loadOptions();
+            event.eventOpen();
+
+            XListSorter eventButtons = new XListSorter(XConstants.VERTICAL_SORT_REVERSE, 0, (this.getWidth() / 2) - 266, this.getHeight() - 30);
 
             for (int i = 0; i < event.button.size(); i++) { //load in the buttons
                 XButtonCustom btnOption = new XButtonCustom(gfxRepository.button532_42, SwingConstants.LEFT);
                 btnOption.setText(event.button.get(i).getButtonText(), gfxRepository.txtSubtitle, gfxRepository.clrText);
                 btnOption.setToolTipText(event.button.get(i).getMouseOverText());
                 btnOption.setPreferredSize(new Dimension(532, 42));
+                btnOption.setSize(btnOption.getPreferredSize());
                 btnOption.addMouseListener(new EMouseListener(event.button.get(i)) {
                     XButtonCustom source;
                     @Override
@@ -142,13 +145,10 @@ public class EventWindow extends XPanel {
                 });
                 eventButtons.addItem(btnOption); //add the button to the sorter
             }
+            System.out.println("Loading event with [" + event.button.size() + "] button(s).");
             eventButtons.placeItems(main); //place the event window on the panel
-            event.eventOpen(); //play the event's open method
 
             this.setVisible(true);
-            main.setVisible(true);
-            this.repaint();
-            this.revalidate();
 
         } catch (Exception e) { //problem occurred during loading, abort process
             e.printStackTrace();
@@ -160,6 +160,7 @@ public class EventWindow extends XPanel {
 
     public String getTitle() { return title.getText(); }
     public String getDesc() { return desc.getText(); }
+    public eventBuilder getCurrentEvent() { return this.event; }
 
 
 }

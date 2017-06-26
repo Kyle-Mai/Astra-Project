@@ -7,6 +7,7 @@ package Core.techTree;
  */
 
 public interface techConstants {
+    //TODO: Maybe switch to an enum?
     int TECH_PROPULSION = 1;
     int TECH_INFRASTRUCTURE = 2;
     int TECH_AGRICULTURE = 3;

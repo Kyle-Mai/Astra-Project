@@ -134,11 +134,11 @@ public class XListSorter implements XConstants {
                     posy += item.getHeight() + space;
                     break;
                 case VERTICAL_SORT_REVERSE:
-                    posy = item.getY() - (item.getHeight() + space);
+                    posy -= item.getHeight() + space;
                     item.setLocation(posx, posy);
                     break;
                 case HORIZONTAL_SORT_REVERSE:
-                    posx = item.getX() - (item.getWidth() + space);
+                    posx -= item.getWidth() + space;
                     item.setLocation(posx, posy);
                     break;
                 default:

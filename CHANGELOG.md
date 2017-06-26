@@ -814,3 +814,15 @@ Everything from this point on is post-submission.
 - Added proper scaling to a few select UI elements (namely related to backgrounds)
 
 - Added more comments to existing code to make it easier to read.
+
+**JUNE 26 2017** (U1.1 Dev-Build) (1)
+
+- Patched a minor mistake in the XListSorter's reverse sort options that would cause the options to fail to render.
+
+- Slightly adjusted the event UI builder. No effective difference, mostly just insurance.
+
+- Added onto the star's namelist.
+
+- Added a few new (mostly test) tech tree options.
+
+- Added the third tech tree line to the tech tree screen.

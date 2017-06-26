@@ -33,11 +33,12 @@ public class techCoreV2 implements techConstants {
             @Override
             public void finishResearch() {
                 gameSettings.FTLenabled = true; //enable the FTL portion of the game
-                gameSettings.shipbuilder.shipStorage.get(gameSettings.shipbuilder.shipStorage.indexOf(gameSettings.shipbuilder.s_trailblazer)).setUnlocked(); //unlock the trailblazer
+                gameSettings.shipbuilder.shipStorage.get(gameSettings.shipbuilder.shipStorage.indexOf(gameSettings.shipbuilder.s_trailblazer)).setUnlocked(); //unlock the trailblazer ship
+                System.out.println("String Drive Prototype researched! The FTL system has been enabled.");
             }
         });
 
-        techTree.add(new techBuilder("New Worlds Protocol", 0, 35, 100, TECH_AGRICULTURE, false, "tech_colonization_1.png", "The time has come to begin researching into long-term stasis and mega-construction techniques. By doing so, we can begin construction of colony ships which will allow us to colonize new worlds in far off systems.") {
+        techTree.add(new techBuilder("New Worlds Protocol", 0, 35, 100, TECH_SOCIOLOGY, false, "tech_colonization_1.png", "The time has come to begin researching into long-term stasis and mega-construction techniques. By doing so, we can begin construction of colony ships which will allow us to colonize new worlds in far off systems.") {
             @Override
             public void finishResearch() {
 
@@ -51,32 +52,35 @@ public class techCoreV2 implements techConstants {
             }
         });
 
+        techTree.add(new techBuilder("Arcologies", 0, 50, 8, TECH_INFRASTRUCTURE, false, "tech_vault.png", "The arcology is a massive structure housing a large, self-sustaining population within it. With very minimal ecological impact, we can more effectively utilize the planet's resources without as high a risk of ecological disaster.") {
+            @Override
+            public void finishResearch() {
+
+            }
+        });
+
+        techTree.add(new techBuilder("String Drive", 0, 120, 65, TECH_PROPULSION, false, "tech_string_drive_2.png", "By improving the efficiency of the string drive, we should be able to reduce the amount of material needed to maintain the string-lines.") {
+            @Override
+            public void finishResearch() {
+
+            }
+        });
+
+        techTree.add(new techBuilder("Advanced String Drive", 0, 450, 50, TECH_PROPULSION, true, "tech_string_drive_3.png", "Further improvements to the string-drive concept have lead to faster charge times, lower transit times, and cheaper operating costs.") {
+            @Override
+            public void finishResearch() {
+
+            }
+        });
+
+        techTree.add(new techBuilder("Dyson Sphere Construction", 0, 7500, 6, TECH_INFRASTRUCTURE, false, "tech_dyson_sphere.png", "PLACEHOLDER") {
+            @Override
+            public void finishResearch() {
+
+            }
+        });
+
     }
-
-    /*
-
-    techBuilder prop_StringDrive_02 = new techBuilder("String Drive", 2, 120, 100, TECH_PROPULSION, "By improving the efficiency of the string drive, we should be able to reduce the amount of material needed to maintain the string-lines.") {
-        @Override
-        public void finishResearch() {
-
-        }
-    };
-
-    techBuilder prop_StringDrive_03 = new techBuilder("Advanced String Drive", 4, 450, 65, TECH_PROPULSION, "") {
-        @Override
-        public void finishResearch() {
-
-        }
-    };
-
-    techBuilder infr_Arcologies = new techBuilder("Arcologies", 6, 2100, 1, TECH_INFRASTRUCTURE, "The arcology is a massive structure housing a large, self-sustaining population within it. With very minimal ecological impact, we can more effectively utilize the planet's resources without as high a risk of ecological disaster.") {
-        @Override
-        public void finishResearch() {
-
-        }
-    };
-
-    */
 
 
 

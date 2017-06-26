@@ -2467,7 +2467,7 @@ public class guiCoreV4 implements gfxConstants {
             }
         } else { //no current research
             tech_1_header.setIcon(new ImageIcon(gfxRepository.techGreyHeader));
-            tech_1_header_text.setText("???", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_1_header_text.setText("Physics", gfxRepository.txtButtonSmall, gfxRepository.clrText);
             tech_1_main.setIcon(new ImageIcon(gfxRepository.techGreyBG));
             tech_1_name.setText("No active research project.", gfxRepository.txtSubtitle, gfxRepository.clrText);
         }
@@ -2568,7 +2568,7 @@ public class guiCoreV4 implements gfxConstants {
             }
         } else { //no current research
             tech_2_header.setIcon(new ImageIcon(gfxRepository.techGreyHeader));
-            tech_2_header_text.setText("???", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_2_header_text.setText("Biology", gfxRepository.txtButtonSmall, gfxRepository.clrText);
             tech_2_main.setIcon(new ImageIcon(gfxRepository.techGreyBG));
             tech_2_name.setText("No active research project.", gfxRepository.txtSubtitle, gfxRepository.clrText);
         }
@@ -2579,6 +2579,106 @@ public class guiCoreV4 implements gfxConstants {
         tech_2_header.setVisible(true);
         tech_2_main.setVisible(true);
 
+        XPanel tech_3 = new XPanel();
+        tech_3.setOpaque(false);
+        imgTechBG.add(tech_3);
+        tech_3.setBounds(0, tech_2.getY() + tech_2.getHeight() + 15, 452, 110);
+        XLabel tech_3_header = new XLabel(gfxRepository.greyHeader);
+        tech_3_header.setOpaque(false);
+        tech_3.add(tech_3_header);
+        tech_3_header.setBounds(0, 0, 452, 25);
+        tech_3_header.setAlignments(SwingConstants.CENTER);
+        XLabel tech_3_header_text = new XLabel();
+        tech_3_header.add(tech_3_header_text);
+        tech_3_header_text.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
+        tech_3_header_text.setBounds(5, 0, tech_3_header.getWidth() - 20, tech_3_header.getHeight());
+        XLabel tech_3_main = new XLabel();
+        tech_3.add(tech_3_main);
+        tech_3_main.setBounds(0, 25, 452, 85);
+        XLabel tech_3_name = new XLabel();
+        tech_3_main.add(tech_3_name);
+        tech_3_name.setBounds(5, 1, tech_3_main.getWidth() - 10, 30);
+        tech_3_name.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
+        XButton tech_3_button = new XButton(gfxRepository.techButton, SwingConstants.LEFT);
+        tech_3_main.add(tech_3_button);
+        tech_3_button.setBounds(-13, -5, 478, 110);
+        tech_3_button.addMouseListener(new XMouseListener() {
+            XButton source;
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                audioRepository.buttonConfirm();
+                window.refresh();
+                if (!pnlTechSelect.isVisible()) {
+                    selectResearch(3);
+                } else {
+                    pnlTechSelect.removeAll();
+                    pnlTechSelect.setVisible(false);
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                window.refresh();
+            }
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.CENTER);
+                audioRepository.menuTab();
+                window.refresh();
+            }
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+                source = (XButton)mouseEvent.getSource();
+                source.setHorizontalAlignment(SwingConstants.LEFT);
+                window.refresh();
+            }
+        });
+
+        if (gameSettings.techtree.currentResearch_3 != null) {
+            tech_3_header.setIcon(new ImageIcon(gfxRepository.techOrangeHeader));
+            tech_3_header_text.setText(gameSettings.techtree.currentResearch_3.getResearchTree(), gfxRepository.txtHeader, gfxRepository.clrText);
+            tech_3_name.setText(gameSettings.techtree.currentResearch_3.getName(), gfxRepository.txtSubtitle, gfxRepository.clrText);
+            XLabel tech_3_icon = new XLabel();
+            tech_3_main.add(tech_3_icon);
+            tech_3_icon.setBounds(70, 30, 52, 52);
+            try {
+                tech_3_icon.scaleImage(ImageIO.read(new File(System.getProperty("user.dir") + "/src/Core/GUI/Resources/tech/" + gameSettings.techtree.currentResearch_3.getIcon())));
+            } catch (IOException e) {
+                tech_3_icon.scaleImage(gfxRepository.missingIconTech);
+            }
+            tech_3_icon.setVisible(true);
+            if (gameSettings.techtree.currentResearch_3.getRarity() < 10 && !gameSettings.techtree.currentResearch_3.isDangerous()) { //tech is rare, showcase rare colour
+                tech_3_main.setIcon(new ImageIcon(gfxRepository.techPurpleBG));
+                XLabel tech_3_main_mask = new XLabel(gfxRepository.techMask);
+                tech_3_main.add(tech_3_main_mask);
+                tech_3_main_mask.setBounds(0, 0, tech_3_main.getWidth(), tech_3_main.getHeight());
+            } else if (gameSettings.techtree.currentResearch_3.isDangerous()) { //dangerous technology, display accordingly
+                tech_3_main.setIcon(new ImageIcon(gfxRepository.techRedBG));
+            } else { //regular tech, display regular colour
+                tech_3_main.setIcon(new ImageIcon(gfxRepository.techOrangeBG));
+            }
+        } else { //no current research
+            tech_3_header.setIcon(new ImageIcon(gfxRepository.techGreyHeader));
+            tech_3_header_text.setText("Engineering", gfxRepository.txtButtonSmall, gfxRepository.clrText);
+            tech_3_main.setIcon(new ImageIcon(gfxRepository.techGreyBG));
+            tech_3_name.setText("No active research project.", gfxRepository.txtSubtitle, gfxRepository.clrText);
+        }
+        tech_3_button.setVisible(true);
+        tech_3_name.setVisible(true);
+        tech_3_header_text.setVisible(true);
+        tech_3.setVisible(true);
+        tech_3_header.setVisible(true);
+        tech_3_main.setVisible(true);
 
         window.refresh();
     }

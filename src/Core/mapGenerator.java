@@ -40,6 +40,12 @@ public class mapGenerator implements Serializable {
 
     /** Variables **/
 
+    //variables for the map as a whole
+    private int xScale;
+    private int yScale;
+    private int starDensity;
+    private int mapArea;
+
     /** Map Constructor **/
     //Necessary in order to store all of the map data together.
 
@@ -105,12 +111,6 @@ public class mapGenerator implements Serializable {
 
         }
     }
-
-    //variables for the map as a whole
-    private int xScale;
-    private int yScale;
-    private int starDensity;
-    private int mapArea;
 
     public mapGenerator(int xScale, int yScale, int starDensity) {
         System.out.println("Creating new map...");
