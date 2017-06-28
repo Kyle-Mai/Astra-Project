@@ -8,11 +8,8 @@ package Core.GUI.SwingEX;
 
 
 //import all relevant stuff
-import Core.starClass;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 
 public class XPanel extends JPanel {
@@ -29,6 +26,15 @@ public class XPanel extends JPanel {
         this.setBorder(null);
 
     }
+    // VUILCANDEV EDIT Layouts cannn be useful
+    public XPanel(LayoutManager layoutStyle, Color backgroundColor){
+        this.setLayout(layoutStyle);
+        this.setBackground(backgroundColor);
+        this.setFocusable(false);
+        this.setOpaque(true);
+        this.setBorder(null);
+    }
+    // VULCANDEV EDIT
 
     public XPanel() {
         this.setLayout(null);
