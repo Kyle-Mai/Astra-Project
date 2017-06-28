@@ -6,10 +6,15 @@ import javax.swing.*;
 import java.awt.*;
 
 // Created By VulcanDev
-class TestUI extends JFrame{
+class m_TestUI extends JFrame{
     private DataManager dataManager = new DataManager(); // DataManger Init
 
-    TestUI() {
+    // Main Method
+    public static void main(String[] args) {
+        new m_TestUI();
+    }
+
+    private m_TestUI() {
         XPanel panel = new XPanel(new GridLayout(3,1), new Color(50, 50, 50));
         XButton save = new XButton("Save", new Font("Roboto", Font.PLAIN, 32), new Color(202, 202, 202), new Color(30, 60, 30));
         XButton load = new XButton("Load", new Font("Roboto", Font.PLAIN, 32), new Color(202, 202, 202), new Color(30, 30, 60));
