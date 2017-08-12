@@ -1,7 +1,6 @@
 package Core.GUI;
 
-import Core.GUI.SwingEX.EXColorDefaults;
-import Core.GUI.SwingEX.XButton;
+import AetheriusEngine.core.gui.*;
 import Core.planetClass;
 import Core.starClass;
 
@@ -34,7 +33,7 @@ public class planetButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(EXColorDefaults.NONE); //GOODBYE STUPID WHITE BOX
+        g.setColor(XConstants.NONE); //GOODBYE STUPID WHITE BOX
         super.paintComponent(g);
 
     }

@@ -1,12 +1,13 @@
-package Core.GUI.SwingEX;
+package AetheriusEngine.core.gui;
+
+/*
+Lolita's Revenge
+June 29 2017
+
+Handles background loading during a loading screen.
+ */
 
 import javax.swing.*;
-
-/**
- * KM
- * June 16 2017
- * Handles background loading.
- */
 
 public abstract class XLoader extends SwingWorker<Void, Void> {
 
@@ -31,9 +32,10 @@ public abstract class XLoader extends SwingWorker<Void, Void> {
         return null;
     }
 
-    protected abstract void done();
+    protected abstract void done(); //Determines what the loader will do when the operation is complete.
 
-    protected abstract void loadOperation(int percent); //what the loader does every time it ticks up a percent
+    protected abstract void loadOperation(int percent); //What the loader does every time it ticks up a percent
 
+    //------------------------------------------------------------------------------------------------------------------
 
 }

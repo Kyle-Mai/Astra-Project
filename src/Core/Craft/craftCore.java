@@ -1,6 +1,6 @@
 package Core.Craft;
 
-import Core.GUI.SwingEX.XPanel;
+import AetheriusEngine.core.gui.*;
 import Core.SFX.audioRepository;
 import Core.gameSettings;
 import Core.starClass;

@@ -1,11 +1,11 @@
 package Core.GUI.Design;
 
-import Core.GUI.SwingEX.*;
 import Core.GUI.gfxRepository;
 import Core.SFX.audioRepository;
 import Core.events.EMouseListener;
 import Core.events.eventBuilder;
 import Core.gameSettings;
+import AetheriusEngine.core.gui.*;
 
 import javax.swing.*;
 import java.awt.*;

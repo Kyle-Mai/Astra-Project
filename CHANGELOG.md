@@ -826,3 +826,9 @@ Everything from this point on is post-submission.
 - Added a few new (mostly test) tech tree options.
 
 - Added the third tech tree line to the tech tree screen.
+
+**AUGUST 12 2017** (U2.0 Dev-Build) (1)
+
+- Added the Aetherius Engine into the project.
+
+- Converted a large chunk of the game (namely UI and audio) to run off of my self-proclaimed 'engine', which should drastically reduce the amount of work required. Still needs quite a bit of work done to fully convert.

@@ -1,8 +1,8 @@
 package Core.GUI;
 
+import AetheriusEngine.core.gui.*;
 import Core.planetCore;
 import Core.starCore;
-import com.sun.javafx.tk.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,11 +10,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -38,7 +36,7 @@ public class gfxRepository implements gfxConstants {
 
     private final static File imageFolder = new File(System.getProperty("user.dir") + "/src/Core/GUI");
 
-    public static final String gameVersion = "U1.1 Dev-Build";
+    public static final String gameVersion = "U2.0 Dev-Build";
 
     public static Font txtSubtitle;
     public static Font txtItalSubtitle;
@@ -179,6 +177,8 @@ public class gfxRepository implements gfxConstants {
     public static BufferedImage mineralsIconSmall;
     public static BufferedImage energyIconSmall;
 
+    public static XSpriteMap spriteExitButton;
+
     public static BufferedImage shipHighlight;
 
     public static Icon loadingIcon;
@@ -193,6 +193,12 @@ public class gfxRepository implements gfxConstants {
 
         try {
             mainBackground = ImageIO.read(new File(imageFolder + "/Resources/background/launcher.png"));
+
+            //XGreyscale greybg = new XGreyscale();
+            //greybg.setSource(mainBackground);
+            //greybg.convertImage();
+            //mainBackground = greybg.getGreyscaledImage();
+
             loadingScreenBGList.add(ImageIO.read(new File(imageFolder + "/Resources/background/loadingBG.jpg")));
             closeButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_close.png"));
             settingsButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_settings.png"));
@@ -202,6 +208,10 @@ public class gfxRepository implements gfxConstants {
             rejectButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_reject.png"));
             wideButton = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large.png"));
             wideButton2 = ImageIO.read(new File(imageFolder + "/Resources/ui/button_large2.png"));
+
+            spriteExitButton = new XSpriteMap();
+            spriteExitButton.setSource(ImageIO.read(new File(imageFolder + "/Resources/ui/button_close.png")));
+            spriteExitButton.createSprites(false, XSpriteConstants.HORIZONTAL_MAP, 3);
 
             Thread temp = new Thread() { //creates a temporary thread to continue loading non-essential images in the background
                 public void run() {
@@ -221,8 +231,9 @@ public class gfxRepository implements gfxConstants {
                         System.out.println("GFX background images finished loading successfully.");
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        interrupt();
                     }
-                    interrupt();
                 }
             };
             temp.start();

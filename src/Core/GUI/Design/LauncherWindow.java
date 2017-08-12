@@ -1,12 +1,12 @@
 package Core.GUI.Design;
 
-import Core.GUI.SwingEX.*;
 import Core.GUI.gfxConstants;
 import Core.GUI.gfxRepository;
 import Core.GUI.screenScale;
 import Core.SFX.audioRepository;
 import Core.gameSettings;
 import Core.xmlLoader;
+import AetheriusEngine.core.gui.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +65,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
         lblVersion.setVisible(true);
 
         //load exit button
-        XButton btnExit = new XButton(gfxRepository.closeButton, SwingConstants.LEFT);
+        XButton btnExit = new XButton(gfxRepository.spriteExitButton.get(0), SwingConstants.CENTER);
 
         this.add(btnExit, MODAL_LAYER);
         btnExit.setBounds(this.getWidth() - 58, 6, 38, 38);
@@ -76,30 +76,35 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                source.setIcon(gfxRepository.spriteExitButton.get(2), SwingConstants.CENTER);
                 audioRepository.buttonClick();
-                gameSettings.ui.window.closeProgram();
+                source.refresh();
+                gameSettings.ui.window.close();
             }
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
+                source.setIcon(gfxRepository.spriteExitButton.get(2), SwingConstants.CENTER);
+                source.refresh();
             }
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
+                source.setIcon(gfxRepository.spriteExitButton.get(0), SwingConstants.CENTER);
+                source.refresh();
             }
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
+                source.setIcon(gfxRepository.spriteExitButton.get(1), SwingConstants.CENTER);
                 audioRepository.menuTab();
+                source.refresh();
             }
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
+                source.setIcon(gfxRepository.spriteExitButton.get(0), SwingConstants.CENTER);
+                source.refresh();
             }
         });
 
@@ -119,17 +124,16 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
             public void mouseClicked(MouseEvent mouseEvent) {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
-                source.toggleState();
                 audioRepository.buttonClick();
+                source.toggleState();
 
-                if (source.isState()) {
+                if (source.getCurrentState()) {
                     source.setIcon(new ImageIcon(gfxRepository.muteButton));
                     audioRepository.muteMusic();
                 } else {
                     source.setIcon(new ImageIcon(gfxRepository.audioButton));
                     audioRepository.setMusicVolume();
                 }
-
             }
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -152,6 +156,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
                 source = (XButton)mouseEvent.getSource();
                 source.setHorizontalAlignment(SwingConstants.LEFT);
             }
+
         });
 
         //load settings button
@@ -333,7 +338,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
                                 source.setHorizontalAlignment(SwingConstants.LEFT);
                                 source.toggleState();
 
-                                if (source.isState()) {
+                                if (source.getCurrentState()) {
                                     source.setIcon(new ImageIcon(gfxRepository.acceptButton));
                                     audioRepository.buttonConfirm();
                                     source.setToolTipText("Disable");
@@ -342,7 +347,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
                                     audioRepository.buttonDisable();
                                     source.setToolTipText("Enable");
                                 }
-                                xmlLoader.changeExpansionInfo(getIDValue(), source.isState());
+                                xmlLoader.changeExpansionInfo(getIDValue(), source.getCurrentState());
                                 pnlContent.refresh();
                             }
                             @Override
@@ -411,7 +416,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
                                 source.setHorizontalAlignment(SwingConstants.LEFT);
                                 source.toggleState();
 
-                                if (source.isState()) {
+                                if (source.getCurrentState()) {
                                     source.setIcon(new ImageIcon(gfxRepository.acceptButton));
                                     audioRepository.buttonConfirm();
                                     source.setToolTipText("Disable");
@@ -420,7 +425,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
                                     audioRepository.buttonDisable();
                                     source.setToolTipText("Enable");
                                 }
-                                xmlLoader.changeModInfo(getIDValue(), source.isState());
+                                xmlLoader.changeModInfo(getIDValue(), source.getCurrentState());
                                 pnlContent.refresh();
                             }
                             @Override

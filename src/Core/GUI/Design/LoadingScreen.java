@@ -1,7 +1,6 @@
 package Core.GUI.Design;
 
-import Core.GUI.SwingEX.XLabel;
-import Core.GUI.SwingEX.XLoader;
+import AetheriusEngine.core.gui.*;
 import Core.GUI.gfxRepository;
 import Core.gameSettings;
 

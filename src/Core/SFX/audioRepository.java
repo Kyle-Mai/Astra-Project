@@ -1,6 +1,13 @@
 package Core.SFX;
 
+import AetheriusEngine.core.sfx.AudioPlayer;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * KM
@@ -10,6 +17,7 @@ import java.util.Random;
 
 public class audioRepository {
 
+    private static ExecutorService audioExecutor = Executors.newCachedThreadPool();
 
     public static int uiVolume = 60;
     public static int musicVolume = 50;
@@ -18,86 +26,132 @@ public class audioRepository {
     public static int voiceVolume = 70;
     public static int effectsVolume = 50;
 
+    private static AudioPlayer ambianceOther = null;
+
     private static audioCore music;
     private static audioCore ambiance;
-    private static audioCore ambiance_other = null;
     private static audioCore tutorial = null;
 
     /** UI actions **/
 
     public static void buttonClick() {
-        audioCore buttonPress = new audioCore("/ui/menu_press.wav", uiVolume, 0, 400);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_press.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void buttonSelect() {
-        audioCore buttonPress = new audioCore("/ui/menu_select.wav", uiVolume, 0, 400);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_select.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void buttonDisable() {
-        audioCore buttonPress = new audioCore("/ui/menu_close.wav", uiVolume, 0, 500);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_close.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void menuTab() {
-        audioCore buttonPress = new audioCore("/ui/menu_tab.wav", uiVolume, 0, 120);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_tab.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void menuTab2() {
-        audioCore buttonPress = new audioCore("/ui/menu_tab2.wav", uiVolume, 0, 100);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_tab2.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void buttonConfirm() {
-        audioCore buttonPress = new audioCore("/ui/menu_confirm.wav", uiVolume, 0, 500);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_confirm.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void buttonHighlight() {
-        audioCore buttonPress = new audioCore("/ui/menu_highlight.wav", uiVolume, 0, 200);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("menu_highlight.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void gamePaused() {
-        audioCore buttonPress = new audioCore("/ui/pause.wav", uiVolume, 0, 350);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("pause.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void gameSlower() {
-        audioCore buttonPress = new audioCore("/ui/time_slow.wav", uiVolume, 0, 300);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("time_slow.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void gameFaster() {
-        audioCore buttonPress = new audioCore("/ui/time_speed.wav", uiVolume, 0, 300);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("time_speed.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void gameInvalid() {
-        audioCore buttonPress = new audioCore("/ui/invalid_action.wav", uiVolume, 0, 300);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("invalid_action.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void repairNotification() {
-        audioCore buttonPress = new audioCore("/ui/notification_repair.wav", uiVolume, 0, 1500);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("notification_repair.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void startResearch() {
-        audioCore buttonPress = new audioCore("/ui/start_research_01.wav", uiVolume, 0, 1000);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("start_research_01.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void constructShip() {
-        audioCore buttonPress = new audioCore("/ui/queuing_ship_01.wav", voiceVolume, 0, 1600);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("queuing_ship_01.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void constructionComplete() {
-        audioCore buttonPress = new audioCore("/ui/construction_complete.wav", uiVolume, 0, 1800);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ui/"));
+        effect.addAudioFromFolder("construction_complete.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     /** Music **/
@@ -134,7 +188,7 @@ public class audioRepository {
     }
 
     public static void ambianceMainGame() {
-        ambiance = new audioCore("/ambiance/space_ambient01.wav", audioRepository.ambianceVolume, true);
+        ambiance = new audioCore("/ambiance/space_ambient01.wav", ambianceVolume, true);
         ambiance.start();
     }
 
@@ -142,81 +196,92 @@ public class audioRepository {
 
         int toplay = planetID - 1999;
 
-        if (ambiance_other != null) {
-            ambiance_other.stopAudio();
-            ambiance_other.interrupt();
+        if (ambianceOther != null) {
+            ambianceOther.dump();
+        } else {
+            ambianceOther = new AudioPlayer();
         }
+
+        ambianceOther.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ambiance/"));
 
         switch (toplay) {
             case 1:
-                ambiance_other = new audioCore("/ambiance/continental_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("continental_planet.wav");
                 break;
             case 2:
-                ambiance_other = new audioCore("/ambiance/ocean_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("ocean_planet.wav");
                 break;
             case 3:
-                ambiance_other = new audioCore("/ambiance/ocean_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("ocean_planet.wav");
                 break;
             case 4:
-                ambiance_other = new audioCore("/ambiance/alpine_planet.wav", audioRepository.ambianceVolume, 0, 6600);
+                ambianceOther.addAudioFromFolder("alpine_planet.wav");
                 break;
             case 5:
-                ambiance_other = new audioCore("/ambiance/tundra_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("tundra_planet.wav");
                 break;
             case 6:
-                ambiance_other = new audioCore("/ambiance/barren_cold.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("barren_cold.wav");
                 break;
             case 7:
-                ambiance_other = new audioCore("/ambiance/desert_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("desert_planet.wav");
                 break;
             case 8:
-                ambiance_other = new audioCore("/ambiance/tropical_planet.wav", audioRepository.ambianceVolume, 0, 2400);
+                ambianceOther.addAudioFromFolder("tropical_planet.wav");
                 break;
             case 9:
-                ambiance_other = new audioCore("/ambiance/tropical_planet.wav", audioRepository.ambianceVolume, 0, 2400);
+                ambianceOther.addAudioFromFolder("tropical_planet.wav");
                 break;
             case 10:
-                ambiance_other = new audioCore("/ambiance/toxic_planet.wav", audioRepository.ambianceVolume, 0, 2700);
+                ambianceOther.addAudioFromFolder("toxic_planet.wav");
                 break;
             case 11:
-                ambiance_other = new audioCore("/ambiance/frozen_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("frozen_planet.wav");
                 break;
             case 12:
-                ambiance_other = new audioCore("/ambiance/molten_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("molten_planet.wav");
                 break;
             case 13:
-                ambiance_other = new audioCore("/ambiance/storm_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("storm_planet.wav");
                 break;
             case 14:
-                ambiance_other = new audioCore("/ambiance/gas_giant.wav", audioRepository.ambianceVolume, 0, 3600);
+                ambianceOther.addAudioFromFolder("gas_giant.wav");
                 break;
             case 16:
-                ambiance_other = new audioCore("/ambiance/nuked_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("nuked_planet.wav");
                 break;
             case 17:
-                ambiance_other = new audioCore("/ambiance/desert_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("desert_planet.wav");
                 break;
             case 18:
-                ambiance_other = new audioCore("/ambiance/radiation_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("radiation_planet.wav");
                 break;
             case 21:
-                ambiance_other = new audioCore("/ambiance/gaia_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("gaia_planet.wav");
                 break;
             case 22:
-                ambiance_other = new audioCore("/ambiance/gas_giant.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("gas_giant.wav");
                 break;
             default:
-                ambiance_other = new audioCore("/ambiance/barren_planet.wav", audioRepository.ambianceVolume, 0, 2600);
+                ambianceOther.addAudioFromFolder("barren_planet.wav");
                 break;
         }
-
-        ambiance_other.start();
+        ambianceOther.setVolume(ambianceVolume);
+        audioExecutor.submit(ambianceOther);
     }
 
     public static void starSound() {
-        ambiance_other = new audioCore("/ambiance/solar_fusion_01.wav", audioRepository.ambianceVolume, 0, 5500);
-        ambiance_other.start();
+        if (ambianceOther != null) {
+            ambianceOther.dump();
+        } else {
+            ambianceOther = new AudioPlayer();
+        }
 
+        ambianceOther.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ambiance/"));
+
+        ambianceOther.addAudioFromFolder("solar_fusion_01.wav");
+        ambianceOther.setVolume(ambianceVolume);
+        audioExecutor.submit(ambianceOther);
     }
 
     /** ship audio **/

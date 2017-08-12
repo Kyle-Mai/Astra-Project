@@ -1,10 +1,7 @@
 package Core.GUI.Design;
 
 import Core.Craft.craftCore;
-import Core.GUI.SwingEX.XButton;
-import Core.GUI.SwingEX.XLabel;
-import Core.GUI.SwingEX.XMouseListener;
-import Core.GUI.SwingEX.XPanel;
+import AetheriusEngine.core.gui.*;
 import Core.GUI.gfxRepository;
 import Core.SFX.audioRepository;
 import Core.gameSettings;

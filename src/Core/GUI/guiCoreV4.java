@@ -3,17 +3,12 @@ package Core.GUI;
 //import all relevant stuff
 import Core.*;
 import Core.Craft.craftBuilder;
-import Core.Craft.craftCore;
 import Core.GUI.Design.*;
-import Core.GUI.SwingEX.*;
 import Core.Player.SaveDirectoryConstants;
 import Core.Player.playerData;
 import Core.SFX.audioRepository;
-import Core.events.EMouseListener;
-import Core.events.eventBuilder;
 import Core.events.eventCoreV2;
 import Core.techTree.techCoreV2;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,16 +16,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
+import AetheriusEngine.core.gui.*;
 
 /**
  KM
@@ -195,14 +187,14 @@ public class guiCoreV4 implements gfxConstants {
 
         XLoader loadMainContent = new XLoader() {
             @Override
-            protected void loadOperation(int percent) {
+            protected void loadOperation(int i) {
                 Random r = new Random();
                 try {
                     Thread.sleep(80 + r.nextInt(100));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                switch(percent) {
+                switch(i) {
                     case 1:
                         gfxRepository.loadMainGFX();
                         break;
@@ -514,7 +506,7 @@ public class guiCoreV4 implements gfxConstants {
                 audioRepository.buttonClick();
                 source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
-                window.closeProgram();
+                window.close();
             }
 
             @Override
@@ -707,7 +699,8 @@ public class guiCoreV4 implements gfxConstants {
         XButtonCustom btcBack = new XButtonCustom(gfxRepository.button435_80, SwingConstants.LEFT);
         btcBack.setText("Back", gfxRepository.txtButtonLarge, gfxRepository.clrText);
         btcBack.setBounds(30, settingsMenu.getHeight() - 80, 435, 80);
-        btcBack.placeOn(settingsMenu);
+        settingsMenu.add(btcBack);
+        btcBack.setVisible(true);
         btcBack.addMouseListener(new XMouseListener() {
             XButtonCustom source;
 
@@ -758,7 +751,8 @@ public class guiCoreV4 implements gfxConstants {
         XButtonCustom btcLaunchNew = new XButtonCustom(gfxRepository.button435_80, SwingConstants.LEFT);
         btcLaunchNew.setText("Start", gfxRepository.txtButtonLarge, gfxRepository.clrText);
         btcLaunchNew.setBounds(btcBack.getX(), btcBack.getY() - 85, btcBack.getWidth(), btcBack.getHeight());
-        btcLaunchNew.placeOn(settingsMenu);
+        settingsMenu.add(btcLaunchNew);
+        btcLaunchNew.setVisible(true);
         btcLaunchNew.addMouseListener(new XMouseListener() {
             XButtonCustom source;
 
@@ -882,7 +876,7 @@ public class guiCoreV4 implements gfxConstants {
         hshResources.put(new Integer(gameSettings.resourceAbundanceAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
         sldResources.setLabelTable(hshResources);
         sldResources.setFont(gfxRepository.txtTiny);
-        sldResources.setForeground(gfxRepository.clrText);
+        sldResources.setForeground(clrText);
         sldResources.setPreferredSize(new Dimension(settingsMenu.getWidth() - 20, 50));
         sldResources.addChangeListener(new ChangeListener() { //adds a listener to keep track of the slider's value and translate it to the gameSettings class
             @Override
@@ -1764,9 +1758,9 @@ public class guiCoreV4 implements gfxConstants {
                 //source.setHorizontalAlignment(SwingConstants.RIGHT);
                 window.refresh();
 
-                if (source.isState()) {
+                if (source.getCurrentState()) {
                     audioRepository.buttonConfirm();
-                    window.closeProgram();
+                    window.close();
                 } else {
                     audioRepository.buttonDisable();
                     source.setText("Are you sure?");
@@ -2281,7 +2275,7 @@ public class guiCoreV4 implements gfxConstants {
                 XButton btnBuildShip = new XButton(gfxRepository.techHighlight, SwingConstants.LEFT);
                 pnlShip.add(btnBuildShip);
                 btnBuildShip.setBounds(0, 0, pnlShip.getWidth(), pnlShip.getHeight());
-                btnBuildShip.scaleImage(gfxRepository.techHighlight);
+                btnBuildShip.scaleImage(gfxRepository.techHighlight, XConstants.SCALE_FULL);
                 btnBuildShip.setVisible(true);
                 btnBuildShip.addMouseListener(new XMouseListener(i) {
                     XButton source;
@@ -2812,13 +2806,13 @@ public class guiCoreV4 implements gfxConstants {
                 XButton btnSelect = new XButton(gfxRepository.techHighlight, SwingConstants.LEFT);
                 pnlTechOption.add(btnSelect);
                 btnSelect.setBounds(0, 0, pnlTechOption.getWidth(), pnlTechOption.getHeight());
-                btnSelect.scaleImage(gfxRepository.techHighlight);
+                btnSelect.scaleImage(gfxRepository.techHighlight, XConstants.SCALE_FULL);
                 btnSelect.setIdentifier(i);
                 if (gameSettings.techtree.currentResearch_1 == gameSettings.techtree.techTree.get(i)) { //if this is the current tech, show it accordingly
                     btnSelect.toggleState();
                     btnSelect.setHorizontalAlignment(SwingConstants.RIGHT);
                 }
-                if (!btnSelect.isState()) { //if this isn't the currently selected tech, enable the button's listener
+                if (!btnSelect.getCurrentState()) { //if this isn't the currently selected tech, enable the button's listener
                     btnSelect.addMouseListener(new XMouseListener(tech_line) {
                         XButton source;
                         @Override
