@@ -219,10 +219,8 @@ public class AudioPlayer extends LinkedList<Media> implements Runnable {
     }
 
     public void dispose() { //attempts to clear and shut down the audio player.
-        audioFile.clear();
-        clear();
+        dump();
         if (mediaPlayer != null) {
-            stop();
             mediaPlayer.dispose();
         }
         fxPanel = null;
@@ -230,6 +228,8 @@ public class AudioPlayer extends LinkedList<Media> implements Runnable {
     }
 
     public void dump() {
+        loop = false;
+        shuffle = false;
         audioFile.clear();
         clear();
         if (mediaPlayer != null) {

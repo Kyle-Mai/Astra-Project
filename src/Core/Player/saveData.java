@@ -42,7 +42,7 @@ public class saveData implements DataConstants, SaveDirectoryConstants {
 
         if (!SAVEDIRECTORY.exists()) { //if the saves folder is compromised, create a new one
             SAVEDIRECTORY.mkdir();
-            System.out.println("[SD](create) Unexpected token - Save directory not found. Creating...");
+            System.err.println("[SD](create) Unexpected token - Save directory not found. Creating...");
         }
 
         if (!validate()) { //check to ensure we don't overwrite an existing save
@@ -51,7 +51,7 @@ public class saveData implements DataConstants, SaveDirectoryConstants {
                 System.out.println("[SD](create) New save folder created successfully."); //if it is created successfully, output accordingly
             }
         } else {
-            System.out.println("[SD](create) Unexpected Error - User directory already exists.");
+            System.err.println("[SD](create) Unexpected Error - User directory already exists.");
         }
     }
 

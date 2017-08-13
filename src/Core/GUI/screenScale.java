@@ -14,11 +14,11 @@ import java.awt.*;
 public enum screenScale {
  
     //Widescreen 16:9 monitor resolutions
-    W_WXGA (1280, 720, true),
-    W_HD (1600, 900, true),
-    W_1KHD (1920, 1080, true),
-    W_2KHD (2560, 1440, true),
     W_4KHD (3840, 2160, true),
+    W_2KHD (2560, 1440, true),
+    W_1KHD (1920, 1080, true),
+    W_HD (1600, 900, true),
+    W_WXGA (1280, 720, true),
     //Standard 4:3 monitor resolutions
     S_XGA (1024, 768, true),
     S_XGAP (1152, 864, true),
@@ -48,7 +48,7 @@ public enum screenScale {
 
     public static void setScreenSize(Dimension newSize) {
         if (newSize.getWidth() > monitorSize.getWidth() || newSize.getHeight() > monitorSize.getHeight()) {
-            System.out.println("Unexpected Error - Monitor is not large enough to support this resolution.");
+            System.err.println("Unexpected Error - Monitor is not large enough to support this resolution.");
         } else {
             //no incompatibilities, proceed
             screenSize = newSize;

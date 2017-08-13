@@ -1,6 +1,7 @@
 package Core.Craft;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * KM
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class craftBuilder {
 
-    public transient ArrayList<craftCore>  shipStorage = new ArrayList<>();
+    public transient List<craftCore> shipStorage = new LinkedList<>();
 
     public craftCore s_trailblazer;
 

@@ -27,10 +27,9 @@ public class audioRepository {
     public static int effectsVolume = 50;
 
     private static AudioPlayer ambianceOther = null;
-
-    private static audioCore music;
-    private static audioCore ambiance;
-    private static audioCore tutorial = null;
+    private static AudioPlayer ambianceMain;
+    private static AudioPlayer voiceTutorial = null;
+    private static AudioPlayer musicPlayer;
 
     /** UI actions **/
 
@@ -157,39 +156,61 @@ public class audioRepository {
     /** Music **/
 
     public static void setMusicVolume() { //changes the volume of the music
-        music.setVolume(musicVolume);
+        musicPlayer.setVolume(musicVolume);
     }
 
-    public static void muteMusic() { music.setVolume(mute); }
+    public static void muteMusic() { musicPlayer.setVolume(mute); }
 
     public static void musicTitleScreen() { //plays the title screen music
-        music.stopAudio();
-        music.interrupt();
-        music = new audioCore("/music/towards_utopia.mp3", musicVolume, true);
-        music.start();
+        musicPlayer.dump();
+        musicPlayer.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/music/"));
+        musicPlayer.addAudioFromFolder("towards_utopia.mp3");
+        musicPlayer.setVolume(musicVolume);
+        musicPlayer.loop();
+        audioExecutor.submit(musicPlayer);
     }
 
     public static void musicLauncherScreen() { //plays the launcher screen music
-        music = new audioCore("/music/new_dawn.mp3", musicVolume, true);
-        music.start();
+        musicPlayer = new AudioPlayer();
+        musicPlayer.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/music/"));
+        musicPlayer.addAudioFromFolder("new_dawn.mp3");
+        musicPlayer.setVolume(musicVolume);
+        musicPlayer.loop();
+        audioExecutor.submit(musicPlayer);
     }
 
     public static void musicShuffle() {
-        music.stopAudio();
-        music.interrupt();
-        music = new audioCore(musicVolume, true);
-        music.start();
+        musicPlayer.dump();
+        musicPlayer.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/music/"));
+        musicPlayer.addAudioFromFolder("imperial_fleet.mp3");
+        musicPlayer.addAudioFromFolder("new_dawn.mp3");
+        musicPlayer.addAudioFromFolder("in_search_of_life.mp3");
+        musicPlayer.addAudioFromFolder("mercedes_romero.mp3");
+        musicPlayer.addAudioFromFolder("spatial_lullaby.mp3");
+        musicPlayer.addAudioFromFolder("towards_utopia.mp3");
+        musicPlayer.addAudioFromFolder("to_the_ends_of_the_galaxy.mp3");
+        musicPlayer.addAudioFromFolder("gravitational_constant.mp3");
+        musicPlayer.addAudioFromFolder("assembling_the_fleet.mp3");
+        musicPlayer.addAudioFromFolder("cradle_of_the_galaxy.mp3");
+        musicPlayer.setVolume(musicVolume);
+        musicPlayer.setShuffle(true);
+        musicPlayer.loop();
+        audioExecutor.submit(musicPlayer);
     }
 
     /** Ambiance **/
 
     public static void setAmbianceVolume() {
-        ambiance.setVolume(ambianceVolume);
+        ambianceMain.setVolume(ambianceVolume);
     }
 
     public static void ambianceMainGame() {
-        ambiance = new audioCore("/ambiance/space_ambient01.wav", ambianceVolume, true);
-        ambiance.start();
+        ambianceMain = new AudioPlayer();
+        ambianceMain.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ambiance/"));
+        ambianceMain.addAudioFromFolder("space_ambient01.wav");
+        ambianceMain.setVolume(ambianceVolume);
+        ambianceMain.loop();
+        audioExecutor.submit(ambianceMain);
     }
 
     public static void planetAmbiance(int planetID) {
@@ -287,92 +308,124 @@ public class audioRepository {
     /** ship audio **/
 
     public static void shipScienceSelect() {
-        audioCore buttonPress = new audioCore("/ship/select_science.wav", uiVolume, 0, 1500);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ship/"));
+        effect.addAudioFromFolder("select_science.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void shipScienceMove() {
-        audioCore buttonPress = new audioCore("/ship/move_science.wav", uiVolume, 0, 1500);
-        buttonPress.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/ship/"));
+        effect.addAudioFromFolder("move_science.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
     /** Advisor audio **/
 
     public static void tutorial_01() {
-        if (tutorial != null) { //stop tutorial audio thread if it's playing already
-            tutorial.interrupt();
+        if (voiceTutorial != null) { //stop tutorial audio thread if it's playing already
+            voiceTutorial.dump();
+        } else {
+            voiceTutorial = new AudioPlayer();
         }
-        tutorial = new audioCore("/advisor/tutorial_greeting.wav", voiceVolume);
-        tutorial.start();
+        voiceTutorial.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/advisor/"));
+        voiceTutorial.setVolume(voiceVolume);
+        voiceTutorial.addAudioFromFolder("tutorial_greeting.wav");
+        audioExecutor.submit(voiceTutorial);
     }
 
     public static void tutorial_02() {
-        if (tutorial != null) { //stop tutorial audio thread if it's playing already
-            tutorial.interrupt();
+        if (voiceTutorial != null) { //stop tutorial audio thread if it's playing already
+            voiceTutorial.dump();
+        } else {
+            voiceTutorial = new AudioPlayer();
         }
-        tutorial = new audioCore("/advisor/tut_survey_intro_01.wav", voiceVolume);
-        tutorial.start();
+        voiceTutorial.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/advisor/"));
+        voiceTutorial.setVolume(voiceVolume);
+        voiceTutorial.addAudioFromFolder("tut_survey_intro_01.wav");
+        audioExecutor.submit(voiceTutorial);
     }
 
     public static void tutorial_03() {
-        if (tutorial != null) { //stop tutorial audio thread if it's playing already
-            tutorial.interrupt();
+        if (voiceTutorial != null) { //stop tutorial audio thread if it's playing already
+            voiceTutorial.dump();
+        } else {
+            voiceTutorial = new AudioPlayer();
         }
-        tutorial = new audioCore("/advisor/tut_technologies_intro_01.wav", voiceVolume);
-        tutorial.start();
+        voiceTutorial.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/advisor/"));
+        voiceTutorial.setVolume(voiceVolume);
+        voiceTutorial.addAudioFromFolder("tut_technologies_intro_01.wav");
+        audioExecutor.submit(voiceTutorial);
     }
 
     public static void tutorial_04() {
-        if (tutorial != null) { //stop tutorial audio thread if it's playing already
-            tutorial.interrupt();
+        if (voiceTutorial != null) { //stop tutorial audio thread if it's playing already
+            voiceTutorial.dump();
+        } else {
+            voiceTutorial = new AudioPlayer();
         }
-        tutorial = new audioCore("/advisor/tut_technologies_success_01.wav", voiceVolume);
-        tutorial.start();
+        voiceTutorial.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/advisor/"));
+        voiceTutorial.setVolume(voiceVolume);
+        voiceTutorial.addAudioFromFolder("tut_technologies_success_01.wav");
+        audioExecutor.submit(voiceTutorial);
     }
 
     public static void tutorial_off() {
         Random r = new Random();
         int opt = 1 + r.nextInt(6); //pick the audio to play
 
-        if (tutorial != null) { //stop tutorial audio thread if it's playing already
-            tutorial.interrupt();
+        if (voiceTutorial != null) { //stop tutorial audio thread if it's playing already
+            voiceTutorial.dump();
+        } else {
+            voiceTutorial = new AudioPlayer();
         }
+
+        voiceTutorial.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/advisor/"));
 
         switch (opt) {
             case 1:
-                tutorial = new audioCore("/advisor/no_tut_advior_01.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_01.wav");
                 break;
             case 2:
-                tutorial = new audioCore("/advisor/no_tut_advior_02.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_02.wav");
                 break;
             case 3:
-                tutorial = new audioCore("/advisor/no_tut_advior_03.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_03.wav");
                 break;
             case 4:
-                tutorial = new audioCore("/advisor/no_tut_advior_04.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_04.wav");
                 break;
             case 5:
-                tutorial = new audioCore("/advisor/no_tut_advior_05.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_05.wav");
                 break;
             case 6:
-                tutorial = new audioCore("/advisor/no_tut_advior_06.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_06.wav");
                 break;
             default:
-                tutorial = new audioCore("/advisor/no_tut_advior_07.wav", voiceVolume, 0, 2200);
+                voiceTutorial.addAudioFromFolder("no_tut_advior_07.wav");
                 break;
         }
-
-        tutorial.start();
+        voiceTutorial.setVolume(voiceVolume);
+        audioExecutor.submit(voiceTutorial);
     }
 
     public static void announce_researchComplete() {
-        audioCore announcer = new audioCore("/advisor/research_complete.wav", voiceVolume, 0, 2000);
-        announcer.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/advisor/"));
+        effect.addAudioFromFolder("research_complete.wav");
+        effect.setVolume(voiceVolume);
+        audioExecutor.submit(effect);
     }
 
     public static void event_conversation() {
-        audioCore event = new audioCore("/event/event_conversation.wav", uiVolume, 0, 5000);
-        event.start();
+        AudioPlayer effect = new AudioPlayer();
+        effect.setAudioFolder(new File(System.getProperty("user.dir") + "/src/Core/SFX/Resources/event/"));
+        effect.addAudioFromFolder("event_conversation.wav");
+        effect.setVolume(uiVolume);
+        audioExecutor.submit(effect);
     }
 
 

@@ -829,6 +829,8 @@ Everything from this point on is post-submission.
 
 **AUGUST 12 2017** (U2.0 Dev-Build) (1)
 
+- Switched project over to using Java 8.
+
 - Added the Aetherius Engine into the project.
 
 - Converted a large chunk of the game (namely UI and audio) to run off of my self-proclaimed 'engine', which should drastically reduce the amount of work required. Still needs quite a bit of work done to fully convert.

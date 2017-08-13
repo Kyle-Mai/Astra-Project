@@ -3,7 +3,6 @@ package Core.Craft;
 import AetheriusEngine.core.gui.*;
 import Core.SFX.audioRepository;
 import Core.gameSettings;
-import Core.starClass;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

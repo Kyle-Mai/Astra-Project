@@ -154,7 +154,7 @@ public class EventWindow extends XPanel {
             e.printStackTrace();
             main.removeAll();
             this.setVisible(false);
-            System.out.println("[EVT-WIN](loadEvent) Error occurred while loading, aborting process - " + e.getMessage());
+            System.err.println("[EVT-WIN](loadEvent) Error occurred while loading, aborting process - " + e.getMessage());
         }
     }
 

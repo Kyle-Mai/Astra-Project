@@ -1,8 +1,6 @@
 package AetheriusEngine.core.locale;
 
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.util.*;
 
 /*
 Lolita's Revenge
@@ -11,7 +9,7 @@ July 07 2017
 Handles lists of strings that can be pulled from to generate something like a name.
 */
 
-public class NameList extends ArrayList<String> {
+public class NameList extends LinkedList<String> {
 
     /*------------------------------------------------------------------------------------------------------------------
      Variables.
@@ -20,7 +18,7 @@ public class NameList extends ArrayList<String> {
 
     private boolean useDuplicates = false; //Whether or not the NameList will use the same strings multiple times.
     private boolean storeUsed = true; //Whether or not the NameList will store the used strings in the 'used' ArrayList.
-    private ArrayList<String> used = new ArrayList<>();
+    private List<String> used = new LinkedList<>();
 
     /*------------------------------------------------------------------------------------------------------------------
      Constructors.
