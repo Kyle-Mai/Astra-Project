@@ -834,3 +834,9 @@ Everything from this point on is post-submission.
 - Added the Aetherius Engine into the project.
 
 - Converted a large chunk of the game (namely UI and audio) to run off of my self-proclaimed 'engine', which should drastically reduce the amount of work required. Still needs quite a bit of work done to fully convert.
+
+**AUGUST 13 2017** (U2.0 Dev-Build) (1)
+
+- Converted old hardcoded name list function into the NameList class.
+
+- Slightly improved the NameList class's performance by switching it to use Collections.addAll() instead of for loops when adding information. Should be a little more efficient now.

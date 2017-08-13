@@ -1,8 +1,11 @@
 package Core;
 
+import AetheriusEngine.core.locale.NameList;
+
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 /**
@@ -35,7 +38,7 @@ public class starCore {
     private final double bolometricEarthConst = 4.72; //bolometric constant for Earth
     private final int binaryChance = 56; //Chance for a star to be a part of a binary system (2 stars) Measured as 1 = 0.1%.
 
-    private final String[] STARS = {"Aleph", "Angels", "Ayin", "Abaddon's Demesne", "Alpha Hydri", "Beldrish", "Antak Rham", "Boltaran", "Debari", "Fia Nita", "Hell's Maw", "Jeldari", "Vielinger", "Light's End", "Makrabi", "Miiran", "Orkam Fung",
+    private NameList nameList = new NameList("Aleph", "Angels", "Ayin", "Abaddon's Demesne", "Alpha Hydri", "Beldrish", "Antak Rham", "Boltaran", "Debari", "Fia Nita", "Hell's Maw", "Jeldari", "Vielinger", "Light's End", "Makrabi", "Miiran", "Orkam Fung",
             "Oskian", "Pralaxs", "Ryl Somot", "Sigma Draconis", "Omicron Persei", "War", "Achernar", "Ascella", "Athyr", "Ether", "Azaleh", "Avalon", "Baltris", "Bastion", "Belgium", "Bivham", "Bythia", "Braum",
             "Capella", "Cador", "Cursa", "Crescim", "Caesar", "Dalphene", "Dere", "Tsun", "Doria", "Duhr", "Durascadon", "Edellimar", "Eieospone", "Eiol", "Elnath", "Evarym", "Estreon", "Faenov", "Falmir",
             "Fafnir", "Sandalphon", "Zadkiel", "Zafkiel", "Camael", "Ezak", "Fedoa", "Feonus", "Fuou", "Gathrica", "Gemma", "Geulea", "Gilmon", "Guram", "Hadar", "Haedus", "Hades", "Hark", "Hazra", "Heka", "Haribas",
@@ -43,7 +46,7 @@ public class starCore {
             "Kuma", "Musashi", "Lazarus", "Lastus", "Mang", "Marath", "Magam", "Medgar", "Matsonia", "Mareid", "Mihil", "Mestros", "Mecura", "Mordor", "Naos", "Nashira", "Nembus", "Navi", "Nuranka", "Nodro", "Nox",
             "Oberon", "Obrium", "Osellus", "Parsax", "Peith", "Pentarym", "Pulcor", "Pyla", "Beowulf", "Runa", "Rixim", "Ridathi", "Regganus", "Roma", "Saia", "Sarack", "Selnoc", "Sosta", "Sterope", "Subra", "Sym",
             "Targon", "Teae", "Taramda", "Tir", "Torovil", "Tyl", "Tyastedore", "Umbra", "Ublion", "Ulysses", "Uldor", "Ulym", "Unatra", "Vega", "Vhallas", "Vokkon", "Vermillion", "Wezen", "Wir", "Wolfen", "Wolgun",
-            "Xema", "Xudra", "Xolton", "Yggdrasil", "Yotla", "Yval", "Zaffa", "Zeldrah", "Zuben", "Zirq", "Zonn", "Nidus", "Halholme", "Pol", "Freyja", "Magnus", "Lira", "Fons", "Los", "Des"}; //name list used for star names
+            "Xema", "Xudra", "Xolton", "Yggdrasil", "Yotla", "Yval", "Zaffa", "Zeldrah", "Zuben", "Zirq", "Zonn", "Nidus", "Halholme", "Pol", "Freyja", "Magnus", "Lira", "Fons", "Los", "Des", "Seraph", "Aldus"); //name list used for star names
 
     /** General variables **/
     //General variables used by the starCore class.
@@ -55,7 +58,7 @@ public class starCore {
     //Used to set the base description, class, etc of the star.
 
     //Sets up an ArrayList (listOfStars) with all of the different declared star types in it. Allows for dynamic addition/removal of different star types as we need to add them. Also organizes all of the star blueprint information in one easy to access place.
-    private static void createStarTypes() {
+    private static void createStarTypes() { //TODO: Maybe make into an Enum?
         listOfStars.add(new starType("Red Giant", 1000, 196, "A large star near the end of its life. Running low on hydrogen, it has begun fusing heavier elements and expanding. Within a few million years, it will blows off it's outer layers and become a white dwarf.", 2800, 4600, true, 0, 0, 5, "/Core/GUI/Resources/portraits/m_star.png", "/Core/GUI/Resources/stars/orange_star.png"));
         listOfStars.add(new starType("Blue Giant", 1001, 109, "These relatively young white or bluish-white main-sequence stars are typically among the most visible to the naked eye. They are large and rotate very quickly, but will eventually evolve into slower and cooler red giants.", 20000, 50000, true, 0, 0, 5, "/Core/GUI/Resources/portraits/a_star.png", "/Core/GUI/Resources/stars/blue_star.png"));
         listOfStars.add(new starType("Yellow Dwarf", 1002, 358, "Main-sequence stars fuse hydrogen for roughly 10 billion years before they expand and become red giants. Although their lifespans are shorter than orange dwarves, worlds inside the habitable zone of a yellow dwarf often enjoy optimal conditions for the development of life.", 5300, 6000, true, 0, 0, 6, "/Core/GUI/Resources/portraits/g_star.png", "/Core/GUI/Resources/stars/yellow_star.png"));
@@ -71,7 +74,6 @@ public class starCore {
         listOfStars.add(new starType("Relativistic Star", 1012, 8, "A fast rotating Neutron star with behavior better explained by general relativity than conventional physics. Relativistic stars allow for efficient studying of gravity and its properties.", 500000, 720000, false, 12, 4, 0, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/neutron_star.png"));
         listOfStars.add(new starType("Magnetar", 1013, 26, "A type of Neutron star with an extremely powerful magnetic field, which powers the continuous emission of high-energy x-rays and gamma rays. Occasional Starquakes rip through the surface of the star, triggering extremely powerful gamma ray flare emissions.", 500000, 720000, false, 12, 4, 3, "/Core/GUI/Resources/portraits/neutron_star.png", "/Core/GUI/Resources/stars/neutron_star.png"));
         listOfStars.add(new starType("Hypergiant", 1014, 17, "A massively large star, thousands of times larger than most main-sequence stars. Hypergiants possess tremendous luminosities and a very high rate of mass loss through stellar wind. When it dies, it will likely collapse in a supernova that forms a Black Hole.", 4000, 35000, false, 0, 0, 7, "/Core/GUI/Resources/portraits/a_star.png", "/Core/GUI/Resources/stars/super_star.png"));
-
     }
 
     //Gets the different spawnChance values of the star blueprints (listOfStars) and organizes them by sum in an ArrayList (spawnWeights).
@@ -158,7 +160,6 @@ public class starCore {
     public static void starPreloader(){
         createStarTypes();
         System.out.println("starCore successfully preloaded.");
-
     }
 
 
@@ -179,28 +180,11 @@ public class starCore {
     //General starCore methods, generally used for constructing the specific star (starClass) from the blueprint (starType).
 
     protected String chooseStarName() {
-        int chooseName;
-
-        while (true) { //TODO: Maybe eventually convert to a for to prevent accidental infinite loops (rare but possible)?
-            Random dice = new Random();
-            chooseName = dice.nextInt(STARS.length);
-
-            //System.out.println("Deciding star name...");
-
-            valid:
-            {
-                if (starNames.size() > 0) {
-                    for (int i = 0; i < starNames.size(); i++) {
-                        if (starNames.size() > 0) {
-                            if (chooseName == starNames.get(i)) { //reroll, we don't want duplicates
-                                break valid;
-                            }
-                        }
-                    }
-                }
-                starNames.add(chooseName);
-                return STARS[chooseName];
-            }
+        try {
+            return nameList.generate();
+        } catch (NoSuchElementException e) { //namelist has run out of names, reuse old ones
+            nameList.reset();
+            return nameList.generate();
         }
     }
 

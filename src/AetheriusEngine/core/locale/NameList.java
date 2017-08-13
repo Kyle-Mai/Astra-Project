@@ -27,9 +27,7 @@ public class NameList extends LinkedList<String> {
 
     public NameList() {}
 
-    public NameList(String... s) {
-        for (String a : s) { add(a); }
-    }
+    public NameList(String... s) { Collections.addAll(this, s); }
 
     public NameList(boolean store, boolean dupl) {
         storeUsed = store;
@@ -37,7 +35,7 @@ public class NameList extends LinkedList<String> {
     }
 
     public NameList(boolean store, boolean dupl, String... s) {
-        for (String a : s) { add(a); }
+        Collections.addAll(this, s);
         storeUsed = store;
         useDuplicates = dupl;
     }
@@ -53,9 +51,7 @@ public class NameList extends LinkedList<String> {
     public boolean isStoringUsed() { return storeUsed; }
     public void setStoreUsed(boolean b) { storeUsed = b; }
 
-    public void add(String... s) {
-        for (String a : s) { add(a); }
-    }
+    public void add(String... s) { Collections.addAll(this, s); }
 
     public String getUsed(int i) { return used.get(i); }
     public int getUsedCount() { return used.size(); }
