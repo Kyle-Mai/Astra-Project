@@ -6,6 +6,7 @@ import Core.gameSettings;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * KM
@@ -92,7 +93,13 @@ public class eventCoreV2 implements eventConstants {
                 });
             }
             @Override public boolean eventTrigger() {
-                return (gameSettings.FTLenabled && gameSettings.currentDate > 120);
+                if (gameSettings.FTLenabled && gameSettings.currentDate > 120) {
+                    Random ran = new Random();
+                    if (ran.nextInt(100) <= 68) { //68% chance to trigger per turn after 120 turns
+                        return true;
+                    }
+                }
+                return false;
             }
             @Override public void eventOpen() {
                 audioRepository.event_conversation();

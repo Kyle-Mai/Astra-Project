@@ -51,16 +51,6 @@ public class guiCoreV4 implements gfxConstants {
 
     public ArrayList<XPanel> shipList = new ArrayList<>();
 
-    private ArrayList<XPanel> pnlExpansions = new ArrayList<>();
-    private ArrayList<XLabel> lblExpansions = new ArrayList<>();
-    private ArrayList<XLabel> lblExpanDesc = new ArrayList<>();
-    private ArrayList<XButton> btnExpanEnable = new ArrayList<>();
-    private ArrayList<XLabel> lblExpanID = new ArrayList<>();
-    private ArrayList<XPanel> pnlMods = new ArrayList<>();
-    private ArrayList<XLabel> lblMods = new ArrayList<>();
-    private ArrayList<XLabel> lblModAuthor = new ArrayList<>();
-    private ArrayList<XButton> btnModEnable = new ArrayList<>();
-
     private Dimension monitorSize = Toolkit.getDefaultToolkit().getScreenSize(); //gets the screen size of the user
     private double screenWidth = monitorSize.getWidth();
     private double screenHeight = monitorSize.getHeight();
@@ -94,7 +84,8 @@ public class guiCoreV4 implements gfxConstants {
 
     public EventWindow eventWindow;
     private LoadingScreen loadingScreen;
-    public CelestialObject celestialObject;
+    private CelestialObject celestialObject;
+    private MainMenu mainMenu;
 
     private XTextImage tmgMinerals;
     private XTextImage tmgEnergy;
@@ -111,10 +102,9 @@ public class guiCoreV4 implements gfxConstants {
     private planetClass currentPlanet;
     private starClass currentStar;
 
-
     private boolean pauseMenuOpen = false;
 
-    private int launcherContentLoaded = 0; //tracks the content on the launcher
+    private TechTreeView techTreeView;
 
 
     /** UI scaling code**/
@@ -148,6 +138,17 @@ public class guiCoreV4 implements gfxConstants {
         window.setVisible(true);
 
     }
+
+    public XFrame getWindow() { return window; }
+
+    public TechTreeView getTechTreeView() { return techTreeView; }
+    public void setTechTreeView(TechTreeView t) { techTreeView = t; }
+
+    public CelestialObject getCelestialObject() { return celestialObject; }
+    public void setCelestialObject(CelestialObject c) { celestialObject = c; }
+
+    public void setPnlPauseMenu(XPanel p) { pnlPauseMenu = p; }
+    public void setPnlOverlay(XPanel p) { pnlOverlay = p; }
 
     public void clearUI() {
         //clears the content off of the UI
@@ -212,8 +213,13 @@ public class guiCoreV4 implements gfxConstants {
 
             @Override
             protected void done() {
-                clearUI();
-                loadMainMenu();
+                layers.removeAll();
+                screen.remove(loadingScreen);
+                mainMenu = new MainMenu();
+                mainMenu.loadMainMenu();
+                layers.add(mainMenu, 3, 1);
+                mainMenu.setVisible(true);
+                window.refresh();
             }
         };
         loadGame(loadMainContent);
@@ -224,7 +230,7 @@ public class guiCoreV4 implements gfxConstants {
     //shown when the game is loading new content
 
     //load the loading screen and game content
-    private void loadGame(XLoader loader) {
+    public void loadGame(XLoader loader) {
 
         clearUI();
         window.setBounds((int)(screenWidth / 2) - (this.getUIScaleX() / 2), (int)(screenHeight / 2) - (this.getUIScaleY() / 2), this.getUIScaleX(), this.getUIScaleY());
@@ -236,7 +242,7 @@ public class guiCoreV4 implements gfxConstants {
 
     }
 
-    private void setMainKeybindings() { //adds keybindings to the game
+    public void setMainKeybindings() { //adds keybindings to the game
 
         screen.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "pause");
         screen.getActionMap().put("pause", new AbstractAction() {
@@ -292,691 +298,11 @@ public class guiCoreV4 implements gfxConstants {
     }
 
 
-    /** Main menu elements **/
-
-    private void loadMainMenu() {
-
-        //background image
-        bgPanel = new XLabel();
-        layers.add(bgPanel, new Integer(0), 0);
-        bgPanel.setBounds(0, 0, getUIScaleX(), getUIScaleY());
-        bgPanel.scaleImage(gfxRepository.mainBackground);
-        bgPanel.setOpaque(true);
-        bgPanel.setVisible(true);
-
-        //game logo
-        imgLogo = new XLabel(gfxRepository.gameLogoLarge);
-        layers.add(imgLogo, new Integer(10), 0);
-        imgLogo.setBounds(window.getWidth() - 115, 5, 120, 120);
-        imgLogo.setVisible(true);
-
-        //game name
-        lblLogo = new XLabel("Astra Project", gfxRepository.txtTitle, gfxRepository.clrText);
-        layers.add(lblLogo, new Integer(11), 0);
-        lblLogo.setBounds(10, 10, 600, 60);
-        lblLogo.setAlignments(SwingConstants.LEFT, SwingConstants.TOP);
-        lblLogo.setVisible(true);
-
-        //planet
-        XLabel menuPlanet = new XLabel(gfxRepository.menuPlanet);
-        layers.add(menuPlanet, new Integer(8), 0);
-        menuPlanet.setBounds(window.getWidth() - 1100, 0, 1500, 450);
-        menuPlanet.setVisible(true);
-
-        //lens flares
-        XLabel lblLensGlare = new XLabel();
-        layers.add(lblLensGlare, new Integer(9), 0);
-        lblLensGlare.setBounds(0, 0, screen.getWidth(), screen.getHeight());
-        lblLensGlare.scaleImage(gfxRepository.menuGlare);
-        lblLensGlare.setVisible(true);
-
-        //bottom menu bar
-        pnlMenuBarH = new XPanel(gfxRepository.clrBackground);
-        layers.add(pnlMenuBarH, new Integer(14), 0);
-        pnlMenuBarH.setBounds(0, getUIScaleY() - 95, getUIScaleX(), 95);
-        pnlMenuBarH.setVisible(true);
-
-        //flavor
-        XLabel lblBottom = new XLabel("Powered by SwingEX", gfxRepository.txtTiny, gfxRepository.clrText);
-        pnlMenuBarH.add(lblBottom);
-        lblBottom.setBounds(pnlMenuBarH.getWidth() - 305, pnlMenuBarH.getHeight() - 45, 300, 40);
-        lblBottom.setAlignments(SwingConstants.RIGHT, SwingConstants.BOTTOM);
-
-        XListSorter srtMenuButtons = new XListSorter(XConstants.HORIZONTAL_SORT, (screen.getWidth() - (319 * 4)) / 5, (screen.getWidth() - (319 * 4)) / 5, 0);
-
-        //button to start new game
-        XButtonCustom btcNewGame = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT); //replaced 10 lines with 4 using this
-        btcNewGame.setText("New Game", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcNewGame.setPreferredSize(new Dimension(319, 80));
-        btcNewGame.setSize(btcNewGame.getPreferredSize());
-        btcNewGame.addMouseListener(new MouseListener() {
-            XButtonCustom source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.buttonClick();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-
-                pnlMenuBarH.setVisible(false);
-                loadNewSettingsMenu();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-        srtMenuButtons.addItem(btcNewGame);
-
-        //button to load game
-        XButtonCustom btcLoadGame = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT);
-        btcLoadGame.setText("Load Game", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcLoadGame.setPreferredSize(btcNewGame.getPreferredSize());
-        btcLoadGame.setSize(btcLoadGame.getPreferredSize());
-        btcLoadGame.addMouseListener(new XMouseListener() {
-            XButtonCustom source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.buttonClick();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                pnlMenuBarH.setVisible(false);
-                window.refresh();
-
-                pnlLoadSaves.setVisible(true);
-                loadSavesMenu();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-        srtMenuButtons.addItem(btcLoadGame);
-
-        //button to adjust game settings
-        XButtonCustom btcSettings = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT);
-        btcSettings.setText("Options", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcSettings.setPreferredSize(btcNewGame.getPreferredSize());
-        btcSettings.setSize(btcSettings.getPreferredSize());
-        btcSettings.addMouseListener(new XMouseListener() {
-            XButtonCustom source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.buttonClick();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-        srtMenuButtons.addItem(btcSettings);
-
-        //quit button
-        XButtonCustom btcQuit = new XButtonCustom(gfxRepository.wideButton2, SwingConstants.LEFT);
-        btcQuit.setText("Quit", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcQuit.setPreferredSize(btcNewGame.getPreferredSize());
-        btcQuit.setSize(btcQuit.getPreferredSize());
-        btcQuit.addMouseListener(new XMouseListener() {
-            XButtonCustom source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.buttonClick();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-                window.close();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-        srtMenuButtons.addItem(btcQuit);
-
-        srtMenuButtons.placeItems(pnlMenuBarH); //place the buttons
-
-        settingsMenu = new XPanel(gfxRepository.clrBackground);
-        layers.add(settingsMenu, new Integer(13), 0);
-        settingsMenu.setBounds(5, 50, 495, window.getHeight() - 100);
-        settingsMenu.setVisible(false);
-
-        pnlLoadSaves = new XPanel(gfxRepository.clrBackground);
-        layers.add(pnlLoadSaves, new Integer(14), 0);
-        pnlLoadSaves.setBounds(5, (window.getHeight() / 2) - 425, 750, 850);
-        pnlLoadSaves.setVisible(false);
-
-        window.refresh();
-
-        Random randomizePosition = new Random();
-
-        menuSpaceport = new animCore(new ImageIcon(gfxRepository.menuSpaceport), 2, layers, window);
-        menuSpaceport.setAnimationSmoothness(0.1, 200);
-        menuSpaceport.start();
-
-        menuMoon2 = new animCore(new ImageIcon(gfxRepository.moon2Icon), 3, layers, window, window.getWidth() - 300, -200, 640);
-        menuMoon2.setAnimationSmoothness(0.1, 180);
-        menuMoon2.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
-        menuMoon2.start();
-
-        menuMoon1 = new animCore(new ImageIcon(gfxRepository.moon1Icon), 3, layers, window, window.getWidth() - 500, -100, 600);
-        menuMoon1.setAnimationSmoothness(0.1, 150);
-        menuMoon1.setAnimationStartTime(randomizePosition.nextInt(359)); //randomizes the starting position of the moons
-        menuMoon1.start();
-
-    }
-
-    //loads a menu with all of the save files in it
-    private void loadSavesMenu() { //TODO: Fill out
-
-        XLabel lblLoadSaves = new XLabel("Load Saved Game", gfxRepository.txtLargeText, gfxRepository.clrText);
-        pnlLoadSaves.add(lblLoadSaves);
-        lblLoadSaves.setBounds(0, 5, pnlLoadSaves.getWidth(), 40);
-        lblLoadSaves.setAlignments(SwingConstants.CENTER);
-        lblLoadSaves.setVisible(true);
-
-        XPanel pnlSavesList = new XPanel(gfxRepository.clrDGrey);
-        pnlLoadSaves.add(pnlSavesList);
-        pnlSavesList.setBounds(5, 80, 319, pnlLoadSaves.getHeight() - 160);
-        pnlSavesList.setVisible(true);
-
-        //button to handle returning to the title screen options
-        XLabel lblReturn = new XLabel("Back", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        pnlLoadSaves.add(lblReturn);
-        lblReturn.setBounds(pnlSavesList.getX(), pnlSavesList.getY() + pnlSavesList.getHeight(), 319, 80);
-        lblReturn.setAlignments(SwingConstants.CENTER);
-        lblReturn.setVisible(true);
-
-        XButton btnReturn = new XButton(gfxRepository.wideButton2, SwingConstants.LEFT);
-        pnlLoadSaves.add(btnReturn);
-        btnReturn.setBounds(lblReturn.getBounds());
-        btnReturn.setVisible(true);
-
-        btnReturn.addMouseListener(new XMouseListener() {
-            XButton source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.buttonDisable();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-
-                pnlMenuBarH.setVisible(true);
-                lblLogo.setVisible(true);
-                pnlLoadSaves.removeAll();
-                pnlLoadSaves.setVisible(false);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButton)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-
-        XScrollPane spSavesList = new XScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-
-        try {
-            File[] loadSaves = SaveDirectoryConstants.SAVEDIRECTORY.listFiles();
-
-            for (File current : loadSaves) {
-                if (current.isDirectory()) { //only want directories
-                    File[] temp = current.listFiles();
-                    for (File player : temp) { //find the player's data file
-                        if (player.getName().equals("playerinfo.xml")) { //FOUND IT
-                        xmlLoader.loadPlayerInfo(player); //loads the player's info
-                        }
-                    }
-                } else {
-                    System.out.println("Illegal alien detected in saves folder, clearing it."); //"undocumented file"
-                    current.delete(); //deport, er, delete the intruding file. shouldn't be here
-                }
-            }
-
-            for (int i = 0; i < xmlLoader.listOfPlayers.size(); i++) { //lists out all of the save files
-
-
-
-
-
-
-
-
-            }
-        } catch (NullPointerException e) { //catches any null errors so the game doesn't just explode
-
-
-        }
-
-        window.refresh();
-
-    }
-
-    //loads the menu to set up a new game
-    private void loadNewSettingsMenu() {
-
-        settingsMenu.removeAll();
-        settingsMenu.setVisible(true);
-
-        XListSorter srtSettings = new XListSorter(XConstants.VERTICAL_SORT, 5, 5, 5);
-
-        XLabel lblSettingsHeader = new XLabel("Game Settings", gfxRepository.txtHeader, gfxRepository.clrText);
-        lblSettingsHeader.setPreferredSize(new Dimension(settingsMenu.getWidth() - 10, 40));
-        lblSettingsHeader.setAlignments(SwingConstants.CENTER);
-
-        //close new game loading, go back to main menu
-        XButtonCustom btcBack = new XButtonCustom(gfxRepository.button435_80, SwingConstants.LEFT);
-        btcBack.setText("Back", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcBack.setBounds(30, settingsMenu.getHeight() - 80, 435, 80);
-        settingsMenu.add(btcBack);
-        btcBack.setVisible(true);
-        btcBack.addMouseListener(new XMouseListener() {
-            XButtonCustom source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.buttonDisable();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-
-                pnlMenuBarH.setVisible(true);
-                lblLogo.setVisible(true);
-                settingsMenu.removeAll();
-                settingsMenu.setVisible(false);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-
-        //button to start new game at specified settings
-        XButtonCustom btcLaunchNew = new XButtonCustom(gfxRepository.button435_80, SwingConstants.LEFT);
-        btcLaunchNew.setText("Start", gfxRepository.txtButtonLarge, gfxRepository.clrText);
-        btcLaunchNew.setBounds(btcBack.getX(), btcBack.getY() - 85, btcBack.getWidth(), btcBack.getHeight());
-        settingsMenu.add(btcLaunchNew);
-        btcLaunchNew.setVisible(true);
-        btcLaunchNew.addMouseListener(new XMouseListener() {
-            XButtonCustom source;
-
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                audioRepository.buttonConfirm();
-                window.refresh();
-
-                menuSpaceport.stopAnimation();
-                menuMoon1.stopAnimation();
-                menuMoon2.stopAnimation();
-                clearUI();
-
-                XLoader loadNewGame = new XLoader() {
-                    @Override
-                    protected void loadOperation(int percent) {
-                        Random r = new Random();
-                        try {
-                            Thread.sleep(30 + r.nextInt(80));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        switch(percent) {
-                            case 1:
-                                gameSettings.player = new playerData();
-                                gfxRepository.loadMapGFX();
-                                break;
-                            case 15: //create the new user
-                                gameSettings.player.newPlayer("Test Player");
-                                break;
-                            case 20: //set up the map
-                                gameSettings.map  = new mapGenerator(gameSettings.currMapScaleX, gameSettings.currMapScaleY, gameSettings.starFrequency);
-                                break;
-                            case 32: //load the map string
-                                gameLoader.mapLoader(gameSettings.map, gameSettings.player);
-                                break;
-                            case 43: //load the events core
-                                gameSettings.eventhandler = new eventCoreV2();
-                                break;
-                            case 44:
-                                gameSettings.techtree = new techCoreV2();
-                                break;
-                            case 45:
-                                gameSettings.shipbuilder = new craftBuilder();
-                                gameSettings.shipbuilder.buildScienceShips();
-                                break;
-                            case 46:
-                                gameSettings.shipbuilder.refreshArray();
-                                break;
-                            case 80: //set up some of the UI content
-                                pnlOverlay = new XPanel(gfxRepository.clrBlkTransparent);
-                                pnlPauseMenu = new XPanel(gfxRepository.clrBGOpaque);
-                                celestialObject = new CelestialObject();
-                                pnlTechTree = new XPanel();
-                                pnlTechSelect = new XPanel();
-                                pnlTechSelect.setVisible(false);
-                                pnlShipBuilder = new XPanel();
-                                pnlShipBuilder.setVisible(false);
-                                pnlTechTree.setVisible(false);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    protected void done() {
-                        audioRepository.musicShuffle();
-                        audioRepository.ambianceMainGame();
-                        setMainKeybindings();
-                        loadMapView();
-                        gameSettings.turn = new turnTicker();
-                        gameSettings.turn.start();
-                        gameSettings.player.tickStats();
-                        gameSettings.ui.turnTick();
-                    }
-                };
-
-                loadGame(loadNewGame);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.RIGHT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                audioRepository.menuTab();
-                source.setHorizontalAlignment(SwingConstants.CENTER);
-                window.refresh();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-                source = (XButtonCustom)mouseEvent.getSource();
-                source.setHorizontalAlignment(SwingConstants.LEFT);
-                window.refresh();
-            }
-        });
-
-        //sets up settings option for resource abundance
-        XLabel lblResources = new XLabel("Resource Abundance", gfxRepository.txtSubheader, gfxRepository.clrText);
-        lblResources.setAlignments(SwingConstants.CENTER);
-        XSlider sldResources = new XSlider(JSlider.HORIZONTAL, gameSettings.resourceAbundanceMin, gameSettings.resourceAbundanceHigh, gameSettings.resourceAbundanceAvg);
-        lblResources.setPreferredSize(new Dimension(settingsMenu.getWidth() - 10, 25));
-        sldResources.setTicks(25, 5);
-        Hashtable hshResources = new Hashtable();
-        hshResources.put(new Integer(gameSettings.resourceAbundanceMin), new XLabel("Sparse", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshResources.put(new Integer(gameSettings.resourceAbundanceHigh), new XLabel("Abundant", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshResources.put(new Integer(gameSettings.resourceAbundanceAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
-        sldResources.setLabelTable(hshResources);
-        sldResources.setFont(gfxRepository.txtTiny);
-        sldResources.setForeground(clrText);
-        sldResources.setPreferredSize(new Dimension(settingsMenu.getWidth() - 20, 50));
-        sldResources.addChangeListener(new ChangeListener() { //adds a listener to keep track of the slider's value and translate it to the gameSettings class
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                XSlider source = (XSlider)changeEvent.getSource();
-                if (source.getValueIsAdjusting()) {
-                    gameSettings.currentResources = source.getValue();
-                }
-                window.refresh();
-            }
-        });
-
-        //sets up settings option for star abundance
-        XLabel lblStarFreq = new XLabel("Star Frequency", gfxRepository.txtSubheader, gfxRepository.clrText);
-        lblStarFreq.setAlignments(SwingConstants.CENTER);
-        XSlider sldStarFreq = new XSlider(JSlider.HORIZONTAL, gameSettings.starFreqMin, gameSettings.starFreqHigh, gameSettings.starFreqAvg);
-        lblStarFreq.setPreferredSize(new Dimension(settingsMenu.getWidth() - 10, 25));
-        sldStarFreq.setTicks(15, 5);
-        Hashtable hshStarFreq = new Hashtable();
-        hshStarFreq.put(new Integer(gameSettings.starFreqMin), new XLabel("Many", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshStarFreq.put(new Integer(gameSettings.starFreqHigh), new XLabel("Few", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshStarFreq.put(new Integer(gameSettings.starFreqAvg), new XLabel("Average", gfxRepository.txtTiny, gfxRepository.clrText));
-        sldStarFreq.setLabelTable(hshStarFreq);
-        sldStarFreq.setFont(gfxRepository.txtTiny);
-        sldStarFreq.setForeground(gfxRepository.clrText);
-        sldStarFreq.setPreferredSize(new Dimension(settingsMenu.getWidth() - 20, 50));
-        sldStarFreq.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                XSlider source = (XSlider)changeEvent.getSource();
-                if (source.getValueIsAdjusting()) {
-                    gameSettings.starFrequency = source.getValue();
-                }
-                window.refresh();
-            }
-        });
-
-        //sets up settings option for map scaling
-        XLabel lblMapScale = new XLabel("Map Scale", gfxRepository.txtSubheader, gfxRepository.clrText);
-        lblMapScale.setAlignments(SwingConstants.CENTER);
-        XSlider sldMapScale = new XSlider(JSlider.HORIZONTAL, gameSettings.mapScaleMin, gameSettings.mapScaleHigh, gameSettings.mapScaleAvg);
-        lblMapScale.setPreferredSize(new Dimension(settingsMenu.getWidth() - 10, 25));
-        sldMapScale.setTicks(20, 5);
-        Hashtable hshMapScale = new Hashtable();
-        hshMapScale.put(new Integer(gameSettings.mapScaleMin), new XLabel("Small", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshMapScale.put(new Integer(gameSettings.mapScaleHigh), new XLabel("Huge", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshMapScale.put(new Integer(gameSettings.mapScaleAvg), new XLabel("Normal", gfxRepository.txtTiny, gfxRepository.clrText));
-        sldMapScale.setLabelTable(hshMapScale);
-        sldMapScale.setFont(gfxRepository.txtTiny);
-        sldMapScale.setForeground(gfxRepository.clrText);
-        sldMapScale.setPreferredSize(new Dimension(settingsMenu.getWidth() - 20, 50));
-        sldMapScale.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                XSlider source = (XSlider)changeEvent.getSource();
-                if (source.getValueIsAdjusting()) {
-                    gameSettings.currMapScaleX = source.getValue();
-                    gameSettings.currMapScaleY = source.getValue();
-                }
-                window.refresh();
-            }
-        });
-
-        XLabel lblDiffOverall = new XLabel("Overall Difficulty", gfxRepository.txtSubheader, gfxRepository.clrText);
-        lblDiffOverall.setAlignments(SwingConstants.CENTER);
-        XSlider sldDiffOverall = new XSlider(JSlider.HORIZONTAL, gameSettings.overallDifficultyMin, gameSettings.overallDifficultyHigh, gameSettings.overallDifficultyAvg);
-        lblDiffOverall.setPreferredSize(new Dimension(settingsMenu.getWidth() - 10, 25));
-        sldDiffOverall.setTicks(25, 5);
-        Hashtable hshDiffOverall = new Hashtable();
-        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyMin), new XLabel("Easy", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyHigh), new XLabel("Hard", gfxRepository.txtTiny, gfxRepository.clrText));
-        hshDiffOverall.put(new Integer(gameSettings.overallDifficultyAvg), new XLabel("Normal", gfxRepository.txtTiny, gfxRepository.clrText));
-        sldDiffOverall.setLabelTable(hshDiffOverall);
-        sldDiffOverall.setFont(gfxRepository.txtTiny);
-        sldDiffOverall.setForeground(gfxRepository.clrText);
-        sldDiffOverall.setPreferredSize(new Dimension(settingsMenu.getWidth() - 20, 50));
-        sldDiffOverall.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                XSlider source = (XSlider)changeEvent.getSource();
-                if (source.getValueIsAdjusting()) {
-                    gameSettings.currDifficulty = source.getValue();
-                }
-                window.refresh();
-            }
-        });
-
-        srtSettings.addItems(lblSettingsHeader, lblDiffOverall, sldDiffOverall, lblMapScale, sldMapScale, lblStarFreq, sldStarFreq, lblResources, sldResources);
-        srtSettings.placeItems(settingsMenu);
-
-        window.refresh();
-
-    }
-
-
     /** Map screen UI **/
     //Handles the display of the map screen's UI.
 
     //loads the map view
-    private void loadMapView() {
+    public void loadMapView() {
 
         Random r = new Random();
 

@@ -11,6 +11,8 @@ import AetheriusEngine.core.gui.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * KM
@@ -19,6 +21,9 @@ import java.awt.event.*;
  */
 
 public class LauncherWindow extends JLayeredPane implements gfxConstants {
+
+    private final String title = "stra Project";
+    private final String version = gfxRepository.gameVersion;
 
     private XPanel pnlContent;
     private XPanel pnlSettings;
@@ -51,14 +56,14 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
         imgLogo.setBounds(40, 20, 50, 60);
         imgLogo.setVisible(true);
 
-        XLabel lblTitle = new XLabel("stra Project", gfxRepository.txtTitle, clrText);
+        XLabel lblTitle = new XLabel(title, gfxRepository.txtTitle, clrText);
         this.add(lblTitle, PALETTE_LAYER);
         lblTitle.setBounds(imgLogo.getX() + imgLogo.getWidth() - 5, 30, 300, 75);
         lblTitle.setVerticalAlignment(SwingConstants.TOP);
         lblTitle.setVisible(true);
 
         //load the game version
-        XLabel lblVersion = new XLabel("Version; " + gfxRepository.gameVersion, gfxRepository.txtTiny, clrText);
+        XLabel lblVersion = new XLabel("Version; " + version, gfxRepository.txtTiny, clrText);
         this.add(lblVersion, PALETTE_LAYER);
         lblVersion.setBounds(25, this.getHeight() - 50, 200, 35);
         lblVersion.setAlignments(SwingConstants.LEFT, SwingConstants.CENTER);
@@ -513,5 +518,7 @@ public class LauncherWindow extends JLayeredPane implements gfxConstants {
         this.revalidate();
         this.repaint();
     }
+
+    public String getTitle() { return title; }
 
 }
